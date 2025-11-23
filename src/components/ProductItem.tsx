@@ -22,83 +22,67 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
     }
 
     return (
-            <div 
-                className="
-                bg-white 
-                rounded-xl 
-                shadow-md 
-                hover:shadow-xl 
-                transition-all 
-                duration-300 
-                overflow-hidden 
-                border 
-                border-gray-200 
-                hover:border-blue-300 
-                h-full 
-                flex 
-                flex-col"
-            >
-                
+            <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-300 h-full flex flex-col">
+
+                <Link to={`/product/${category}/${productId}`}>
                     <div className="relative overflow-hidden bg-gray-100 aspect-square">
-                        <Link to={`/product/${category}/${productId}`}>
                         <img 
                             src={imgURL[0]} 
                             alt={name}
-                            className="h-full w-full object-cover hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                         />
-                        </Link>
-    =                    <div className="absolute -top-0.5 left-0.5">
-                            <span className="bg-black text-[9px] font-bold px-2 py-1 rounded-full text-white capitalize shadow-sm">
+    =                    <div className="absolute top-0 left-0.5">
+                            <span className="bg-blue-400 text-xs font-medium px-3 py-1 rounded-full text-white capitalize shadow-sm">
                                 {category}
                             </span> 
                         </div>
-                        <button onClick={ () => (handleToggle(), addToWishList(productId))} className="top-0.5 right-0.5 absolute cursor-pointer">
-                            <div className="bg-white rounded-full px-2 py-2 hover:bg-gray-200 shadow-lg shadow-gray-300">
-                                { isToggled 
-                                    ?   <BsHeartFill size={15} className={`text-red-600`} />
-                                    :   <BsHeart size={15} className= {`text-gray-600`} />
-                                }
-                            </div>
-                        </button>
                     </div>
+                </Link>
 
 
-                <div className="p-4 relative">
+                <div className="p-4">
 
                     <div className="mb-3">
-
                         <Link to={`/product/${category}/${productId}`}>
-                            <p className=" text-sm font-bold mb-2 line-clamp-1 cursor-pointer hover:text-blue-600 ">
+                            <p className="font-semibold mb-2 line-clamp-1 cursor-pointer hover:text-blue-600 ">
                                 {name}
                             </p>
                         </Link>
-
-                        <p className=" relative flex flex-row gap-2 items-center font-bold">
-                            <p className="text-md">
-                                {currency || '$'}{price*20-0.01} 
-                            </p>
-                            <p className="text-[12px] discountPrice text-gray-500">
-                                {(price*20-0.01) + (price*20*0.25) } 
-                            </p>
-                            <p className="bg-red-600 rounded-full text-white text-center leading-2.5  w-10 px-0.5 py-1 text-[10px]">
-                                25% OFF
-                            </p>
-
+                        <div className="flex gap-1">
+                            <BsStarFill size={12} className="text-orange-600"/>
+                            <BsStarFill size={12} className="text-orange-600"/>
+                            <BsStarFill size={12} className="text-orange-600"/>
+                            <BsStarFill size={12} className="text-orange-600"/>
+                            <BsStarHalf size={12} className="text-orange-600"/>
+                            <span className="text-xs">{price*16} reviews)</span>
+                        </div>
+                        <p className="text-xl font-bold text-gray-900">
+                            {currency || '$'}{price-1}.99
+                            <span className="ml-3 text-sm discountPrice text-gray-500">{price+20}.00</span>
                         </p>
                     </div>
 
-                    <div className="flex justify-center items-center">
+                    <div className="flex justify-between items-center">
 
                         <button 
                             onClick={(e) => {
                                 e.preventDefault();
                                 addToCart(productId)
                             }}
-                            className="w-[80%] bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 rounded-full transition-all duration-200 flex items-center justify-center gap-2 group-hover:shadow-lg cursor-pointer"
+                            className="w-[80%] bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group-hover:shadow-lg cursor-pointer"
                         >
                             <ShoppingBag size={20} />
                             <span>Add to Cart</span>
                         </button>
+
+                        <div className="relative">
+                            <button onClick={ () => (handleToggle(), addToWishList(productId))} className="cursor-pointer">
+                                { isToggled 
+                                    ?   <BsHeartFill size={20} className={`absolute top-0 right-0 text-red-500`} />
+                                    :   <BsHeart size={20} className= {`absolute top-0 right-0 text-blue-500`} />
+                                }
+                            </button>
+                        </div>
 
                     </div>
 
