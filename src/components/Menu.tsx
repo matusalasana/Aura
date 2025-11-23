@@ -3,11 +3,15 @@ import { CgClose, CgProfile } from "react-icons/cg"
 import { BiCart, BiHome, BiCollection, BiPhone, BiUser } from "react-icons/bi"
 import { FiHeart, FiShoppingBag, FiInfo } from "react-icons/fi"
 import { MenuIcon, Phone } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function Menu() {
 
   const location = useLocation();
+
+  useEffect( () => {
+    closeMenu()
+  },[location.pathname])
 
   const navigationItems = [
     { path: "/", label: "Home", icon: BiHome },
