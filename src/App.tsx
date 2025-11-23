@@ -10,17 +10,15 @@ import PlaceOrder from "./pages/PlaceOrder"
 import Orders from "./pages/Orders"
 import Nav from "./components/Nav"
 import Error from "./pages/Error"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import SignUp from "./pages/SignUp"
 import Profile from "./pages/Profile"
 import Terms from "./pages/Terms"
 import Wishlist from "./pages/Wishlist"
 
 function App() {
-  const [searchVisibility, setSearchVisibility] = useState('hidden')
   const page = useLocation()
 
-  {/* scroll to top when routing */}
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -38,7 +36,7 @@ function App() {
         to-gray-100"
       >
 
-        <Nav onClickSearch={() => setSearchVisibility('block')} />
+        <Nav />
 
         <main>
           <Routes>
@@ -46,8 +44,12 @@ function App() {
               path="/" 
               element={<Home />} />
             <Route 
-              path="/collection" 
-              element={<Collection onClickClose={() => setSearchVisibility('hidden')} status={searchVisibility} />} />
+  path="/collection" 
+  element={
+    <Collection 
+    />
+  } 
+/>
             <Route  
               path="/about" 
               element={<About />} />

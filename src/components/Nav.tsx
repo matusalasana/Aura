@@ -9,11 +9,8 @@ import { useContext } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import Menu from './Menu'
 
-interface Props{
-    onClickSearch:()=>void
-}
 
-function Nav({onClickSearch}:Props) {
+function Nav() {
 
     const items = useContext(ShopContext)
 
@@ -48,7 +45,7 @@ function Nav({onClickSearch}:Props) {
         <div className='flex items-center gap-6'>
 
             <Link to={'/collection'}>
-                <BsSearch onClick={onClickSearch} fontSize={'20px'} />
+                <BsSearch fontSize={'20px'} />
             </Link>
 
             <div className='group relative'>
