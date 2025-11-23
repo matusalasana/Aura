@@ -12,23 +12,37 @@ function Collection() {
     const [sortBy, setSortBy] = useState('')
     const [sortedItems, setSortedItems] = useState<Product[]>([])
 
-    useEffect (()=>{
-        if(sortBy=="name"){
-            setSortedItems([...products].sort((a,b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())))
-        }
-        else if (sortBy=="high-to-low-price"){
-            setSortedItems([...products].sort((a,b) => b.price - a.price))
-        }
-        else if (sortBy=="low-to-high-price"){
-            setSortedItems([...products].sort((a,b) => a.price - b.price))
-        }
-        else if (sortBy=="review"){
-            setSortedItems([...products].sort((a,b) => b.price - a.price))
-        }
-         else {
-            setSortedItems([...products])
-        }
-    },[sortBy])
+    useEffect(() => {
+    if (!products.length) {
+        setSortedItems([]);
+        return;
+    }
+
+    const sortedProducts = [...products];
+    
+    switch(sortBy) {
+        case "name":
+            sortedProducts.sort((a, b) => 
+                a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+            break;
+        case "high-to-low-price":
+            sortedProducts.sort((a, b) => 
+                b.price - a.price);
+            break;
+        case "low-to-high-price":
+            sortedProducts.sort((a, b) => 
+                a.price - b.price);
+            break;
+        case "review":
+            sortedProducts.sort((a, b) => 
+                b.price - a.price);
+            break;
+        default:
+            break;
+    }
+    
+    setSortedItems(sortedProducts);
+}, [sortBy, products]);
     
     
     console.log(sortBy)
