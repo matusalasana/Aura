@@ -51,9 +51,9 @@ function Menu() {
 
         <div className="flex shrink-0 justify-between items-center px-3">
           <div className="flex gap-3">
-            <p className="bg-indigo-600 text-white font-semibold w-12 h-12 flex items-center justify-center rounded-2xl">SM</p>
+            <Link to={'/profile'}><p className="cursor-poiter bg-indigo-600 text-white font-semibold w-12 h-12 flex items-center justify-center rounded-2xl">SM</p></Link>
             <div>
-              <p className="font-bold">Sana Matusala</p>
+              <Link to={'/profile'}><p className="font-bold cursor-pointer">Sana Matusala</p></Link>
               <p className="text-gray-600">Welcome back!</p>
             </div>
           </div>

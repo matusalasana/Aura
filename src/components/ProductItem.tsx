@@ -22,22 +22,45 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
     }
 
     return (
-            <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-300 h-full flex flex-col">
-
-                <Link to={`/product/${category}/${productId}`}>
+            <div 
+                className="
+                bg-white 
+                rounded-xl 
+                shadow-md 
+                hover:shadow-xl 
+                transition-all 
+                duration-300 
+                overflow-hidden 
+                border 
+                border-gray-200 
+                hover:border-blue-300 
+                h-full 
+                flex 
+                flex-col"
+            >
+                
                     <div className="relative overflow-hidden bg-gray-100 aspect-square">
+                        <Link to={`/product/${category}/${productId}`}>
                         <img 
                             src={imgURL[0]} 
                             alt={name}
                             className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                         />
+                        </Link>
     =                    <div className="absolute top-0 left-0.5">
-                            <span className="bg-blue-400 text-xs font-medium px-3 py-1 rounded-full text-white capitalize shadow-sm">
+                            <span className="bg-blue-300 text-xs font-bold px-3 py-1 rounded-full text-white capitalize shadow-sm">
                                 {category}
                             </span> 
                         </div>
+                        <button onClick={ () => (handleToggle(), addToWishList(productId))} className="top-0.5 right-0.5 absolute cursor-pointer">
+                            <div className="bg-white rounded-full px-2 py-2 hover:bg-gray-200 shadow-lg shadow-gray-300">
+                                { isToggled 
+                                    ?   <BsHeartFill size={15} className={`text-red-600`} />
+                                    :   <BsHeart size={15} className= {`text-gray-600`} />
+                                }
+                            </div>
+                        </button>
                     </div>
-                </Link>
 
 
                 <div className="p-4">
@@ -74,15 +97,6 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                             <ShoppingBag size={20} />
                             <span>Add to Cart</span>
                         </button>
-
-                        <div className="relative">
-                            <button onClick={ () => (handleToggle(), addToWishList(productId))} className="cursor-pointer">
-                                { isToggled 
-                                    ?   <BsHeartFill size={20} className={`absolute top-0 right-0 text-red-500`} />
-                                    :   <BsHeart size={20} className= {`absolute top-0 right-0 text-blue-500`} />
-                                }
-                            </button>
-                        </div>
 
                     </div>
 
