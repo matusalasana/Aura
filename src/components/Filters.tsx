@@ -1,11 +1,12 @@
 
 interface Props{
     onSortChange: (value:string) => void;
-    onClickGenderCheckbox: (value:string) =>void;
+    onClickCategory: (value:string) =>void;
+    onClickTypeCheckbox: (value: string) =>void;
     
 }
 
-function Filters( { onSortChange, onClickGenderCheckbox }: Props ) {
+function Filters( { onSortChange, onClickCategory, onClickTypeCheckbox }: Props ) {
 
     const sort = [
         {label: 'Sort By', value: ''},
@@ -16,10 +17,15 @@ function Filters( { onSortChange, onClickGenderCheckbox }: Props ) {
     ]
 
 
-    const gender = [
+    const categories = [
         { label: 'Men', value: 'men' },
         { label: 'Women', value: 'women' },
         { label: 'Kids', value: 'kids' },
+    ]
+
+    const types = [
+        { label: 'Topwear', value: 'topwear' },
+        { label: 'Bottomwear', value: 'bottomwear' },
     ]
 
   return (
@@ -33,11 +39,21 @@ function Filters( { onSortChange, onClickGenderCheckbox }: Props ) {
         </div>
 
         <div className="mt-5">
-            <p>Gender</p>
-            { gender.map( (sex) => (
-                <div key={sex.value} >
-                    <input onChange={ () => onClickGenderCheckbox(sex.value)}  type="checkbox" id={sex.value} />
-                    <label htmlFor={sex.value}>{sex.label}</label>
+            <p>Categories</p>
+            { categories.map( (category) => (
+                <div key={category.value} >
+                    <input onChange={ () => onClickCategory(category.value)}  type="checkbox" id={category.value} />
+                    <label htmlFor={category.value}>{category.label}</label>
+                </div>
+            )) }
+        </div>
+
+        <div className="mt-5">
+            <p>Types</p>
+            { types.map( (type) => (
+                <div key={type.value} >
+                    <input onChange={ () => onClickTypeCheckbox(type.value)}  type="checkbox" id={type.value} />
+                    <label htmlFor={type.value}>{type.label}</label>
                 </div>
             )) }
         </div>

@@ -9,21 +9,34 @@ import Filters from "../components/Filters"
 function Collection() {
 
     const {products} = useShop()!
-    const [sortBy, setSortBy] = useState('')
-    // const [sortedItems, setSortedItems] = useState<Product[]>([])
+    // const [sortBy, setSortBy] = useState('')
     const [filteredItems, setFilteredItems] = useState<Product[]>([])
 
-    const [checkboxResults, setCheckboxResults] = useState([
-        { gender: 'men', status: false},
-        { gender: 'women', status: false},
-        { gender: 'kids', status: false},
+    const [categories, setCategories] = useState([
+        { category: 'men', status: false},
+        { category: 'women', status: false},
+        { category: 'kids', status: false},
+    ])
+    const [types, setTypes] = useState([
+        { type: 'topwear', status: false},
+        { type: 'bottomwear', status: false},
     ])
 
-    const handleCheckboxToggle = (value: string) => {
-        setCheckboxResults(prev => 
+    const handleCategoryToggle = (value: string) => {
+        setCategories(prev => 
             prev.map(item => 
-                item.gender === value 
+                item.category === value 
                     ? { ...item, status: !item.status } 
+                    : item
+            )
+        )
+    }
+
+    const handleTypeToggle = (value: string) =>{
+        setTypes( prev =>
+            prev.map( item => 
+                item.type === value 
+                    ? {...item, status: !item.status }
                     : item
             )
         )
@@ -62,23 +75,36 @@ function Collection() {
         // }
         
 
-        const activeValues = checkboxResults
+        const activeCategories = categories
             .filter(item => item.status === true)
-            .map(item => item.gender)
+            .map(item => item.category)
 
-            console.log(activeValues)
+        const activeTypes = types
+            .filter( item => item.status===true)
+            .map(product => product.type)
+            console.log(activeTypes)
 
-        if (activeValues.length===0) {
-            setFilteredItems([...products])
+
+        let result = [...products];
+
+        if (activeCategories.length > 0) {
+            result = result.filter(product => 
+                activeCategories.includes(product.category.toLowerCase())
+            );
         }
-        else {
-            const genderFilteredItems = products.filter( product => activeValues.includes(product.category.toLowerCase()))
-            setFilteredItems(genderFilteredItems)
+
+
+        if (activeTypes.length > 0) {
+            result = result.filter(product => 
+                activeTypes.includes(product.subCategory.toLowerCase())
+            );
         }
 
-        // setSortedItems(sortedProducts);
+        
+        setFilteredItems(result);
 
-        }, [ products, checkboxResults]);
+
+        }, [ products, categories, types]);
     
     
     return (
@@ -91,7 +117,8 @@ function Collection() {
 
                 <Filters 
                     onSortChange={(value)=> setSortBy(value) } 
-                    onClickGenderCheckbox={ handleCheckboxToggle }
+                    onClickCategory={ handleCategoryToggle }
+                    onClickTypeCheckbox={handleTypeToggle}
                 />
                 <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                     
