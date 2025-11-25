@@ -9,7 +9,6 @@ import Filters from "../components/Filters"
 function Collection() {
 
     const {products} = useShop()!
-    // const [sortBy, setSortBy] = useState('')
     const [filteredItems, setFilteredItems] = useState<Product[]>([])
 
     const [categories, setCategories] = useState([
@@ -22,10 +21,12 @@ function Collection() {
         { type: 'bottomwear', status: false},
     ])
 
+    const [clickedSize, setClickedSize] = useState<string>()
+
     const handleCategoryToggle = (value: string) => {
         setCategories(prev => 
             prev.map(item => 
-                item.category === value 
+                (item.category === value  )
                     ? { ...item, status: !item.status } 
                     : item
             )
@@ -42,6 +43,10 @@ function Collection() {
         )
     }
 
+    const handleSizeSelect = (value: string) => {
+        setClickedSize( value )
+    };
+
 
     useEffect(() => {
 
@@ -50,31 +55,6 @@ function Collection() {
             return;
         }
 
-        // const sortedProducts = [...products];
-        
-        
-        // switch(sortBy) {
-        //     case "name":
-        //         sortedProducts.sort((a, b) => 
-        //             a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-        //         break;
-        //     case "high-to-low-price":
-        //         sortedProducts.sort((a, b) => 
-        //             b.price - a.price);
-        //         break;
-        //     case "low-to-high-price":
-        //         sortedProducts.sort((a, b) => 
-        //             a.price - b.price);
-        //         break;
-        //     case "review":
-        //         sortedProducts.sort((a, b) => 
-        //             b.price - a.price);
-        //         break;
-        //     default:
-        //         break;
-        // }
-        
-
         const activeCategories = categories
             .filter(item => item.status === true)
             .map(item => item.category)
@@ -82,7 +62,6 @@ function Collection() {
         const activeTypes = types
             .filter( item => item.status===true)
             .map(product => product.type)
-            console.log(activeTypes)
 
 
         let result = [...products];
@@ -93,18 +72,23 @@ function Collection() {
             );
         }
 
-
         if (activeTypes.length > 0) {
             result = result.filter(product => 
                 activeTypes.includes(product.subCategory.toLowerCase())
             );
         }
 
+
+        if (clickedSize) {
+            result = result.filter( product => product.sizes.includes(clickedSize.toUpperCase()))
+        }
+
         
         setFilteredItems(result);
 
 
-        }, [ products, categories, types]);
+        }, [ products, categories, types, clickedSize]);
+
     
     
     return (
@@ -115,10 +99,10 @@ function Collection() {
 
                 <p onClick={() => setFilteredItems(products)}>Clear all filters</p>
 
-                <Filters 
-                    onSortChange={(value)=> setSortBy(value) } 
+                <Filters  
                     onClickCategory={ handleCategoryToggle }
                     onClickTypeCheckbox={handleTypeToggle}
+                    onSelectSize={handleSizeSelect}
                 />
                 <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                     
