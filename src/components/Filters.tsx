@@ -3,13 +3,14 @@ import { CgClose } from "react-icons/cg";
 import { MdFilterList } from "react-icons/md";
 
 interface Props {
+    onSelectSort: (value: string) => void;
     onClickCategory: (value: string) => void;
     onClickTypeCheckbox: (value: string) => void;
     onSelectSize: (value: string) => void;
     clearFilters: () => void;
 }
 
-function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilters }: Props) {
+function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilters, onSelectSort }: Props) {
 
     const [isFilterOpen, setIsFilterOpepn] = useState(false)
 
@@ -48,8 +49,9 @@ function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilt
 
             
 
-        <div className="flex justify-between items-center mb-5">
+        <div className="flex flex-wrap gap-3 justify-between items-center mb-5">
             <select 
+                onChange={ (e) => onSelectSort(e.currentTarget.value)}
                 className="rounded-md shadow-md border-2 border-gray-300 p-2"
             >
                 {sort.map((sortBy) => (
@@ -71,7 +73,7 @@ function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilt
                 }`}>
                 <CgClose onClick={() => closeFilter()} size={20} className="absolute text-red-500 hover:text-red-600 cursor-pointer rounded top-0.5 right-0.5"/>
                 <p onClick={ () => clearFilters()} className=" text-red-500 font-bold hover:text-red-600 mb-2 cursor-pointer w-30" >Clear all filters</p>
-                <div className="flex justify-between flex-wrap">
+                <div className="flex justify-between flex-wrap max-sm:flex-col">
                     <div>
                         <p className="font-medium text-sm text-gray-800">Categories</p>
                         {categories.map((category) => (

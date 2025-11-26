@@ -22,6 +22,12 @@ function Collection() {
     ])
 
     const [clickedSize, setClickedSize] = useState<string>()
+    const [sortBy, setSortBy] = useState<string>()
+    console.log(sortBy)
+
+    const handleSortChange = ( value: string) => {
+        setSortBy(value)
+    }
 
     const handleCategoryToggle = (value: string) => {
         setCategories(prev => 
@@ -55,6 +61,31 @@ function Collection() {
             return;
         }
 
+        let result = [...products];
+
+        switch (sortBy) {
+            case "name":
+                result.sort((a,b) => 
+                    a.name.toLowerCase().localeCompare(b.name)
+                )
+                break;
+            case "high-to-low-price":
+                result.sort((a,b) => 
+                    b.price - a.price
+                )
+                break;
+            case "low-to-high-price":
+                result.sort((a,b) => 
+                    a.price - b.price
+                )
+                break;
+            case "review":
+                result.sort((a,b) => 
+                    b.price - a.price
+                )
+                break;
+        }
+
         const activeCategories = categories
             .filter(item => item.status === true)
             .map(item => item.category)
@@ -64,7 +95,6 @@ function Collection() {
             .map(product => product.type)
 
 
-        let result = [...products];
 
         if (activeCategories.length > 0) {
             result = result.filter(product => 
@@ -87,7 +117,7 @@ function Collection() {
         setFilteredItems(result);
 
 
-        }, [ products, categories, types, clickedSize]);
+        }, [ products, categories, types, clickedSize, sortBy]);
 
     
     
@@ -103,6 +133,7 @@ function Collection() {
                     onClickTypeCheckbox={handleTypeToggle}
                     onSelectSize={handleSizeSelect}
                     clearFilters={() => setFilteredItems(products)}
+                    onSelectSort={handleSortChange}
                 />
                 <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                     
