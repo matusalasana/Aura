@@ -136,7 +136,7 @@ function Collection() {
 
                 <Title text1="YOUR" text2="COLLECTION" />
 
-                <div className="fixed top-19 left-[20%] right-[20%] max-sm:left-1 max-sm:right-1 z-10">
+                <div className="fixed top-22 left-[20%] right-[20%] max-sm:left-1 max-sm:right-1 z-10">
                     <SearchItem onSearch={ (input) => setSearchTerm(input)} />
                 </div>
 
