@@ -95,14 +95,14 @@ function Collection() {
         <div className="pt-30">
 
             <div className="px-15">
-                <Title text1="YOUR" text2="COLLECTION" />
 
-                <p onClick={() => setFilteredItems(products)}>Clear all filters</p>
+                <Title text1="YOUR" text2="COLLECTION" />
 
                 <Filters  
                     onClickCategory={ handleCategoryToggle }
                     onClickTypeCheckbox={handleTypeToggle}
                     onSelectSize={handleSizeSelect}
+                    clearFilters={() => setFilteredItems(products)}
                 />
                 <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                     

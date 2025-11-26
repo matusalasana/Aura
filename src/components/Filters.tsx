@@ -3,9 +3,10 @@ interface Props {
     onClickCategory: (value: string) => void;
     onClickTypeCheckbox: (value: string) => void;
     onSelectSize: (value: string) => void;
+    clearFilters: () => void;
 }
 
-function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize }: Props) {
+function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilters }: Props) {
 
     const sort = [
         { label: 'Sort By', value: '' },
@@ -34,57 +35,64 @@ function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize }: Props) 
     ];
 
     return (
-        <div className="p-4">
+        <div className="">
 
             <div>
-                <select 
-                    className="rounded-md shadow-md border-2 border-gray-300 p-2"
-                >
-                    {sort.map((sortBy) => (
-                        <option key={sortBy.value} value={sortBy.value}>
-                            {sortBy.label}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div className="mt-5">
-                <p className="font-medium">Categories</p>
-                {categories.map((category) => (
-                    <div key={category.value} className="flex items-center gap-2 mt-1">
-                        <input 
-                            onChange={() => onClickCategory(category.value)} 
-                            type="checkbox" 
-                            id={`cat-${category.value}`} 
-                        />
-                        <label htmlFor={`cat-${category.value}`}>{category.label}</label>
+                <p onClick={ () => clearFilters()} className="text-red-500 font-bold hover:text-red-600 mb-2" >Clear all filters</p>
+                <div className="flex justify-between flex-wrap">
+                    <div>
+                        <p className="font-medium">Categories</p>
+                        {categories.map((category) => (
+                            <div key={category.value} className="flex items-center gap-2 mt-1">
+                                <input 
+                                    onChange={() => onClickCategory(category.value)} 
+                                    type="checkbox" 
+                                    id={`cat-${category.value}`} 
+                                />
+                                <label htmlFor={`cat-${category.value}`}>{category.label}</label>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
 
-            <div className="mt-5">
-                <p className="font-medium">Types</p>
-                {types.map((type) => (
-                    <div key={type.value} className="flex items-center gap-2 mt-1">
-                        <input 
-                            onChange={() => onClickTypeCheckbox(type.value)} 
-                            type="checkbox" 
-                            id={`type-${type.value}`} 
-                        />
-                        <label htmlFor={`type-${type.value}`}>{type.label}</label>
+                    <div>
+                        <p className="font-medium">Types</p>
+                        {types.map((type) => (
+                            <div key={type.value} className="flex items-center gap-2 mt-1">
+                                <input 
+                                    onChange={() => onClickTypeCheckbox(type.value)} 
+                                    type="checkbox" 
+                                    id={`type-${type.value}`} 
+                                />
+                                <label htmlFor={`type-${type.value}`}>{type.label}</label>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
 
-            <div className="mt-5">
-                <p className="font-medium">Sizes</p>
-                { sizes.map(product =>(
-                    <div key={product.value} className="flex items-center gap-2 ">
-                        <input onChange={() => onSelectSize(product.value)} type="radio" id={product.value} name="size" className="cursor-pointer" />
-                        <label htmlFor={product.value} className="cursor-pointer" >{product.label}</label>
+                    <div>
+                        <p className="font-medium">Sizes</p>
+                        { sizes.map(product =>(
+                            <div key={product.value} className="flex items-center gap-2 ">
+                                <input onChange={() => onSelectSize(product.value)} type="radio" id={product.value} name="size" className="cursor-pointer" />
+                                <label htmlFor={product.value} className="cursor-pointer" >{product.label}</label>
+                            </div>
+                        ))}
                     </div>
-                ))}
             </div>
+        </div>
+
+        <div>
+            <select 
+                className="rounded-md shadow-md border-2 border-gray-300 p-2"
+            >
+                {sort.map((sortBy) => (
+                    <option key={sortBy.value} value={sortBy.value}>
+                        {sortBy.label}
+                    </option>
+                ))}
+            </select>
+        </div>
+
+        
         </div>
     );
 }
