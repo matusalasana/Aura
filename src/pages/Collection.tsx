@@ -4,12 +4,15 @@ import ProductItem from "../components/ProductItem"
 import Title from "../components/Title"
 import Footer from "../components/Footer"
 import Filters from "../components/Filters"
+import SearchItem from "../components/SearchItem"
 
 
 function Collection() {
 
     const {products} = useShop()!
     const [filteredItems, setFilteredItems] = useState<Product[]>([])
+
+    const [searchTerm, setSearchTerm] = useState<string>()
 
     const [categories, setCategories] = useState([
         { category: 'men', status: false},
@@ -23,7 +26,6 @@ function Collection() {
 
     const [clickedSize, setClickedSize] = useState<string>()
     const [sortBy, setSortBy] = useState<string>()
-    console.log(sortBy)
 
     const handleSortChange = ( value: string) => {
         setSortBy(value)
@@ -113,11 +115,17 @@ function Collection() {
             result = result.filter( product => product.sizes.includes(clickedSize.toUpperCase()))
         }
 
+        if (searchTerm) {
+            result = result.filter( product =>
+                product.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        }
+
         
         setFilteredItems(result);
 
 
-        }, [ products, categories, types, clickedSize, sortBy]);
+        }, [ products, categories, types, clickedSize, sortBy, searchTerm]);
 
     
     
@@ -127,6 +135,8 @@ function Collection() {
             <div className="px-15">
 
                 <Title text1="YOUR" text2="COLLECTION" />
+
+                <SearchItem onSearch={ (input) => setSearchTerm(input)} />
 
                 <Filters  
                     onClickCategory={ handleCategoryToggle }

@@ -19,7 +19,7 @@ function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilt
     }
 
     const sort = [
-        { label: 'Sort By', value: '' },
+        { label: 'Sort By', value: 'default' },
         { label: 'Name: A to Z', value: 'name' },
         { label: 'Price: High to Low', value: 'high-to-low-price' },
         { label: 'Price: Low to High', value: 'low-to-high-price' },
