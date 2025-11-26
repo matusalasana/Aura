@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { 
     createContext, 
     useState, 
@@ -31,9 +32,13 @@ export interface WishListItem{
 import { products } from "../assets/assets";
 
 export interface ShopContextType {
+    text: boolean;
     currency: string;
     delivery_fee: number;
     products: Product[];
+
+    closeSearch: () => void;
+    openSearch: () => void;
 
     cartCount: number;
     cartTotal: number;
@@ -68,6 +73,17 @@ function ShopContextProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [wishList, setWishList] = useState<WishListItem[]>([]);
     const [heartStates, setHeartStates] = useState<{ [productId: string]: boolean }>({});
+    const [status, setStatus] = useState(false)
+    const text = status
+
+    const closeSearch = () => {
+        setStatus(false)
+    }
+
+    const openSearch = () => {
+        setStatus(true)
+    }
+    
 
     useEffect(() => {
         const savedHeartStates = localStorage.getItem('heart-states');
@@ -175,6 +191,9 @@ function ShopContextProvider({ children }: { children: ReactNode }) {
     }, 0);
 
     const contextValue: ShopContextType = {
+        closeSearch,
+        openSearch,
+        text,
         products,
         currency,
         delivery_fee,

@@ -45,7 +45,7 @@ function Nav() {
         <div className='flex items-center gap-6'>
 
             <Link to={'/collection'}>
-                <BsSearch fontSize={'20px'} />
+                <BsSearch onClick={() => items?.openSearch()} fontSize={'20px'} />
             </Link>
 
             <div className='group relative'>
