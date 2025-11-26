@@ -45,7 +45,7 @@ function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilt
     ];
 
     return (
-        <div className="">
+        <div>
 
             
 
