@@ -15,7 +15,7 @@ function Nav() {
     const items = useContext(ShopContext)
 
   return (
-    <nav className='flex bg-linear-to-r from-gray-200 to-gray-100 justify-between items-center px-5 shadow-sm py-8 fixed w-full z-10'>
+    <nav className='flex bg-linear-to-r from-gray-200 to-gray-100 justify-between items-center px-5 shadow-sm py-8 pb-10 fixed w-full z-10'>
         <Link to={'/'}>
             <img src = {smLogo} alt="logo" className='max-sm:w-20 mb-px' />
             <img src = {storeLogo} alt="logo" className='max-sm:w-[78px] w-[95px]' />

@@ -136,7 +136,9 @@ function Collection() {
 
                 <Title text1="YOUR" text2="COLLECTION" />
 
-                <SearchItem onSearch={ (input) => setSearchTerm(input)} />
+                <div className="fixed top-19 left-[20%] right-[20%] max-sm:left-1 max-sm:right-1 z-10">
+                    <SearchItem onSearch={ (input) => setSearchTerm(input)} />
+                </div>
 
                 <Filters  
                     onClickCategory={ handleCategoryToggle }
