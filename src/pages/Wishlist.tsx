@@ -28,7 +28,7 @@ function Wishlist() {
 
 
                 {wishlistProducts.length > 0 ? (
-                    <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                    <div className="flex flex-wrap gap-5 justify-center items-center">
                         {wishlistProducts.map((product) => (
                             <div key={product._id} className="relative">
                                 <ProductItem 

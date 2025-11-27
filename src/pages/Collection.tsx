@@ -130,15 +130,13 @@ function Collection() {
     
     
     return (
-        <div className="pt-30">
+        <div className="pt-40">
 
             <div className="px-15">
 
                 <Title text1="YOUR" text2="COLLECTION" />
 
-                <div className="fixed top-20 left-[20%] right-[20%] max-sm:left-1 max-sm:right-1 px-1 z-10">
                     <SearchItem onSearch={ (input) => setSearchTerm(input)} />
-                </div>
 
                 <Filters  
                     onClickCategory={ handleCategoryToggle }
@@ -147,7 +145,7 @@ function Collection() {
                     clearFilters={() => setFilteredItems(products)}
                     onSelectSort={handleSortChange}
                 />
-                <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+                <div className="flex flex-wrap gap-5 justify-center items-center">
                     
                     {filteredItems.map((product) => {
                         return (

@@ -6,17 +6,13 @@ import ProductItem from "./ProductItem"
 
 function LatestCollection() {
 
-  const items  = useShop()
-  
-  if (!items) return null
-
-  const {products} = items
+  const {products} = useShop()!
 
   const [latestProducts, setLatestProducts] = useState<Product[]>()
 
   useEffect(() => {
     setLatestProducts(products)
-  },[])
+  },[products])
 
   return (
     <div className="mb-10 mt-20 max-sm:px-10 md:px-15 lg:px-20 xl:px-30">
@@ -28,7 +24,7 @@ function LatestCollection() {
       </p>
       </div>
 
-      <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      <div className="flex flex-wrap gap-5 justify-center items-center">
         {latestProducts?.slice(0,10).map((product, index)=>(
           <div>
             <ProductItem name={product.name} price={product.price} key={index} imgURL={product.image} productId={product._id} category={product.category} />

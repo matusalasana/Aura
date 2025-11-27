@@ -7,15 +7,13 @@ import ProductItem from "./ProductItem"
 
 function BestSellers() {
 
-  const shop = useShop()
-  if (!shop) return null
-  const { products } = shop
+  const {products} = useShop()!
 
-  const [latestProducts, setLatestProducts] = useState<Product[]>()
+  const [latestProducts, setLatestProducts] = useState<Product[]>([])
 
   useEffect(() => {
     setLatestProducts(products)
-  },[])
+  },[products])
 
   return (
     <div className="mb-10 mt-40 max-sm:px-10 md:px-15 lg:px-20 xl:px-30">
@@ -27,7 +25,7 @@ function BestSellers() {
       </p>
       </div>
     
-      <div className="grid grid-cols-3 max-sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      <div className="flex flex-wrap gap-5 justify-center items-center">
         {latestProducts?.map((product, index)=>(
           <>
           { product.bestseller==true &&
