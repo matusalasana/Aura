@@ -35,7 +35,6 @@ function SignUp() {
     
     // Simulate API call
     setTimeout(() => {
-      console.log("Sign up attempt:", formData)
       setIsLoading(false)
       // Handle sign up logic here
     }, 1500)

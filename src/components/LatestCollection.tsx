@@ -15,7 +15,7 @@ function LatestCollection() {
   },[products])
 
   return (
-    <div className="mb-10 mt-20 max-sm:px-10 md:px-15 lg:px-20 xl:px-30">
+    <div className="mb-10 mt-20 max-sm:px-10 md:px-15 lg:px-20 xl:px-30 px-10">
 
       <div className="mb-15">
         <Title text1={"LATEST"} text2={"COLLECTIONS"} />
@@ -24,9 +24,9 @@ function LatestCollection() {
       </p>
       </div>
 
-      <div className="flex flex-wrap gap-5 justify-center items-center">
+      <div className="mx-auto grid grid-cols-4 gap-6 mb-20 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
         {latestProducts?.slice(0,10).map((product, index)=>(
-          <div>
+          <div key={index}>
             <ProductItem name={product.name} price={product.price} key={index} imgURL={product.image} productId={product._id} category={product.category} />
           </div>
         ))}

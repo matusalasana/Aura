@@ -66,7 +66,7 @@ function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilt
             </button>
         </div>
 
-        <div className={`relative border border-gray-300 bg-linear-to-b from-gray-200 to-gray-100 pr-10 pl-2 pt-3 pb-2 my-5 rounded-lg
+        <div className={`relative border border-gray-300 bg-white pr-10 pl-2 pt-3 pb-2 my-5 shadow-2xl shadow-gray-300 rounded-lg
                 ${ isFilterOpen 
                     ? 'transition-opacity block opacity-100 duration-300'
                     : 'hidden opacity-0'

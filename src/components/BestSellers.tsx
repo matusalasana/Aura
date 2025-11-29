@@ -16,7 +16,7 @@ function BestSellers() {
   },[products])
 
   return (
-    <div className="mb-10 mt-40 max-sm:px-10 md:px-15 lg:px-20 xl:px-30">
+    <div className="mb-10 max-sm:px-10 md:px-15 lg:px-20 xl:px-30 px-10">
 
       <div className="mb-15">
         <Title text1={"BEST"} text2={"SELLERS"} />
@@ -25,15 +25,15 @@ function BestSellers() {
       </p>
       </div>
     
-      <div className="flex flex-wrap gap-5 justify-center items-center">
+      <div className="grid grid-cols-4 gap-6 mb-20 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
         {latestProducts?.map((product, index)=>(
-          <>
+          <div key={index}>
           { product.bestseller==true &&
           <div>
             <ProductItem name={product.name} price={product.price} key={index} imgURL={product.image} productId={product._id} category={product.category} />
           </div>
           }
-          </>
+          </div>
         ))}
       </div>
       

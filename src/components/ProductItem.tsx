@@ -23,7 +23,7 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
     }
 
     return (
-            <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-300 h-full flex flex-col w-70">
+            <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-300 h-full flex flex-col w-full ">
 
                 
                     <div className="relative overflow-hidden bg-gray-100 aspect-square">
@@ -34,20 +34,23 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                             className="p-2 rounded-2xl w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                         />
                         </Link>
-    =                    <div className="absolute top-0 left-0.5">
-                            <span className="bg-blue-400 text-xs font-medium px-3 py-1 rounded-full text-white capitalize shadow-sm">
+                        <div className="absolute top-2 left-2">
+                            <span className="bg-gray-500 hover:bg-white px-2 py-1 rounded-full shadow-lg text-xs text-white">
                                 {category}
                             </span> 
                         </div>
                         <div className="absolute top-3 right-3">
-                            <button onClick={ () => (handleToggle(), addToWishList(productId))} className="cursor-pointer">
-                                <div className=" relative rounded-full bg-white w-7 h-7">
+
+                            <button onClick={ () => (handleToggle(), addToWishList(productId))} className="cursor-pointer flex items-center gap-1 bg-white/90 hover:bg-white px-2 py-1 rounded-full shadow-lg">
+                                
                                     { isToggled 
-                                        ?   <BsHeartFill size={15} className={` text-red-500 absolute top-2 right-1.5`} />
-                                        :   <BsHeart size={15} className= {` text-black absolute top-2 right-1.5`} />
+                                        ?   <BsHeartFill size={15} className={` text-red-500 `} />
+                                        :   <BsHeart size={15} className= {` text-black `} />
                                     }
-                                </div>
+                                    <span className="text-xs text-black">Wishlist</span>
+                                
                             </button>
+                            
                         </div>
                     </div>
                 
@@ -61,18 +64,29 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                                 {name}
                             </p>
                         </Link>
-                        <div className="flex gap-1">
-                            <BsStarFill size={12} className="text-orange-600"/>
-                            <BsStarFill size={12} className="text-orange-600"/>
-                            <BsStarFill size={12} className="text-orange-600"/>
-                            <BsStarFill size={12} className="text-orange-600"/>
-                            <BsStarHalf size={12} className="text-orange-600"/>
+                        <div className="flex gap-1 items-center">
+                            <BsStarFill size={10} className="text-black"/>
+                            <BsStarFill size={10} className="text-black"/>
+                            <BsStarFill size={10} className="text-black"/>
+                            <BsStarFill size={10} className="text-black"/>
+                            <BsStarHalf size={10} className="text-black"/>
                             <span className="text-xs">{price*16} reviews)</span>
+                            <span className="mx-1 h-4 w-0.5 bg-gray-300"></span><span className="font-bold text-sm">4.5</span>
                         </div>
-                        <p className="text-xl font-bold text-gray-900">
-                            {currency || '$'}{price-1}.99
-                            <span className="ml-3 text-sm discountPrice text-gray-500">{price+20}.00</span>
-                        </p>
+                        <div className="flex gap-2 items-center font-bold text-gray-900 mt-2">
+                            
+                            <span className="">
+                                {currency || 'ETB'}{price*20 - price*20*0.25}
+                            </span>
+                            <p className="flex flex-col text-[10px]">
+                                <span className="text-red-600">
+                                    - 25% now save ETB {price*20*0.25}
+                                </span>
+                                <span className="discountPrice text-gray-500">
+                                    {currency || 'ETB'}{price*20-1}.00
+                                </span>
+                            </p>
+                        </div>
                     </div>
 
                     <div className="flex justify-center items-center">

@@ -145,7 +145,7 @@ function Collection() {
                     clearFilters={() => setFilteredItems(products)}
                     onSelectSort={handleSortChange}
                 />
-                <div className="flex flex-wrap gap-5 justify-center items-center">
+                <div className="grid grid-cols-4 gap-6 mb-20 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
                     
                     {filteredItems.map((product) => {
                         return (

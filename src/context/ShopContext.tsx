@@ -70,7 +70,7 @@ export const ShopContext = createContext<ShopContextType | undefined>(undefined)
 
 function ShopContextProvider({ children }: { children: ReactNode }) {
 
-    const currency = "$";
+    const currency = "ETB ";
     const delivery_fee = 10;
     const [cart, setCart] = useState<CartItem[]>([]);
     const [wishList, setWishList] = useState<WishListItem[]>([]);
