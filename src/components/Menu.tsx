@@ -44,7 +44,7 @@ function Menu() {
 
   return (
     <>
-    <MenuIcon onClick={() => openMenu()} />
+    <MenuIcon onClick={() => openMenu()} className="text-[#FFFFFF]" />
      { isOpen && 
      <div className = {`flex flex-col gap-5 fixed top-0 right-0 z-50 h-screen bg-white w-80 py-10`}>
 

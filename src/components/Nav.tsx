@@ -1,7 +1,6 @@
 
 import { Link, NavLink } from 'react-router-dom'
-import smLogo from '../assets/SMblue.svg'
-import storeLogo from '../assets/store logo.svg'
+import storeLogo from '../assets/logo.svg'
 import { BsSearch } from 'react-icons/bs'
 import { CgProfile } from 'react-icons/cg'
 import { BiCart } from 'react-icons/bi'
@@ -15,12 +14,11 @@ function Nav() {
     const items = useContext(ShopContext)
 
   return (
-    <nav className='flex bg-linear-to-r from-gray-200 to-gray-100 justify-between items-center px-5 shadow-sm pt-8 pb-5 fixed w-full z-10'>
+    <nav className='flex bg-[#000000] justify-between items-center px-5 shadow-sm shadow-gray-600 pt-8 pb-5 fixed w-full z-10'>
         <Link to={'/'}>
-            <img src = {smLogo} alt="logo" className='max-sm:w-20 mb-px' />
-            <img src = {storeLogo} alt="logo" className='max-sm:w-[78px] w-[95px]' />
+            <img src = {storeLogo} alt="logo" className='max-sm:w-[110px] w-[125px]' />
         </Link>
-        <div className='hidden sm:flex gap-5 text-sm text-gray-700'>
+        <div className='hidden sm:flex gap-5 text-sm text-[#FFFFFF]'>
             <NavLink to={'/'} className = "flex flex-col items-center gap-1" >
                 <p>Home</p>
                 <hr className=' w-2/4 h-0.5 bg-gray-700 hidden' />
@@ -45,11 +43,11 @@ function Nav() {
         <div className='flex items-center gap-6'>
 
             <Link to={'/collection'}>
-                <BsSearch onClick={() => items?.openSearch()} fontSize={'20px'} />
+                <BsSearch onClick={() => items?.openSearch()} fontSize={'20px'} className='text-[#FFFFFF]'/>
             </Link>
 
             <div className='group relative'>
-                <Link to={'/login'}><CgProfile fontSize={'25px'} /></Link>
+                <Link to={'/login'}><CgProfile fontSize={'25px'} className='text-[#FFFFFF]'/></Link>
                 <div 
                     className='
                         absolute 
@@ -71,7 +69,7 @@ function Nav() {
             </div>
 
             <Link to="/cart" className='relative'>
-                <BiCart fontSize={'35px'} />
+                <BiCart fontSize={'35px'} className='text-[#FFFFFF]'/>
                 <p 
                     className='
                         absolute 
@@ -89,7 +87,7 @@ function Nav() {
                 >{items?.cartCount ?? 0}</p>
             </Link>
 
-            <Menu/>
+            <Menu />
         </div>
         
 

@@ -23,10 +23,10 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
     }
 
     return (
-            <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-300 h-full flex flex-col w-full ">
+            <div className="bg-[#ffffff] rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-300 h-full flex flex-col w-full ">
 
                 
-                    <div className="relative overflow-hidden bg-gray-100 aspect-square">
+                    <div className="relative overflow-hidden bg-[ffffff] aspect-square">
                         <Link to={`/product/${category}/${productId}`}>
                         <img 
                             src={imgURL[0]} 
@@ -96,10 +96,26 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                                 e.preventDefault();
                                 addToCart(productId)
                             }}
-                            className="w-[80%] bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 group-hover:shadow-lg cursor-pointer"
+                            className="
+                            w-[80%] 
+                            bg-[#000000]
+                            text-[#ffffff]
+                            hover:bg-gray-700
+                            hover:text-white  
+                            font-semibold 
+                            text-sm 
+                            py-3 
+                            rounded-lg 
+                            transition-all 
+                            duration-200 
+                            flex items-center 
+                            justify-center 
+                            gap-2 
+                            group-hover:shadow-lg 
+                            cursor-pointer"
                         >
                             <ShoppingBag size={20} />
-                            <span>Add to Cart</span>
+                            <span>ADD TO CART</span>
                         </button>
 
                     </div>

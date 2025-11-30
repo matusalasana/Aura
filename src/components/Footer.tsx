@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 import { BiCopyright, BiPhone, BiEnvelope } from "react-icons/bi"
-import smLogo from "../assets/SMblue.svg"
-import storeLogo from '../assets/store logo white.svg'
+import storeLogo from '../assets/logo.svg'
 
 function Footer() {
   const currentYear = new Date().getFullYear()
@@ -14,7 +13,6 @@ function Footer() {
           
           <div className="space-y-4">
             <div className="flex flex-col items-center gap-1">
-              <img src={smLogo} alt="SM Logo" className="h-8" />
               <img src={storeLogo} alt="Store Logo" className="h-7" />
             </div>
             <p className="text-sm text-center leading-relaxed max-w-md">

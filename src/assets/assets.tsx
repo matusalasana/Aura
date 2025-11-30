@@ -56,7 +56,7 @@ import p_img51 from './p_img51.png'
 import p_img52 from './p_img52.png'
 
 
-import logo from './logo.png'
+import logo from './logo.svg'
 import hero_img from './hero_img.png'
 import newArrival from './New-Arrival-High-Quality-Male-Jacket.jpeg'
 import cart_icon from './cart_icon.png'

@@ -49,7 +49,7 @@ function Filters({ onClickCategory, onClickTypeCheckbox, onSelectSize, clearFilt
 
             
 
-        <div className="flex flex-wrap gap-3 justify-between items-center mb-5">
+        <div className="flex flex-wrap gap-3 justify-between items-center mb-5 mt-10">
             <select 
                 onChange={ (e) => onSelectSort(e.currentTarget.value)}
                 className="rounded-md shadow-md border-2 border-gray-300 p-2"

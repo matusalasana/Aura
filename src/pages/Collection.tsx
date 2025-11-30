@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useShop, type Product } from "../context/ShopContext"
 import ProductItem from "../components/ProductItem"
-import Title from "../components/Title"
 import Footer from "../components/Footer"
 import Filters from "../components/Filters"
 import SearchItem from "../components/SearchItem"
@@ -130,13 +129,11 @@ function Collection() {
     
     
     return (
-        <div className="pt-40">
+        <div className="pt-60">
 
             <div className="px-15">
 
-                <Title text1="YOUR" text2="COLLECTION" />
-
-                    <SearchItem onSearch={ (input) => setSearchTerm(input)} />
+                <SearchItem onSearch={ (input) => setSearchTerm(input)} />
 
                 <Filters  
                     onClickCategory={ handleCategoryToggle }

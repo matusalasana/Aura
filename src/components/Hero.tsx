@@ -34,7 +34,7 @@ function Hero() {
 
            
             <div className="flex flex-col sm:flex-row items-center gap-4 lg:justify-start justify-center">
-              <button className="group relative bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-lg">
+              <button className="group relative bg-[#00BCD4] hover:bg-[#00BCE0] text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-lg">
                 <span className="flex items-center gap-2">
                   Shop Now
                   <svg 
@@ -98,12 +98,12 @@ function Hero() {
               </div>
               
               
-              <div className="absolute -top-4 -right-4 bg-linear-to-b from-blue-300 to-blue-500 rounded-2xl shadow-black shadow-sm p-4 animate-pulse">
-                <div className="text-sm font-semibold text-gray-900">🔥 Hot Item</div>
+              <div className="absolute -top-4 -right-4 bg-linear-to-r from-cyan-900 to-cyan-700 rounded-2xl shadow-black shadow-sm p-4 animate-pulse duration-100">
+                <div className="text-sm  text-white font-bold">🔥 Hot Item</div>
               </div>
               
-              <div className="absolute bottom-0 -left-4 bg-blue-600 text-white rounded-2xl shadow-xl p-4">
-                <div className="text-sm font-semibold">New Season</div>
+              <div className="absolute bottom-0 -left-4 bg-linear-to-r from-cyan-900 to-cyan-700 text-white rounded-2xl shadow-xl p-4">
+                <div className="text-sm">New Season</div>
               </div>
             </div>
           </div>

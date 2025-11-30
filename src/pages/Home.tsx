@@ -7,7 +7,7 @@ import Footer from "../components/Footer"
 
 function Home() {
   return (
-    <div className="pt-20">
+    <div className="pt-20 bg-[#f8f8f8]">
       <Hero />
       <LatestCollection/>
       <BestSellers />
