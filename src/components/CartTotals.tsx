@@ -35,12 +35,12 @@ function CartTotals({ currency, totalPrice, shippingFee, subTotal }: Props) {
                 
                 <div className="flex justify-between items-center pt-2">
                     <p className="font-bold text-lg">Total</p>
-                    <p className="font-bold text-lg text-orange-600">{currency}{totalPrice.toFixed(2)}</p>
+                    <p className="font-bold text-lg  text-amber-600">{currency}{totalPrice.toFixed(2)}</p>
                 </div>
                 
                 
                 <Link to={'/place-order'}>
-                    <button className="px-6 py-3 w-full mt-4 rounded-lg cursor-pointer hover:bg-blue-700 bg-blue-600 text-white font-semibold transition-colors duration-200">
+                    <button className="px-6 py-3 w-full mt-4 rounded-lg cursor-pointer hover:bg-gray-700 bg-gray-600 text-white font-semibold transition-colors duration-200">
                         PROCEED TO CHECKOUT
                     </button>
                 </Link>

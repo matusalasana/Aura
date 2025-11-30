@@ -23,7 +23,7 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
     }
 
     return (
-            <div className="bg-[#ffffff] rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-300 h-full flex flex-col w-full ">
+            <div className="bg-[#ffffff] rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-gray-300 h-full flex flex-col w-full ">
 
                 
                     <div className="relative overflow-hidden bg-[ffffff] aspect-square">
@@ -60,7 +60,7 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
 
                     <div className="mb-3">
                         <Link to={`/product/${category}/${productId}`}>
-                            <p className="font-semibold mb-2 line-clamp-1 cursor-pointer hover:text-blue-600 ">
+                            <p className="font-semibold mb-2 line-clamp-1 cursor-pointer hover:text-gray-600 ">
                                 {name}
                             </p>
                         </Link>
@@ -98,10 +98,9 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                             }}
                             className="
                             w-[80%] 
-                            bg-[#000000]
-                            text-[#ffffff]
-                            hover:bg-gray-700
-                            hover:text-white  
+                            bg-black
+                            text-white
+                            hover:bg-gray-700  
                             font-semibold 
                             text-sm 
                             py-3 

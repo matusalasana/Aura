@@ -59,7 +59,7 @@ function Product() {
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                      selectedImage === index ? 'border-blue-600' : 'border-gray-200'
+                      selectedImage === index ? 'border-gray-600' : 'border-gray-200'
                     }`}
                   >
                     <img 
@@ -124,7 +124,7 @@ function Product() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label className="font-semibold text-gray-900">Select Size</label>
-                <button className="text-blue-600 text-sm font-medium">Size Guide</button>
+                <button className="text-gray-600 text-sm font-medium">Size Guide</button>
               </div>
               <div className="flex flex-wrap gap-3">
                 {product.sizes.map((size) => (
@@ -133,7 +133,7 @@ function Product() {
                     onClick={() => setSelectedSize(size)}
                     className={`px-6 py-3 border-2 rounded-xl font-medium transition-all duration-200 ${
                       selectedSize === size
-                        ? 'border-blue-600 bg-blue-50'
+                        ? 'border-gray-600 bg-gray-50'
                         : 'border-gray-200 hover:border-gray-300 text-gray-700'
                     }`}
                   >
@@ -165,7 +165,7 @@ function Product() {
                 <div className="flex gap-3 flex-1">
                   <button 
                     onClick={() => items?.addToCart(product._id)}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                   >
                     <ShoppingBag size={20} />
                     Add to Cart
@@ -216,15 +216,15 @@ function Product() {
               <h3 className="font-semibold text-gray-900">Product Details</h3>
               <ul className="text-gray-600 space-y-2">
                 <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
                   100% Original product
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
                   Cash on delivery available
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
                   Easy return and exchange within 7 days
                 </li>
               </ul>

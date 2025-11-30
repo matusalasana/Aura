@@ -8,7 +8,7 @@ function Contact() {
   return (
     <div className="min-h-screen bg-gray-50 pt-25">
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-linear-to-br from-blue-50 to-indigo-100">
+      <section className="pt-24 pb-16 bg-linear-to-br from-gray-50 to-indigo-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Title text1="CONTACT" text2="US" />
@@ -37,12 +37,12 @@ function Contact() {
                 {/* Floating Contact Card */}
                 <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-6 max-w-xs">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                      <Phone className="w-6 h-6 text-gray-600" />
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">Call Us</div>
-                      <div className="text-blue-600 font-medium">+251-945807386</div>
+                      <div className="text-gray-600 font-medium">+251-945807386</div>
                     </div>
                   </div>
                   <p className="text-sm text-gray-600">Available 24/7 for customer support</p>
@@ -55,13 +55,13 @@ function Contact() {
               {/* Store Information */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                 <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
-                  Visit Our <span className="text-blue-600">Store</span>
+                  Visit Our <span className="text-gray-600">Store</span>
                 </h2>
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
-                      <MapPin className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
+                      <MapPin className="w-6 h-6 text-gray-600" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Our Location</h3>
@@ -115,7 +115,7 @@ function Contact() {
                       <input
                         type="text"
                         id="name"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors"
                         placeholder="Enter your name"
                       />
                     </div>
@@ -126,7 +126,7 @@ function Contact() {
                       <input
                         type="email"
                         id="email"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors"
                         placeholder="Enter your email"
                       />
                     </div>
@@ -138,7 +138,7 @@ function Contact() {
                     <input
                       type="text"
                       id="subject"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors"
                       placeholder="What is this regarding?"
                     />
                   </div>
@@ -149,13 +149,13 @@ function Contact() {
                     <textarea
                       id="message"
                       rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors resize-none"
                       placeholder="Tell us how we can help you..."
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
                   >
                     Send Message
                     <ArrowRight size={18} />
@@ -171,19 +171,19 @@ function Contact() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="bg-linear-to-r from-blue-600 to-purple-600 rounded-3xl p-8 lg:p-12 text-white">
+            <div className="bg-linear-to-r from-gray-600 to-purple-600 rounded-3xl p-8 lg:p-12 text-white">
               <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <Users className="w-8 h-8" />
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">
                 Careers at <span className="text-orange-300">SMstore</span>
               </h2>
-              <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-gray-100 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
                 Join our passionate team and help us revolutionize the shopping experience. 
                 We're always looking for talented individuals who share our vision.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-blue-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2">
+                <button className="bg-white text-gray-600 hover:bg-gray-100 font-semibold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2">
                   Explore Job Openings
                   <ArrowRight size={18} />
                 </button>

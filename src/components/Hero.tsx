@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import newArrivals from '../assets/New-Arrival-High-Quality-Male-Jacket.jpeg';
+import Title from './Title';
+import { FaGreaterThan } from 'react-icons/fa';
+import TiltleDiscription from './TiltleDiscription';
 
 function Hero() {
 
@@ -11,71 +14,50 @@ function Hero() {
          
           <div className="text-center lg:text-left space-y-6 lg:space-y-8 order-2 lg:order-1 animate-fade-in">
             
-            <div className="flex items-center justify-center lg:justify-start gap-3">
-              <div className="w-10 h-0.5 bg-blue-500"></div>
-              <span className="text-sm font-medium text-gray-500 tracking-wider uppercase">
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-10 h-0.5 bg-gray-500"></div>
+              <span className="text-sm font-medium text-gray-500 uppercase">
                 Our Bestsellers
               </span>
-              <div className="w-10 h-0.5 bg-blue-500"></div>
+              <div className="w-10 h-0.5 bg-gray-500"></div>
             </div>
 
            
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight">
-                New{' '}
-                <span className="text-blue-600 bg-linear-to-r from-blue-600 to-red-600 bg-clip-text">
-                  Arrivals
-                </span>
-              </h1>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                Discover our premium collection of stylish jackets and outerwear for the modern man.
-              </p>
+            <div className="flex flex-col justify-center items-center">
+              <Title text1='NEW' text2='ARRIVALS' />
+              <TiltleDiscription
+                text="Discover our premium collection of stylish jackets and outerwear for the modern man."
+              />
             </div>
 
            
-            <div className="flex flex-col sm:flex-row items-center gap-4 lg:justify-start justify-center">
-              <button className="group relative bg-[#00BCD4] hover:bg-[#00BCE0] text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-lg">
-                <span className="flex items-center gap-2">
-                  Shop Now
-                  <svg 
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </span>
-              </button>
+            
               
-              <Link to={'/collection'}>
-                <button className="group border-2 border-gray-300 hover:border-blue-600 text-gray-700 hover:text-blue-600 font-medium py-4 px-8 rounded-xl transition-all duration-300">
-                  <span className="flex items-center gap-2">
-                    View Collection
-                    <svg 
-                      className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+            
+              <button className="flex items-center justify-center mx-auto bg-[#000000] text-[#f8f8f8] hover:bg-gray-700 font-medium py-5 px-8 rounded-xl transition-all duration-300">
+
+                <Link to={'/collection'} className='flex gap-3 items-center'>
+                  <span>
+                    View Our Collections
                   </span>
-                </button>
-              </Link>
-            </div>
+                  < FaGreaterThan />
+                </Link>
+
+              </button>
+            
+            
 
            
-            <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
-              <div className="text-center">
+            <div className="flex justify-center items-center gap-6 pt-4">
+              <div >
                 <div className="text-2xl font-bold text-gray-900">200+</div>
                 <div className="text-sm text-gray-500">Premium Products</div>
               </div>
-              <div className="text-center">
+              <div>
                 <div className="text-2xl font-bold text-gray-900">5K+</div>
                 <div className="text-sm text-gray-500">Happy Customers</div>
               </div>
-              <div className="text-center">
+              <div>
                 <div className="text-2xl font-bold text-gray-900">100%</div>
                 <div className="text-sm text-gray-500">Quality Guarantee</div>
               </div>
@@ -98,12 +80,12 @@ function Hero() {
               </div>
               
               
-              <div className="absolute -top-4 -right-4 bg-linear-to-r from-cyan-900 to-cyan-700 rounded-2xl shadow-black shadow-sm p-4 animate-pulse duration-100">
-                <div className="text-sm  text-white font-bold">🔥 Hot Item</div>
+              <div className="absolute -top-4 -right-4 bg-linear-to-r from-blue-600 to-blue-700 rounded-2xl shadow-black shadow-sm p-4 animate-pulse">
+                <div className="text-sm font-semibold text-white">🔥 Hot Item</div>
               </div>
               
-              <div className="absolute bottom-0 -left-4 bg-linear-to-r from-cyan-900 to-cyan-700 text-white rounded-2xl shadow-xl p-4">
-                <div className="text-sm">New Season</div>
+              <div className="absolute bottom-0 -left-4 bg-blue-600 text-white rounded-2xl shadow-xl p-4">
+                <div className="text-sm font-semibold">New Season</div>
               </div>
             </div>
           </div>

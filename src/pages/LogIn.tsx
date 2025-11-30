@@ -12,7 +12,7 @@ function LogIn() {
 
   return (
 
-      <div className="pt-30 bg-linear-to-r from-blue-100 to-blue-200">
+      <div className="pt-30 bg-linear-to-r from-gray-100 to-gray-200">
 
         <div className=" bg-white rounded-2xl pb-10 w-[70%] mx-auto my-10 shadow-xl">
           <Title text1="WELCOME" text2="BACK"/>
@@ -31,7 +31,7 @@ function LogIn() {
             <div>
             <p className="flex justify-between">
               <label htmlFor="">Password</label>
-              <label htmlFor="" className="text-blue-600 hover:text-blue-700 font-bold cursor-pointer">Forgot Password?</label>
+              <label htmlFor="" className="text-gray-600 hover:text-gray-700 font-bold cursor-pointer">Forgot Password?</label>
             </p>
               <div className="relative">
                 <input type={`${ showPassword === true ? 'text' : 'password'}`} name="password" id="password" className="w-full py-2 focus:outline-none border border-gray-300 rounded-lg px-10" />
@@ -46,7 +46,7 @@ function LogIn() {
             </div>
 
             <div className="flex">
-              <button className="flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-700 w-full text-white rounded-lg py-2">
+              <button className="flex justify-center items-center gap-2 bg-gray-600 hover:bg-gray-700 w-full text-white rounded-lg py-2">
                 <span className="font-semibold">Sign In</span>
                 <ArrowRight size={15} className="text-white "/> 
               </button>
@@ -71,7 +71,7 @@ function LogIn() {
 
             <div className="flex flex-col justify-center items-center">
               <p>Don't have an account?</p>
-              <p className="flex gap-2 items-center cursor-pointer hover:text-blue-700 text-blue-600 font-bold">
+              <p className="flex gap-2 items-center cursor-pointer hover:text-gray-700 text-gray-600 font-bold">
                 <UserPlus size={20} /> 
                 <span>Sign up now</span>
               </p>

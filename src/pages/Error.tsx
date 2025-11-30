@@ -23,7 +23,7 @@ function Error() {
         <div className="space-y-3">
           <Link
             to="/"
-            className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            className="block w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
           >
             Go to Homepage
           </Link>
@@ -40,7 +40,7 @@ function Error() {
         <div className="mt-6">
           <p className="text-sm text-gray-500">
             Need help?{' '}
-            <Link to="/contact" className="text-blue-600 hover:underline">
+            <Link to="/contact" className="text-gray-600 hover:underline">
               Contact Support
             </Link>
           </p>

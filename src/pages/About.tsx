@@ -39,7 +39,7 @@ function About() {
               sourced from trusted brands and suppliers.
             </p>
             
-            <div className="bg-blue-50 rounded-xl p-6">
+            <div className="bg-gray-50 rounded-xl p-6">
               <h3 className="font-semibold text-gray-900 text-xl mb-3">Our Mission</h3>
               <p className="text-gray-600 leading-relaxed">
                 Our mission at SMstore is to empower customers with choice, convenience, and confidence. 
@@ -57,8 +57,8 @@ function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <div className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-blue-600 font-bold">✓</span>
+            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-gray-600 font-bold">✓</span>
             </div>
             <h3 className="font-semibold text-lg mb-3">Quality Assurance</h3>
             <p className="text-gray-600 text-sm">

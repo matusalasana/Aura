@@ -59,7 +59,7 @@ function SignUp() {
   const passwordStrengthScore = Object.values(passwordStrength).filter(Boolean).length
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 to-blue-100 pt-24">
+    <div className="min-h-screen bg-linear-to-br from-green-50 to-gray-100 pt-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
         {/* Sign Up Card */}
@@ -93,7 +93,7 @@ function SignUp() {
                       value={formData.firstName}
                       onChange={handleChange}
                       placeholder="First name"
-                      className="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -114,7 +114,7 @@ function SignUp() {
                       value={formData.lastName}
                       onChange={handleChange}
                       placeholder="Last name"
-                      className="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -137,7 +137,7 @@ function SignUp() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your email"
-                    className="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors"
                   />
                 </div>
               </div>
@@ -159,7 +159,7 @@ function SignUp() {
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Create a password"
-                    className="block w-full pl-10 pr-12 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="block w-full pl-10 pr-12 py-4 border border-gray-300 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-colors"
                   />
                   <button
                     type="button"
@@ -179,7 +179,7 @@ function SignUp() {
                           key={index}
                           className={`h-2 flex-1 rounded-full transition-colors ${
                             index <= passwordStrengthScore
-                              ? index <= 2 ? 'bg-red-500' : index <= 4 ? 'bg-yellow-500' : 'bg-green-500'
+                              ? index <= 2 ? 'bg-red-500' : index <= 4 ? 'bg-gray-500' : 'bg-green-500'
                               : 'bg-gray-200'
                           }`}
                         />
@@ -224,10 +224,10 @@ function SignUp() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Confirm your password"
-                    className={`block w-full pl-10 pr-12 py-4 border rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                    className={`block w-full pl-10 pr-12 py-4 border rounded-xl placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors ${
                       formData.confirmPassword && formData.password !== formData.confirmPassword
                         ? 'border-red-300 focus:border-red-500'
-                        : 'border-gray-300 focus:border-blue-500'
+                        : 'border-gray-300 focus:border-gray-500'
                     }`}
                   />
                   <button
@@ -253,15 +253,15 @@ function SignUp() {
                     required
                     checked={formData.agreeToTerms}
                     onChange={handleChange}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
+                    className="h-4 w-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500 mt-1"
                   />
                   <label htmlFor="agreeToTerms" className="text-sm text-gray-700">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-blue-600 hover:text-blue-500 font-medium">
+                    <Link to="/terms" className="text-gray-600 hover:text-gray-500 font-medium">
                       Terms and Conditions
                     </Link>{" "}
                     and{" "}
-                    <Link to="/privacy" className="text-blue-600 hover:text-blue-500 font-medium">
+                    <Link to="/privacy" className="text-gray-600 hover:text-gray-500 font-medium">
                       Privacy Policy
                     </Link>
                   </label>
@@ -274,7 +274,7 @@ function SignUp() {
                     type="checkbox"
                     checked={formData.newsletter}
                     onChange={handleChange}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
+                    className="h-4 w-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500 mt-1"
                   />
                   <label htmlFor="newsletter" className="text-sm text-gray-700">
                     Send me product updates, special offers, and shopping tips (optional)
@@ -343,7 +343,7 @@ function SignUp() {
                 Already have an account?{" "}
                 <Link 
                   to="/login" 
-                  className="text-blue-600 hover:text-blue-500 font-semibold transition-colors"
+                  className="text-gray-600 hover:text-gray-500 font-semibold transition-colors"
                 >
                   Sign in here
                 </Link>

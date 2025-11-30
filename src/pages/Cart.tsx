@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useState, useEffect } from "react"
 import CartBox from "../components/CartBox"
 import CartTotals from "../components/CartTotals"
@@ -10,17 +12,15 @@ function Cart() {
   const items = useContext(ShopContext)
   const [subTotal, setSubTotal] = useState<number>(0)
 
-  // Get cart products with quantities - UPDATED for new cart structure
   const cartProducts = (items?.cart.map(cartItem => {
     const product = items.products.find(p => p._id === cartItem.productId)
     return product ? { 
       ...product, 
       quantity: cartItem.quantity,
-      cartItemId: cartItem.productId // Keep the original ID for removal
+      cartItemId: cartItem.productId
     } : null
   }).filter(Boolean) as any[]) || []
 
-  // Calculate subtotal whenever cart changes - UPDATED for quantities
   useEffect(() => {
     if (cartProducts.length > 0) {
       const total = cartProducts.reduce((sum, product) => {
@@ -51,7 +51,7 @@ function Cart() {
           <Title text1="YOUR" text2="CART" />
           <p className="text-gray-500 text-lg mt-4">Your cart is empty</p>
           <button 
-            className="mt-4 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+            className="mt-4 bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
           >
             <Link to="/collection">Continue Shopping</Link>
           </button>

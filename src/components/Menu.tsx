@@ -73,13 +73,13 @@ function Menu() {
             return (
                 <Link to={item.path} key={index} className={`flex justify-between items-center  font-semibold transition-colors duration-200 p-2 rounded-lg
                   ${isActive 
-                    ? 'text-blue-600 bg-blue-50 border-blue-600' 
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' } `}>
+                    ? 'text-gray-600 bg-gray-50 border-gray-600' 
+                    : 'text-gray-700 hover:text-gray-600 hover:bg-gray-50' } `}>
                   <div className="flex gap-3">
                     <Icon size={20} />
                     <p className="bb">{item.label}</p>
                   </div>
-                  <p className= {`h-2 w-2 bg-blue-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
+                  <p className= {`h-2 w-2 bg-gray-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
                 </Link>
             )
           })}
@@ -96,13 +96,13 @@ function Menu() {
               return (
                 <Link to={item.path} key={index} className={`flex justify-between items-center  font-semibold transition-colors duration-200 p-2 rounded-lg
                   ${isActive 
-                    ? 'text-blue-600 bg-blue-50 border-blue-600' 
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' } `}>
+                    ? 'text-gray-600 bg-gray-50 border-gray-600' 
+                    : 'text-gray-700 hover:text-gray-600 hover:bg-gray-50' } `}>
                   <div className="flex gap-3">
                     <Icon size={20} />
                     <p>{item.label}</p>
                   </div>
-                  <p className= {`h-2 w-2 bg-blue-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
+                  <p className= {`h-2 w-2 bg-gray-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
                 </Link>
               )
             })}
@@ -119,13 +119,13 @@ function Menu() {
             return (
                 <Link to={item.path} key={index} className={`flex justify-between items-center  font-semibold transition-colors duration-200 p-2 rounded-lg
                   ${isActive 
-                    ? 'text-blue-600 bg-blue-50 border-blue-600' 
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50' } `}>
+                    ? 'text-gray-600 bg-gray-50 border-gray-600' 
+                    : 'text-gray-700 hover:text-gray-600 hover:bg-gray-50' } `}>
                   <div className="flex gap-3">
                     <Icon size={20} />
                     <p className="bb">{item.label}</p>
                   </div>
-                  <p className= {`h-2 w-2 bg-blue-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
+                  <p className= {`h-2 w-2 bg-gray-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
                 </Link>
             )
           })}

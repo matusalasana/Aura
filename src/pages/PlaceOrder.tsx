@@ -102,7 +102,7 @@ function PlaceOrder() {
                       <div className={`
                         w-12 h-12 rounded-full flex items-center justify-center border-2 font-semibold transition-all duration-200
                         ${isCompleted ? 'bg-green-500 border-green-500 text-white' : ''}
-                        ${isActive ? 'bg-blue-600 border-blue-600 text-white' : ''}
+                        ${isActive ? 'bg-gray-600 border-gray-600 text-white' : ''}
                         ${!isCompleted && !isActive ? 'bg-white border-gray-300 text-gray-400' : ''}
                       `}>
                         {isCompleted ? <Check className="w-6 h-6" /> : <StepIcon className="w-6 h-6" />}
@@ -190,7 +190,7 @@ function PlaceOrder() {
                 {/* Shipping Information */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center gap-3 mb-6">
-                    <MapPin className="w-6 h-6 text-blue-600" />
+                    <MapPin className="w-6 h-6 text-gray-600" />
                     <h3 className="text-xl font-semibold text-gray-900">Shipping Information</h3>
                   </div>
 
@@ -205,7 +205,7 @@ function PlaceOrder() {
                         required
                         value={formData.firstName}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
                     <div>
@@ -218,7 +218,7 @@ function PlaceOrder() {
                         required
                         value={formData.lastName}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
                   </div>
@@ -234,7 +234,7 @@ function PlaceOrder() {
                         required
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
                     <div>
@@ -247,7 +247,7 @@ function PlaceOrder() {
                         required
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
                   </div>
@@ -262,7 +262,7 @@ function PlaceOrder() {
                       required
                       value={formData.address}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                     />
                   </div>
 
@@ -277,7 +277,7 @@ function PlaceOrder() {
                         required
                         value={formData.city}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
                     <div>
@@ -290,7 +290,7 @@ function PlaceOrder() {
                         required
                         value={formData.zipCode}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
                     <div>
@@ -302,7 +302,7 @@ function PlaceOrder() {
                         required
                         value={formData.country}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       >
                         <option value="">Select Country</option>
                         <option value="US">United States</option>
@@ -317,7 +317,7 @@ function PlaceOrder() {
                 {/* Payment Information */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center gap-3 mb-6">
-                    <CreditCard className="w-6 h-6 text-blue-600" />
+                    <CreditCard className="w-6 h-6 text-gray-600" />
                     <h3 className="text-xl font-semibold text-gray-900">Payment Information</h3>
                   </div>
 
@@ -333,7 +333,7 @@ function PlaceOrder() {
                         placeholder="1234 5678 9012 3456"
                         value={formData.cardNumber}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
 
@@ -349,7 +349,7 @@ function PlaceOrder() {
                           placeholder="MM/YY"
                           value={formData.expiryDate}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                         />
                       </div>
                       <div>
@@ -363,7 +363,7 @@ function PlaceOrder() {
                           placeholder="123"
                           value={formData.cvv}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                         />
                       </div>
                     </div>
@@ -378,7 +378,7 @@ function PlaceOrder() {
                         required
                         value={formData.cardName}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                       />
                     </div>
                   </div>
@@ -400,7 +400,7 @@ function PlaceOrder() {
                   <button
                     type="submit"
                     disabled={isProcessing}
-                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
+                    className="w-full bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
                   >
                     {isProcessing ? (
                       <>
@@ -417,11 +417,11 @@ function PlaceOrder() {
 
                   <p className="text-center text-sm text-gray-600 mt-4">
                     By placing your order, you agree to our{" "}
-                    <Link to="/terms" className="text-blue-600 hover:text-blue-500">
+                    <Link to="/terms" className="text-gray-600 hover:text-gray-500">
                       Terms of Service
                     </Link>{" "}
                     and{" "}
-                    <Link to="/privacy" className="text-blue-600 hover:text-blue-500">
+                    <Link to="/privacy" className="text-gray-600 hover:text-gray-500">
                       Privacy Policy
                     </Link>
                   </p>

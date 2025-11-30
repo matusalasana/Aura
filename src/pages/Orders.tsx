@@ -51,8 +51,8 @@ const mockOrders = [
 
 const statusConfig = {
   delivered: { label: "Delivered", color: "bg-green-100 text-green-800", icon: CheckCircle },
-  shipped: { label: "Shipped", color: "bg-blue-100 text-blue-800", icon: Truck },
-  processing: { label: "Processing", color: "bg-yellow-100 text-yellow-800", icon: Clock },
+  shipped: { label: "Shipped", color: "bg-gray-100 text-gray-800", icon: Truck },
+  processing: { label: "Processing", color: "bg-gray-100 text-gray-800", icon: Clock },
   cancelled: { label: "Cancelled", color: "bg-red-100 text-red-800", icon: XCircle }
 }
 
@@ -126,7 +126,7 @@ function Orders() {
                 placeholder="Search orders or products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
               />
             </div>
 
@@ -135,7 +135,7 @@ function Orders() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
               >
                 <option value="all">All Status</option>
                 <option value="processing">Processing</option>
@@ -147,7 +147,7 @@ function Orders() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -170,7 +170,7 @@ function Orders() {
                   setSearchTerm("")
                   setStatusFilter("all")
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
               >
                 Clear Filters
               </button>
@@ -243,7 +243,7 @@ function Orders() {
                       </button>
                       
                       {order.status === 'delivered' && (
-                        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
                           Buy Again
                         </button>
                       )}

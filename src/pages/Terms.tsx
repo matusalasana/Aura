@@ -6,9 +6,9 @@ const Terms = () => {
             <div className="min-h-screen bg-gray-50 py-8 px-4 pt-30 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
                     
-                    <div className="bg-linear-to-r from-blue-600 to-purple-600 px-6 py-8 text-white">
+                    <div className="bg-linear-to-r from-gray-600 to-purple-600 px-6 py-8 text-white">
                         <h1 className="text-4xl font-bold text-center mb-2">Terms & Conditions</h1>
-                        <p className="text-center text-blue-100">Last updated: {new Date().toLocaleDateString()}</p>
+                        <p className="text-center text-gray-100">Last updated: {new Date().toLocaleDateString()}</p>
                     </div>
 
                     
@@ -23,7 +23,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 1. Acceptance of Terms
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -34,7 +34,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 2. Account Registration
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -45,7 +45,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 3. Products and Pricing
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -56,7 +56,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 4. Payment Methods
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -67,7 +67,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 5. Shipping & Delivery
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -78,7 +78,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 6. Returns & Refunds
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -89,7 +89,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 7. Intellectual Property
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -100,7 +100,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 8. Limitation of Liability
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -111,7 +111,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 9. Governing Law
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -122,7 +122,7 @@ const Terms = () => {
 
                         
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-blue-500 pl-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 border-l-4 border-gray-500 pl-4">
                                 10. Contact Information
                             </h2>
                             <p className="text-gray-600 leading-relaxed">
@@ -136,8 +136,8 @@ const Terms = () => {
                         </div>
 
                         
-                        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-8">
-                            <p className="text-yellow-700">
+                        <div className="bg-gray-50 border-l-4 border-gray-400 p-4 mt-8">
+                            <p className="text-gray-700">
                                 <strong>Note:</strong> By using our website, you acknowledge that you have read, understood, 
                                 and agree to be bound by these Terms & Conditions.
                             </p>

@@ -37,11 +37,11 @@ function Footer() {
             <h3 className="text-white font-semibold text-lg">GET IN TOUCH</h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
-                <BiPhone className="w-4 h-4 text-blue-400" />
+                <BiPhone className="w-4 h-4 text-gray-400" />
                 <span>+251-945807386</span>
               </div>
               <div className="flex items-center gap-2">
-                <BiEnvelope className="w-4 h-4 text-blue-400" />
+                <BiEnvelope className="w-4 h-4 text-gray-400" />
                 <a href="mailto:matusalasana@gmail.com" className="hover:text-white transition-colors">
                   matusalasana@gmail.com
                 </a>

@@ -89,7 +89,7 @@ function Profile() {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
                 {/* User Summary */}
                 <div className="text-center mb-6 pb-6 border-b border-gray-100">
-                  <div className="w-20 h-20 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-20 h-20 bg-linear-to-br from-gray-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-white text-2xl font-bold">
                       {profileData.firstName[0]}{profileData.lastName[0]}
                     </span>
@@ -114,8 +114,8 @@ function Profile() {
                         className={`
                           w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                           ${activeTab === item.id 
-                            ? 'bg-blue-50 text-blue-600 border border-blue-200' 
-                            : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                            ? 'bg-gray-50 text-gray-600 border border-gray-200' 
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-600'
                           }
                         `}
                       >
@@ -146,7 +146,7 @@ function Profile() {
                     {!isEditing ? (
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
                       >
                         <Edit2 className="w-4 h-4" />
                         Edit Profile
@@ -162,7 +162,7 @@ function Profile() {
                         </button>
                         <button
                           onClick={handleSave}
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors"
                         >
                           <Save className="w-4 h-4" />
                           Save Changes
@@ -187,7 +187,7 @@ function Profile() {
                             value={formData.firstName}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
                           />
                         </div>
 
@@ -201,7 +201,7 @@ function Profile() {
                             value={formData.lastName}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
                           />
                         </div>
 
@@ -217,7 +217,7 @@ function Profile() {
                               value={formData.email}
                               onChange={handleInputChange}
                               disabled={!isEditing}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
                             />
                           </div>
                         </div>
@@ -234,7 +234,7 @@ function Profile() {
                               value={formData.phone}
                               onChange={handleInputChange}
                               disabled={!isEditing}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
                             />
                           </div>
                         </div>
@@ -254,7 +254,7 @@ function Profile() {
                               value={formData.address}
                               onChange={handleInputChange}
                               disabled={!isEditing}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
                             />
                           </div>
                         </div>
@@ -269,7 +269,7 @@ function Profile() {
                             value={formData.bio}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500 resize-none"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500 resize-none"
                           />
                         </div>
                       </div>
@@ -285,8 +285,8 @@ function Profile() {
                     const Icon = stat.icon
                     return (
                       <div key={stat.label} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                          <Icon className="w-6 h-6 text-blue-600" />
+                        <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                          <Icon className="w-6 h-6 text-gray-600" />
                         </div>
                         <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
                         <div className="text-gray-600">{stat.label}</div>
@@ -316,7 +316,7 @@ function Profile() {
                           <div className="font-semibold text-gray-900">${order.total.toFixed(2)}</div>
                           <div className={`text-sm ${
                             order.status === 'Delivered' ? 'text-green-600' : 
-                            order.status === 'Shipped' ? 'text-blue-600' : 'text-yellow-600'
+                            order.status === 'Shipped' ? 'text-gray-600' : 'text-gray-600'
                           }`}>
                             {order.status}
                           </div>
