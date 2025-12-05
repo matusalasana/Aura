@@ -103,9 +103,9 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                             }}
                             className="
                             w-[80%] 
-                            bg-green-600
+                            bg-blue-600
                             text-gray-100
-                            hover:bg-green-700
+                            hover:bg-blue-700
                             font-semibold
                             text-sm
                             py-3

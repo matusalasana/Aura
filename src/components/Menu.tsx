@@ -46,7 +46,7 @@ function Menu() {
     <>
     <MenuIcon onClick={() => openMenu()} className="text-[#FFFFFF]" />
      { isOpen && 
-     <div className = {`flex flex-col gap-5 fixed top-0 right-0 z-50 h-screen bg-white w-80 py-10`}>
+     <div className = {`flex flex-col gap-5 fixed top-0 right-0 z-50 h-screen bg-white max-sm:w-[50%] max-md:w-[40%] max-lg:w-[30%] max-xl:w-[25%] max-2xl:w-[20%] py-10`}>
 
 
         <div className="flex shrink-0 justify-between items-center px-3">
@@ -79,7 +79,7 @@ function Menu() {
                     <Icon size={20} />
                     <p className="bb">{item.label}</p>
                   </div>
-                  <p className= {`h-2 w-2 bg-gray-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
+                  <p className= {`h-2 w-2 bg-blue-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
                 </Link>
             )
           })}
@@ -102,7 +102,7 @@ function Menu() {
                     <Icon size={20} />
                     <p>{item.label}</p>
                   </div>
-                  <p className= {`h-2 w-2 bg-gray-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
+                  <p className= {`h-2 w-2 bg-blue-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
                 </Link>
               )
             })}
@@ -125,7 +125,7 @@ function Menu() {
                     <Icon size={20} />
                     <p className="bb">{item.label}</p>
                   </div>
-                  <p className= {`h-2 w-2 bg-gray-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
+                  <p className= {`h-2 w-2 bg-blue-400 rounded-full ${isActive ? 'block' : 'hidden'} `}></p>
                 </Link>
             )
           })}
@@ -135,7 +135,7 @@ function Menu() {
         <div className="flex flex-col gap-5">
           <p className="text-gray-600 font-semibold mt-5">SUPPORT</p>
           <div className="flex items-center gap-3 cursor-pointer">
-            <Phone color="green" className="bg-gray-100 w-10 h-10 p-2 rounded-lg"/>
+            <Phone color="blue" className="bg-gray-100 w-10 h-10 p-2 rounded-lg"/>
             <div>
               <p className="text-gray-700 font-semibold">Call Support</p>
               <p className="text-gray-700">+251-945807386</p>

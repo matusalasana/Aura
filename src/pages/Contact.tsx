@@ -72,8 +72,8 @@ function Contact() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center shrink-0">
-                      <Phone className="w-6 h-6 text-green-600" />
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                      <Phone className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>

@@ -101,7 +101,7 @@ function PlaceOrder() {
                     <div className="flex items-center flex-wrap">
                       <div className={`
                         w-12 h-12 rounded-full flex items-center justify-center border-2 font-semibold transition-all duration-200
-                        ${isCompleted ? 'bg-green-500 border-green-500 text-white' : ''}
+                        ${isCompleted ? 'bg-blue-500 border-blue-500 text-white' : ''}
                         ${isActive ? 'bg-gray-600 border-gray-600 text-white' : ''}
                         ${!isCompleted && !isActive ? 'bg-white border-gray-300 text-gray-400' : ''}
                       `}>
@@ -117,7 +117,7 @@ function PlaceOrder() {
                     {index < steps.length - 1 && (
                       <div className={`
                         flex-1 h-0.5 mx-4 transition-colors duration-200
-                        ${isCompleted ? 'bg-green-500' : 'bg-gray-200'}
+                        ${isCompleted ? 'bg-blue-500' : 'bg-gray-200'}
                       `} />
                     )}
                   </div>
@@ -171,12 +171,12 @@ function PlaceOrder() {
                 </div>
 
                 {/* Security Badge */}
-                <div className="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
+                <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
                   <div className="flex items-center gap-3">
-                    <Shield className="w-5 h-5 text-green-600" />
+                    <Shield className="w-5 h-5 text-blue-600" />
                     <div>
-                      <p className="text-sm font-medium text-green-900">Secure Checkout</p>
-                      <p className="text-xs text-green-700">Your payment information is encrypted</p>
+                      <p className="text-sm font-medium text-blue-900">Secure Checkout</p>
+                      <p className="text-xs text-blue-700">Your payment information is encrypted</p>
                     </div>
                   </div>
                 </div>
@@ -388,7 +388,7 @@ function PlaceOrder() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      <Lock className="w-5 h-5 text-green-600" />
+                      <Lock className="w-5 h-5 text-blue-600" />
                       <span className="text-sm text-gray-600">Secure SSL Encryption</span>
                     </div>
                     <div className="text-right">

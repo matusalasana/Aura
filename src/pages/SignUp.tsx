@@ -59,7 +59,7 @@ function SignUp() {
   const passwordStrengthScore = Object.values(passwordStrength).filter(Boolean).length
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 to-gray-100 pt-24">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-gray-100 pt-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
         {/* Sign Up Card */}
@@ -179,7 +179,7 @@ function SignUp() {
                           key={index}
                           className={`h-2 flex-1 rounded-full transition-colors ${
                             index <= passwordStrengthScore
-                              ? index <= 2 ? 'bg-red-500' : index <= 4 ? 'bg-gray-500' : 'bg-green-500'
+                              ? index <= 2 ? 'bg-red-500' : index <= 4 ? 'bg-gray-500' : 'bg-blue-500'
                               : 'bg-gray-200'
                           }`}
                         />
@@ -187,20 +187,20 @@ function SignUp() {
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="flex items-center gap-2">
-                        <Check className={`h-3 w-3 ${passwordStrength.hasMinLength ? 'text-green-500' : 'text-gray-300'}`} />
-                        <span className={passwordStrength.hasMinLength ? 'text-green-600' : 'text-gray-500'}>8+ characters</span>
+                        <Check className={`h-3 w-3 ${passwordStrength.hasMinLength ? 'text-blue-500' : 'text-gray-300'}`} />
+                        <span className={passwordStrength.hasMinLength ? 'text-blue-600' : 'text-gray-500'}>8+ characters</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Check className={`h-3 w-3 ${passwordStrength.hasUpperCase ? 'text-green-500' : 'text-gray-300'}`} />
-                        <span className={passwordStrength.hasUpperCase ? 'text-green-600' : 'text-gray-500'}>Uppercase letter</span>
+                        <Check className={`h-3 w-3 ${passwordStrength.hasUpperCase ? 'text-blue-500' : 'text-gray-300'}`} />
+                        <span className={passwordStrength.hasUpperCase ? 'text-blue-600' : 'text-gray-500'}>Uppercase letter</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Check className={`h-3 w-3 ${passwordStrength.hasLowerCase ? 'text-green-500' : 'text-gray-300'}`} />
-                        <span className={passwordStrength.hasLowerCase ? 'text-green-600' : 'text-gray-500'}>Lowercase letter</span>
+                        <Check className={`h-3 w-3 ${passwordStrength.hasLowerCase ? 'text-blue-500' : 'text-gray-300'}`} />
+                        <span className={passwordStrength.hasLowerCase ? 'text-blue-600' : 'text-gray-500'}>Lowercase letter</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Check className={`h-3 w-3 ${passwordStrength.hasNumber ? 'text-green-500' : 'text-gray-300'}`} />
-                        <span className={passwordStrength.hasNumber ? 'text-green-600' : 'text-gray-500'}>Number</span>
+                        <Check className={`h-3 w-3 ${passwordStrength.hasNumber ? 'text-blue-500' : 'text-gray-300'}`} />
+                        <span className={passwordStrength.hasNumber ? 'text-blue-600' : 'text-gray-500'}>Number</span>
                       </div>
                     </div>
                   </div>
@@ -286,7 +286,7 @@ function SignUp() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>

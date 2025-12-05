@@ -100,7 +100,7 @@ function Product() {
                 ))}
                 <span className="ml-2 text-sm text-gray-600">(122 reviews)</span>
               </div>
-              <span className="text-green-600 text-sm font-medium">In Stock</span>
+              <span className="text-blue-600 text-sm font-medium">In Stock</span>
             </div>
 
             {/* Price */}

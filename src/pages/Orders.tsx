@@ -50,7 +50,7 @@ const mockOrders = [
     
 
 const statusConfig = {
-  delivered: { label: "Delivered", color: "bg-green-100 text-green-800", icon: CheckCircle },
+  delivered: { label: "Delivered", color: "bg-blue-100 text-blue-800", icon: CheckCircle },
   shipped: { label: "Shipped", color: "bg-gray-100 text-gray-800", icon: Truck },
   processing: { label: "Processing", color: "bg-gray-100 text-gray-800", icon: Clock },
   cancelled: { label: "Cancelled", color: "bg-red-100 text-red-800", icon: XCircle }

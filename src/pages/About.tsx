@@ -67,8 +67,8 @@ function About() {
           </div>
 
           <div className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-green-600 font-bold">⚡</span>
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-blue-600 font-bold">⚡</span>
             </div>
             <h3 className="font-semibold text-lg mb-3">Convenience</h3>
             <p className="text-gray-600 text-sm">

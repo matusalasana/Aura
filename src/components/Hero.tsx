@@ -34,7 +34,7 @@ function Hero() {
             
               
             
-              <button className="flex items-center justify-center mx-auto bg-[#000000] text-[#f8f8f8] hover:bg-gray-700 font-medium py-5 px-8 rounded-xl transition-all duration-300">
+              <button className="flex items-center justify-center mx-auto bg-blue-600 text-white hover:bg-blue-700 font-medium py-5 px-8 rounded-xl transition-all duration-300">
 
                 <Link to={'/collection'} className='flex gap-3 items-center'>
                   <span>

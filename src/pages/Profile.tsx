@@ -315,7 +315,7 @@ function Profile() {
                         <div className="text-right">
                           <div className="font-semibold text-gray-900">${order.total.toFixed(2)}</div>
                           <div className={`text-sm ${
-                            order.status === 'Delivered' ? 'text-green-600' : 
+                            order.status === 'Delivered' ? 'text-blue-600' : 
                             order.status === 'Shipped' ? 'text-gray-600' : 'text-gray-600'
                           }`}>
                             {order.status}
