@@ -22,6 +22,19 @@ export interface Product {
     bestseller: boolean;
 }
 
+export interface AdminProduct {
+    _id: string;
+    name: string;
+    description: string;
+    price: number;
+    image: string[];
+    category: string;
+    subCategory: string;
+    sizes: string[];
+    date: number;
+    bestseller: boolean;
+}
+
 export interface CartItem {
     productId: string;
     quantity: number;
@@ -38,6 +51,9 @@ export interface ShopContextType {
     currency: string;
     delivery_fee: number;
     products: Product[];
+    
+    adminProducts: AdminProduct[];
+    addNewProduct: (product: AdminProduct) => void;
 
     closeSearch: () => void;
     openSearch: () => void;
@@ -70,6 +86,8 @@ export const ShopContext = createContext<ShopContextType | undefined>(undefined)
 
 function ShopContextProvider({ children }: { children: ReactNode }) {
 
+    const [newProducts, setNewProducts] = useState<AdminProduct[]>(products);
+
     const currency = "ETB ";
     const delivery_fee = 10;
     const [cart, setCart] = useState<CartItem[]>([]);
@@ -88,6 +106,16 @@ function ShopContextProvider({ children }: { children: ReactNode }) {
     
 
     useEffect(() => {
+        const savedAdminProducts = localStorage.getItem('admin-products');
+        if (savedAdminProducts) {
+            setNewProducts(JSON.parse(savedAdminProducts));
+        }
+    }, []);
+    useEffect(() => {
+        localStorage.setItem('admin-products', JSON.stringify(newProducts));
+    }, [newProducts]);
+    
+    useEffect(() => {
         const savedHeartStates = localStorage.getItem('heart-states');
         if (savedHeartStates) {
             setHeartStates(JSON.parse(savedHeartStates));
@@ -97,6 +125,10 @@ function ShopContextProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         localStorage.setItem('heart-states', JSON.stringify(heartStates));
     }, [heartStates]);
+
+    const addNewProduct = (product: AdminProduct) => {
+        setNewProducts(prevProducts => [...prevProducts, product]);
+    }
 
     const toggleHeart = (productId: string) => {
         setHeartStates(prev => {
@@ -193,6 +225,7 @@ function ShopContextProvider({ children }: { children: ReactNode }) {
     }, 0);
 
     const contextValue: ShopContextType = {
+        addNewProduct,
         closeSearch,
         openSearch,
         text,
@@ -212,7 +245,8 @@ function ShopContextProvider({ children }: { children: ReactNode }) {
         heartStates,
         toggleHeart,
         isHeartToggled,
-        clearAllHearts
+        clearAllHearts,
+        adminProducts: []
     };
 
     return (

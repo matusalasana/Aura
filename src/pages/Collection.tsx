@@ -142,6 +142,12 @@ function Collection() {
                     clearFilters={() => setFilteredItems(products)}
                     onSelectSort={handleSortChange}
                 />
+                {
+                    filteredItems.length > 0 
+                        ? <p className="text-sm text-gray-600 font-semibold pt-5 pb-2  px-2">Showing {filteredItems.length} products</p>
+                        : <p className="text-sm text-gray-600 font-semibold pt-5 pb-2  px-2">No products found</p>
+                }
+                
                 <div className="grid grid-cols-4 gap-6 mb-20 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
                     
                     {filteredItems.map((product) => {

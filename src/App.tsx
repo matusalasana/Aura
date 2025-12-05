@@ -15,6 +15,7 @@ import SignUp from "./pages/SignUp"
 import Profile from "./pages/Profile"
 import Terms from "./pages/Terms"
 import Wishlist from "./pages/Wishlist"
+import AdminProduct from "./pages/AdminProduct"
 
 function App() {
   const page = useLocation()
@@ -89,6 +90,9 @@ function App() {
             <Route  
               path="*" 
               element={<Error />} />
+            <Route  
+              path="/admin/product" 
+              element={<AdminProduct />} />
           </Routes>
         </main>
         
