@@ -16,7 +16,7 @@ function LogIn() {
 
         <div className=" bg-white rounded-2xl pb-10 w-[70%] mx-auto my-10 shadow-xl">
           <Title text1="WELCOME" text2="BACK"/>
-          <p className="text-center text-gray-600 text-md">Sign in to your account to continue</p>
+          <p className="text-center text-blue-600 text-md">Sign in to your account to continue</p>
 
           <form action="" className="flex flex-col justify-center gap-5 px-10 mt-10">
 

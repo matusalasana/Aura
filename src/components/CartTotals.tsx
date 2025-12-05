@@ -48,7 +48,7 @@ function CartTotals({ currency, totalPrice, shippingFee, subTotal }: Props) {
                 
                 <button 
                     onClick={() => window.history.back()}
-                    className="px-6 py-2 w-full mt-2 rounded-lg cursor-pointer hover:bg-gray-200 bg-gray-100 text-gray-700 font-semibold transition-colors duration-200"
+                    className="px-6 py-2 w-full mt-2 rounded-lg cursor-pointer hover:bg-blue-700 bg-blue-600 text-white font-semibold transition-colors duration-200"
                 >
                     CONTINUE SHOPPING
                 </button>

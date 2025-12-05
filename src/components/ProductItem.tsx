@@ -35,7 +35,7 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                         />
                         </Link>
                         <div className="absolute top-2 left-2">
-                            <span className="bg-gray-500 hover:bg-white px-2 py-1 rounded-full shadow-lg text-xs text-white">
+                            <span className="bg-gray-600 px-2 py-1 rounded-full shadow-lg text-xs text-white">
                                 {category}
                             </span> 
                         </div>
@@ -73,11 +73,16 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                             <span className="text-xs">{price*16} reviews)</span>
                             <span className="mx-1 h-4 w-0.5 bg-gray-300"></span><span className="font-bold text-sm">4.5</span>
                         </div>
-                        <div className="flex gap-2 items-center font-bold text-gray-900 mt-2">
+                        <div className="flex gap-5 items-center font-bold mt-2">
                             
-                            <span className="">
-                                {currency || 'ETB'}{price*20 - price*20*0.25}
-                            </span>
+                            <p className="flex flex-col items-center justify-center">
+                                <span className="text-sm">
+                                    {currency || 'ETB'}
+                                </span>
+                                <span className="text-xl text-gray-900">
+                                    {price*20 - price*20*0.25}
+                                </span>
+                            </p>
                             <p className="flex flex-col text-[10px]">
                                 <span className="text-red-600">
                                     - 25% now save ETB {price*20*0.25}
@@ -98,15 +103,15 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                             }}
                             className="
                             w-[80%] 
-                            bg-black
-                            text-white
-                            hover:bg-gray-700  
-                            font-semibold 
-                            text-sm 
-                            py-3 
-                            rounded-lg 
+                            bg-green-600
+                            text-gray-100
+                            hover:bg-green-700
+                            font-semibold
+                            text-sm
+                            py-3
+                            rounded-lg
                             transition-all 
-                            duration-200 
+                            duration-100 
                             flex items-center 
                             justify-center 
                             gap-2 

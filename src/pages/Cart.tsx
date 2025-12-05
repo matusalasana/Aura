@@ -51,7 +51,7 @@ function Cart() {
           <Title text1="YOUR" text2="CART" />
           <p className="text-gray-500 text-lg mt-4">Your cart is empty</p>
           <button 
-            className="mt-4 bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+            className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
           >
             <Link to="/collection">Continue Shopping</Link>
           </button>
