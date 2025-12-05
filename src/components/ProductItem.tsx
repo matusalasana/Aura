@@ -73,13 +73,13 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                             <span className="text-xs">{price*16} reviews)</span>
                             <span className="mx-1 h-4 w-0.5 bg-gray-300"></span><span className="font-bold text-sm">4.5</span>
                         </div>
-                        <div className="flex gap-5 items-center font-bold mt-2">
+                        <div className="flex gap-5 items-center justify-center font-bold mt-2">
                             
-                            <p className="flex flex-col items-center justify-center">
+                            <p className="flex items-center justify-center leading-2 gap-1">
                                 <span className="text-sm">
                                     {currency || 'ETB'}
                                 </span>
-                                <span className="text-xl text-gray-900">
+                                <span className="text-lg text-gray-900">
                                     {price*20 - price*20*0.25}
                                 </span>
                             </p>
