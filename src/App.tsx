@@ -15,7 +15,14 @@ import SignUp from "./pages/SignUp"
 import Profile from "./pages/Profile"
 import Terms from "./pages/Terms"
 import Wishlist from "./pages/Wishlist"
+import Notification from "./pages/Notification"
 import AdminProduct from "./pages/AdminProduct"
+import AdminLayout from "./pages/AdminLayout"
+import Statistics from "./pages/Statistics"
+import Reports from "./pages/Reports"
+import Payments from "./pages/Payments"
+import Customers from "./pages/Customers"
+import AdminOrders from "./pages/AdminOrders"
 
 function App() {
   const page = useLocation()
@@ -90,9 +97,31 @@ function App() {
             <Route  
               path="*" 
               element={<Error />} />
+
             <Route  
               path="/admin/product" 
               element={<AdminProduct />} />
+            <Route  
+              path="/admin" 
+              element={<AdminLayout />} />
+            <Route  
+              path="/admin/orders" 
+              element={<AdminOrders />} />
+            <Route  
+              path="/admin/customers" 
+              element={<Customers />} />
+            <Route  
+              path="/admin/payments" 
+              element={<Payments />} />
+            <Route  
+              path="/admin/reports" 
+              element={<Reports />} />
+            <Route  
+              path="/admin/statistics" 
+              element={<Statistics />} />
+            <Route  
+              path="/admin/notification" 
+              element={<Notification />} />
           </Routes>
         </main>
         
