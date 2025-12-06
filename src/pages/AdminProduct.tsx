@@ -30,7 +30,7 @@ const schema = z.object({
 
 function AdminProduct() {
 
-    const { register, handleSubmit, formState:{errors} } = useForm<FormData>({
+    const { register, handleSubmit, reset, formState:{errors} } = useForm<FormData>({
         resolver: zodResolver(schema),
         defaultValues: {
             productName: "",
@@ -42,6 +42,7 @@ function AdminProduct() {
 
     const onSubmit = (data: FormData) => {
         console.log('Submitted data:', data);
+        reset();
     };
 
   return (

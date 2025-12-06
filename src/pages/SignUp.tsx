@@ -28,12 +28,13 @@ type SignUpFormData = z.infer<typeof schema>
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const {register, handleSubmit, formState: {errors} } = useForm<SignUpFormData>({
+  const {register, handleSubmit,reset, formState: {errors, isSubmitting} } = useForm<SignUpFormData>({
     resolver: zodResolver(schema),
   })
 
   const onSubmit = (data: SignUpFormData) => {
     console.log('submitted form,',data)
+    reset()
   }
   
   return (
@@ -144,7 +145,7 @@ function SignUp() {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
           >
-            Sign Up <ArrowRight />
+            {isSubmitting ? "Signing Up..." : "Sign Up"} <ArrowRight />
           </button>
         </form>
 

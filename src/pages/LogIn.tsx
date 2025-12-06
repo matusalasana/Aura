@@ -24,10 +24,11 @@ type FormValues = z.infer<typeof schema>
 function LogIn() {
 
   const form = useForm<FormValues>({ resolver: zodResolver(schema) })
-  const { register, handleSubmit, formState: { errors } } = form
+  const { register, handleSubmit, reset, formState: { errors } } = form
 
   const onSubmit = (data: FormValues) => {
     console.log('Submitted forms,',data)
+    reset()
   }
 
   const [showPassword, setShowPassword] =useState(false)
