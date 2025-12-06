@@ -42,7 +42,7 @@ function LogIn() {
         <p className="text-center text-gray-600 mx-auto text-sm wrap-break-words">Sign in to your account to continue</p>
 
         
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center gap-5 mt-10">
+        <form onSubmit={handleSubmit(onSubmit)} method="post" action={'/submit'} className="flex flex-col justify-center gap-5 mt-10">
 
           <div>
             <label htmlFor="">Email Address</label>
