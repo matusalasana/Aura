@@ -102,7 +102,7 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                         <BsStarFill size={15} className="text-amber-500"/>
                         <BsStarFill size={15} className="text-amber-500"/>
                         <BsStarHalf size={15} className="text-amber-500"/>
-                        <span className="text-xs">({price*2} reviews)</span>
+                        <span className="text-xs">(2K reviews)</span>
                         <span className="mx-1 h-4 w-0.5 bg-gray-300"></span>
                     </div>
 

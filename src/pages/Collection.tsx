@@ -131,7 +131,7 @@ function Collection() {
     return (
         <div className="pt-60">
 
-            <div className="px-15">
+            <div className="px-10 container mx-auto">
 
                 <SearchItem onSearch={ (input) => setSearchTerm(input)} />
 
@@ -148,8 +148,15 @@ function Collection() {
                         : <p className="text-sm text-gray-600 font-semibold pt-5 pb-2  px-2">No products found</p>
                 }
                 
-                <div className="grid grid-cols-4 gap-6 mb-20 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
-                    
+                <div className="
+                    grid gap-6 mb-20
+                    max-sm:grid-cols-1
+                    max-md:grid-cols-2
+                    max-lg:grid-cols-2
+                    max-xl:grid-cols-3
+                    max-2xl:grid-cols-4
+                    2xl:grid-cols-5"
+                >
                     {filteredItems.map((product) => {
                         return (
                             <ProductItem
