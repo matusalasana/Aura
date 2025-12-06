@@ -72,9 +72,6 @@ export default function BarChart({
           scales: {
             y: {
               beginAtZero: true,
-              grid: {
-                drawBorder: false,
-              },
             },
             x: {
               grid: {
