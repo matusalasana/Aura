@@ -46,7 +46,7 @@ function Menu() {
     <>
     <MenuIcon onClick={() => openMenu()} className="text-[#FFFFFF]" />
      { isOpen && 
-     <div className = {`flex flex-col gap-5 fixed top-0 right-0 z-50 h-screen bg-white max-sm:w-[50%] max-md:w-[40%] max-lg:w-[30%] max-xl:w-[25%] max-2xl:w-[20%] py-10`}>
+     <div className = {`flex flex-col gap-5 fixed top-0 right-0 z-50 h-screen bg-white max-sm:w-[65%] max-md:w-[45%] max-lg:w-[40%] max-xl:w-[30%] max-2xl:w-[25%] py-10`}>
 
 
         <div className="flex shrink-0 justify-between items-center px-3">
