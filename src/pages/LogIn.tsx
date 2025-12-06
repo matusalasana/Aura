@@ -12,9 +12,9 @@ function LogIn() {
 
   return (
 
-      <div className="pt-30 bg-linear-to-r from-gray-100 to-gray-200">
+      <div className="pt-30 bg-linear-to-b from-gray-100 to-gray-200">
 
-        <div className=" bg-white rounded-2xl pb-10 w-[70%] mx-auto my-10 shadow-xl">
+        <div className=" container bg-white rounded-2xl pb-10 w-[70%] mx-auto my-10 shadow-xl">
           <Title text1="WELCOME" text2="BACK"/>
           <p className="text-center text-blue-600 text-md">Sign in to your account to continue</p>
 
