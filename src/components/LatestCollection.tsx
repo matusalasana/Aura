@@ -16,7 +16,7 @@ function LatestCollection() {
   },[products])
 
   return (
-    <div className="container mx-auto px-10">
+    <div className="container mx-auto mt-20 px-10">
 
       <div className="flex flex-col items-center justify-center mb-15">
         <Title text1={"LATEST"} text2={"COLLECTIONS"} />

@@ -3,8 +3,32 @@ import Footer from "../components/Footer"
 import Title from "../components/Title"
 import { Eye, EyeOff, Mail, Lock, ArrowRight, UserPlus } from "lucide-react"
 import { BsFacebook, BsGoogle } from "react-icons/bs"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod/src/zod.js"
+import { Link } from "react-router-dom"
+
+const schema = z.object({
+  email: z.string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email address" }),
+  password: z.string()
+    .min(1, { message: "Password is required" })
+    .min(8, { message: "Password must be at least 8 characters long" }),
+  remember: z.boolean()
+    .optional(),
+})
+
+type FormValues = z.infer<typeof schema>
 
 function LogIn() {
+
+  const form = useForm<FormValues>({ resolver: zodResolver(schema) })
+  const { register, handleSubmit, formState: { errors } } = form
+
+  const onSubmit = (data: FormValues) => {
+    console.log('Submitted forms,',data)
+  }
 
   const [showPassword, setShowPassword] =useState(false)
 
@@ -18,20 +42,23 @@ function LogIn() {
         <p className="text-center text-gray-600 mx-auto text-sm wrap-break-words">Sign in to your account to continue</p>
 
         
-        <form action="/submit" method="post" className="flex flex-col justify-center gap-5 mt-10">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center gap-5 mt-10">
 
           <div>
             <label htmlFor="">Email Address</label>
             <div className="relative">
-              <input placeholder="Enter your email" type="email" name="email" id="email" className="w-full focus:outline-none px-10 py-2 border border-gray-300 rounded-lg" />
+              <input {...register("email")} placeholder="Enter your email" type="email" name="email" id="email" className="w-full focus:outline-none px-10 py-2 border border-gray-300 rounded-lg" />
               <Mail size={20} className="text-gray-600 absolute top-2.5 left-2"/>
             </div>
+            {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
           </div>
 
           <div>
             <label htmlFor="">Password</label>
             <div className="relative">
               <input 
+                {...register("password")} 
+                placeholder="Enter your password"
                 type={showPassword ? 'text' : 'password'} 
                 name="password" 
                 id="password" 
@@ -52,6 +79,7 @@ function LogIn() {
                 />
               )}
             </div>
+            {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
             <div className="flex justify-end mt-1">
             <label 
               htmlFor="password" 
@@ -62,10 +90,12 @@ function LogIn() {
           </div>
           </div>
 
-
-          <div className="flex gap-3">
-            <input type="checkbox" name="remember" id="remember" />
-            <label htmlFor="remember" className="cursor-pointer text-gray-600">Remember me</label>
+          <div>
+            <div className="flex gap-3">
+              <input {...register("remember")} type="checkbox" name="remember" id="remember" />
+              <label htmlFor="remember" className="cursor-pointer text-gray-600">Remember me</label>
+            </div>
+            {errors.remember && <p className="text-sm text-red-600 mt-1">{errors.remember.message}</p>}
           </div>
 
           <div className="flex">
@@ -96,7 +126,9 @@ function LogIn() {
             <p className="text-center text-gray-600">Don't have an account?</p>
             <p className="flex gap-1.5 justify-center items-center cursor-pointer hover:text-blue-700 text-blue-600 font-bold">
               <UserPlus size={20} className="text-center" /> 
+              <Link to="/signup">
               <span className="text-center">Sign up now</span>
+              </Link>
             </p>
           </div>
 
