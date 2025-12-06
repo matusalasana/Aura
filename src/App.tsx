@@ -23,6 +23,9 @@ import Reports from "./pages/Reports"
 import Payments from "./pages/Payments"
 import Customers from "./pages/Customers"
 import AdminOrders from "./pages/AdminOrders"
+import Help from "./pages/Help"
+import { Settings } from "lucide-react"
+import AdminNavbar from "./components/AdminNavbar"
 
 function App() {
   const page = useLocation()
@@ -45,6 +48,7 @@ function App() {
       >
 
         <Nav />
+        <AdminNavbar />
 
         <main>
           <Routes>
@@ -122,6 +126,12 @@ function App() {
             <Route  
               path="/admin/notification" 
               element={<Notification />} />
+            <Route  
+              path="/admin/help" 
+              element={<Help />} />
+            <Route  
+              path="/admin/settings" 
+              element={<Settings />} />
           </Routes>
         </main>
         

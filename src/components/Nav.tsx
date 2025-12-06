@@ -1,10 +1,10 @@
 
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import storeLogo from '../assets/logo.svg'
 import { BsSearch } from 'react-icons/bs'
 import { CgProfile } from 'react-icons/cg'
 import { BiCart } from 'react-icons/bi'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import Menu from './Menu'
 
@@ -12,9 +12,30 @@ import Menu from './Menu'
 function Nav() {
 
     const items = useContext(ShopContext)
+    const location = useLocation();
+
+    const [showNavbar, setShowNavbar] = useState(true);
+      useEffect( () => {
+        if (location.pathname === '/admin' 
+            || location.pathname === '/admin/orders' 
+            || location.pathname === '/admin/product' 
+            || location.pathname === '/admin/payments' 
+            || location.pathname === '/admin/customers'
+            || location.pathname === '/admin/reports' 
+            || location.pathname === '/admin/statistics' 
+            || location.pathname === '/admin/notification' 
+            || location.pathname === '/admin/help' 
+            || location.pathname === '/admin/settings' ) {
+          setShowNavbar(false);
+        } else {
+          setShowNavbar(true);
+        }
+      },[location.pathname])
 
   return (
-    <nav className='flex bg-gray-800 justify-between items-center px-5 shadow-sm shadow-gray-600 pt-8 pb-5 fixed w-full z-10'>
+    <>
+    { showNavbar &&
+    <nav className=' flex bg-gray-800 justify-between items-center px-5 shadow-sm shadow-gray-600 pt-8 pb-5 fixed w-full z-10'>
         <Link to={'/'}>
             <img src = {storeLogo} alt="logo" className='max-sm:w-[110px] w-[125px]' />
         </Link>
@@ -91,7 +112,8 @@ function Nav() {
         </div>
         
 
-    </nav>
+    </nav>}
+    </>
   )
 }
 
