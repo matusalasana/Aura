@@ -27,6 +27,7 @@ import Help from "./pages/Help"
 import { Settings } from "lucide-react"
 import AdminNavbar from "./components/AdminNavbar"
 
+
 function App() {
   const page = useLocation()
 
@@ -46,7 +47,6 @@ function App() {
         from-gray-50 
         to-gray-100"
       >
-
         <Nav />
         <AdminNavbar />
 

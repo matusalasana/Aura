@@ -2,28 +2,29 @@ import Title from "../components/Title"
 import { z } from "zod";
 import {useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/src/zod.js";
-
-
+import { toast } from "react-toastify";
 type FormData = {
   productName: string;
   price: number;
   category: "men" | "women" | "kids";
   type: "topwear" | "bottomwear";
   description: string;
+  image: File | null;
 };
 
 
 const schema = z.object({
-  productName: z.string()
-    .min(1, "Product name is required")
-    .min(3, "Product name must be at least 3 characters"),  
-  price: z.number()
-    .positive("Price must be a positive number"),
-  category: z.enum(["men", "women", "kids"]),
-  type: z.enum(["topwear", "bottomwear"]),
-  description: z.string()
-    .min(1, "Description is required")
-    .min(10, "Description must be at least 10 characters"),
+    productName: z.string()
+        .min(1, "Product name is required")
+        .min(3, "Product name must be at least 3 characters"),  
+    price: z.number()
+        .positive("Price must be a positive number"),
+    category: z.enum(["men", "women", "kids"]),
+    type: z.enum(["topwear", "bottomwear"]),
+    description: z.string()
+        .min(1, "Description is required")
+        .min(10, "Description must be at least 10 characters"),
+
 });
 
 
@@ -37,12 +38,21 @@ function AdminProduct() {
             category: "men",
             type: "topwear",
             description: "",
+            image: null,
         }
     })
 
     const onSubmit = (data: FormData) => {
-        console.log('Submitted data:', data);
-        reset();
+        if (data.image == null) {
+            toast.error("Please insert image of a product.")
+            return -1
+        }
+        else {
+            toast.success("Product added successfully!")
+            console.log('Submitted data:', data);
+            reset();
+        }
+
     };
 
   return (
@@ -84,9 +94,10 @@ function AdminProduct() {
                     </div>
                     <div className="mb-5">
                         <label className="block text-gray-700 mb-2" htmlFor="imageUrl">Upload Image</label>
-                        <input className="w-full p-2 border border-gray-300 rounded" type="file" id="imageUrl" name="imageUrl" accept="image/*" />
+                        <input className="w-full file:px-4 file:py-2 file:mr-3 file:cursor-pointer cursor-pointer font-semibold border border-gray-300 rounded file:bg-blue-200" type="file" id="imageUrl" name="imageUrl" accept="image/*" />
+                        <p className="text-[12px] text-red-600 font-semibold">{errors.image?.message}</p>
                     </div>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full" type="submit">Add Product</button>
+                    <button className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-600 w-full" type="submit">Add Product</button>
                 </form>
             </div>
 
