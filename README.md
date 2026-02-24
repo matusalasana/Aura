@@ -60,5 +60,5 @@ npm start
  
  *SANA MATUSALA*
 • **github:** matusalasana
-• **Telegram:** [sana1514 ([t.me/sana1514])]
+• [Telegram] (https://t.me/sana1514)
 
