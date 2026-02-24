@@ -5,7 +5,7 @@ AuraStore is a high-performance, fully responsive e-commerce web application bui
 ![AuraStore Mockup]([Link to a screenshot or GIF of your app])
 
 ## 🚀 Live Demo
-[**View Live Project**]([Link to your hosted site, e.g., Vercel/Netlify])
+[**View Live Project**]([http://sm-store-phi.vercel.app])
 
 ---
 
@@ -43,3 +43,22 @@ Building AuraStore involved several technical hurdles that sharpened my frontend
 1. **Clone the repository:**
    ```bash
    git clone [https://github.com/matusalasana/AuraStore-Ecommere-app.git](https://github.com/matusalasana/AuraStore-Ecommere-app.git)
+```
+
+2. **Install dependencies:**
+```bash
+cd ecommere-app
+npm install
+```
+
+3. **Start the development server:**
+```bash 
+npm start
+```
+
+4. **👤 Author**
+ 
+ *SANA MATUSALA*
+• **github:** matusalasana
+• **Telegram:** [sana1514 ([t.me/sana1514])]
+
