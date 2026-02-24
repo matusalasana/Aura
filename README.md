@@ -5,7 +5,7 @@ AuraStore is a high-performance, fully responsive e-commerce web application bui
 ![AuraStore Mockup]([Link to a screenshot or GIF of your app])
 
 ## 🚀 Live Demo
-[**View Live Project**]([sm-store-phi.vercel.app])
+[**View Live Project**]([https://sm-store-phi.vercel.app/])
 
 ---
 
@@ -59,6 +59,8 @@ npm start
 4. **👤 Author**
  
  *SANA MATUSALA*
+
 • [**github:**](githun.com/matusalasana)
+
 • [Telegram](https://t.me/sana1514)
 
