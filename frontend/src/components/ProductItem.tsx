@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { BsHeart, BsHeartFill, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { BiCart } from "react-icons/bi";
 import { CgShare } from "react-icons/cg";
+import useCartStore from "../stores/cartStore"
 
 interface Props {
     name: string;
@@ -15,7 +16,8 @@ interface Props {
 
 function ProductItem({ name, productId, imgURL, price, category }: Props) {
 
-    const { currency, toggleHeart, isHeartToggled, addToWishList, addToCart } = useShop()!
+    const { currency, toggleHeart, isHeartToggled, addToWishList } = useShop()!
+    const addToCart = useCartStore((state) => state.addToCart)
 
     const isToggled = isHeartToggled(productId);
 
@@ -85,12 +87,12 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                        
                         <div className="flex justify-between items-center mt-2">
                             <p className="flex flex-col items-center font-semibold text-gray-500">
-                                <span className="max-sm:text-xs">{currency || 'ETB'}</span>
-                                <span className="line-through">{price*30}.00</span>
+                                <span className="max-sm:text-xs">{currency}</span>
+                                <span className="line-through">{price}.00</span>
                             </p>
                             <p className="flex flex-col items-center font-bold text-gray-900">
                                 <span className="max-sm:text-xs">{currency || 'ETB'}</span>
-                                <span className="text-2xl text-gray-800">{price*30 - price*30*0.25-0.01}</span>
+                                <span className="text-2xl text-gray-800">{price}</span>
                             </p>
                             <p className="bg-red-500 text-white font-semibold px-2 py-2 text-sm rounded-lg">25% OFF</p>
                         </div>

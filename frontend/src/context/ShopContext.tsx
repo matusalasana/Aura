@@ -218,6 +218,7 @@ function ShopContextProvider({ children }: { children: ReactNode }) {
         
         
     };
+    
 
     const cartTotal = cart.reduce((total, cartItem) => {
         const price = products.find(p => p._id === cartItem.productId)?.price || 0;
