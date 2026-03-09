@@ -7,9 +7,23 @@ import SearchItem from "../components/SearchItem"
 import useProductStore from "../stores/productStore"
 import { Product } from "../stores/types"
 
+import { useProducts } from '../hooks/useProducts';
+
 function Collection() {
-    const { products } = useProductStore()
-    const [filteredItems, setFilteredItems] = useState<Product[]>([])
+  
+    const { data: products, isLoading, error } = useProducts();
+    const [filteredItems, setFilteredItems] = useState<Product[]>([]);
+    
+    useEffect(() => {
+        if (products) {
+            setFilteredItems(products);
+        }
+    }, [products]);
+  
+    if (isLoading) return <div>Loading products...</div>;
+    if (error) return <div>Error loading products</div>;
+    }
+  
     const [searchTerm, setSearchTerm] = useState<string>("")
 
     const [categories, setCategories] = useState([
