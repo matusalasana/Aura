@@ -22,7 +22,6 @@ function Collection() {
   
     if (isLoading) return <div>Loading products...</div>;
     if (error) return <div>Error loading products</div>;
-    }
   
     const [searchTerm, setSearchTerm] = useState<string>("")
 

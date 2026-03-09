@@ -20,7 +20,7 @@ function ProductDetail() {
     const [selectedSize, setSelectedSize] = useState("")
     const [selectedImage, setSelectedImage] = useState(0)
     const [quantity, setQuantity] = useState(1)
-    const [product, setProduct] = useState<ProductType | null>(null)
+    const [productData, setProductData] = useState<ProductType | null>(null)
     const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([])
 
     const { getProductById, products } = useProductStore()
@@ -31,20 +31,20 @@ function ProductDetail() {
     useEffect(() => {
         if (productId) {
             const foundProduct = getProductById(productId)
-            setProduct(foundProduct as ProductType || null)
+            setProductData(foundProduct as ProductType || null)
         }
     }, [productId, getProductById])
 
     useEffect(() => {
-        if (product && category) {
+        if (productData && category) {
             const related = products
-                .filter(item => item.category === category && item._id !== product._id)
+                .filter(item => item.category === category && item._id !== productData._id)
                 .slice(0, 5)
             setRelatedProducts(related)
         }
-    }, [product, category, products])
+    }, [productData, category, products])
 
-    if (!product) {
+    if (!productData) {
         return (
             <div className="pt-32 min-h-screen flex items-center justify-center">
                 <div className="text-center">
@@ -55,7 +55,7 @@ function ProductDetail() {
         )
     }
 
-    const isWishlisted = isInWishlist(product._id)
+    const isWishlisted = isInWishlist(productData._id)
 
     return (
         <div className="pt-24 min-h-screen bg-gray-50">
@@ -68,16 +68,16 @@ function ProductDetail() {
                         {/* Main Image */}
                         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                             <img 
-                                src={product.image[selectedImage]} 
-                                alt={product.name}
+                                src={productData.image[selectedImage]}
+                                alt={productData.name}
                                 className="w-96 h-96 lg:h-[500px] lg:w-[500px] object-cover hover:scale-105 transition-transform duration-500"
                             />
                         </div>
                         
                         {/* Thumbnail Gallery */}
-                        {product.image.length > 1 && (
+                        {productData.image.length > 1 && (
                             <div className="flex gap-3 overflow-x-auto pb-2">
-                                {product.image.map((img, index) => (
+                                {productData.image.map((img, index) => (
                                     <button
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
@@ -87,7 +87,7 @@ function ProductDetail() {
                                     >
                                         <img 
                                             src={img} 
-                                            alt={`${product.name} view ${index + 1}`}
+                                            alt={`${productData.name} view ${index + 1}`}
                                             className="w-full h-full object-cover"
                                         />
                                     </button>
@@ -101,13 +101,13 @@ function ProductDetail() {
                         {/* Breadcrumb */}
                         <div className="text-sm text-gray-500">
                             <span>Home / </span>
-                            <span className="capitalize">{product.category} / </span>
-                            <span className="text-gray-900 font-medium">{product.name}</span>
+                            <span className="capitalize">{productData.category} / </span>
+                            <span className="text-gray-900 font-medium">{productData.name}</span>
                         </div>
 
                         {/* Product Title */}
                         <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
-                            {product.name}
+                            {productData.name}
                         </h1>
 
                         {/* Rating and Reviews */}
@@ -129,9 +129,9 @@ function ProductDetail() {
                         {/* Price */}
                         <div className="flex items-center gap-3">
                             <span className="text-4xl font-bold text-gray-900">
-                                {currency}{product.price}
+                                {currency}{productData.price}
                             </span>
-                            {product.bestseller && (
+                            {productData.bestseller && (
                                 <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium">
                                     Bestseller
                                 </span>
@@ -140,7 +140,7 @@ function ProductDetail() {
 
                         {/* Description */}
                         <p className="text-gray-600 leading-relaxed text-lg">
-                            {product.description}
+                            {productData.description}
                         </p>
 
                         {/* Size Selection */}
@@ -150,7 +150,7 @@ function ProductDetail() {
                                 <button className="text-gray-600 text-sm font-medium">Size Guide</button>
                             </div>
                             <div className="flex flex-wrap gap-3">
-                                {product.sizes.map((size) => (
+                                {productData.sizes.map((size) => (
                                     <button
                                         key={size}
                                         onClick={() => setSelectedSize(size)}
@@ -187,7 +187,7 @@ function ProductDetail() {
 
                                 <div className="flex gap-3 flex-1">
                                     <button 
-                                        onClick={() => addToCart(product._id)}
+                                        onClick={() => addToCart(productData._id)}
                                         className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                                     >
                                         <ShoppingBag size={20} />
@@ -195,7 +195,7 @@ function ProductDetail() {
                                     </button>
                                   
                                     <button 
-                                        onClick={() => toggleWishlist(product._id)}
+                                        onClick={() => toggleWishlist(productData._id)}
                                         className="p-3 border-2 border-gray-200 hover:border-gray-300 rounded-xl transition-colors duration-200"
                                     >
                                         <Heart 

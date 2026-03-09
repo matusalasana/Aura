@@ -27,8 +27,12 @@ import AdminOrders from "./pages/AdminOrders"
 import Help from "./pages/Help"
 import AdminNavbar from "./components/AdminNavbar"
 
-// If Settings is not exported correctly, import it differently
 import { Settings } from 'lucide-react'
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { queryClient } from './lib/queryClient';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const location = useLocation()
@@ -42,15 +46,11 @@ function App() {
   }, [location]);
 
   return (
-    <div 
-      className="
-        min-h-screen 
-        bg-gradient-to-br 
-        from-gray-50 
-        to-gray-100"
-    >
+    <QueryClientProvider client={queryClient}>
+      {/* REMOVED BrowserRouter from here */}
       <Nav />
       <AdminNavbar />
+      <ToastContainer position="top-right" autoClose={3000} />
 
       <main>
         <Routes>
@@ -83,7 +83,9 @@ function App() {
           <Route path="/admin/settings" element={<div>Settings Page</div>} />
         </Routes>
       </main>
-    </div>
+      
+      {import.meta.env.DEV && <ReactQueryDevtools />}
+    </QueryClientProvider>
   )
 }
 
