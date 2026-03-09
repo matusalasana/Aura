@@ -1,16 +1,23 @@
+// src/pages/Wishlist.tsx
+import { useEffect, useState } from "react"
 import ProductItem from "../components/ProductItem"
 import Title from "../components/Title"
-import { useShop } from '../context/ShopContext';
+import useWishlistStore from '../stores/wishlistStore';
+import useProductStore from '../stores/productStore';
+import { Product } from '../stores/types';
 
 function Wishlist() {
-    const { products, wishList, clearWishList } = useShop()!
+    const { items, clearWishlist } = useWishlistStore()
+    const { getProductById, products } = useProductStore()
+    const [wishlistProducts, setWishlistProducts] = useState<Product[]>([])
     
-    const wishListIds = wishList.map(item => item.productId)
-    
-    const wishlistProducts = products.filter(product => 
-        wishListIds.includes(product._id)
-    )
-    
+    useEffect(() => {
+        const wishlistIds = items.map(item => item.productId)
+        const products = wishlistIds
+            .map(id => getProductById(id))
+            .filter((product): product is Product => product !== undefined)
+        setWishlistProducts(products)
+    }, [items, getProductById])
 
     return (
         <div className="pt-30 max-sm:px-10 md:px-15 lg:px-20 xl:px-30 px-10">
@@ -18,7 +25,7 @@ function Wishlist() {
             <Title text1="YOUR" text2="WISHLIST" />
 
                 <button 
-                    onClick={() => clearWishList()}
+                    onClick={() => clearWishlist()}
                     className="text-red-500 font-bold hover:text-red-600 mb-3"
                 >
                     Clear Wishlist

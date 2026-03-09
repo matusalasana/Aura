@@ -5,13 +5,15 @@ import { CartItem, Product } from './types';
 
 interface CartStore {
     items: CartItem[];
+    currency: string;
+    shippingFee: number;
     addToCart: (productId: string) => void;
     removeFromCart: (productId: string) => void;
     updateQuantity: (productId: string, quantity: number) => void;
     clearCart: () => void;
-    getCartCount: () => number; // Returns total quantity of items
-    getUniqueItemCount: () => number; // Returns number of unique products
-    getCartTotal: (products: Product[]) => number; // Calculate total with product data
+    getCartCount: () => number;
+    getUniqueItemCount: () => number;
+    getCartTotal: (products: Product[]) => number;
     isInCart: (productId: string) => boolean;
     getItemQuantity: (productId: string) => number;
 }
@@ -19,9 +21,9 @@ interface CartStore {
 const useCartStore = create<CartStore>()(
     persist(
         (set, get) => ({
-            currency: "USD",
-            shippingFee: 50,
             items: [],
+            currency: "ETB ",
+            shippingFee: 10,
             
             addToCart: (productId) => {
                 set((state) => {
@@ -49,7 +51,42 @@ const useCartStore = create<CartStore>()(
                 }));
             },
             
+            updateQuantity: (productId, quantity) => {
+                set((state) => ({
+                    items: state.items.map(item =>
+                        item.productId === productId
+                            ? { ...item, quantity: Math.max(1, quantity) }
+                            : item
+                    )
+                }));
+            },
+            
             clearCart: () => set({ items: [] }),
+            
+            getCartCount: () => {
+                return get().items.reduce((total, item) => total + item.quantity, 0);
+            },
+            
+            getUniqueItemCount: () => {
+                return get().items.length;
+            },
+            
+            getCartTotal: (products) => {
+                const { items } = get();
+                return items.reduce((total, cartItem) => {
+                    const product = products.find(p => p._id === cartItem.productId);
+                    return total + (product?.price || 0) * cartItem.quantity;
+                }, 0);
+            },
+            
+            isInCart: (productId) => {
+                return get().items.some(item => item.productId === productId);
+            },
+            
+            getItemQuantity: (productId) => {
+                const item = get().items.find(item => item.productId === productId);
+                return item?.quantity || 0;
+            }
         }),
         {
             name: 'cart-storage',

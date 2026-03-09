@@ -1,10 +1,11 @@
-
-import { useShop } from "../context/ShopContext"
+// src/components/ProductItem.tsx
 import { Link } from "react-router-dom"
 import { BsHeart, BsHeartFill, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { BiCart } from "react-icons/bi";
 import { CgShare } from "react-icons/cg";
 import useCartStore from "../stores/cartStore"
+import useWishlistStore from "../stores/wishlistStore"
+import useUIStore from "../stores/uiStore"
 
 interface Props {
     name: string;
@@ -16,13 +17,17 @@ interface Props {
 
 function ProductItem({ name, productId, imgURL, price, category }: Props) {
 
-    const { currency, toggleHeart, isHeartToggled, addToWishList } = useShop()!
     const addToCart = useCartStore((state) => state.addToCart)
+    const currency = useUIStore((state) => state.currency)
+    
+    const { toggleWishlist, isInWishlist, toggleHeart, isHeartToggled } = useWishlistStore()
 
     const isToggled = isHeartToggled(productId);
+    const isWishlisted = isInWishlist(productId);
 
-    const handleToggle = () => {
+    const handleWishlistToggle = () => {
         toggleHeart(productId);
+        toggleWishlist(productId);
     }
 
     return (
@@ -39,9 +44,9 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
                         </Link>
                         <div className="absolute top-3 right-3">
 
-                            <button onClick={ () => (handleToggle(), addToWishList(productId))} className="cursor-pointer flex items-center gap-1 bg-white/90 hover:bg-white px-2 py-1 rounded-full shadow-lg">
+                            <button onClick={handleWishlistToggle} className="cursor-pointer flex items-center gap-1 bg-white/90 hover:bg-white px-2 py-1 rounded-full shadow-lg">
                                 
-                                    { isToggled 
+                                    { isToggled || isWishlisted
                                         ?   <BsHeartFill size={15} className={` text-red-500 `} />
                                         :   <BsHeart size={15} className= {` text-black `} />
                                     }
@@ -148,4 +153,3 @@ function ProductItem({ name, productId, imgURL, price, category }: Props) {
 }
 
 export default ProductItem
-

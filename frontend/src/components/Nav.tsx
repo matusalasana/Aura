@@ -1,18 +1,19 @@
+// src/components/Nav.tsx
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import storeLogo from '../assets/logo.svg'
 import { BsSearch } from 'react-icons/bs'
 import { CgProfile } from 'react-icons/cg'
 import { BiCart } from 'react-icons/bi'
-import { useContext, useEffect, useState } from 'react'
-import { ShopContext } from '../context/ShopContext'
+import { useEffect, useState } from 'react'
 import Menu from './Menu'
 import useCartStore from "../stores/cartStore"
+import useUIStore from "../stores/uiStore"
 
 function Nav() {
-    const items = useContext(ShopContext)
     const location = useLocation();
     
     const cartItems = useCartStore((state) => state.items)
+    const openSearch = useUIStore((state) => state.openSearch)
     const cartCount = cartItems.length
 
     const [showNavbar, setShowNavbar] = useState(true);
@@ -55,7 +56,7 @@ function Nav() {
 
                     <div className='flex items-center gap-6'>
                         <Link to={'/collection'}>
-                            <BsSearch onClick={() => items?.openSearch()} fontSize={'20px'} className='text-[#FFFFFF]'/>
+                            <BsSearch onClick={openSearch} fontSize={'20px'} className='text-[#FFFFFF]'/>
                         </Link>
 
                         <div className='group relative'>

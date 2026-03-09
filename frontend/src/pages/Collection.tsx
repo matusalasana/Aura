@@ -1,17 +1,16 @@
+// src/pages/Collection.tsx
 import { useEffect, useState } from "react"
-import { useShop, type Product } from "../context/ShopContext"
 import ProductItem from "../components/ProductItem"
 import Footer from "../components/Footer"
 import Filters from "../components/Filters"
 import SearchItem from "../components/SearchItem"
-
+import useProductStore from "../stores/productStore"
+import { Product } from "../stores/types"
 
 function Collection() {
-
-    const {products} = useShop()!
+    const { products } = useProductStore()
     const [filteredItems, setFilteredItems] = useState<Product[]>([])
-
-    const [searchTerm, setSearchTerm] = useState<string>()
+    const [searchTerm, setSearchTerm] = useState<string>("")
 
     const [categories, setCategories] = useState([
         { category: 'men', status: false},
@@ -26,23 +25,23 @@ function Collection() {
     const [clickedSize, setClickedSize] = useState<string>()
     const [sortBy, setSortBy] = useState<string>()
 
-    const handleSortChange = ( value: string) => {
+    const handleSortChange = (value: string) => {
         setSortBy(value)
     }
 
     const handleCategoryToggle = (value: string) => {
         setCategories(prev => 
             prev.map(item => 
-                (item.category === value  )
+                (item.category === value)
                     ? { ...item, status: !item.status } 
                     : item
             )
         )
     }
 
-    const handleTypeToggle = (value: string) =>{
-        setTypes( prev =>
-            prev.map( item => 
+    const handleTypeToggle = (value: string) => {
+        setTypes(prev =>
+            prev.map(item => 
                 item.type === value 
                     ? {...item, status: !item.status }
                     : item
@@ -51,101 +50,93 @@ function Collection() {
     }
 
     const handleSizeSelect = (value: string) => {
-        setClickedSize( value )
-    };
-
+        setClickedSize(value)
+    }
 
     useEffect(() => {
-
         if (!products.length) {
-            setFilteredItems([]);
-            return;
+            setFilteredItems([])
+            return
         }
 
-        let result = [...products];
+        let result = [...products]
 
-        switch (sortBy) {
-            case "name":
-                result.sort((a,b) => 
-                    a.name.toLowerCase().localeCompare(b.name)
-                )
-                break;
-            case "high-to-low-price":
-                result.sort((a,b) => 
-                    b.price - a.price
-                )
-                break;
-            case "low-to-high-price":
-                result.sort((a,b) => 
-                    a.price - b.price
-                )
-                break;
-            case "review":
-                result.sort((a,b) => 
-                    b.price - a.price
-                )
-                break;
+        // Apply sorting
+        if (sortBy) {
+            switch (sortBy) {
+                case "name":
+                    result.sort((a, b) => 
+                        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+                    )
+                    break
+                case "high-to-low-price":
+                    result.sort((a, b) => b.price - a.price)
+                    break
+                case "low-to-high-price":
+                    result.sort((a, b) => a.price - b.price)
+                    break
+                case "review":
+                    // You can implement review sorting logic here
+                    break
+            }
         }
 
+        // Apply category filters
         const activeCategories = categories
-            .filter(item => item.status === true)
+            .filter(item => item.status)
             .map(item => item.category)
-
-        const activeTypes = types
-            .filter( item => item.status===true)
-            .map(product => product.type)
-
-
 
         if (activeCategories.length > 0) {
             result = result.filter(product => 
                 activeCategories.includes(product.category.toLowerCase())
-            );
+            )
         }
+
+        // Apply type filters
+        const activeTypes = types
+            .filter(item => item.status)
+            .map(item => item.type)
 
         if (activeTypes.length > 0) {
             result = result.filter(product => 
                 activeTypes.includes(product.subCategory.toLowerCase())
-            );
+            )
         }
 
-
+        // Apply size filter
         if (clickedSize) {
-            result = result.filter( product => product.sizes.includes(clickedSize.toUpperCase()))
+            result = result.filter(product => 
+                product.sizes.includes(clickedSize.toUpperCase())
+            )
         }
 
+        // Apply search filter
         if (searchTerm) {
-            result = result.filter( product =>
+            result = result.filter(product =>
                 product.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
         }
 
-        
-        setFilteredItems(result);
+        setFilteredItems(result)
 
+    }, [products, categories, types, clickedSize, sortBy, searchTerm])
 
-        }, [ products, categories, types, clickedSize, sortBy, searchTerm]);
-
-    
-    
     return (
         <div className="pt-60">
-
             <div className="px-10 container mx-auto">
-
-                <SearchItem onSearch={ (input) => setSearchTerm(input)} />
+                <SearchItem onSearch={(input) => setSearchTerm(input)} />
 
                 <Filters  
-                    onClickCategory={ handleCategoryToggle }
+                    onClickCategory={handleCategoryToggle}
                     onClickTypeCheckbox={handleTypeToggle}
                     onSelectSize={handleSizeSelect}
                     clearFilters={() => setFilteredItems(products)}
                     onSelectSort={handleSortChange}
                 />
-                {
-                    filteredItems.length > 0 
-                        ? <p className="text-sm text-gray-600 font-semibold pt-5 pb-2  px-2">Showing {filteredItems.length} products</p>
-                        : <p className="text-sm text-gray-600 font-semibold pt-5 pb-2  px-2">No products found</p>
+                
+                {filteredItems.length > 0 
+                    ? <p className="text-sm text-gray-600 font-semibold pt-5 pb-2 px-2">Showing {filteredItems.length} products</p>
+                    : <p className="text-sm text-gray-600 font-semibold pt-5 pb-2 px-2">No products found</p>
                 }
                 
                 <div className="
@@ -157,9 +148,8 @@ function Collection() {
                     max-2xl:grid-cols-4
                     2xl:grid-cols-5"
                 >
-                    {filteredItems.map((product) => {
-                        return (
-                            <ProductItem
+                    {filteredItems.map((product) => (
+                        <ProductItem
                             key={product._id}
                             name={product.name}
                             price={product.price}
@@ -167,14 +157,10 @@ function Collection() {
                             imgURL={product.image}
                             category={product.category}
                         />
-                        )
-                    })}
-                    
+                    ))}
                 </div>
-
             </div>    
             
-
             <Footer />
         </div>
     )
