@@ -3,17 +3,19 @@ import { useEffect, useState } from "react"
 import Title from "./Title"
 import ProductItem from "./ProductItem"
 import TiltleDiscription from "./TiltleDiscription"
-import useProductStore from "../stores/productStore"
+import { useProducts } from "../hooks/useProducts"
 import { Product } from "../stores/types"
 
 function LatestCollection() {
-    const { products } = useProductStore()
+    const { data: products } = useProducts()
     const [latestProducts, setLatestProducts] = useState<Product[]>([])
 
     useEffect(() => {
-        // Sort by date to get the latest products
-        const sorted = [...products].sort((a, b) => b.date - a.date)
-        setLatestProducts(sorted)
+        if (products) {
+            // Sort by date to get the latest products
+            const sorted = [...products].sort((a, b) => b.date - a.date)
+            setLatestProducts(sorted)
+        }
     }, [products])
 
     return (

@@ -4,27 +4,12 @@ import ProductItem from "../components/ProductItem"
 import Footer from "../components/Footer"
 import Filters from "../components/Filters"
 import SearchItem from "../components/SearchItem"
-import useProductStore from "../stores/productStore"
 import { Product } from "../stores/types"
-
 import { useProducts } from '../hooks/useProducts';
 
 function Collection() {
-  
-    const { data: products, isLoading, error } = useProducts();
-    const [filteredItems, setFilteredItems] = useState<Product[]>([]);
-    
-    useEffect(() => {
-        if (products) {
-            setFilteredItems(products);
-        }
-    }, [products]);
-  
-    if (isLoading) return <div>Loading products...</div>;
-    if (error) return <div>Error loading products</div>;
-  
+    // ✅ ALL useState hooks MUST be at the VERY TOP, before any conditions
     const [searchTerm, setSearchTerm] = useState<string>("")
-
     const [categories, setCategories] = useState([
         { category: 'men', status: false},
         { category: 'women', status: false},
@@ -34,45 +19,36 @@ function Collection() {
         { type: 'topwear', status: false},
         { type: 'bottomwear', status: false},
     ])
-
     const [clickedSize, setClickedSize] = useState<string>()
     const [sortBy, setSortBy] = useState<string>()
-
-    const handleSortChange = (value: string) => {
-        setSortBy(value)
-    }
-
-    const handleCategoryToggle = (value: string) => {
-        setCategories(prev => 
-            prev.map(item => 
-                (item.category === value)
-                    ? { ...item, status: !item.status } 
-                    : item
-            )
-        )
-    }
-
-    const handleTypeToggle = (value: string) => {
-        setTypes(prev =>
-            prev.map(item => 
-                item.type === value 
-                    ? {...item, status: !item.status }
-                    : item
-            )
-        )
-    }
-
-    const handleSizeSelect = (value: string) => {
-        setClickedSize(value)
-    }
-
+    
+    // React Query hook
+    const { data: products, isLoading, error } = useProducts();
+    const [filteredItems, setFilteredItems] = useState<Product[]>([]);
+    
+    // Debug logs
     useEffect(() => {
-        if (!products.length) {
-            setFilteredItems([])
-            return
+        console.log('🔍 Products:', products);
+        console.log('🔍 Loading:', isLoading);
+        console.log('🔍 Error:', error);
+    }, [products, isLoading, error]);
+    
+    // Update filtered items when products change
+    useEffect(() => {
+        if (products) {
+            console.log('✅ Setting filtered items:', products.length);
+            setFilteredItems(products);
+        }
+    }, [products]);
+
+    // Filtering effect
+    useEffect(() => {
+        if (!products?.length) {
+            setFilteredItems([]);
+            return;
         }
 
-        let result = [...products]
+        let result = [...products];
 
         // Apply sorting
         if (sortBy) {
@@ -80,76 +56,139 @@ function Collection() {
                 case "name":
                     result.sort((a, b) => 
                         a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-                    )
-                    break
+                    );
+                    break;
                 case "high-to-low-price":
-                    result.sort((a, b) => b.price - a.price)
-                    break
+                    result.sort((a, b) => b.price - a.price);
+                    break;
                 case "low-to-high-price":
-                    result.sort((a, b) => a.price - b.price)
-                    break
-                case "review":
-                    // You can implement review sorting logic here
-                    break
+                    result.sort((a, b) => a.price - b.price);
+                    break;
             }
         }
 
         // Apply category filters
         const activeCategories = categories
             .filter(item => item.status)
-            .map(item => item.category)
+            .map(item => item.category);
 
         if (activeCategories.length > 0) {
             result = result.filter(product => 
                 activeCategories.includes(product.category.toLowerCase())
-            )
+            );
         }
 
         // Apply type filters
         const activeTypes = types
             .filter(item => item.status)
-            .map(item => item.type)
+            .map(item => item.type);
 
         if (activeTypes.length > 0) {
             result = result.filter(product => 
                 activeTypes.includes(product.subCategory.toLowerCase())
-            )
+            );
         }
 
         // Apply size filter
         if (clickedSize) {
             result = result.filter(product => 
                 product.sizes.includes(clickedSize.toUpperCase())
-            )
+            );
         }
 
         // Apply search filter
         if (searchTerm) {
             result = result.filter(product =>
                 product.name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
+            );
         }
 
-        setFilteredItems(result)
+        setFilteredItems(result);
 
-    }, [products, categories, types, clickedSize, sortBy, searchTerm])
+    }, [products, categories, types, clickedSize, sortBy, searchTerm]);
+
+    // Handlers
+    const handleSortChange = (value: string) => {
+        setSortBy(value);
+    };
+
+    const handleCategoryToggle = (value: string) => {
+        setCategories(prev => 
+            prev.map(item => 
+                item.category === value
+                    ? { ...item, status: !item.status }
+                    : item
+            )
+        );
+    };
+
+    const handleTypeToggle = (value: string) => {
+        setTypes(prev =>
+            prev.map(item => 
+                item.type === value 
+                    ? { ...item, status: !item.status }
+                    : item
+            )
+        );
+    };
+
+    const handleSizeSelect = (value: string) => {
+        setClickedSize(value);
+    };
+
+    const clearFilters = () => {
+        setCategories(prev => prev.map(c => ({ ...c, status: false })));
+        setTypes(prev => prev.map(t => ({ ...t, status: false })));
+        setClickedSize(undefined);
+        setSortBy(undefined);
+        setSearchTerm("");
+        if (products) {
+            setFilteredItems(products);
+        }
+    };
+
+    // Loading and error states (these are fine here because they return early)
+    if (isLoading) {
+        return (
+            <div className="pt-60 min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <h2 className="text-2xl font-semibold">Loading products...</h2>
+                </div>
+            </div>
+        );
+    }
+    
+    if (error) {
+        return (
+            <div className="pt-60 min-h-screen flex items-center justify-center">
+                <div className="text-center text-red-500">
+                    <h2 className="text-2xl font-semibold">Error loading products</h2>
+                    <p>{error.message}</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="pt-60">
             <div className="px-10 container mx-auto">
-                <SearchItem onSearch={(input) => setSearchTerm(input)} />
+                <SearchItem onSearch={setSearchTerm} />
 
                 <Filters  
                     onClickCategory={handleCategoryToggle}
                     onClickTypeCheckbox={handleTypeToggle}
                     onSelectSize={handleSizeSelect}
-                    clearFilters={() => setFilteredItems(products)}
+                    clearFilters={clearFilters}
                     onSelectSort={handleSortChange}
                 />
                 
                 {filteredItems.length > 0 
-                    ? <p className="text-sm text-gray-600 font-semibold pt-5 pb-2 px-2">Showing {filteredItems.length} products</p>
-                    : <p className="text-sm text-gray-600 font-semibold pt-5 pb-2 px-2">No products found</p>
+                    ? <p className="text-sm text-gray-600 font-semibold pt-5 pb-2 px-2">
+                        Showing {filteredItems.length} products
+                      </p>
+                    : <p className="text-sm text-gray-600 font-semibold pt-5 pb-2 px-2">
+                        No products found
+                      </p>
                 }
                 
                 <div className="
@@ -176,7 +215,7 @@ function Collection() {
             
             <Footer />
         </div>
-    )
+    );
 }
 
-export default Collection
+export default Collection;

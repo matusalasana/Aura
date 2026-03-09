@@ -34,9 +34,22 @@ import { queryClient } from './lib/queryClient';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 function App() {
   const location = useLocation()
-
+  
+  //Temporary 
+//   useEffect(() => {
+//     const updateImages = async () => {
+//         const { updateImageUrls } = await import('./scripts/updateImageUrls');
+//         await updateImageUrls();
+//     };
+    
+//     if (window.confirm('Update image URLs?')) {
+//         updateImages();
+//     }
+// }, []);
+  
   useEffect(() => {
     window.scrollTo({
       top: 0,

@@ -8,7 +8,7 @@ import Reviews from "../components/Reviews"
 import ProductItem from "../components/ProductItem"
 import Title from "../components/Title"
 import { ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw } from "lucide-react"
-import useProductStore from "../stores/productStore"
+import { useProducts } from "../hooks/useProducts"
 import useCartStore from "../stores/cartStore"
 import useWishlistStore from "../stores/wishlistStore"
 import useUIStore from "../stores/uiStore"
@@ -23,20 +23,20 @@ function ProductDetail() {
     const [productData, setProductData] = useState<ProductType | null>(null)
     const [relatedProducts, setRelatedProducts] = useState<ProductType[]>([])
 
-    const { getProductById, products } = useProductStore()
+    const { data: products } = useProducts()
     const addToCart = useCartStore((state) => state.addToCart)
     const currency = useUIStore((state) => state.currency)
     const { toggleWishlist, isInWishlist } = useWishlistStore()
 
     useEffect(() => {
-        if (productId) {
-            const foundProduct = getProductById(productId)
-            setProductData(foundProduct as ProductType || null)
+        if (productId && products) {
+            const foundProduct = products.find(p => p._id === productId)
+            setProductData(foundProduct || null)
         }
-    }, [productId, getProductById])
+    }, [productId, products])
 
     useEffect(() => {
-        if (productData && category) {
+        if (productData && category && products) {
             const related = products
                 .filter(item => item.category === category && item._id !== productData._id)
                 .slice(0, 5)

@@ -3,16 +3,18 @@ import { useEffect, useState } from "react"
 import Title from "./Title"
 import ProductItem from "./ProductItem"
 import TiltleDiscription from "./TiltleDiscription"
-import useProductStore from "../stores/productStore"
+import { useProducts } from "../hooks/useProducts"
 import { Product } from "../stores/types"
 
 function BestSellers() {
-    const { products } = useProductStore()
+    const { data: products } = useProducts()
     const [bestSellers, setBestSellers] = useState<Product[]>([])
 
     useEffect(() => {
-        const filtered = products.filter((item) => item.bestseller === true)
-        setBestSellers(filtered)
+        if (products) {
+            const filtered = products.filter((item) => item.bestseller === true)
+            setBestSellers(filtered)
+        }
     }, [products])
 
     return (

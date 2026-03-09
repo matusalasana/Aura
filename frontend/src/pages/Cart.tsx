@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import CartBox from "../components/CartBox"
 import CartTotals from "../components/CartTotals"
 import Title from "../components/Title"
 import Footer from "../components/Footer"
 import { Link } from "react-router-dom"
-
 import useCartStore from "../stores/cartStore"
-import useProductStore from "../stores/productStore" // Import product store
+import { useProducts } from "../hooks/useProducts"
 
 function Cart() {
   const [subTotal, setSubTotal] = useState<number>(0)
@@ -21,60 +20,39 @@ function Cart() {
   const currency = useCartStore((state) => state.currency)
   const shippingFee = useCartStore((state) => state.shippingFee)
   
-  // Get product functions
-  const getProductById = useProductStore((state) => state.getProductById)
-  const products = useProductStore((state) => state.products)
-  const adminProducts = useProductStore((state) => state.adminProducts)
+  // Get products from Supabase
+  const { data: products } = useProducts()
 
   // Combine cart items with product details
   useEffect(() => {
-    console.log('Cart items from store:', cartItems)
+    if (!products || !cartItems.length) return
     
     const itemsWithDetails = cartItems.map(cartItem => {
-      // Get full product details
-      const productDetails = getProductById(cartItem.productId)
+      const productDetails = products.find(p => p._id === cartItem.productId)
       
-      if (!productDetails) {
-        console.warn(`Product not found for ID: ${cartItem.productId}`)
-        return null
-      }
+      if (!productDetails) return null
       
-      // Combine cart quantity with product details
       return {
         ...productDetails,
         quantity: cartItem.quantity,
-        cartItemId: cartItem.productId // Use productId as identifier
+        cartItemId: cartItem.productId
       }
-    }).filter(item => item !== null) // Remove items where product not found
+    }).filter(item => item !== null)
 
-    console.log('Items with details:', itemsWithDetails)
     setCartItemsWithDetails(itemsWithDetails)
 
-    // Calculate subtotal
     const total = itemsWithDetails.reduce((sum, product) => {
       return sum + ((product?.price || 0) * (product?.quantity || 1))
     }, 0)
     setSubTotal(total)
 
-  }, [cartItems, getProductById, products, adminProducts])
+  }, [cartItems, products])
 
   const handleRemove = (id: string) => {
-    console.log('Removing item with ID:', id)
-    if (removeFromCart) {
-      removeFromCart(id)
-    } else {
-      alert("item not removed")
-    }
+    removeFromCart(id)
   }
 
   const totalPrice = subTotal + shippingFee
-
-  // Debug: Check what's in the stores
-  useEffect(() => {
-    console.log('All products:', products)
-    console.log('Admin products:', adminProducts)
-    console.log('Cart items raw:', cartItems)
-  }, [])
 
   if (cartItems.length === 0) {
     return (
