@@ -1,34 +1,70 @@
-// src/App.tsx
-import { useEffect, useState } from 'react'
+import { useAuth } from './hooks/useAuth';
 
-import { supabase } from './lib/supabaseClient'
-import { useQuery } from '@tanstack/react-query'
-import { useProducts } from './hooks/useProducts'
+import { Login } from './pages/Login';
+import { Signup } from "./pages/Signup";
+import  Home from './pages/Home';
+import {ProductDetails} from "./pages/ProductDetails"
+import {Cart} from "./pages/Cart"
 
-import { ToastContainer, toast } from 'react-toastify';
+import Footer from './components/Footer';
+import Navbar from './components/Navbar'; 
+
+import { Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const { data: products, isLoading, error } = useProducts();
+  const { user, loading } = useAuth();
 
-  if (isLoading) return <p>Loading...</p>
-  if (error) return <p>Error: {error.message}</p>
-
+  if (loading) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center bg-[#f8f8f8]">
+        <div className="relative flex items-center justify-center">
+          <div className="absolute h-16 w-16 animate-ping rounded-full bg-indigo-400 opacity-20"></div>
+          <h1 className="text-3xl font-black tracking-tighter text-gray-900 italic">AURA</h1>
+        </div>
+        <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 animate-pulse">
+          Establishing Secure Session
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-    <button className="bg-blue-700 text-white font-semibold rounded-lg px-4 py-2">
-        Add To Cart
-      </button>
-      <h1>Product List ({products.length})</h1>
-      {products.length === 0 ? (
-        <p>No products found. Did you add them to the dashboard?</p>
+    <div className="App selection:bg-indigo-100 selection:text-indigo-900">
+      <ToastContainer position="bottom-right" autoClose={3000} theme="light" />
+
+      {/* Logic: If logged in, show Navbar + Content + Footer.
+          If not logged in, only show the Auth pages.
+      */}
+      {!user ? (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          {/* Redirect any unknown path to login if not authenticated */}
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
       ) : (
-        products.map(item => <img key={item.id} src={item.image[0]} />)
+        <div className="flex min-h-screen flex-col">
+          <Navbar /> 
+          
+          <main className="flex-grow pt-16"> {/* pt-16 accounts for fixed navbar */}
+            
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Navigate to="/" />} />
+              <Route path="/signup" element={<Navigate to="/" />} />
+              <Route path="/product/:productId" element={<ProductDetails />} />
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
+              
+          </main>
+
+          <Footer />
+        </div>
       )}
-      <ToastContainer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
