@@ -6,6 +6,8 @@ import { ProductDetails } from "./pages/ProductDetails";
 import { Cart } from "./pages/Cart";
 import { Checkout } from "./pages/Checkout";
 import { OrderConfirmation } from "./pages/OrderConfirmation";
+import {Profile} from "./pages/Profile"
+
 import Footer from './components/Footer';
 import Navbar from './components/Navbar'; 
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -42,6 +44,7 @@ function App() {
 
             {/* Protected Routes */}
             <Route path="/cart" element={user ? <Cart /> : <Navigate to="/login" />} />
+            <Route path="/profile" element={user ? <Profile /> : <Navigate to="/profile" />} />
             <Route path="/checkout" element={user ? <Checkout /> : <Navigate to="/login" />} />
             <Route path="/order-confirmation" element={user ? <OrderConfirmation /> : <Navigate to="/login" />} />
             

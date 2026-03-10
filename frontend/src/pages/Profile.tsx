@@ -1,361 +1,201 @@
-import { useState } from "react"
-import Footer from "../components/Footer"
-import Title from "../components/Title"
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Edit2, 
-  Save, 
-  X,
-  ShoppingBag,
-  Heart,
-  Settings,
-  LogOut,
-  Shield,
-  CreditCard,
-  Bell
-} from "lucide-react"
+// pages/Profile.tsx
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { supabase } from '../lib/supabaseClient';
+import { User, Package, Heart, LogOut, Clock, MapPin, ChevronRight, Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-function Profile() {
-  const [isEditing, setIsEditing] = useState(false)
-  const [activeTab, setActiveTab] = useState("profile")
-  
-  const [profileData, setProfileData] = useState({
-    firstName: "Sana",
-    lastName: "Matusala",
-    email: "matusalasana@gmail.com",
-    phone: "+251-945807386",
-    address: "King George VI St, Addis Ababa, Ethiopia",
-    bio: "Love discovering new styles and trends!",
-    joinDate: "January 2023"
-  })
+export const Profile = () => {
+  const { user } = useAuth();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('orders');
 
-  const [formData, setFormData] = useState({ ...profileData })
+  useEffect(() => {
+    if (user) fetchOrders();
+  }, [user]);
 
-  const stats = [
-    { label: "Orders", value: "12", icon: ShoppingBag },
-    { label: "Wishlist", value: "8", icon: Heart },
-    { label: "Reviews", value: "5", icon: Bell }
-  ]
+  const fetchOrders = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*, order_items (*)')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false });
 
-  const recentOrders = [
-    { id: "ORD-7842", date: "2024-01-15", total: 149.99, status: "Delivered", items: 3 },
-    { id: "ORD-6591", date: "2024-01-12", total: 89.98, status: "Shipped", items: 2 },
-    { id: "ORD-5123", date: "2024-01-10", total: 45.99, status: "Processing", items: 1 }
-  ]
+      if (error) throw error;
+      setOrders(data || []);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (!error) toast.success('Signed out successfully');
+  };
 
-  const handleSave = () => {
-    setProfileData(formData)
-    setIsEditing(false)
-  }
-
-  const handleCancel = () => {
-    setFormData(profileData)
-    setIsEditing(false)
-  }
-
-  const menuItems = [
-    { id: "profile", label: "Profile", icon: User },
-    { id: "orders", label: "Orders", icon: ShoppingBag },
-    { id: "wishlist", label: "Wishlist", icon: Heart },
-    { id: "settings", label: "Settings", icon: Settings },
-    { id: "security", label: "Security", icon: Shield },
-    { id: "payment", label: "Payment Methods", icon: CreditCard }
-  ]
+  const tabs = [
+    { id: 'orders', label: 'Orders', icon: Package },
+    { id: 'wishlist', label: 'Wishlist', icon: Heart },
+    { id: 'addresses', label: 'Addresses', icon: MapPin },
+    { id: 'settings', label: 'Settings', icon: Settings },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-[#F8F9FA] pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
         
-        {/* Header */}
-
-        <div className="text-center mb-8">
-          <Title text1="MY" text2="PROFILE" />
-          <p className="text-gray-600 mt-2">Manage your account and preferences</p>
-        </div>
-
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            
-            {/* Sidebar Menu */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
-                {/* User Summary */}
-                <div className="text-center mb-6 pb-6 border-b border-gray-100">
-                  <div className="w-20 h-20 bg-linear-to-br from-gray-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white text-2xl font-bold">
-                      {profileData.firstName[0]}{profileData.lastName[0]}
-                    </span>
-                  </div>
-                  <h3 className="font-semibold text-gray-900 text-lg">
-                    {profileData.firstName} {profileData.lastName}
-                  </h3>
-                  <p className="text-gray-500 text-sm">{profileData.email}</p>
-                  <p className="text-gray-400 text-xs mt-1">
-                    Member since {profileData.joinDate}
-                  </p>
-                </div>
-
-                {/* Navigation Menu */}
-                <nav className="space-y-2">
-                  {menuItems.map((item) => {
-                    const Icon = item.icon
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => setActiveTab(item.id)}
-                        className={`
-                          w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
-                          ${activeTab === item.id 
-                            ? 'bg-gray-50 text-gray-600 border border-gray-200' 
-                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-600'
-                          }
-                        `}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
-                      </button>
-                    )
-                  })}
-                  
-                  {/* Logout Button */}
-                  <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors mt-4">
-                    <LogOut className="w-5 h-5" />
-                    <span className="font-medium">Log Out</span>
-                  </button>
-                </nav>
+        {/* Header Section */}
+        <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div className="relative group">
+              <div className="h-24 w-24 rounded-3xl bg-gradient-to-br from-gray-900 to-gray-700 flex items-center justify-center shadow-xl transform transition-transform group-hover:scale-105">
+                <User className="h-10 w-10 text-white" />
               </div>
+              <button className="absolute -bottom-2 -right-2 bg-white p-2 rounded-xl shadow-md border border-gray-100 hover:bg-gray-50">
+                <Settings className="h-4 w-4 text-gray-600" />
+              </button>
             </div>
+            <div>
+              <h1 className="text-4xl font-black text-gray-900 tracking-tight">
+                {user?.user_metadata?.full_name || 'My Account'}
+              </h1>
+              <p className="text-gray-500 font-medium">{user?.email}</p>
+            </div>
+          </div>
+          
+          <button 
+            onClick={handleSignOut}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-bold text-red-500 hover:bg-red-50 hover:border-red-100 transition-all active:scale-95 shadow-sm"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </button>
+        </header>
 
-            {/* Main Content */}
-            <div className="lg:col-span-3">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Sidebar Navigation */}
+          <nav className="lg:col-span-3 flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold transition-all whitespace-nowrap ${
+                    activeTab === tab.id 
+                    ? 'bg-black text-white shadow-lg shadow-gray-200' 
+                    : 'bg-transparent text-gray-500 hover:bg-white hover:text-black'
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Main Content Area */}
+          <main className="lg:col-span-9">
+            <div className="bg-white rounded-[2.5rem] p-6 md:p-10 shadow-sm border border-gray-100 min-h-[500px]">
               
-              {/* Profile Tab */}
-              {activeTab === "profile" && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                  {/* Header */}
-                  <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                    <h3 className="text-xl font-semibold text-gray-900">Personal Information</h3>
-                    {!isEditing ? (
-                      <button
-                        onClick={() => setIsEditing(true)}
-                        className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                        Edit Profile
-                      </button>
-                    ) : (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={handleCancel}
-                          className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
-                        >
-                          <X className="w-4 h-4" />
-                          Cancel
-                        </button>
-                        <button
-                          onClick={handleSave}
-                          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors"
-                        >
-                          <Save className="w-4 h-4" />
-                          Save Changes
-                        </button>
-                      </div>
-                    )}
+              {activeTab === 'orders' && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-2xl font-bold">Order History</h2>
+                    <span className="text-sm font-medium text-gray-400">{orders.length} orders total</span>
                   </div>
 
-                  {/* Profile Form */}
-                  <div className="p-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      
-                      {/* Personal Info */}
-                      <div className="space-y-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            First Name
-                          </label>
-                          <input
-                            type="text"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Last Name
-                          </label>
-                          <input
-                            type="text"
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Email Address
-                          </label>
-                          <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <input
-                              type="email"
-                              name="email"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                              disabled={!isEditing}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Phone Number
-                          </label>
-                          <div className="relative">
-                            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <input
-                              type="tel"
-                              name="phone"
-                              value={formData.phone}
-                              onChange={handleInputChange}
-                              disabled={!isEditing}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Additional Info */}
-                      <div className="space-y-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Address
-                          </label>
-                          <div className="relative">
-                            <MapPin className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-                            <input
-                              type="text"
-                              name="address"
-                              value={formData.address}
-                              onChange={handleInputChange}
-                              disabled={!isEditing}
-                              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Bio
-                          </label>
-                          <textarea
-                            name="bio"
-                            rows={4}
-                            value={formData.bio}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 disabled:bg-gray-50 disabled:text-gray-500 resize-none"
-                          />
-                        </div>
-                      </div>
+                  {loading ? (
+                    <div className="space-y-4">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="h-24 w-full bg-gray-50 animate-pulse rounded-3xl" />
+                      ))}
                     </div>
-                  </div>
+                  ) : orders.length === 0 ? (
+                    <EmptyState 
+                      icon={Package} 
+                      title="No orders yet" 
+                      desc="Looks like you haven't made your first purchase."
+                      cta="Start Shopping"
+                    />
+                  ) : (
+                    <div className="space-y-4">
+                      {orders.map((order: any) => (
+                        <OrderCard key={order.id} order={order} />
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* Stats Overview */}
-              {activeTab === "profile" && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                  {stats.map((stat) => {
-                    const Icon = stat.icon
-                    return (
-                      <div key={stat.label} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
-                        <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                          <Icon className="w-6 h-6 text-gray-600" />
-                        </div>
-                        <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                        <div className="text-gray-600">{stat.label}</div>
-                      </div>
-                    )
-                  })}
+              {/* Other tabs follow the same pattern... */}
+              {activeTab !== 'orders' && (
+                <div className="flex flex-col items-center justify-center h-full py-20 text-center">
+                  <div className="bg-gray-50 p-6 rounded-full mb-4">
+                    <Heart className="h-10 w-10 text-gray-300" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
+                  <p className="text-gray-500">We're still polishing the {activeTab} section.</p>
                 </div>
               )}
 
-              {/* Orders Tab */}
-              {activeTab === "orders" && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
-                  <div className="px-6 py-4 border-b border-gray-100">
-                    <h3 className="text-xl font-semibold text-gray-900">Recent Orders</h3>
-                  </div>
-                  
-                  <div className="p-6">
-                    {recentOrders.map((order) => (
-                      <div key={order.id} className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0">
-                        <div>
-                          <div className="font-semibold text-gray-900">{order.id}</div>
-                          <div className="text-sm text-gray-600">
-                            {new Date(order.date).toLocaleDateString()} • {order.items} item{order.items > 1 ? 's' : ''}
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-semibold text-gray-900">${order.total.toFixed(2)}</div>
-                          <div className={`text-sm ${
-                            order.status === 'Delivered' ? 'text-blue-600' : 
-                            order.status === 'Shipped' ? 'text-gray-600' : 'text-gray-600'
-                          }`}>
-                            {order.status}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    
-                    <button className="w-full mt-4 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
-                      View All Orders
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Other Tabs Placeholder */}
-              {!['profile', 'orders'].includes(activeTab) && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
-                  <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    {(() => {
-                      const Icon = menuItems.find(item => item.id === activeTab)?.icon || Settings
-                      return <Icon className="w-8 h-8 text-gray-400" />
-                    })()}
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-        {menuItems.find(item => item.id === activeTab)?.label}
-                  </h3>
-                  <p className="text-gray-600">
-                    This section is coming soon. We're working on bringing you more features!
-                  </p>
-                </div>
-              )}
             </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* Sub-components for cleaner code */
+
+const OrderCard = ({ order }: { order: any }) => (
+  <div className="group bg-white border border-gray-100 p-5 rounded-3xl hover:border-black hover:shadow-md transition-all cursor-pointer">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex items-center gap-4">
+        <div className="h-12 w-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-black transition-colors">
+          <Package className="h-6 w-6 text-gray-400 group-hover:text-white" />
+        </div>
+        <div>
+          <h4 className="font-bold text-gray-900 uppercase tracking-tight text-sm">Order #{order.id.slice(0, 8)}</h4>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-xs text-gray-400 flex items-center gap-1">
+              <Clock className="h-3 w-3" /> {new Date(order.created_at).toLocaleDateString()}
+            </span>
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+              order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+            }`}>
+              {order.status}
+            </span>
           </div>
         </div>
       </div>
-
-      <Footer />
+      <div className="flex items-center justify-between sm:justify-end gap-6 border-t sm:border-t-0 pt-4 sm:pt-0">
+        <div className="text-right">
+          <p className="text-xs text-gray-400 font-medium">Amount Paid</p>
+          <p className="font-black text-lg">${order.total_amount}</p>
+        </div>
+        <ChevronRight className="h-5 w-5 text-gray-300 group-hover:text-black transform group-hover:translate-x-1 transition-all" />
+      </div>
     </div>
-  )
-}
+  </div>
+);
 
-export default Profile
+const EmptyState = ({ icon: Icon, title, desc, cta }: any) => (
+  <div className="text-center py-16">
+    <div className="inline-flex items-center justify-center h-20 w-20 bg-gray-50 rounded-[2rem] mb-6">
+      <Icon className="h-10 w-10 text-gray-300" />
+    </div>
+    <h3 className="text-xl font-black mb-2">{title}</h3>
+    <p className="text-gray-500 mb-8 max-w-xs mx-auto">{desc}</p>
+    <Link to="/" className="inline-block bg-black text-white px-8 py-4 rounded-2xl text-sm font-bold shadow-lg shadow-gray-200 hover:scale-105 transition-transform">
+      {cta}
+    </Link>
+  </div>
+);
