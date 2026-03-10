@@ -1,12 +1,26 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Vite uses import.meta.env instead of process.env
+// Get env vars
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Add a small check to see if they are loading
+// Log for debugging
+console.log('🔧 Supabase URL:', supabaseUrl ? '✅ Found' : '❌ Missing')
+console.log('🔧 Supabase Key:', supabaseKey ? '✅ Found' : '❌ Missing')
+
 if (!supabaseUrl || !supabaseKey) {
-    console.error("Missing Supabase Keys! Check your .env.local file.");
+  console.error('❌ Missing Supabase environment variables!')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// Create client with error handling
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder',
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+)

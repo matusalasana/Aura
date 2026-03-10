@@ -1,39 +1,38 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
-
+import App from './App'
 import { BrowserRouter } from 'react-router-dom'
-import { Suspense, lazy } from 'react'
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-const queryClient = new QueryClient()
+// Simple error logger for Acode
+console.log('🚀 App starting...')
 
-const ToastContainer = lazy(() => 
-  import('react-toastify').then(module => ({ 
-    default: module.ToastContainer 
-  }))
-)
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
-createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    <Suspense fallback={null}>
-      <ToastContainer 
-        position="top-right" 
-        autoClose={3000} 
-        hideProgressBar={false} 
-        newestOnTop={false} 
-        closeOnClick 
-        rtl={false} 
-        pauseOnFocusLoss 
-        draggable 
-        pauseOnHover 
-        theme="light"
-      />
-    </Suspense>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-  </BrowserRouter>
-  
-  )
+const root = document.getElementById('root')
+if (!root) {
+  console.error('❌ Root element not found!')
+} else {
+  try {
+    createRoot(root).render(
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <App />
+          <ToastContainer position="bottom-right" autoClose={3000} />
+        </QueryClientProvider>
+      </BrowserRouter>
+    )
+    console.log('✅ App rendered successfully')
+  } catch (error) {
+    console.error('❌ Render error:', error)
+  }
+}
