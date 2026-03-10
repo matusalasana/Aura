@@ -17,6 +17,9 @@ function App() {
 
   return (
     <div>
+    <button className="bg-blue-700 text-white font-semibold rounded-lg px-4 py-2">
+        Add To Cart
+      </button>
       <h1>Product List ({products.length})</h1>
       {products.length === 0 ? (
         <p>No products found. Did you add them to the dashboard?</p>
