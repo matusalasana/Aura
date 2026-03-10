@@ -9,8 +9,6 @@ function Home() {
   return (
     <div className="pt-20 bg-[#f8f8f8">
       <Hero />
-      <LatestCollection/>
-      <BestSellers />
       <Policies />
       <Subscription />
       <Footer />
