@@ -30,18 +30,16 @@ export const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
-  // Debug: Log what we're receiving
+  // Debug logs
   console.log('ProductId from URL:', productId);
-  console.log('All products from Supabase:', products);
-  console.log('Products type:', typeof products);
-  console.log('Is products array?', Array.isArray(products));
+  console.log('Current user:', user);
 
   useEffect(() => {
     if (products && productId) {
       console.log('Searching for product with ID:', productId);
       
-      // Try different matching strategies
       const foundProduct = products.find((p: any) => {
         console.log('Comparing:', String(p._id), 'vs', String(productId));
         return String(p._id) === String(productId);
@@ -61,13 +59,9 @@ export const ProductDetails = () => {
     }
   }, [productId, products, navigate]);
 
-  // Debug: Check if product is set
-  console.log('Current product state:', product);
-
   const handleAddToCart = () => {
     if (!user) {
-      toast.error('Please login to add items to cart');
-      navigate('/login');
+      setShowLoginPrompt(true);
       return;
     }
 
@@ -76,6 +70,7 @@ export const ProductDetails = () => {
       return;
     }
     
+    // Add to cart for each quantity
     for (let i = 0; i < quantity; i++) {
       addToCart({ productId: product._id, size: selectedSize });
     }
@@ -83,8 +78,7 @@ export const ProductDetails = () => {
 
   const handleBuyNow = () => {
     if (!user) {
-      toast.error('Please login to checkout');
-      navigate('/login');
+      setShowLoginPrompt(true);
       return;
     }
 
@@ -137,13 +131,9 @@ export const ProductDetails = () => {
     );
   }
 
-  // Debug: Render product info
-  console.log('Rendering product:', product);
-
   return (
     <div className="min-h-screen bg-white pt-24 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
         {/* Back Button */}
         <button 
           onClick={() => navigate(-1)}
@@ -377,6 +367,35 @@ export const ProductDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Login Prompt Modal */}
+      {showLoginPrompt && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-8 text-center">
+            <h3 className="text-2xl font-black mb-4">Login Required</h3>
+            <p className="text-gray-600 mb-6">
+              Please login to your account to add items to your cart.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLoginPrompt(false)}
+                className="flex-1 py-3 rounded-xl border border-gray-200 font-bold hover:bg-gray-50 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowLoginPrompt(false);
+                  navigate('/login');
+                }}
+                className="flex-1 bg-black text-white py-3 rounded-xl font-bold hover:bg-zinc-800 transition-all"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
