@@ -3,19 +3,13 @@ import { useEffect, useState } from 'react'
 
 import { supabase } from './lib/supabaseClient'
 import { useQuery } from '@tanstack/react-query'
+import { useProducts } from './hooks/useProducts'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const { data: products, isLoading, error } = useQuery({
-    queryKey: ['products'],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('products').select('*')
-      if (error) throw new Error(error.message)
-      return data
-    },
-  })
+  const { data: products, isLoading, error } = useProducts();
 
   if (isLoading) return <p>Loading...</p>
   if (error) return <p>Error: {error.message}</p>
