@@ -1,7 +1,8 @@
+// hooks/useProducts.ts
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../lib/supabaseClient'
 
-interface Product {
+export interface Product {
   _id: string
   name: string
   description: string
@@ -18,27 +19,29 @@ export const useProducts = (category?: string) => {
   return useQuery({
     queryKey: ['products', category], 
     queryFn: async (): Promise<Product[]> => {
-      try {
-        let query = supabase.from('products').select('*')
-        
-        if (category) {
-          query = query.eq('category', category)
-        }
-
-        const { data, error } = await query
-        
-        if (error) {
-          console.error('Products fetch error:', error)
-          throw new Error(error.message)
-        }
-        
-        return data || []
-      } catch (error) {
-        console.error('Unexpected error in useProducts:', error)
-        throw error
+      console.log('Fetching products...');
+      
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('date', { ascending: false });
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(error.message);
       }
+      
+      console.log('Raw products from DB:', data);
+      
+      // Map the data to ensure _id is present
+      const mappedProducts = data?.map(item => ({
+        ...item,
+        _id: item._id || item.id, // Use _id if exists, fallback to id
+      })) || [];
+      
+      console.log('Mapped products:', mappedProducts);
+      return mappedProducts;
     },
-    staleTime: 1000 * 60 * 5, // Data stays fresh for 5 minutes
-    gcTime: 1000 * 60 * 10, // Cache for 10 minutes
-  })
-}
+    staleTime: 1000 * 60 * 5,
+  });
+};

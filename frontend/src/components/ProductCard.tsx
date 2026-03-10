@@ -1,7 +1,8 @@
+// components/ProductCard.tsx
 import React, { useState } from 'react';
-import { ShoppingCart, Star, Eye, Loader2 } from 'lucide-react';
+import { ShoppingCart, Star, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useCart } from "../hooks/useCart"; //
+import { useCart } from "../hooks/useCart";
 
 interface ProductProps {
   _id: string;
@@ -21,13 +22,17 @@ const ProductCard: React.FC<ProductProps> = ({
   name,
   price,
   image,
-  category,
-  subCategory,
   sizes,
   bestseller,
 }) => {
-  const [currentImage, setCurrentImage] = useState(image[0]);
-  const { addToCart, isAdding } = useCart(); //
+  const [currentImage, setCurrentImage] = useState(image?.[0] || '');
+  const { addToCart, isAdding } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent, size: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart({ productId: _id, size });
+  };
 
   return (
     <div className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
@@ -40,23 +45,23 @@ const ProductCard: React.FC<ProductProps> = ({
         )}
 
         <img
-          src={currentImage}
+          src={currentImage || 'https://via.placeholder.com/300x400?text=No+Image'}
           alt={name}
           className="h-full w-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105"
+          onError={(e) => {
+            e.currentTarget.src = 'https://via.placeholder.com/300x400?text=No+Image';
+          }}
         />
 
         {/* Quick Add Overlay */}
         <div className="absolute inset-x-0 bottom-0 translate-y-full p-4 transition-transform duration-300 group-hover:translate-y-0 bg-gradient-to-t from-black/40 to-transparent">
           <div className="rounded-xl bg-white/95 p-3 backdrop-blur-md shadow-xl">
-            <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-tighter text-gray-400">Quick Add Size</p>
+            <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-tighter text-gray-400">Quick Add</p>
             <div className="flex justify-center gap-1.5">
-              {sizes.map((size) => (
+              {sizes?.map((size) => (
                 <button
                   key={size}
-                  onClick={(e) => { 
-                    e.preventDefault(); 
-                    addToCart({ productId: _id, size }); //
-                  }}
+                  onClick={(e) => handleAddToCart(e, size)}
                   className="flex h-8 min-w-[32px] items-center justify-center rounded-md border border-gray-100 text-[11px] font-semibold hover:bg-black hover:text-white"
                 >
                   {size}
@@ -73,7 +78,13 @@ const ProductCard: React.FC<ProductProps> = ({
           <span className="text-lg font-black text-gray-900">${price}</span>
           <button 
              disabled={isAdding}
-             onClick={() => addToCart({ productId: _id, size: sizes[0] })} //
+             onClick={(e) => {
+               e.preventDefault();
+               e.stopPropagation();
+               if (sizes && sizes.length > 0) {
+                 addToCart({ productId: _id, size: sizes[0] });
+               }
+             }}
              className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-900 text-white hover:bg-indigo-600 disabled:bg-gray-400"
           >
             {isAdding ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />}

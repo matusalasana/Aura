@@ -14,31 +14,33 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    // 1. Authenticate
+    // 1. Sign in
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (authError) {
-      toast.error('Invalid login credentials');
+      toast.error('Invalid credentials');
       setLoading(false);
       return;
     }
 
-    // 2. Verify Admin Status
-    const { data: adminRecord, error: adminError } = await supabase
+    // 2. Check if admin
+    const { data: adminData, error: adminError } = await supabase
       .from('admin_users')
-      .select('user_id')
-      .eq('user_id', authData.user.id)
-      .maybeSingle();
+      .select('*')
+      .eq('user_id', authData.user.id);
 
-    if (adminError || !adminRecord) {
-      toast.error('Access Denied: You are not an authorized admin');
-      await supabase.auth.signOut(); // Wipe session
-    } else {
-      toast.success('Access Granted');
+    if (adminError) {
+      toast.error('Error checking admin status');
+      await supabase.auth.signOut();
+    } else if (adminData && adminData.length > 0) {
+      toast.success('Welcome Admin!');
       navigate('/admin');
+    } else {
+      toast.error('Not authorized as admin');
+      await supabase.auth.signOut();
     }
 
     setLoading(false);
@@ -46,34 +48,35 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
           <h1 className="text-4xl font-black italic tracking-tighter">AURA</h1>
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mt-2">Internal Dashboard</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mt-2">Admin Access</p>
         </div>
-        <form onSubmit={handleLogin} className="mt-8 space-y-4">
+
+        <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
-            placeholder="Admin Email"
-            className="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-black outline-none transition-all"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50"
             required
           />
           <input
             type="password"
             placeholder="Password"
-            className="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-black outline-none transition-all"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50"
             required
           />
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-5 rounded-2xl font-bold hover:shadow-lg disabled:opacity-50 flex items-center justify-center transition-all"
+            className="w-full bg-black text-white py-4 rounded-2xl font-bold"
           >
-            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Log In'}
+            {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : 'Access Dashboard'}
           </button>
         </form>
       </div>

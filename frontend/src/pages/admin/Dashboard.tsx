@@ -1,4 +1,3 @@
-// pages/admin/Dashboard.tsx
 import React from 'react';
 import { useAdmin } from '../../hooks/useAdmin';
 import { Package, ShoppingBag, DollarSign, TrendingUp, Loader2 } from 'lucide-react';
@@ -53,7 +52,6 @@ const Dashboard = () => {
         <p className="text-gray-500 mt-1">Welcome back to your store overview</p>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => (
           <Link
@@ -74,29 +72,19 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Recent Orders */}
       <div className="bg-white rounded-2xl shadow-sm p-6">
         <h2 className="text-lg font-bold mb-4">Recent Orders</h2>
         {stats?.recentOrders?.length > 0 ? (
           <div className="space-y-4">
             {stats.recentOrders.map((order: any) => (
-              <div key={order.id} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+              <div key={order.id} className="flex items-center justify-between py-3 border-b border-gray-100">
                 <div>
                   <p className="text-sm font-bold">#{order.id.slice(0, 8)}</p>
                   <p className="text-xs text-gray-500">
                     {new Date(order.created_at).toLocaleDateString()}
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
-                    order.status === 'processing' ? 'bg-amber-100 text-amber-700' :
-                    order.status === 'shipped' ? 'bg-blue-100 text-blue-700' :
-                    'bg-green-100 text-green-700'
-                  }`}>
-                    {order.status}
-                  </span>
-                  <span className="font-black">${order.total_amount}</span>
-                </div>
+                <span className="font-black">${order.total_amount}</span>
               </div>
             ))}
           </div>

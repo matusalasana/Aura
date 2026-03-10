@@ -1,4 +1,3 @@
-// components/admin/ProtectedAdminRoute.tsx
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAdmin } from '../../hooks/useAdmin';
