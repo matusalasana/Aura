@@ -24,12 +24,17 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return (
       <div className="flex h-screen flex-col items-center justify-center bg-[#f8f8f8]">
-        <h1 className="text-3xl font-black italic animate-pulse">AURA</h1>
+        <div className="text-center">
+          <div className="relative">
+            <div className="h-16 w-16 animate-spin rounded-full border-4 border-gray-200 border-t-black mx-auto mb-4"></div>
+          </div>
+          <h1 className="text-3xl font-black italic animate-pulse">AURA</h1>
+        </div>
       </div>
     );
   }
@@ -48,11 +53,13 @@ function App() {
             <Route path="/product/:productId" element={<ProductDetails />} />
             
             {/* Auth Routes */}
-            <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-            <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
-            
-            {/* Admin Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
+            {/* Admin Login Route */}
             <Route path="/admin/login" element={<AdminLogin />} />
+            
+            {/* Protected Admin Routes */}
             <Route path="/admin" element={
               <ProtectedAdminRoute>
                 <AdminLayout />
@@ -61,13 +68,15 @@ function App() {
               <Route index element={<AdminDashboard />} />
               <Route path="products" element={<AdminProducts />} />
               <Route path="orders" element={<AdminOrders />} />
+              <Route path="customers" element={<div>Customers (Coming Soon)</div>} />
+              <Route path="settings" element={<div>Settings (Coming Soon)</div>} />
             </Route>
 
-            {/* Protected Routes */}
-            <Route path="/cart" element={user ? <Cart /> : <Navigate to="/login" />} />
-            <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
-            <Route path="/checkout" element={user ? <Checkout /> : <Navigate to="/login" />} />
-            <Route path="/order-confirmation" element={user ? <OrderConfirmation /> : <Navigate to="/login" />} />
+            {/* Protected User Routes */}
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-confirmation" element={<OrderConfirmation />} />
             
             {/* 404 */}
             <Route path="/error" element={<Error />} />

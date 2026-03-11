@@ -63,7 +63,7 @@ function Home() {
               category={product.category}
               subCategory={product.subCategory}
               sizes={product.sizes || []}
-              date={product.date}
+              date={product.date || Date.now()}
               bestseller={product.bestseller || false}
             />
           ))}

@@ -1,241 +1,147 @@
-import React, { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
-import { X, Loader2 } from 'lucide-react';
-import { toast } from 'react-toastify';
-import { useQueryClient } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
+import { X, Loader2, Plus, Trash2 } from 'lucide-react';
+import { useAdmin } from '../../hooks/useAdmin';
 
 interface ProductFormProps {
   product?: any;
   onClose: () => void;
 }
 
-const ProductForm = ({ product, onClose }: ProductFormProps) => {
-  const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(false);
+const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
+  const { createProduct, updateProduct, isSubmitting } = useAdmin();
   
   const [formData, setFormData] = useState({
-    name: product?.name || '',
-    description: product?.description || '',
-    price: product?.price || '',
-    category: product?.category || 'men',
-    subCategory: product?.subCategory || 'topwear',
-    sizes: product?.sizes || ['S', 'M', 'L', 'XL'],
-    bestseller: product?.bestseller || false,
-    image: product?.image || ['', '', '', ''],
+    name: '',
+    description: '',
+    price: '',
+    category: 'men',
+    subCategory: 'topwear',
+    sizes: [] as string[],
+    bestseller: false,
+    image: [''] as string[],
   });
 
   const categories = ['men', 'women', 'kids'];
-  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  const subCategories = {
+    men: ['topwear', 'bottomwear', 'winterwear'],
+    women: ['topwear', 'bottomwear', 'winterwear'],
+    kids: ['topwear', 'bottomwear', 'winterwear'],
+  };
 
-  const handleSizeToggle = (size: string) => {
-    const currentSizes = [...formData.sizes];
-    if (currentSizes.includes(size)) {
-      setFormData({ 
-        ...formData, 
-        sizes: currentSizes.filter(s => s !== size) 
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name || '',
+        description: product.description || '',
+        price: product.price?.toString() || '',
+        category: product.category || 'men',
+        subCategory: product.sub_category || 'topwear',
+        sizes: product.sizes || [],
+        bestseller: product.bestseller || false,
+        image: product.image?.length ? product.image : [''],
       });
+    }
+  }, [product]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload = {
+      name: formData.name.trim(),
+      description: formData.description.trim(),
+      price: parseFloat(formData.price),
+      category: formData.category,
+      sub_category: formData.subCategory,
+      sizes: formData.sizes,
+      bestseller: formData.bestseller,
+      image: formData.image.filter(url => url.trim() !== ''),
+    };
+
+    if (product?._id) {
+      updateProduct({ id: product._id, data: payload }, { onSuccess: onClose });
     } else {
-      setFormData({ 
-        ...formData, 
-        sizes: [...currentSizes, size].sort() 
-      });
+      createProduct(payload, { onSuccess: onClose });
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const filteredImages = formData.image.filter((url: string) => url.trim() !== '');
-      
-      const productData = {
-        name: formData.name,
-        description: formData.description,
-        price: parseFloat(formData.price as string),
-        category: formData.category,
-        subCategory: formData.subCategory,
-        sizes: formData.sizes,
-        bestseller: formData.bestseller,
-        image: filteredImages,
-        date: product?.date || Date.now(),
-        _id: product?._id || Math.random().toString(36).substring(2, 10)
-      };
-
-      let error;
-
-      if (product) {
-        const { error: updateError } = await supabase
-          .from('products')
-          .update(productData)
-          .eq('_id', product._id);
-        error = updateError;
-      } else {
-        const { error: insertError } = await supabase
-          .from('products')
-          .insert([productData]);
-        error = insertError;
-      }
-
-      if (error) throw error;
-
-      toast.success(product ? 'Product updated!' : 'Product created!');
-      queryClient.invalidateQueries({ queryKey: ['admin-products'] });
-      queryClient.invalidateQueries({ queryKey: ['products'] });
-      onClose();
-      
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save product');
-    } finally {
-      setLoading(false);
-    }
+  const handleImageChange = (index: number, value: string) => {
+    const newImages = [...formData.image];
+    newImages[index] = value;
+    setFormData({ ...formData, image: newImages });
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 overflow-y-auto">
-      <div className="relative bg-white rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        
-        <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
-          <h2 className="text-2xl font-black tracking-tighter">
-            {product ? 'EDIT PRODUCT' : 'NEW PRODUCT'}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
+        <div className="p-6 border-b flex justify-between items-center">
+          <h2 className="text-xl font-black italic uppercase tracking-tighter">
+            {product ? 'Edit Product' : 'Add Product'}
           </h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
-            <X className="h-5 w-5" />
-          </button>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><X size={20}/></button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          
-          <div>
-            <label className="text-xs font-bold uppercase text-gray-500 mb-2 block">
-              Product Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className="w-full px-5 py-4 rounded-2xl bg-gray-50 border border-gray-100 focus:border-black"
+        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
+          {/* Product Name */}
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Name</label>
+            <input 
+              className="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-black transition-all"
+              value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required 
             />
           </div>
 
-          <div>
-            <label className="text-xs font-bold uppercase text-gray-500 mb-2 block">
-              Description *
-            </label>
-            <textarea
-              required
-              rows={4}
-              value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-              className="w-full px-5 py-4 rounded-2xl bg-gray-50 border border-gray-100 focus:border-black"
+          {/* Description */}
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Description</label>
+            <textarea 
+              className="w-full p-4 bg-gray-50 rounded-2xl outline-none h-24 resize-none border-2 border-transparent focus:border-black"
+              value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
             />
           </div>
 
+          {/* Price and Category */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold uppercase text-gray-500 mb-2 block">
-                Price *
-              </label>
-              <input
-                type="number"
-                required
-                min="0"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({...formData, price: e.target.value})}
-                className="w-full px-5 py-4 rounded-2xl bg-gray-50 border border-gray-100 focus:border-black"
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Price ($)</label>
+              <input 
+                type="number" step="0.01" className="w-full p-4 bg-gray-50 rounded-2xl outline-none"
+                value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} required
               />
             </div>
-
-            <div>
-              <label className="text-xs font-bold uppercase text-gray-500 mb-2 block">
-                Category
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({...formData, category: e.target.value})}
-                className="w-full px-5 py-4 rounded-2xl bg-gray-50 border border-gray-100 focus:border-black"
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Category</label>
+              <select 
+                className="w-full p-4 bg-gray-50 rounded-2xl outline-none appearance-none"
+                value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}
               >
-                {categories.map(cat => (
-                  <option key={cat} value={cat} className="capitalize">{cat}</option>
-                ))}
+                {categories.map(c => <option key={c} value={c}>{c.toUpperCase()}</option>)}
               </select>
             </div>
           </div>
 
-          <div>
-            <label className="text-xs font-bold uppercase text-gray-500 mb-2 block">
-              Sizes
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {sizeOptions.map(size => (
-                <button
-                  key={size}
-                  type="button"
-                  onClick={() => handleSizeToggle(size)}
-                  className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${
-                    formData.sizes.includes(size)
-                      ? 'bg-black text-white'
-                      : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
-                  }`}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="text-xs font-bold uppercase text-gray-500 mb-2 block">
-              Image URLs
-            </label>
-            {[0, 1, 2, 3].map((index) => (
-              <input
-                key={index}
-                type="url"
-                value={formData.image[index] || ''}
-                onChange={(e) => {
-                  const newImages = [...formData.image];
-                  newImages[index] = e.target.value;
-                  setFormData({...formData, image: newImages});
-                }}
-                className="w-full mb-2 px-5 py-4 rounded-2xl bg-gray-50 border border-gray-100 focus:border-black"
-                placeholder={`Image URL ${index + 1}`}
-              />
+          {/* Image URLs */}
+          <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Image URLs</label>
+            {formData.image.map((url, index) => (
+              <div key={index} className="flex gap-2">
+                <input 
+                  className="flex-1 p-4 bg-gray-50 rounded-2xl outline-none" placeholder="https://..."
+                  value={url} onChange={e => handleImageChange(index, e.target.value)}
+                />
+                {formData.image.length > 1 && (
+                  <button type="button" onClick={() => setFormData({...formData, image: formData.image.filter((_, i) => i !== index)})} className="text-red-500 px-2"><Trash2 size={18}/></button>
+                )}
+              </div>
             ))}
+            <button type="button" onClick={() => setFormData({...formData, image: [...formData.image, '']})} className="text-xs font-bold flex items-center gap-1 text-gray-500 hover:text-black transition-colors"><Plus size={14}/> Add Image</button>
           </div>
 
-          <div className="flex items-center gap-4">
-            <input
-              type="checkbox"
-              id="bestseller"
-              checked={formData.bestseller}
-              onChange={(e) => setFormData({...formData, bestseller: e.target.checked})}
-              className="w-4 h-4"
-            />
-            <label htmlFor="bestseller" className="font-bold">
-              Mark as Bestseller
-            </label>
-          </div>
-
-          <div className="flex gap-4 pt-6">
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 bg-black text-white py-5 rounded-2xl font-bold hover:bg-zinc-800 disabled:opacity-50"
-            >
-              {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : 
-                (product ? 'Update Product' : 'Create Product')}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-8 py-5 border-2 border-gray-200 rounded-2xl font-bold hover:border-black"
-            >
-              Cancel
-            </button>
-          </div>
+          <button 
+            type="submit" disabled={isSubmitting}
+            className="w-full bg-black text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-zinc-800 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+          >
+            {isSubmitting && <Loader2 className="animate-spin h-5 w-5" />}
+            {product ? 'Update Details' : 'Publish Product'}
+          </button>
         </form>
       </div>
     </div>
