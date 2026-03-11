@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { X, Loader2, Plus, Trash2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Loader2, Plus, Trash2, Image as ImageIcon, DollarSign, Layers, AlignLeft, Upload, CloudUpload, Link as LinkIcon } from 'lucide-react';
 import { useAdmin } from '../../hooks/useAdmin';
 
 interface ProductFormProps {
@@ -9,24 +9,22 @@ interface ProductFormProps {
 
 const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
   const { createProduct, updateProduct, isSubmitting } = useAdmin();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [imageUrlInput, setImageUrlInput] = useState(''); // New state for the URL input
   
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
     category: 'men',
-    subCategory: 'topwear',
+    sub_category: 'topwear',
     sizes: [] as string[],
     bestseller: false,
-    image: [''] as string[],
+    image: [] as string[],
   });
 
   const categories = ['men', 'women', 'kids'];
-  const subCategories = {
-    men: ['topwear', 'bottomwear', 'winterwear'],
-    women: ['topwear', 'bottomwear', 'winterwear'],
-    kids: ['topwear', 'bottomwear', 'winterwear'],
-  };
 
   useEffect(() => {
     if (product) {
@@ -35,25 +33,64 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
         description: product.description || '',
         price: product.price?.toString() || '',
         category: product.category || 'men',
-        subCategory: product.sub_category || 'topwear',
+        sub_category: product.sub_category || 'topwear',
         sizes: product.sizes || [],
         bestseller: product.bestseller || false,
-        image: product.image?.length ? product.image : [''],
+        image: product.image || [],
       });
     }
   }, [product]);
 
+  // Handle adding image via URL
+  const handleAddImageUrl = () => {
+    if (!imageUrlInput.trim()) return;
+    
+    setFormData(prev => ({
+      ...prev,
+      image: [...prev.image, imageUrlInput.trim()]
+    }));
+    setImageUrlInput(''); // Clear input after adding
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const newImages: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        const promise = new Promise<string>((resolve) => {
+          reader.onload = (e) => resolve(e.target?.result as string);
+        });
+        reader.readAsDataURL(files[i]);
+        newImages.push(await promise);
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        image: [...prev.image, ...newImages]
+      }));
+    } catch (error) {
+      console.error("Upload failed", error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setFormData({
+      ...formData,
+      image: formData.image.filter((_, i) => i !== index)
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const payload = {
-      name: formData.name.trim(),
-      description: formData.description.trim(),
+      ...formData,
       price: parseFloat(formData.price),
-      category: formData.category,
-      sub_category: formData.subCategory,
-      sizes: formData.sizes,
-      bestseller: formData.bestseller,
-      image: formData.image.filter(url => url.trim() !== ''),
     };
 
     if (product?._id) {
@@ -63,84 +100,119 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
     }
   };
 
-  const handleImageChange = (index: number, value: string) => {
-    const newImages = [...formData.image];
-    newImages[index] = value;
-    setFormData({ ...formData, image: newImages });
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
-        <div className="p-6 border-b flex justify-between items-center">
-          <h2 className="text-xl font-black italic uppercase tracking-tighter">
-            {product ? 'Edit Product' : 'Add Product'}
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl flex flex-col max-h-[92vh] border border-gray-100 overflow-hidden">
+        
+        {/* Header */}
+        <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+          <h2 className="text-2xl font-black tracking-tighter text-black uppercase">
+            {product ? 'Edit Item' : 'New Listing'} <span className="text-indigo-600">.</span>
           </h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><X size={20}/></button>
+          <button onClick={onClose} className="p-3 hover:bg-black hover:text-white rounded-2xl transition-all"><X size={20} /></button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
-          {/* Product Name */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Name</label>
-            <input 
-              className="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-black transition-all"
-              value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required 
-            />
+        <form onSubmit={handleSubmit} className="p-8 space-y-8 overflow-y-auto custom-scrollbar">
+          
+          {/* Image Section */}
+          <div className="space-y-4">
+            <label className="flex items-center gap-2 text-[11px] font-black uppercase text-gray-400 tracking-[0.2em] ml-1">
+              <ImageIcon size={14} /> Product Media
+            </label>
+            
+            {/* Image Link Input Area */}
+            <div className="flex gap-2 mb-4">
+              <div className="relative flex-1">
+                <LinkIcon size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input 
+                  type="text"
+                  placeholder="Paste image URL here..."
+                  className="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 outline-none text-sm transition-all"
+                  value={imageUrlInput}
+                  onChange={(e) => setImageUrlInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddImageUrl())}
+                />
+              </div>
+              <button 
+                type="button"
+                onClick={handleAddImageUrl}
+                className="px-6 bg-gray-900 text-white rounded-xl font-bold text-xs uppercase hover:bg-indigo-600 transition-colors"
+              >
+                Add Link
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {/* Thumbnails */}
+              {formData.image.map((url, index) => (
+                <div key={index} className="group relative aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 bg-gray-50">
+                  <img src={url} alt="Product" className="w-full h-full object-cover" />
+                  <button 
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity scale-90 hover:scale-100"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+
+              {/* Upload Trigger */}
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="aspect-square rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-2 hover:border-indigo-500 hover:bg-indigo-50/30 transition-all group"
+              >
+                {uploading ? <Loader2 className="animate-spin text-indigo-500" /> : (
+                  <>
+                    <div className="p-3 rounded-full bg-gray-50 group-hover:bg-indigo-100 transition-colors">
+                      <CloudUpload className="text-gray-400 group-hover:text-indigo-600" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase text-gray-400">Upload File</span>
+                  </>
+                )}
+              </button>
+            </div>
+            
+            <input type="file" ref={fileInputRef} onChange={handleFileUpload} multiple accept="image/*" className="hidden" />
           </div>
 
-          {/* Description */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Description</label>
-            <textarea 
-              className="w-full p-4 bg-gray-50 rounded-2xl outline-none h-24 resize-none border-2 border-transparent focus:border-black"
-              value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
-            />
-          </div>
-
-          {/* Price and Category */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Price ($)</label>
+          {/* Product Details (rest of your form) */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[11px] font-black uppercase text-gray-400 tracking-[0.2em] ml-1">Product Name</label>
               <input 
-                type="number" step="0.01" className="w-full p-4 bg-gray-50 rounded-2xl outline-none"
-                value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} required
+                className="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-black transition-all font-medium"
+                value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required 
               />
             </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Category</label>
-              <select 
-                className="w-full p-4 bg-gray-50 rounded-2xl outline-none appearance-none"
-                value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}
-              >
-                {categories.map(c => <option key={c} value={c}>{c.toUpperCase()}</option>)}
-              </select>
-            </div>
-          </div>
-
-          {/* Image URLs */}
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Image URLs</label>
-            {formData.image.map((url, index) => (
-              <div key={index} className="flex gap-2">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-[11px] font-black uppercase text-gray-400 tracking-[0.2em] ml-1">Price ($)</label>
                 <input 
-                  className="flex-1 p-4 bg-gray-50 rounded-2xl outline-none" placeholder="https://..."
-                  value={url} onChange={e => handleImageChange(index, e.target.value)}
+                  type="number" className="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-black transition-all font-bold"
+                  value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} required
                 />
-                {formData.image.length > 1 && (
-                  <button type="button" onClick={() => setFormData({...formData, image: formData.image.filter((_, i) => i !== index)})} className="text-red-500 px-2"><Trash2 size={18}/></button>
-                )}
               </div>
-            ))}
-            <button type="button" onClick={() => setFormData({...formData, image: [...formData.image, '']})} className="text-xs font-bold flex items-center gap-1 text-gray-500 hover:text-black transition-colors"><Plus size={14}/> Add Image</button>
+              <div className="space-y-2">
+                <label className="text-[11px] font-black uppercase text-gray-400 tracking-[0.2em] ml-1">Category</label>
+                <select 
+                  className="w-full p-4 bg-gray-50 rounded-2xl outline-none border-2 border-transparent focus:border-black transition-all font-bold appearance-none"
+                  value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}
+                >
+                  {categories.map(c => <option key={c} value={c}>{c.toUpperCase()}</option>)}
+                </select>
+              </div>
+            </div>
           </div>
 
           <button 
-            type="submit" disabled={isSubmitting}
-            className="w-full bg-black text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-zinc-800 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+            type="submit" disabled={isSubmitting || uploading}
+            className="group w-full relative bg-black text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.2em] overflow-hidden transition-all hover:shadow-xl disabled:opacity-50"
           >
-            {isSubmitting && <Loader2 className="animate-spin h-5 w-5" />}
-            {product ? 'Update Details' : 'Publish Product'}
+            <span className="relative z-10">{isSubmitting ? 'Processing...' : 'Save Product'}</span>
+            <div className="absolute inset-0 bg-indigo-600 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
           </button>
         </form>
       </div>

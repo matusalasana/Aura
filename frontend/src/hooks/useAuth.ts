@@ -1,37 +1,85 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import { User } from '@supabase/supabase-js';
 
 export const useAuth = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
-    const initializeAuth = async () => {
+    const getSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
         
-        if (mounted) {
-          const currentUser = session?.user ?? null;
+        if (error) throw error;
+
+        if (mounted && session?.user) {
+          const currentUser = session.user;
           setUser(currentUser);
-          setRole(currentUser?.user_metadata?.role || null);
-          setLoading(false);
+          
+          // Check multiple places for role
+          const userRole = 
+            currentUser.user_metadata?.role || 
+            currentUser.app_metadata?.role || 
+            null;
+          
+          setRole(userRole);
+          setIsAdmin(userRole === 'admin');
+          
+          console.log('Auth state:', {
+            email: currentUser.email,
+            user_metadata: currentUser.user_metadata,
+            app_metadata: currentUser.app_metadata,
+            role: userRole,
+            isAdmin: userRole === 'admin'
+          });
+        } else if (mounted) {
+          setUser(null);
+          setRole(null);
+          setIsAdmin(false);
         }
       } catch (error) {
         console.error('Auth error:', error);
-        if (mounted) setLoading(false);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
-    initializeAuth();
+    getSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (mounted) {
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
-        setRole(currentUser?.user_metadata?.role || null);
+        if (session?.user) {
+          const currentUser = session.user;
+          setUser(currentUser);
+          
+          const userRole = 
+            currentUser.user_metadata?.role || 
+            currentUser.app_metadata?.role || 
+            null;
+          
+          setRole(userRole);
+          setIsAdmin(userRole === 'admin');
+          
+          console.log('Auth state changed:', {
+            email: currentUser.email,
+            user_metadata: currentUser.user_metadata,
+            app_metadata: currentUser.app_metadata,
+            role: userRole,
+            isAdmin: userRole === 'admin'
+          });
+        } else {
+          setUser(null);
+          setRole(null);
+          setIsAdmin(false);
+        }
+        setLoading(false);
       }
     });
 
@@ -40,8 +88,6 @@ export const useAuth = () => {
       subscription.unsubscribe();
     };
   }, []);
-
-  const isAdmin = role === 'admin';
 
   return { user, loading, role, isAdmin };
 };

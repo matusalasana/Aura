@@ -1,3 +1,4 @@
+// pages/admin/Login.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
@@ -23,29 +24,36 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      toast.error('Invalid credentials');
+      if (error) throw error;
+
+      // Check if user has admin role in metadata
+      const userRole = data.user?.user_metadata?.role;
+      
+      console.log('Logged in user:', {
+        email: data.user?.email,
+        user_metadata: data.user?.user_metadata,
+        role: userRole
+      });
+      
+      if (userRole === 'admin') {
+        toast.success('Welcome Admin!');
+        navigate('/admin');
+      } else {
+        toast.error('Not authorized as admin');
+        await supabase.auth.signOut();
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast.error(error.message || 'Invalid credentials');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // Check if user has admin role in metadata
-    const userRole = data.user?.user_metadata?.role;
-    
-    if (userRole === 'admin') {
-      toast.success('Welcome Admin!');
-      navigate('/admin');
-    } else {
-      toast.error('Not authorized as admin');
-      await supabase.auth.signOut();
-    }
-
-    setLoading(false);
   };
 
   return (

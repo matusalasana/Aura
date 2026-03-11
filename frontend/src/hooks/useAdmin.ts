@@ -7,15 +7,18 @@ export const useAdmin = () => {
   const { isAdmin } = useAuth();
   const queryClient = useQueryClient();
 
+  console.log('useAdmin - isAdmin:', isAdmin);
+
   // Fetch Products
   const {
     data: products = [],
     isLoading: productsLoading,
     error: productsError,
+    refetch: refetchProducts
   } = useQuery({
     queryKey: ["admin-products"],
     queryFn: async () => {
-      console.log("Fetching products...");
+      console.log("Fetching products for admin...");
       const { data, error } = await supabase
         .from("products")
         .select("*")
@@ -26,12 +29,15 @@ export const useAdmin = () => {
         throw error;
       }
 
+      console.log("Raw products from DB:", data);
+
       const mapped = (data || []).map((p) => ({
         ...p,
         _id: p.id,
         subCategory: p.sub_category,
       }));
-      console.log("Fetched products:", mapped);
+      
+      console.log("Mapped products:", mapped);
       return mapped;
     },
     enabled: !!isAdmin,
@@ -41,8 +47,14 @@ export const useAdmin = () => {
   const createProduct = useMutation({
     mutationFn: async (newProduct: any) => {
       console.log("Creating product:", newProduct);
-      const { error } = await supabase.from("products").insert([newProduct]);
+      const { data, error } = await supabase
+        .from("products")
+        .insert([newProduct])
+        .select();
+      
       if (error) throw error;
+      console.log("Product created:", data);
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
@@ -54,7 +66,7 @@ export const useAdmin = () => {
     },
   });
 
-  // Update Product – fixed row check
+  // Update Product
   const updateProduct = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
       console.log("Updating product:", id, data);
@@ -68,7 +80,7 @@ export const useAdmin = () => {
       if (!updatedRows || updatedRows.length === 0) {
         throw new Error("No product found with that ID or you don't have permission.");
       }
-      console.log("Update successful, rows affected:", updatedRows.length);
+      console.log("Update successful:", updatedRows);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
@@ -80,7 +92,7 @@ export const useAdmin = () => {
     },
   });
 
-  // Delete Product – fixed row check
+  // Delete Product
   const deleteProduct = useMutation({
     mutationFn: async (id: string) => {
       console.log("Deleting product:", id);
@@ -94,7 +106,7 @@ export const useAdmin = () => {
       if (!deletedRows || deletedRows.length === 0) {
         throw new Error("No product found with that ID or you don't have permission.");
       }
-      console.log("Delete successful, rows affected:", deletedRows.length);
+      console.log("Delete successful:", deletedRows);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
@@ -110,11 +122,14 @@ export const useAdmin = () => {
   const { data: orders = [], isLoading: ordersLoading } = useQuery({
     queryKey: ["admin-orders"],
     queryFn: async () => {
+      console.log("Fetching orders for admin...");
       const { data, error } = await supabase
         .from("orders")
         .select("*")
         .order("created_at", { ascending: false });
+      
       if (error) throw error;
+      console.log("Orders fetched:", data);
       return data || [];
     },
     enabled: !!isAdmin,
@@ -135,8 +150,9 @@ export const useAdmin = () => {
     createProduct: createProduct.mutate,
     updateProduct: updateProduct.mutate,
     deleteProduct: deleteProduct.mutate,
-    deleteProductMutation: deleteProduct, // important for loading state
+    deleteProductMutation: deleteProduct,
     isSubmitting: createProduct.isPending || updateProduct.isPending,
     productsError,
+    refetchProducts,
   };
 };
