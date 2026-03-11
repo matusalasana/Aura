@@ -22,9 +22,18 @@ import Navbar from './components/Navbar';
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 
 function App() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    // Scroll to top on every route change
+    window.scrollTo(0, 0);
+  }, [pathname]);
   const { loading } = useAuth();
+  
 
   if (loading) {
     return (

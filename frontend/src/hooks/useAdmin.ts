@@ -28,7 +28,7 @@ export const useAdmin = () => {
 
       const mapped = (data || []).map((p) => ({
         ...p,
-        _id: p.id, // Map database id to frontend _id
+        _id: p.id,
         subCategory: p.sub_category,
       }));
       console.log("Fetched products:", mapped);
@@ -54,19 +54,21 @@ export const useAdmin = () => {
     },
   });
 
-  // Update Product – with row count check
+  // Update Product – fixed row check
   const updateProduct = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
       console.log("Updating product:", id, data);
-      const { error, count } = await supabase
+      const { data: updatedRows, error } = await supabase
         .from("products")
         .update(data)
         .eq("id", id)
-        .select(); // Returns the updated rows
+        .select();
 
       if (error) throw error;
-      if (count === 0) throw new Error("No product found with that ID");
-      console.log("Update successful, rows affected:", count);
+      if (!updatedRows || updatedRows.length === 0) {
+        throw new Error("No product found with that ID or you don't have permission.");
+      }
+      console.log("Update successful, rows affected:", updatedRows.length);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
@@ -78,19 +80,21 @@ export const useAdmin = () => {
     },
   });
 
-  // Delete Product – with row count check
+  // Delete Product – fixed row check
   const deleteProduct = useMutation({
     mutationFn: async (id: string) => {
       console.log("Deleting product:", id);
-      const { error, count } = await supabase
+      const { data: deletedRows, error } = await supabase
         .from("products")
         .delete()
         .eq("id", id)
-        .select(); // Returns the deleted rows
+        .select();
 
       if (error) throw error;
-      if (count === 0) throw new Error("No product found with that ID");
-      console.log("Delete successful, rows affected:", count);
+      if (!deletedRows || deletedRows.length === 0) {
+        throw new Error("No product found with that ID or you don't have permission.");
+      }
+      console.log("Delete successful, rows affected:", deletedRows.length);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-products"] });
@@ -102,7 +106,7 @@ export const useAdmin = () => {
     },
   });
 
-  // Fetch Orders (for dashboard stats)
+  // Fetch Orders
   const { data: orders = [], isLoading: ordersLoading } = useQuery({
     queryKey: ["admin-orders"],
     queryFn: async () => {
@@ -116,7 +120,6 @@ export const useAdmin = () => {
     enabled: !!isAdmin,
   });
 
-  // Dashboard stats
   const stats = {
     totalProducts: products.length,
     totalOrders: orders.length,
@@ -132,9 +135,8 @@ export const useAdmin = () => {
     createProduct: createProduct.mutate,
     updateProduct: updateProduct.mutate,
     deleteProduct: deleteProduct.mutate,
-    deleteProductMutation: deleteProduct, // for per‑product loading
+    deleteProductMutation: deleteProduct, // important for loading state
     isSubmitting: createProduct.isPending || updateProduct.isPending,
-    // Expose errors for debugging
     productsError,
   };
 };
