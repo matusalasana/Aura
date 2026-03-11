@@ -1,2 +1,0 @@
-// when you push code to github this file gets inside git ignore file so it won't be pushed
-PORT=4000
