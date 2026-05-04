@@ -8,3 +8,5 @@ export const FRONTEND_LOCALHOST_URL = process.env.FRONTEND_LOCALHOST_URL || "htt
 export const DATABASE_URL = process.env.DATABASE_URL;
 export const JWT_SECRET = process.env.JWT_SECRET;
 export const NODE_ENV = process.env.NODE_ENV;
+export const REDIS_LOCAL_HOST = process.env.REDIS_LOCAL_HOST;
+export const REDIS_CLOUD_URL = process.env.REDIS_CLOUD_URL;
