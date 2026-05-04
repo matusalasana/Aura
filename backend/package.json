@@ -4,7 +4,7 @@
   "description": "",
   "main": "server",
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/core/server/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
@@ -18,8 +18,10 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "redis": "^5.12.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
