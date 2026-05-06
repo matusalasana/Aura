@@ -3,9 +3,9 @@ import { Loader2} from "lucide-react";
 import { type RegisterInput, registerSchema } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { useRegister } from "../hooks/useAuth";
+import { useRegister } from "../hooks/useRegister";
 
-const Signup = () => {
+const RegistrationForm = () => {
   const navigate = useNavigate()
   const { mutate: registerUser, isPending } = useRegister()
   const {
@@ -30,24 +30,14 @@ const Signup = () => {
       >
         <legend className="fieldset-legend">Sign up</legend>
 
-        <label className="label">First name</label>
+        <label className="label">Full name</label>
         <input
           type="text"
           className="input"
-          {...register("first_name")}
+          {...register("full_name")}
         />
-        {errors.first_name && (
-          <p className="text-red-500 text-sm">{errors.first_name.message}</p>
-        )}
-
-        <label className="label">Last name</label>
-        <input
-          type="text"
-          className="input"
-          {...register("last_name")}
-        />
-        {errors.last_name && (
-          <p className="text-red-500 text-sm">{errors.last_name.message}</p>
+        {errors.full_name && (
+          <p className="text-red-500 text-sm">{errors.full_name.message}</p>
         )}
 
         <label className="label">Email</label>
@@ -64,10 +54,10 @@ const Signup = () => {
         <input
           type="password"
           className="input"
-          {...register("password")}
+          {...register("password_hash")}
         />
-        {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password.message}</p>
+        {errors.password_hash && (
+          <p className="text-red-500 text-sm">{errors.password_hash.message}</p>
         )}
 
         <button 
@@ -77,7 +67,7 @@ const Signup = () => {
         >
         { isPending 
           ? <Loader2 className="animate-spin" /> 
-          : "Sign up" 
+          : "Register" 
         }
         </button>
 
@@ -96,4 +86,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default RegistrationForm;

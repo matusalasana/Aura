@@ -1,8 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectRoutes from "./features/auth/components/ProtectRoutes"
+
+// Pages
+import RegisterationPage from "./features/auth/pages/RegisterationPage";
+import LoginPage from "./features/auth/pages/LoginPage"
 import ProductsPage from "./features/products/pages/ProductsPage"
 import Collections from "./features/products/pages/Collections"
-import LoginPage from "./features/auth/pages/LoginPage"
 
 const App = () => {
   return (
@@ -12,9 +15,10 @@ const App = () => {
       
       <Routes>
       
-        <Route path="/products" element={<ProductsPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterationPage />} />
         <Route path="/collections" element={<Collections />} />
+        <Route path="/products" element={<ProductsPage />} />
         
         <Route element={<ProtectRoutes />}>
           <Route path="/test" element={<p> This is protected </p>} />

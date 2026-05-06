@@ -17,6 +17,6 @@ export const useRegister = () => {
     },
     onError: (error) => {
       toast.error(getApiErrorMessage(error))
-    };
+    }
   })
 }
