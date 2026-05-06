@@ -1,7 +1,13 @@
-
+import ProductsPage from "./features/products/pages/ProductsPage"
 const App = () => {
   return (
-    <div>Welcome to Aura</div>
+    <div>
+  
+      <p>Welcome to Aura</p>
+      
+      <ProductsPage />
+      
+    </div>
   )
 }
 
