@@ -5,7 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetMe = () => {
   return useQuery({
-    queryKey: ['auth'],
-    queryFn: getMe
-  })
-}
+    queryKey: ['auth', 'me'],
+    queryFn: getMe,
+    retry: false, 
+  });
+};
