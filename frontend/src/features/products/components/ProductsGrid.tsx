@@ -1,5 +1,6 @@
 import ProductCard from "./ProductCard";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
+import { useState} from "react"
 
 type Product = {
   id: string;
@@ -29,6 +30,10 @@ const ProductsGrid = ({
       productId: id,
       quantity: 1
     });
+  }
+  const [addingProductId, setAddingProductId] = useState<string| null>(null)
+  const handleIsAdding = (id: string) =>{
+    setAddingProductId(id)
   }
   
   // LOADING STATE
@@ -64,8 +69,11 @@ const ProductsGrid = ({
           rating={p.average_rating}
           image={"https://bxxwonszqwilodfqvjbv.supabase.co/storage/v1/object/public/product-images/New-Arrival-High-Quality-Male-Jacket.jpeg"}
           onClickWishlist={() => alert(`${p.name} added to wishlist`)}
-          onClickAddToCart={() => handleAddToCart(p.id)}
-          isAdding={isPending}
+          onClickAddToCart={() => {
+            handleAddToCart(p.id);
+            handleIsAdding(p.id);
+          }}
+          isAdding={(addingProductId===p.id) && isPending}
         />
       ))}
     </div>
