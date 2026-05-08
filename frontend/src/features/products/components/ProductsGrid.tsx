@@ -1,4 +1,5 @@
 import ProductCard from "./ProductCard";
+import { useAddToCart } from "../../cart/hooks/useAddToCart";
 
 type Product = {
   id: string;
@@ -6,10 +7,10 @@ type Product = {
   name: string;
   description: string;
   price: number;
-  stock: number;
+  stock_quantity: number;
   rating_count: number;
   rating: number;
-  image: string;
+  image_url: string;
 };
 
 type ProductsGridProps = {
@@ -21,6 +22,15 @@ const ProductsGrid = ({
   products = [],
   isLoading,
 }: ProductsGridProps) => {
+  
+  const { mutate: addToCart, isPending } = useAddToCart();
+  const handleAddToCart = (id: string) => {
+    addToCart({
+      productId: id,
+      quantity: 1
+    });
+  }
+  
   // LOADING STATE
   if (isLoading) {
     return (
@@ -49,12 +59,13 @@ const ProductsGrid = ({
           name={p.name}
           description={p.description}
           price={p.price}
-          stock={p.stock_quantitl}
+          stock={p.stock_quantity}
           rating_count={p.rating_count}
           rating={p.average_rating}
           image={"https://bxxwonszqwilodfqvjbv.supabase.co/storage/v1/object/public/product-images/New-Arrival-High-Quality-Male-Jacket.jpeg"}
           onClickWishlist={() => alert(`${p.name} added to wishlist`)}
-          onClickAddToCart={() => alert(`${p.name} added to cart`)}
+          onClickAddToCart={() => handleAddToCart(p.id)}
+          isAdding={isPending}
         />
       ))}
     </div>

@@ -10,6 +10,7 @@ type ProductCardProps = {
   rating_count: number;
   rating: number;
   image: string;
+  isAdding: boolean;
   onClickWishlist: () => void;
   onClickAddToCart: () => void;
 };
@@ -25,6 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   image,
   onClickWishlist,
   onClickAddToCart,
+  isAdding,
 }) => {
   const isInStock = stock > 0;
 
@@ -106,7 +108,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           >
             <span className="relative z-10 flex items-center gap-2">
               <ShoppingCart size={16} />
-              Add
+              {isAdding ? "Adding to cart ..." : "Add to Cart"}
             </span>
             <ArrowRight 
               size={14} 
