@@ -1,5 +1,6 @@
-import React from "react";
-import { Heart, ShoppingCart, Star, ArrowRight } from "lucide-react";
+import React from 'react';
+import { ShoppingCart, Star, Heart, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type ProductCardProps = {
   category: string;
@@ -24,100 +25,111 @@ const ProductCard: React.FC<ProductCardProps> = ({
   rating_count,
   rating,
   image,
+  isAdding,
   onClickWishlist,
   onClickAddToCart,
-  isAdding,
 }) => {
-  const isInStock = stock > 0;
-
+  
   return (
-    <div className="group relative w-full max-w-sm overflow-hidden rounded-[2rem] bg-white p-3 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl dark:bg-gray-900 dark:shadow-none">
-      
-      {/* IMAGE CONTAINER */}
-      <div className="relative h-72 w-full overflow-hidden rounded-[1.5rem] bg-gray-100 dark:bg-gray-800">
-        <img
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -5 }}
+      className="group relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-xl dark:bg-slate-900"
+    >
+      {/* Image Container */}
+      <div className="relative aspect-square overflow-hidden bg-slate-100">
+        <motion.img
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.4 }}
           src={image}
           alt={name}
-          className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
+          className="h-full w-full object-cover object-center"
         />
+        
+        {/* Wishlist Button */}
+        <button
+          onClick={onClickWishlist}
+          className="absolute right-3 top-3 rounded-full bg-white/80 p-2 text-slate-900 backdrop-blur-sm transition-colors hover:bg-white hover:text-red-500 dark:bg-slate-800/80 dark:text-slate-100"
+        >
+          <Heart size={20} className="transition-transform active:scale-90" />
+        </button>
 
-        {/* Floating Price Tag */}
-        <div className="absolute bottom-4 left-4 z-10">
-          <div className="rounded-2xl bg-white/80 px-4 py-2 font-bold text-gray-900 backdrop-blur-md dark:bg-gray-900/80 dark:text-white">
-            {price} ETB
-          </div>
-        </div>
-
-        {/* Action Buttons Overlay */}
-        <div className="absolute right-4 top-4 flex flex-col gap-2">
-          <button
-            onClick={onClickWishlist}
-            className="group/heart flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-sm transition-all hover:bg-red-50 dark:bg-gray-800/90 dark:hover:bg-red-950"
-            aria-label="Add to wishlist"
-          >
-            <Heart 
-              size={18} 
-              className="text-gray-600 transition-colors group-hover/heart:fill-red-500 group-hover/heart:text-red-500 dark:text-gray-300" 
-            />
-          </button>
-        </div>
-
-        {/* Out of Stock Mask */}
-        {!isInStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/60 backdrop-blur-[2px]">
-            <span className="rotate-[-10deg] rounded-lg border-2 border-white px-4 py-1 text-sm font-bold uppercase tracking-widest text-white">
-              Sold Out
-            </span>
+        {/* Stock Badge */}
+        {stock < 5 && stock > 0 && (
+          <div className="absolute left-3 top-3 rounded-full bg-orange-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+            Low Stock
           </div>
         )}
       </div>
 
-      {/* CONTENT SECTION */}
-      <div className="px-3 pb-4 pt-6">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
-            {category}
-          </span>
-          <div className="flex items-center gap-1">
-            <Star size={12} className="fill-amber-400 text-amber-400" />
-            <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{rating}</span>
-            <span className="text-[10px] text-gray-400">({rating_count})</span>
-          </div>
-        </div>
-
-        <h3 className="mb-2 line-clamp-1 text-xl font-bold text-gray-900 dark:text-white">
+      {/* Content */}
+      <div className="p-5">
+        <span className="mb-1 block text-xs font-medium uppercase tracking-wider text-blue-600 dark:text-blue-400">
+          {category}
+        </span>
+        
+        <h3 className="mb-2 line-clamp-1 text-lg font-bold text-slate-800 dark:text-slate-100">
           {name}
         </h3>
         
-        <p className="mb-6 line-clamp-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+        <p className="mb-4 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
           {description}
         </p>
 
-        {/* INTERACTIVE FOOTER */}
+        {/* Rating & Price Row */}
         <div className="flex items-center justify-between">
-          <div className="flex flex-col">
-             <span className={`text-[11px] font-medium ${isInStock ? 'text-emerald-500' : 'text-red-400'}`}>
-               {isInStock ? `● ${stock} in stock` : '○ Restocking soon'}
-             </span>
+          <div className="flex items-center gap-1">
+            <div className="flex items-center text-yellow-400">
+              <Star size={16} fill="currentColor" />
+            </div>
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{rating}</span>
+            <span className="text-xs text-slate-400">({rating_count})</span>
           </div>
+          
+          <div className="text-xl font-bold text-slate-900 dark:text-white">
+            {Number(price).toLocaleString()} ETB
+          </div>
+        </div>
 
+        {/* Action Button */}
+        <div className="mt-6">
           <button
+            disabled={stock === 0 || isAdding}
             onClick={onClickAddToCart}
-            disabled={!isInStock}
-            className="group/btn relative flex items-center gap-2 overflow-hidden rounded-xl bg-gray-900 px-6 py-3 text-sm font-bold text-white transition-all hover:bg-black hover:pr-8 disabled:bg-gray-300 dark:bg-white dark:text-gray-900 dark:disabled:bg-gray-700"
+            className={`relative flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+              ${stock === 0 
+                ? 'cursor-not-allowed bg-slate-200 text-slate-400' 
+                : 'bg-slate-900 text-white hover:bg-slate-800 active:scale-95 dark:bg-blue-600 dark:hover:bg-blue-700'
+              }`}
           >
-            <span className="relative z-10 flex items-center gap-2">
-              <ShoppingCart size={16} />
-              {isAdding ? "Adding to cart ..." : "Add to Cart"}
-            </span>
-            <ArrowRight 
-              size={14} 
-              className="absolute right-2 opacity-0 transition-all group-hover/btn:right-3 group-hover/btn:opacity-100" 
-            />
+            <AnimatePresence mode="wait">
+              {isAdding ? (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="idle"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center gap-2"
+                >
+                  <ShoppingCart size={18} />
+                  {stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -12,10 +12,11 @@ export const useAddToCart = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: addToCart,
+    retry: false,
     
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["cart"]
+        queryKey: ["cart", "items"]
       })
       toast.success("Item added to cart")
     },
