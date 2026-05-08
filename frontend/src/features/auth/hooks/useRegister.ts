@@ -12,7 +12,7 @@ export const useRegister = () => {
     onSuccess: () => {
       toast.success("You have registered successfully")
       queryClient.invalidateQueries({
-        queryKey: ['auth']
+        queryKey: ['auth', 'me']
       });
     },
     onError: (error) => {

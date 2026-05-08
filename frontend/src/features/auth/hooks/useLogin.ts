@@ -12,7 +12,7 @@ export const useLogin = () => {
     onSuccess: () => {
       toast.success("You have Logged in successfully")
       queryClient.invalidateQueries({
-        queryKey: ['auth']
+        queryKey: ['auth', 'me']
       });
     },
     onError: (error) => {
