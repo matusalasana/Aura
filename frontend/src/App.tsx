@@ -3,11 +3,11 @@ import ProtectRoutes from "./features/auth/components/ProtectRoutes"
 import Topbar from "./components/Topbar/Topbar"
 
 // Pages
-import RegisterationPage from "./features/auth/pages/RegisterationPage";
-import LoginPage from "./features/auth/pages/LoginPage"
-import ProductsPage from "./features/products/pages/ProductsPage"
-import Collections from "./features/products/pages/Collections"
-import CartPage from "./features/cart/pages/CartPage"
+import RegisterationPage from "./pages/RegisterationPage";
+import LoginPage from "./pages/LoginPage"
+import ProductsPage from "./pages/ProductsPage"
+import Collections from "./pages/Collections"
+import CartPage from "./pages/CartPage"
 
 const App = () => {
   return (
@@ -25,7 +25,6 @@ const App = () => {
         
         {/* PROTECTED ROUTES */}
         <Route element={<ProtectRoutes />}>
-          <Route path="/test" element={<p> This is protected </p>} />
           <Route path="/cart" element={<CartPage />} />
         </Route>
         

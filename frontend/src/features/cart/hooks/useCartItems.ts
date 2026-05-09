@@ -6,7 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useCartItems = () => {
   return useQuery({
-    queryKey: ['cart'],
-    queryFn: getCartItems
-  })
-}
+    queryKey: ['cart', 'items'],
+    queryFn: getCartItems,
+    retry: false,
+  });
+};

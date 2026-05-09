@@ -18,7 +18,7 @@ export const findUserByIdRepo = async (id: string) => {
     LIMIT 1
   `;
 
-  return result[0] || null;
+  return result[0];
 };
 
 

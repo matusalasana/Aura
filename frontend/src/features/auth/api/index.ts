@@ -3,12 +3,12 @@ import { type RegisterInput, type LoginInput } from "../types";
 
 export const register = async (data: RegisterInput) => {
   const res = await API.post("/auth/register", data);
-  return res.data;
+  return res.data.data;
 };
 
 export const login = async (data: LoginInput) => {
   const res = await API.post("/auth/login", data);
-  return res.data;
+  return res.data.data;
 };
 
 export const logout = async () => {
@@ -18,5 +18,5 @@ export const logout = async () => {
 
 export const getMe = async () => {
   const res = await API.get("/auth/me");
-  return res.data;
+  return res.data.data;
 };

@@ -6,8 +6,6 @@ import {
   updateProduct,
   deleteProduct
 } from './products.controller';
-import { validate } from '../../middleware/validate.middleware';
-import { productSchema, updateProductSchema } from './products.validation';
 import { verifyJWT, authorize } from '../../middleware/auth.middleware';
 
 const router = Router();
@@ -16,8 +14,8 @@ router.get('/', getProducts);
 router.get('/:id', getProductById);
 
 // Admin only routes
-router.post('/', verifyJWT, authorize('admin'), validate(productSchema), createProduct);
-router.patch('/:id', verifyJWT, authorize('admin'), validate(updateProductSchema), updateProduct);
+router.post('/', verifyJWT, authorize('admin'), createProduct);
+router.patch('/:id', verifyJWT, authorize('admin'), updateProduct);
 router.delete('/:id', verifyJWT, authorize('admin'), deleteProduct);
 
 export default router;

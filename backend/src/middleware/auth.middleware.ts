@@ -1,82 +1,115 @@
-import { Request, Response, NextFunction } from 'express';
-import { verifyAccessToken, verifyRefreshToken, generateAccessToken, generateRefreshToken } from '../utils/jwt';
-import { findUserByIdRepo, updateRefreshTokenRepo } from '../modules/auth/auth.repository';
-import { NODE_ENV } from '../config/env';
+// auth.middleware.ts
+import {
+  Request,
+  Response,
+  NextFunction,
+} from "express";
 
-const accessCookieOptions = {
-  httpOnly: true,
-  secure: NODE_ENV === 'production',
-  sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
-  maxAge: 15 * 60 * 1000,   // 15 minutes – match auth.controller.ts
-};
+import {
+  verifyAccessToken,
+  verifyRefreshToken,
+  generateAccessToken,
+  generateRefreshToken
+} from "../utils/jwt";
+import { 
+  updateRefreshTokenRepo,
+  findUserByIdRepo} from "../modules/auth/auth.repository.ts"
+import { NODE_ENV } from "../config/env"
 
-const refreshCookieOptions = {
-  httpOnly: true,
-  secure: NODE_ENV === 'production',
-  sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-};
 
-export const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const accessToken = req.cookies?.accessToken;
-    const refreshToken = req.cookies?.refreshToken;
+export const verifyJWT = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  
+  const accessToken = req.cookies?.accessToken;
+  const refreshToken = req.cookies?.refreshToken; 
+  
+  const accessCookieOptions = {
+    httpOnly: true,
+    secure: NODE_ENV === 'production',
+    sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
+    maxAge: 15 * 60 * 1000, // 15 minutes
+  };
+  
+  const refreshCookieOptions = {
+    httpOnly: true,
+    secure: NODE_ENV === 'production',
+    sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  };
 
-    // 1. Try to verify access token
-    if (accessToken) {
-      try {
-        const decoded = verifyAccessToken(accessToken) as any;
-        req.user = decoded;
-        return next(); // ✅ valid access token
-      } catch (err) {
-        console.log("Access token expired/invalid – attempting refresh");
-      }
-    }
-
-    // 2. No access token or invalid – require refresh token
-    if (!refreshToken) {
-      return res.status(401).json({ message: "No refresh token" });
-    }
-
-    let decodedRefresh;
+  // 1. Try verifying the Access Token
+  if (accessToken) {
     try {
-      decodedRefresh = verifyRefreshToken(refreshToken) as any;
-    } catch (err) {
-      return res.status(401).json({ message: "Invalid refresh token" });
+      const decoded = verifyAccessToken(accessToken) as any;
+      req.user = decoded;
+      return next();
+    } catch (err: any) {
+      console.log("Access token expired/invalid, attempting refresh...");
     }
+  }
 
-    const user = await findUserByIdRepo(decodedRefresh.id);
+  // 2. Try verifying the Refresh Token
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Unauthorized: No tokens provided" });
+  }
+
+  try {
+    const decoded = (await verifyRefreshToken(refreshToken)) as any;
+    
+    // Ensure you await the DB call
+    const user = await findUserByIdRepo(decoded.id);
+
     if (!user || user.refresh_token !== refreshToken) {
-      return res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({ 
+        message: "Invalid refresh token" 
+      });
     }
 
-    // 3. Rotate tokens
+    // 3. Generate New Tokens
     const newAccessToken = generateAccessToken({
       id: user.id,
       email: user.email,
       role: user.role,
     });
+
     const newRefreshToken = generateRefreshToken({ id: user.id });
 
     await updateRefreshTokenRepo(user.id, newRefreshToken);
 
+    // 4. Set New Cookies
     res.cookie("accessToken", newAccessToken, accessCookieOptions);
     res.cookie("refreshToken", newRefreshToken, refreshCookieOptions);
 
     req.user = { id: user.id, email: user.email, role: user.role };
-    return next();
-
-  } catch (err) {
-    console.error("JWT middleware error:", err);
-    return res.status(401).json({ message: "Unauthorized" });
+    next();
+  } catch (error: any) {
+    console.error("Refresh Token Error:", error.message);
+    return res.status(401).json({ message: "Session expired, please login again" });
   }
 };
 
-export const authorize = (...roles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Forbidden' });
+
+
+// ROLE BASED AUTHORIZATION
+export const authorize = (
+  ...roles: string[]
+) => {
+  return (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (
+      !req.user ||
+      !roles.includes(req.user.role)
+    ) {
+      return res.status(403).json({
+        message: "Forbidden",
+      });
     }
     next();
   };
-}; 
+};

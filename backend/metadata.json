@@ -1,0 +1,6 @@
+{
+  "name": "Aura Commerce Backend",
+  "description": "Production-grade e-commerce backend with Node.js, Express, Neon PostgreSQL, Redis caching, and JWT authentication.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
