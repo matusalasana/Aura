@@ -5,7 +5,6 @@ import {
   login,
   logout,
   getCurrentUser,
-  // refresh
 } from './auth.controller';
 
 import {
@@ -21,7 +20,5 @@ router.post('/login', login);
 router.post( '/logout', verifyJWT, logout );
 
 router.get( '/me', verifyJWT, getCurrentUser );
-
-// router.post("/refresh", refresh);
 
 export default router;

@@ -1,4 +1,3 @@
-// auth.middleware.ts
 import {
   Request,
   Response,
@@ -7,91 +6,37 @@ import {
 
 import {
   verifyAccessToken,
-  verifyRefreshToken,
-  generateAccessToken,
-  generateRefreshToken
 } from "../utils/jwt";
-import { 
-  updateRefreshTokenRepo,
-  findUserByIdRepo} from "../modules/auth/auth.repository.ts"
-import { NODE_ENV } from "../config/env"
-
+import { accessCookieOptions } from "../utils/jwt"
 
 export const verifyJWT = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  
+
   const accessToken = req.cookies?.accessToken;
-  const refreshToken = req.cookies?.refreshToken; 
-  
-  const accessCookieOptions = {
-    httpOnly: true,
-    secure: NODE_ENV === 'production',
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
-    maxAge: 15 * 60 * 1000, // 15 minutes
-  };
-  
-  const refreshCookieOptions = {
-    httpOnly: true,
-    secure: NODE_ENV === 'production',
-    sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  };
-
-  // 1. Try verifying the Access Token
-  if (accessToken) {
-    try {
-      const decoded = verifyAccessToken(accessToken) as any;
-      req.user = decoded;
-      return next();
-    } catch (err: any) {
-      console.log("Access token expired/invalid, attempting refresh...");
-    }
-  }
-
-  // 2. Try verifying the Refresh Token
-  if (!refreshToken) {
-    return res.status(401).json({ message: "Unauthorized: No tokens provided" });
-  }
 
   try {
-    const decoded = (await verifyRefreshToken(refreshToken)) as any;
-    
-    // Ensure you await the DB call
-    const user = await findUserByIdRepo(decoded.id);
-
-    if (!user || user.refresh_token !== refreshToken) {
-      return res.status(401).json({ 
-        message: "Invalid refresh token" 
+    if (!accessToken) {
+      return res.status(404).json({
+        message: "Token not found, please login first"
       });
-    }
+    };
 
-    // 3. Generate New Tokens
-    const newAccessToken = generateAccessToken({
-      id: user.id,
-      email: user.email,
-      role: user.role,
+    const decoded = verifyAccessToken(accessToken) as any;
+
+    req.user = decoded;
+    return next();
+  } catch (err: any) {
+    console.log("Token expired/invalid");
+    return res.status(401).json({
+      message: "Unauthorized"
     });
-
-    const newRefreshToken = generateRefreshToken({ id: user.id });
-
-    await updateRefreshTokenRepo(user.id, newRefreshToken);
-
-    // 4. Set New Cookies
-    res.cookie("accessToken", newAccessToken, accessCookieOptions);
-    res.cookie("refreshToken", newRefreshToken, refreshCookieOptions);
-
-    req.user = { id: user.id, email: user.email, role: user.role };
-    next();
-  } catch (error: any) {
-    console.error("Refresh Token Error:", error.message);
-    return res.status(401).json({ message: "Session expired, please login again" });
   }
+
+
 };
-
-
 
 // ROLE BASED AUTHORIZATION
 export const authorize = (

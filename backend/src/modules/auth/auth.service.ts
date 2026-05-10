@@ -1,14 +1,11 @@
 import {
   findUserByEmailRepo,
   findUserByIdRepo,
-  createUserRepo,
-  updateRefreshTokenRepo
+  createUserRepo
 } from './auth.repository';
 
 import {
   generateAccessToken,
-  generateRefreshToken,
-  verifyRefreshToken,
 } from '../../utils/jwt';
 
 import {
@@ -78,15 +75,6 @@ export const loginService = async (
     role: user.role,
   });
 
-  const refreshToken = generateRefreshToken({
-    id: user.id,
-  });
-
-  await updateRefreshTokenRepo(
-    user.id,
-    refreshToken
-  );
-
   return {
     user: {
       id: user.id,
@@ -95,17 +83,8 @@ export const loginService = async (
       role: user.role,
     },
 
-    accessToken,
-    refreshToken,
+    accessToken
   };
-};
-
-
-// LOGOUT
-export const logoutService = async (
-  userId: string
-) => {
-  await updateRefreshTokenRepo(userId, null);
 };
 
 
@@ -127,40 +106,3 @@ export const getCurrentUserService = async (
 
   return safeUser;
 };
-
-
-// export const refreshService = async (oldRefreshToken: string) => {
-
-//   if (!oldRefreshToken) {
-//     throw new Error("No refresh token");
-//   }
-
-//   const decoded = verifyRefreshToken(oldRefreshToken) as any;
-
-//   const user = await findUserByIdRepo(decoded.id);
-
-//   if (!user || user.refresh_token !== oldRefreshToken) {
-//     throw new Error("Invalid refresh token");
-//   }
-
-//   const newAccessToken = generateAccessToken({
-//     id: user.id,
-//     email: user.email,
-//     role: user.role,
-//   });
-
-//   const newRefreshToken = generateRefreshToken({
-//     id: user.id,
-//   });
-
-//   await updateRefreshTokenRepo(
-//     user.id,
-//     newRefreshToken
-//   );
-
-//   return {
-//     newAccessToken,
-//     newRefreshToken,
-//     user,
-//   };
-// };
