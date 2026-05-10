@@ -9,6 +9,7 @@ import ProductsPage from "./features/products/pages/ProductsPage"
 import Collections from "./features/products/pages/Collections"
 import CartPage from "./features/cart/pages/CartPage"
 import Homepage from "./features/home/pages/Homepage"
+import ProfilePage from "./features/profile/pages/ProfilePage"
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         {/* PROTECTED ROUTES */}
         <Route element={<ProtectRoutes />}>
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
         
       </Routes>

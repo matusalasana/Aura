@@ -15,8 +15,3 @@ export const logout = async () => {
   const res = await API.post("/auth/logout");
   return res.data;
 };
-
-export const getMe = async () => {
-  const res = await API.get("/auth/me");
-  return res.data.data;
-};

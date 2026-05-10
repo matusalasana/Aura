@@ -44,6 +44,19 @@ export const createUserRepo = async (full_name, email, password) => {
 };
 
 
+// UPDATE REFRESH TOKEN
+export const updateRefreshTokenRepo = async (
+  userId: string,
+  refreshToken: string | null
+) => {
+  await sql`
+    UPDATE users
+    SET refresh_token = ${refreshToken}
+    WHERE id = ${userId};
+  `;
+};
+
+
 // UPDATE PASSWORD
 export const updatePasswordRepo = async (
   userId: string,

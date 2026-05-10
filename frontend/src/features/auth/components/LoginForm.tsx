@@ -3,7 +3,7 @@ import { type LoginInput, loginSchema } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useGetMe } from "../hooks/useGetMe";
+import { useGetMe } from "../../profile/hooks/useGetMe";
 import { useLogin } from "../hooks/useLogin";
 
 const LoginForm = () => {

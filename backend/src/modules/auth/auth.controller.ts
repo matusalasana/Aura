@@ -3,11 +3,19 @@ import { Request, Response } from 'express';
 import {
   registerService,
   loginService,
+  logoutService,
   getCurrentUserService,
+  // refreshService
 } from './auth.service';
 
-import { accessCookieOptions } from "../../utils/jwt"
+import { NODE_ENV } from '../../config/env';
+import { 
+  accessCookieOptions,
+  refreshCookieOptions
+} from "../../utils/jwt"
 
+console.log("The access token options:", accessCookieOptions);
+console.log("The refresh token options:", refreshCookieOptions);
 
 // REGISTER
 export const register = async (req: Request, res: Response) => {
@@ -35,13 +43,20 @@ export const login = async (req: Request, res: Response) => {
     const {
       user,
       accessToken,
+      refreshToken,
     } = await loginService(req.body);
+    console.log(user)
     return res
       .status(200)
       .cookie(
         'accessToken',
         accessToken,
         accessCookieOptions
+      )
+      .cookie(
+        'refreshToken',
+        refreshToken,
+        refreshCookieOptions
       )
       .json({
         message: 'User logged in successfully',
@@ -66,6 +81,7 @@ export const logout = async (req: Request, res: Response) => {
     return res
       .status(200)
       .clearCookie('accessToken')
+      .clearCookie('refreshToken')
       .json({
         message: 'User logged out successfully',
       });

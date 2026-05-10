@@ -1,11 +1,14 @@
 import {
   findUserByEmailRepo,
   findUserByIdRepo,
-  createUserRepo
+  createUserRepo,
+  updateRefreshTokenRepo
 } from './auth.repository';
 
 import {
   generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
 } from '../../utils/jwt';
 
 import {
@@ -75,6 +78,15 @@ export const loginService = async (
     role: user.role,
   });
 
+  const refreshToken = generateRefreshToken({
+    id: user.id,
+  });
+
+  await updateRefreshTokenRepo(
+    user.id,
+    refreshToken
+  );
+
   return {
     user: {
       id: user.id,
@@ -83,8 +95,17 @@ export const loginService = async (
       role: user.role,
     },
 
-    accessToken
+    accessToken,
+    refreshToken,
   };
+};
+
+
+// LOGOUT
+export const logoutService = async (
+  userId: string
+) => {
+  await updateRefreshTokenRepo(userId, null);
 };
 
 

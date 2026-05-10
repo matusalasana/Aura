@@ -2,10 +2,19 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const DATABASE_URL = process.env.DATABASE_URL;
+
 export const REDIS_URL = process.env.REDIS_URL;
+
 export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'access_secret';
-export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'refresh_secret';
+
+export const ACCESS_COOKIE_MAX_AGE = process.env.ACCESS_COOKIE_MAX_AGE || 1000*60*15;
+
 export const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY || '15m';
+
+export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'refresh_secret';
+
+export const REFRESH_COOKIE_MAX_AGE = process.env.REFRESH_COOKIE_MAX_AGE || 1000*60*60*24*7;
+
 export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY || '7d';
 export const PORT = process.env.PORT || 3000;
 export const SALT_FOR_PWD_HASH = process.env.SALT_FOR_PWD_HASH || 10;
