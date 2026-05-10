@@ -1,11 +1,12 @@
-import { useProducts } from "../features/products/hooks/useProducts";
-import { useAddToCart } from "../features/cart/hooks/useAddToCart";
-import ProductsGrid from "../features/products/components/ProductsGrid"
+import { useProducts } from "../hooks/useProducts";
+import { useAddToCart } from "../../cart/hooks/useAddToCart";
+import ProductsGrid from "../components/ProductsGrid"
+import Title from "../../../shared/ui/Title"
 
 const Collections = () => {
   const { data: products, isLoading, isError } = useProducts();
   const { mutate: addToCart, isPending } = useProducts();
-  
+
   const handleAddToCart = (id: string) => {
     useAddToCart(id);
   }
@@ -18,9 +19,13 @@ const Collections = () => {
   if(products.length===0){
     return<p>No products available</p>
   }
-  
+
   return (
     <div>
+      <Title 
+        txt1="YOUR"
+        txt2="COLLECTIONS"
+      />
       <ProductsGrid
         isLoading={isLoading}
         products={products}

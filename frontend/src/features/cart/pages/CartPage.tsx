@@ -1,5 +1,5 @@
-import { useCartItems } from "../features/cart/hooks/useCartItems"
-import CartItemsGrid from "../features/cart/components/CartItemsGrid"
+import { useCartItems } from "../hooks/useCartItems"
+import CartItemsGrid from "../components/CartItemsGrid"
 const CartPage = () => {
   const { data: cartItems, isLoading, isError } = useCartItems();
   

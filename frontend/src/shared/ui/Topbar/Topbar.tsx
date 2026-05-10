@@ -4,7 +4,7 @@ import ThemeToggle from "./ThemeToggle";
 import Logo from "./Logo";
 import { Link } from "react-router-dom"
 
-import { useCartItems } from "../../features/cart/hooks/useCartItems";
+import { useCartItems } from "../../../features/cart/hooks/useCartItems";
 
 const Topbar = () => {
   const { data: cartItems, isLoading } = useCartItems();

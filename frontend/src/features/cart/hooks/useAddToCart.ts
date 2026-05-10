@@ -5,7 +5,7 @@ import {
   useQuery, 
   useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { getApiErrorMessage } from "../../../utils/getApiErrorMessage"
+import { getApiErrorMessage } from "../../../shared/utils/getApiErrorMessage"
 
 
 export const useAddToCart = () => {

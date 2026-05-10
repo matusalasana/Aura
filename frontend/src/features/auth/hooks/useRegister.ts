@@ -1,5 +1,5 @@
 import { register } from "../api"
-import { getApiErrorMessage } from "../../../utils/getApiErrorMessage"
+import { getApiErrorMessage } from "../../../shared/utils/getApiErrorMessage"
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";

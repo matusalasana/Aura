@@ -1,13 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectRoutes from "./features/auth/components/ProtectRoutes"
-import Topbar from "./components/Topbar/Topbar"
+import Topbar from "./shared/ui/Topbar/Topbar"
 
 // Pages
-import RegisterationPage from "./pages/RegisterationPage";
-import LoginPage from "./pages/LoginPage"
-import ProductsPage from "./pages/ProductsPage"
-import Collections from "./pages/Collections"
-import CartPage from "./pages/CartPage"
+import RegisterationPage from "./features/auth/pages/RegisterationPage";
+import LoginPage from "./features/auth/pages/LoginPage"
+import ProductsPage from "./features/products/pages/ProductsPage"
+import Collections from "./features/products/pages/Collections"
+import CartPage from "./features/cart/pages/CartPage"
+import Homepage from "./features/home/pages/Homepage"
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       <Routes>
       
         {/* PUBLIC ROUTES*/}
+        <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterationPage />} />
         <Route path="/collections" element={<Collections />} />

@@ -1,5 +1,5 @@
 import { getProducts } from "../api"
-import { getApiErrorMessage } from "../../../utils/getApiErrorMessage"
+import { getApiErrorMessage } from "../../../shared/utils/getApiErrorMessage"
 
 import { useQuery } from "@tanstack/react-query";
 
