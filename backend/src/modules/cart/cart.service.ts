@@ -1,135 +1,83 @@
-import { 
+import {
   getCartItemsRepo,
   addToCartRepo,
   updateCartItemRepo,
   removeCartItemRepo,
   clearCartRepo,
-  findProductByIdRepo
-} from './cart.repository';
+  findProductByIdRepo,
+} from "./cart.repository";
 
+import type {
+  AddToCartInput,
+  UpdateCartInput,
+} from "./cart.validation";
 
-// GET ALL
-export const getCartItemsService = async (userId: string) => {
-  if (!userId || userId === null || userId === undefined) {
-    throw new Error("User id is required");
-  }
-
-  const result = await getCartItemsRepo(userId);
-
-  return result;
+// GET
+export const getCartItemsService = async (
+  userId: string
+) => {
+  return await getCartItemsRepo(userId);
 };
-
 
 // ADD
 export const addToCartService = async (
   userId: string,
-  data: any
+  data: AddToCartInput
 ) => {
   const { productId, quantity } = data;
 
-  const normalizedProductId = productId as string;
-  const normalizedQuantity = Number(quantity);
+  const product = await findProductByIdRepo(productId);
 
-  if (!normalizedProductId) {
-    throw new Error("Product id not found");
-  }
-
-  if (!normalizedQuantity || isNaN(normalizedQuantity)) {
-    throw new Error("Quantity not found");
-  }
-
-  if (!userId || userId === null || userId === undefined) {
-    throw new Error("User id is required");
-  }
-
-  const exists = await findProductByIdRepo(normalizedProductId);
-
-  if (!exists) {
+  if (!product) {
     throw new Error("Product not found");
   }
 
-  const result = await addToCartRepo(
-    normalizedQuantity,
-    normalizedProductId,
+  return await addToCartRepo(
+    quantity,
+    productId,
     userId
   );
-
-  return result;
 };
-
 
 // UPDATE
 export const updateCartItemService = async (
   productId: string,
   userId: string,
-  data: any
+  data: UpdateCartInput
 ) => {
   const { quantity } = data;
 
-  const normalizedQuantity = Number(quantity);
-  const normalizedProductId = productId as string;
-
-  const exists = await findProductByIdRepo(normalizedProductId);
-
-  if (!normalizedProductId) {
-    throw new Error("Product id not found");
-  }
-
-  if (!normalizedQuantity || isNaN(normalizedQuantity)) {
-    throw new Error("Quantity not found");
-  }
-
-  if (!userId || userId === null || userId === undefined) {
-    throw new Error("User id is required");
-  }
-
-  if (!exists) {
-    throw new Error("Product not found");
-  }
-
-  const result = await updateCartItemRepo(
-    normalizedQuantity,
-    normalizedProductId,
+  const updated = await updateCartItemRepo(
+    quantity,
+    productId,
     userId
   );
 
-  return result;
-};
+  if (!updated) {
+    throw new Error("Cart item not found");
+  }
 
+  return updated;
+};
 
 // REMOVE
 export const removeCartItemService = async (
   productId: string,
   userId: string
 ) => {
-  const normalizedProductId = productId as string;
-
-  if (!normalizedProductId) {
-    throw new Error("Product id not found");
-  }
-
-  if (!userId || userId === null || userId === undefined) {
-    throw new Error("User id is required");
-  }
-
-  const exists = await findProductByIdRepo(normalizedProductId);
-
-  if (!exists) {
-    throw new Error("Product not found");
-  }
-
-  await removeCartItemRepo(
-    normalizedProductId,
+  const deleted = await removeCartItemRepo(
+    productId,
     userId
   );
+
+  if (!deleted) {
+    throw new Error("Cart item not found");
+  }
 };
 
-
 // CLEAR
-export const clearCartService = async (userId: string) => {
-  if (!userId || userId === null || userId === undefined) {
-    throw new Error("User id is required");
-  }
-
+export const clearCartService = async (
+  userId: string
+) => {
   await clearCartRepo(userId);
 };
