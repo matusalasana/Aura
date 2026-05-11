@@ -24,7 +24,7 @@ export const findUserByIdRepo = async (id: string) => {
 
 
 // CREATE USER
-export const createUserRepo = async (full_name, email, password) => {
+export const registerUserRepo = async (full_name, email, password) => {
 
   const result = await sql`
     INSERT INTO users (
