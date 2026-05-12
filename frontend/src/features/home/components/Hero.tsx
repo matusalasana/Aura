@@ -1,75 +1,63 @@
-import { ChevronRight } from 'lucide-react';
+import { Pointer, ArrowRight } from 'lucide-react';
 import { Link } from "react-router-dom";
-import Title from '../../../shared/ui/Title';
+import { motion } from 'framer-motion';
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-slate-50 dark:bg-slate-900">
-      {/* Decorative Background Blur */}
-      <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-blue-400/10 blur-3xl" />
-      
-      <div className="container mx-auto flex flex-col items-center px-6 py-16 lg:flex-row lg:py-24">
-        
-        {/* Left Content */}
-        <div className="z-10 w-full text-center lg:w-1/2 lg:text-left">
-          <div className="mb-4 inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-            ✨ New Season Arrival
-          </div>
-          
-          <Title txt1="Elevate Your" txt2="Everyday Style" />
-          
-          <p className="mt-6 max-w-lg text-lg text-slate-600 dark:text-slate-400 lg:text-xl">
-            Discover curated collections that blend sustainable materials with 
-            timeless design. Comfort meets high-fashion.
-          </p>
+    <section className="relative bg-black h-[90vh] text-gray-700 dark:text-gray-300 flex items-center overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=2000"
+          alt="Hero Fashion"
+          className="w-full h-full blur-xs dark:opacity-30 opacity-80 object-cover"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-aura-black/20" />
+      </div>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-4 lg:justify-start">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-2xl space-y-8"
+        >
+          <div className="space-y-4">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-[10px] uppercase tracking-[0.5em] text-aura-white font-medium"
+            >
+              Collection 2026
+            </motion.span>
+            <h1 className="text-6xl transition-colors md:text-8xl font-serif text-aura-white italic tracking-tighter leading-[0.9]">
+              Dress Like<br /> the Aura You Want
+               
+            </h1>
+          </div>
+          <p className="text-gray-300 font-light text-lg max-w-md leading-relaxed">
+            Curated essentials for the modern lifestyle. Experience the perfect harmony of comfort and sophistication.
+          </p>
+          <div className="flex justify-center items-center space-x-6 pt-4">
             <Link to="/collections">
-              <button className="rounded-full flex bg-slate-900 px-8 py-4 text-white transition-transform hover:scale-105 dark:bg-white dark:text-black font-bold shadow-lg">
-                View our Collections <ChevronRight size={26} />
-              </button>
+            <button className="flex gap-2 rounded-lg bg-gray-200 dark:bg-gray-600 px-4 py-4">
+              Explore Collections <ArrowRight size={24} />
+            </button>
             </Link>
           </div>
-
-          {/* Social Proof */}
-          <div className="mt-10 flex items-center justify-center gap-4 lg:justify-start">
-            <div className="flex -space-x-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-10 w-10 rounded-full border-2 border-white bg-slate-300 dark:border-slate-900" />
-              ))}
-            </div>
-            <p className="text-sm text-slate-500">
-              <span className="font-bold text-slate-900 dark:text-white">10k+</span> Happy Customers
-            </p>
-          </div>
-        </div>
-
-        {/* Right Content - Image Composition */}
-        <div className="relative mt-16 w-full lg:mt-0 lg:w-1/2">
-          <div className="relative mx-auto max-w-md lg:max-w-none">
-            {/* Main Image Placeholder */}
-            <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-slate-200 shadow-2xl transition-transform duration-500 hover:rotate-2">
-              <img 
-                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800" 
-                alt="Model wearing latest fashion"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            
-            {/* Floating UI Card */}
-            <div className="absolute -bottom-6 -left-6 rounded-xl p-4 shadow-xl bg-blue-600 sm:-left-12">
-              <div className="flex items-center gap-3">
-                <div className="animate-pulse">
-                  <p className="text-xs">Free Shipping</p>
-                  <p className="text-sm font-bold dark:text-white">Orders over 3000 ETB</p>
-                </div>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-
+        </motion.div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div 
+        animate={{ y: [0, 90, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-4"
+      >
+        <span className="text-[9px] uppercase tracking-[0.3em] text-aura-white/40 rotate-90 origin-center translate-y-8"><Pointer size={24} /></span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-aura-white/40 to-transparent" />
+      </motion.div>
     </section>
   );
 };
