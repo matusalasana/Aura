@@ -1,22 +1,17 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Logo = () => {
   return (
-    <div className="flex items-center justify-center">
-      <div className="flex items-baseline space-x-1">
-        <h1 className="
-          text-3xl font-black tracking-tighter
-          text-gray-900 dark:text-white
-        ">
-          Aura
-        </h1>
-
-        {/* Simple accent dot */}
-        <span className="
-          h-2 w-2 rounded-full
-          bg-purple-600
-        " />
-      </div>
-    </div>
+    <Link to="/" className="flex items-center">
+      <motion.span
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-3xl font-serif tracking-tighter italic text-gray-900 dark:text-white"
+      >
+        Aura
+      </motion.span>
+    </Link>
   );
 };
 

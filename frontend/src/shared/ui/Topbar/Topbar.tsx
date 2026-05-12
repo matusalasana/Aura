@@ -11,6 +11,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartItems } from "../../../features/cart/hooks/useCartItems";
 import ThemeToggle from "./ThemeToggle";
+import Logo from "./Logo";
 
 const NAV_LINKS = [
   { name: "Women", path: "/collections" },
@@ -45,15 +46,7 @@ const Topbar = () => {
         </div>
 
         {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-serif tracking-tighter italic text-gray-900 dark:text-white"
-          >
-            Aura
-          </motion.span>
-        </Link>
+        <Logo />
 
         {/* Actions */}
         <div className="flex items-center gap-5 lg:gap-6">

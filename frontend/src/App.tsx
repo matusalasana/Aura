@@ -11,6 +11,8 @@ import Collections from "./features/products/pages/Collections"
 import CartPage from "./features/cart/pages/CartPage"
 import Homepage from "./features/home/pages/Homepage"
 import ProfilePage from "./features/profile/pages/ProfilePage"
+import About from "./shared/ui/About"
+import Dev from "./shared/ui/Dev"
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
         <Route path="/register" element={<RegisterationPage />} />
         <Route path="/collections" element={<Collections />} />
         <Route path="/products" element={<ProductsPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/dev" element={<Dev />} />
         
         {/* PROTECTED ROUTES */}
         <Route element={<ProtectRoutes />}>

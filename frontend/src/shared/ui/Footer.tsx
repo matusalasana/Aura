@@ -40,26 +40,10 @@ const Footer: React.FC = () => {
             <li><Link to="/terms" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">Terms & Conditions</Link></li>
           </ul>
         </div>
-
-        {/* Newsletter */}
-        <div className="space-y-6">
-          <h3 className="text-xs uppercase tracking-[0.2em] font-semibold text-aura-accent">Newsletter</h3>
-          <p className="text-sm text-aura-soft/60 font-light">Stay updated with the latest drops and exclusive offers.</p>
-          <div className="relative group">
-            <input 
-              type="email" 
-              placeholder="YOUR EMAIL" 
-              className="w-full bg-transparent border-b border-aura-soft/30 py-3 text-sm focus:outline-none focus:border-aura-accent transition-colors uppercase tracking-widest font-light placeholder:text-aura-soft/30"
-            />
-            <button className="absolute right-0 bottom-3 group-hover:translate-x-1 transition-transform">
-              <ArrowRight className="w-5 h-5" strokeWidth={1} />
-            </button>
-          </div>
-        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 mt-24 pt-8 border-t border-aura-soft/10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-[10px] uppercase tracking-[0.3em] font-light text-aura-soft/30">
-        <p>&copy; 2026 AURA STUDIO INC. ALL RIGHTS RESERVED.</p>
+        <p>&copy; 2026 AURA. ALL RIGHTS RESERVED.</p>
         <div className="flex space-x-8">
           <Link to="/developers" className="hover:text-aura-white">DEVELOPER(S)</Link>
           <a href="#" className="hover:text-aura-white">PRIVACY POLICY</a>
