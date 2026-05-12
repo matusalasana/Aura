@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import ProtectRoutes from "./features/auth/components/ProtectRoutes"
 import Topbar from "./shared/ui/Topbar/Topbar"
 import Footer from "./shared/ui/Footer"
-
+import ScrollToTop from './shared/utils/ScrollToTop';
 // Pages
 import RegisterationPage from "./features/auth/pages/RegisterationPage";
 import LoginPage from "./features/auth/pages/LoginPage"
@@ -16,6 +16,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white">
       
+      <ScrollToTop />
       <Topbar/>
       
       <Routes>
