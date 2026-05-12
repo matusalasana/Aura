@@ -7,6 +7,7 @@ import CategoriesSection from '../components/CategoriesSection';
 import FeaturedSection from '../components/FeaturedSection';
 import Bestsellers from '../components/Bestsellers';
 import PromoBanner from '../components/PromoBanner';
+import WhyChooseUs from '../components/WhyChooseUs';
 import { useProducts } from '../../products/hooks/useProducts';
 
 const HomePage = () => {
@@ -34,8 +35,9 @@ const HomePage = () => {
         data={products} 
       />
       
-      <PromoBanner 
-      />
+      <PromoBanner />
+      
+      <WhyChooseUs />
 
       {/* Atmosphere Section */}
       <section className="bg-aura-soft py-32 overflow-hidden">
