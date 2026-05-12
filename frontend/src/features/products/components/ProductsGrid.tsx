@@ -1,18 +1,7 @@
 import ProductCard from "./ProductCard";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
 import { useState} from "react"
-
-type Product = {
-  id: string;
-  category: string;
-  name: string;
-  description: string;
-  price: number;
-  stock_quantity: number;
-  rating_count: number;
-  rating: number;
-  image_url: string;
-};
+import { Product } from "../types"
 
 type ProductsGridProps = {
   products?: Product[];
@@ -20,7 +9,7 @@ type ProductsGridProps = {
 };
 
 const ProductsGrid = ({
-  products = [],
+  products,
   isLoading,
 }: ProductsGridProps) => {
   
@@ -46,7 +35,7 @@ const ProductsGrid = ({
   }
 
   // EMPTY STATE
-  if (!products.length) {
+  if (!products || products.length === 0){
     return (
       <div className="py-20 text-center text-gray-500 dark:text-gray-400">
         No products found.
@@ -56,24 +45,11 @@ const ProductsGrid = ({
 
   // GRID
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 lg:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {products.map((p) => (
         <ProductCard
           key={p.id}
-          category={p.category_name}
-          name={p.name}
-          description={p.description}
-          price={p.price}
-          stock={p.stock_quantity}
-          rating_count={p.rating_count}
-          rating={p.average_rating}
-          image={"https://bxxwonszqwilodfqvjbv.supabase.co/storage/v1/object/public/product-images/New-Arrival-High-Quality-Male-Jacket.jpeg"}
-          onClickWishlist={() => alert(`${p.name} added to wishlist`)}
-          onClickAddToCart={() => {
-            handleAddToCart(p.id);
-            handleIsAdding(p.id);
-          }}
-          isAdding={(addingProductId===p.id) && isPending}
+          product={p}
         />
       ))}
     </div>
