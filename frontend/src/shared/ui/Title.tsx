@@ -9,7 +9,7 @@ interface Props {
 
 const Title = ({ txt1, txt2, topTitle }: Props) => {
   return (
-    <div className="flex justify-between items-end py-5">
+    <div className="flex justify-between items-end py-10 mt-5">
       <div className="space-y-2">
         <span className="text-[10px] uppercase tracking-[0.4em] text-aura-black/40">{topTitle}</span>
         <h2 className="text-5xl font-serif italic">{txt1} {txt2}</h2>
