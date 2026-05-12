@@ -27,7 +27,7 @@ const ProductCard = ({
           <motion.img
             src={"https://bxxwonszqwilodfqvjbv.supabase.co/storage/v1/object/public/product-images/New-Arrival-High-Quality-Male-Jacket.jpeg"}
             alt={product.name}
-            className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+            className="w-full h-full rounded-lg object-cover grayscale hover:grayscale-0 transition-all duration-700"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
             referrerPolicy="no-referrer"

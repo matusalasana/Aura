@@ -2,13 +2,13 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play } from 'lucide-react';
-import ProductCard from '../../products/components/ProductCard';
 import Hero from '../components/Hero';
 import CategoriesSection from '../components/CategoriesSection';
+import FeaturedSection from '../components/FeaturedSection';
 import { useProducts } from '../../products/hooks/useProducts';
 
 const HomePage = () => {
-  const {data: featuredProducts, isLoading, isError} = useProducts()
+  const {data: products, isLoading, isError} = useProducts()
 
   if(isLoading){
     return<p>Loading...</p>
@@ -24,24 +24,9 @@ const HomePage = () => {
       <CategoriesSection />
 
       {/* Featured Products */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 space-y-12">
-        <div className="flex justify-between items-end">
-          <div className="space-y-2">
-            <span className="text-[10px] uppercase tracking-[0.4em] text-aura-black/40">Curated Selection</span>
-            <h2 className="text-5xl font-serif italic">Featured Essentials</h2>
-          </div>
-          <Link to="/products" className="group flex items-center space-x-3 text-xs uppercase tracking-widest font-semibold">
-            <span>View All</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={1.5} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
+      <FeaturedSection 
+        featuredProducts={products} 
+      />
 
       {/* Atmosphere Section */}
       <section className="bg-aura-soft py-32 overflow-hidden">
