@@ -8,6 +8,7 @@ import {
   ACCESS_COOKIE_MAX_AGE,
   NODE_ENV
 } from "../config/env";
+import { UserPayload } from "../types/index"
 
 console.log(ACCESS_TOKEN_EXPIRY);
 console.log(REFRESH_TOKEN_EXPIRY);
@@ -17,7 +18,7 @@ if(!ACCESS_TOKEN_SECRET || !ACCESS_TOKEN_EXPIRY || !ACCESS_COOKIE_MAX_AGE || !RE
   throw new Error("Missing JWT env variables");
 }
 
-export const generateAccessToken = (payload: any) => {
+export const generateAccessToken = (payload: UserPayload) => {
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
 };
 

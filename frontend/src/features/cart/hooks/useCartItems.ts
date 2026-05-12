@@ -9,5 +9,6 @@ export const useCartItems = () => {
     queryKey: ['cart', 'items'],
     queryFn: getCartItems,
     retry: false,
+    staleTime: 10*60*1000,
   });
 };

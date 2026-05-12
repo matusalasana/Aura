@@ -12,7 +12,10 @@ export const useLogout = () => {
     onSuccess: () => {
       toast.success("You have logged out successfully")
       queryClient.invalidateQueries({
-        queryKey: ['auth', 'me']
+        queryKey: ["auth", "me"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["cart", "items"],
       });
     },
     onError: (error) => {

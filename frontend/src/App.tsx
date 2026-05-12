@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectRoutes from "./features/auth/components/ProtectRoutes"
 import Topbar from "./shared/ui/Topbar/Topbar"
+import Footer from "./shared/ui/Footer"
 
 // Pages
 import RegisterationPage from "./features/auth/pages/RegisterationPage";
@@ -33,6 +34,8 @@ const App = () => {
         </Route>
         
       </Routes>
+      
+      <Footer />
       
     </div>
   )

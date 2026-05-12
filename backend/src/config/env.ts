@@ -17,5 +17,9 @@ export const REFRESH_COOKIE_MAX_AGE = process.env.REFRESH_COOKIE_MAX_AGE || 1000
 
 export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY || '7d';
 export const PORT = process.env.PORT || 3000;
+
 export const SALT_FOR_PWD_HASH = process.env.SALT_FOR_PWD_HASH || 10;
+
+export const SALT_FOR_TOKEN_HASH = process.env.SALT_FOR_TOKEN_HASH || 10;
+
 export const NODE_ENV = process.env.NODE_ENV || 'development';

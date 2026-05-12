@@ -16,9 +16,7 @@ export const getCartItems = async (
   try {
     const cart = await getCartItemsService(req.user!.id);
 
-    return res.status(200).json({
-      data: cart,
-    });
+    return res.status(200).json(cart);
   } catch (error: any) {
     return res.status(500).json({
       message: error.message,
@@ -37,10 +35,7 @@ export const addToCart = async (
       req.body
     );
 
-    return res.status(201).json({
-      message: "Item added to cart",
-      data: cartItem,
-    });
+    return res.status(201).json(cartItem);
   } catch (error: any) {
     return res.status(400).json({
       message: error.message,
@@ -60,10 +55,7 @@ export const updateCartItem = async (
       req.body
     );
 
-    return res.status(200).json({
-      message: "Cart updated",
-      data: cartItem,
-    });
+    return res.status(200).json(cartItem);
   } catch (error: any) {
     return res.status(400).json({
       message: error.message,

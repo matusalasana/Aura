@@ -1,24 +1,11 @@
-import express, { Application } from 'express';
+import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
 import { loggerMiddleware } from './middleware/logger.middleware';
-
-// Routes
-import authRoutes from './modules/auth/auth.routes';
-import productRoutes from './modules/products/products.routes';
-import categoryRoutes from './modules/categories/categories.routes';
-import cartRoutes from './modules/cart/cart.routes';
-import orderRoutes from './modules/orders/orders.routes';
-import adminUserRoutes from './modules/users/users.routes';
-import analyticsRoutes from './modules/analytics/analytics.routes';
-import reviewRoutes from './modules/reviews/reviews.routes';
-import wishlistRoutes from './modules/wishlist/wishlist.routes';
-import paymentRoutes from './modules/payments/payments.routes';
-import notificationRoutes from './modules/notifications/notifications.routes';
-
-const app: Application = express();
+import routes from "./routes/index";
+const app = express();
 
 // Security & Base Middlewares
 app.use(helmet({
@@ -49,17 +36,7 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // API Routes
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/products', productRoutes);
-app.use('/api/v1/categories', categoryRoutes);
-app.use('/api/v1/cart', cartRoutes);
-app.use('/api/v1/orders', orderRoutes);
-app.use('/api/v1/admin/users', adminUserRoutes);
-app.use('/api/v1/admin/analytics', analyticsRoutes);
-app.use('/api/v1/reviews', reviewRoutes);
-app.use('/api/v1/wishlist', wishlistRoutes);
-app.use('/api/v1/payments', paymentRoutes);
-app.use('/api/v1/notifications', notificationRoutes);
+app.use("/api/v1", routes)
 
 // Health Check
 app.get('/api/v1/health', (req, res) => {

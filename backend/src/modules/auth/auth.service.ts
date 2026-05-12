@@ -2,7 +2,9 @@ import {
   findUserByEmailRepo,
   findUserByIdRepo,
   registerUserRepo,
-  updateRefreshTokenRepo,
+  rotateRefreshTokenRepo,
+  createRefreshTokenRepo,
+  revokeRefreshTokenRepo
 } from "./auth.repository";
 
 import {
@@ -11,7 +13,11 @@ import {
   verifyRefreshToken,
 } from "../../utils/jwt";
 
-import { hashPassword, comparePassword } from "../../utils/hash";
+import { 
+  hashPassword, 
+  comparePassword,
+  hashToken
+} from "../../utils/hash";
 
 import type { RegisterInput, LoginInput } from "./auth.validation";
 
@@ -54,17 +60,15 @@ export const loginService = async (userData: LoginInput) => {
 
   const refreshToken = generateRefreshToken({
     id: user.id,
+    email: user.email,
+    role: user.role,
   });
 
-  await updateRefreshTokenRepo(user.id, refreshToken);
+  const hashedRefreshToken = await hashToken(refreshToken);
+  await createRefreshTokenRepo(user.id, hashedRefreshToken);
 
   return {
-    user: {
-      id: user.id,
-      email: user.email,
-      full_name: user.full_name,
-      role: user.role,
-    },
+    user,
     accessToken,
     refreshToken,
   };
@@ -72,7 +76,7 @@ export const loginService = async (userData: LoginInput) => {
 
 // LOGOUT
 export const logoutService = async (userId: string) => {
-  await updateRefreshTokenRepo(userId, null);
+  await revokeRefreshTokenRepo(userId);
 };
 
 // CURRENT USER
@@ -84,34 +88,4 @@ export const getCurrentUserService = async (userId: string) => {
   const { password_hash, refresh_token, ...safeUser } = user;
 
   return safeUser;
-};
-
-// REFRESH TOKEN
-export const refreshTokenService = async (token: string) => {
-  if (!token) throw new Error("No refresh token");
-
-  const decoded = verifyRefreshToken(token);
-
-  const user = await findUserByIdRepo(decoded.id);
-
-  if (!user || user.refresh_token !== token) {
-    throw new Error("Invalid refresh token");
-  }
-
-  const newAccessToken = generateAccessToken({
-    id: user.id,
-    email: user.email,
-    role: user.role,
-  });
-
-  const newRefreshToken = generateRefreshToken({
-    id: user.id,
-  });
-
-  await updateRefreshTokenRepo(user.id, newRefreshToken);
-
-  return {
-    accessToken: newAccessToken,
-    refreshToken: newRefreshToken,
-  };
 };

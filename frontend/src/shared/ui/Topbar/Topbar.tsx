@@ -8,7 +8,7 @@ import { useCartItems } from "../../../features/cart/hooks/useCartItems";
 
 const Topbar = () => {
   const { data: cartItems, isLoading } = useCartItems();
-  const itemCount = cartItems?.length ?? 0;
+  const itemCount = cartItems?.length ?? null;
   
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
@@ -29,7 +29,7 @@ const Topbar = () => {
           <Link to="/cart">
             <button className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-gray-100 dark:hover:bg-gray-800">
               <ShoppingCart size={20} className="text-gray-800 dark:text-gray-200" />
-              {(!isLoading || itemCount===0) &&
+              {(itemCount >0) &&
               <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black text-xs text-white dark:bg-white dark:text-black">
                 {itemCount >= 10 ? "9+" : itemCount}
               </span>

@@ -9,6 +9,7 @@ const CartPage = () => {
   
   return (
     <div>
+    <h1>Cart will appear here</h1>
       <CartItemsGrid
         data={cartItems ?? []}
         isLoading={isLoading}

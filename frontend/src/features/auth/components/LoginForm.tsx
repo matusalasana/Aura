@@ -33,7 +33,9 @@ const LoginForm = () => {
     );
   }
 
-  if (user) return <Navigate to="/collections" replace />;
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
