@@ -9,6 +9,7 @@ import Bestsellers from '../components/Bestsellers';
 import PromoBanner from '../components/PromoBanner';
 import WhyChooseUs from '../components/WhyChooseUs';
 import AuraTestimonials from '../components/AuraTestimonials';
+import Newsletter from '../components/Newsletter';
 import { useProducts } from '../../products/hooks/useProducts';
 
 const HomePage = () => {
@@ -41,6 +42,8 @@ const HomePage = () => {
       <WhyChooseUs />
       
       <AuraTestimonials />
+      
+      <Newsletter />
 
       {/* Atmosphere Section */}
       <section className="bg-aura-soft py-32 overflow-hidden">
