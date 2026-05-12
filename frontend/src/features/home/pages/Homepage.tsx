@@ -6,6 +6,7 @@ import Hero from '../components/Hero';
 import CategoriesSection from '../components/CategoriesSection';
 import FeaturedSection from '../components/FeaturedSection';
 import Bestsellers from '../components/Bestsellers';
+import PromoBanner from '../components/PromoBanner';
 import { useProducts } from '../../products/hooks/useProducts';
 
 const HomePage = () => {
@@ -31,6 +32,9 @@ const HomePage = () => {
       
       <Bestsellers 
         data={products} 
+      />
+      
+      <PromoBanner 
       />
 
       {/* Atmosphere Section */}
@@ -67,7 +71,7 @@ const HomePage = () => {
           </div>
           <div className="relative aspect-[3/4]">
              <img 
-              src="https://images.unsplash.com/photo-1549439602-43ebca2327af?auto=format&fit=crop&q=80&w=1000" 
+              src="https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=1227&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Atmosphere" 
               className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
               referrerPolicy="no-referrer"
