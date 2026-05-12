@@ -41,7 +41,7 @@ const Hero = () => {
           </p>
           <div className="flex justify-center items-center space-x-6 pt-4">
             <Link to="/collections">
-            <button className="flex gap-2 rounded-lg bg-gray-200 dark:bg-gray-600 px-4 py-4">
+            <button className="flex gap-2 text-black font-bold rounded-lg border-2 border-gray-700 dark:border-gray-900 hover:bg-gray-900 bg-white/30 px-4 py-4">
               Explore Collections <ArrowRight size={24} />
             </button>
             </Link>

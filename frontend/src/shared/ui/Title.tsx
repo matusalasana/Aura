@@ -1,23 +1,19 @@
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 interface Props {
   txt1: string;
   txt2: string;
+  topTitle: string;
 }
 
-const Title = ({ txt1, txt2 }: Props) => {
+const Title = ({ txt1, txt2, topTitle }: Props) => {
   return (
-    <div className="group flex flex-wrap items-center gap-x-3 gap-y-1 py-4">
-      {/* Primary Text: High Contrast & Refined Weight */}
-      <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
-        {txt1}
-      </h1>
-
-      {/* Secondary Text: Gradient & Animation */}
-      <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-3xl font-black tracking-tight text-transparent transition-all duration-300 group-hover:from-blue-500 group-hover:to-indigo-400 sm:text-5xl lg:text-6xl">
-        {txt2}
-      </span>
-      
-      {/* Optional Decorative Underline */}
-      <div className="h-1.5 w-12 rounded-full bg-blue-500 transition-all duration-500 group-hover:w-24" />
+    <div className="flex justify-between items-end py-5">
+      <div className="space-y-2">
+        <span className="text-[10px] uppercase tracking-[0.4em] text-aura-black/40">{topTitle}</span>
+        <h2 className="text-5xl font-serif italic">{txt1} {txt2}</h2>
+      </div> 
     </div>
   );
 };
