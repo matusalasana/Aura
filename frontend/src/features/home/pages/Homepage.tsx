@@ -5,6 +5,7 @@ import { ArrowRight, Play } from 'lucide-react';
 import Hero from '../components/Hero';
 import CategoriesSection from '../components/CategoriesSection';
 import FeaturedSection from '../components/FeaturedSection';
+import Bestsellers from '../components/Bestsellers';
 import { useProducts } from '../../products/hooks/useProducts';
 
 const HomePage = () => {
@@ -25,7 +26,11 @@ const HomePage = () => {
 
       {/* Featured Products */}
       <FeaturedSection 
-        featuredProducts={products} 
+        data={products} 
+      />
+      
+      <Bestsellers 
+        data={products} 
       />
 
       {/* Atmosphere Section */}
