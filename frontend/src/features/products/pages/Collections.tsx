@@ -2,6 +2,7 @@ import { useProducts } from "../hooks/useProducts";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
 import ProductsGrid from "../components/ProductsGrid"
 import ProductFilters from "../components/ProductFilters"
+import ProductSort from "../components/ProductSort"
 import Title from "../../../shared/ui/Title"
 
 const Collections = () => {
@@ -28,6 +29,7 @@ const Collections = () => {
         txt2="COLLECTIONS"
       />
       <ProductFilters />
+      <ProductSort />
       <ProductsGrid
         isLoading={isLoading}
         products={products}
