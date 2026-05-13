@@ -4,19 +4,22 @@ import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_SECRET, 
   REFRESH_TOKEN_EXPIRY,
-  REFRESH_COOKIE_MAX_AGE,
-  ACCESS_COOKIE_MAX_AGE,
   NODE_ENV
 } from "../config/env";
 import { UserPayload } from "../types/index"
 
+console.log(ACCESS_TOKEN_SECRET);
 console.log(ACCESS_TOKEN_EXPIRY);
+console.log(REFRESH_TOKEN_SECRET);
 console.log(REFRESH_TOKEN_EXPIRY);
+console.log(NODE_ENV);
 
 
-if(!ACCESS_TOKEN_SECRET || !ACCESS_TOKEN_EXPIRY || !ACCESS_COOKIE_MAX_AGE || !REFRESH_TOKEN_EXPIRY || !REFRESH_COOKIE_MAX_AGE || !REFRESH_TOKEN_SECRET){
+if(!ACCESS_TOKEN_SECRET || !ACCESS_TOKEN_EXPIRY || !REFRESH_TOKEN_EXPIRY || !REFRESH_TOKEN_SECRET){
   throw new Error("Missing JWT env variables");
 }
+
+
 
 export const generateAccessToken = (payload: UserPayload) => {
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
@@ -30,12 +33,7 @@ export const verifyAccessToken = (token: string) => {
   }
 };
 
-export const accessCookieOptions = {
-  httpOnly: true,
-  secure: NODE_ENV === 'production',
-  sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
-  maxAge: Number(ACCESS_COOKIE_MAX_AGE),
-};
+
 
 
 export const generateRefreshToken = (payload: any) => {
@@ -50,9 +48,3 @@ export const verifyRefreshToken = (token: string) => {
   }
 };
 
-export const refreshCookieOptions = {
-  httpOnly: true,
-  secure: NODE_ENV === 'production',
-  sameSite: NODE_ENV === 'production' ? 'none' : 'lax' as const,
-  maxAge: Number(REFRESH_COOKIE_MAX_AGE),
-};

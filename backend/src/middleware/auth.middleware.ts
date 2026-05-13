@@ -6,151 +6,57 @@ import {
 
 import { 
   verifyAccessToken,
-  verifyRefreshToken,
-  generateAccessToken,
   generateRefreshToken
 } from "../utils/jwt";
-import { 
-  createRefreshTokenRepo,
-  updateRefreshTokenRepo,
-  findRefreshTokenRepo
-} from "../modules/auth/auth.repository";
 
-import { 
-  hashToken,
-  compareToken
-} from "../utils/hash"
 
 type Role = "user" | "admin";
 
-// VERIFY JWT
+
 export const verifyJWT = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  
+  // Authorization: Bearer TOKEN
+  const authHeader = req.headers.authorization;
 
-  const accessToken = req.cookies.accessToken;
+  // Extract token from header
+  const accessToken = authHeader?.split(" ")[1];
+
+  // Refresh token from cookie
   const refreshToken = req.cookies.refreshToken;
 
   try {
-    
-    // ACCESS TOKEN VALIDATION 
+    // No access token
     if (!accessToken) {
-      throw new Error();
+      return res.status(401).json({
+        message: "Unauthorized request",
+      });
     }
 
+    // Verify access token
     const decoded = verifyAccessToken(accessToken);
 
+    // Attach user to request
     req.user = decoded;
+    
+    console.log("Test attached user:", req.user);
 
     return next();
+    
+  } catch (error: any) {
+    
+    console.log(error.message || "Token expired/invalid");
 
-  } catch {
-
-    try {
-      
-      // ________________  REFRESH FLOW  ________________
-      if (!refreshToken) {
-        return res.status(401).json({
-          message: "Unauthorized"
-        });
-      }
-
-      // Verify refresh JWT
-      const refreshDecoded = verifyRefreshToken(refreshToken);
-
-      // Find refresh token in DB
-      const storedToken = await findRefreshTokenRepo(
-        refreshDecoded.id
-      );
-
-      // Check the one in DB
-      if (!storedToken) {
-        return res.status(401).json({
-          message: "Unauthorized"
-        });
-      }
-
-      // Check revoked
-      if (storedToken.revoked_at) {
-        return res.status(401).json({
-          message: "Session revoked"
-        });
-      }
-
-      // Compare hashed tokens
-      const isMatch = await compareToken(
-        refreshToken,
-        storedToken.token
-      );
-
-      if (!isMatch) {
-        return res.status(401).json({
-          message: "Invalid refresh token"
-        });
-      }
-
-      // ________________  ROTATE TOKENS  ________________
-      const newAccessToken = generateAccessToken({
-        id: refreshDecoded.id,
-        role: refreshDecoded.role,
-        email: refreshDecoded.email
-      });
-
-      const newRefreshToken = generateRefreshToken({
-        id: refreshDecoded.id,
-        role: refreshDecoded.role,
-        email: refreshDecoded.email
-      });
-
-      const hashedRefreshToken = await hashToken(newRefreshToken);
-
-      await rotateRefreshTokenRepo(
-        refreshDecoded.id,
-        hashedRefreshToken
-      );
-
-      // ________________  SET COOKIES  ________________
-      res.cookie(
-        "accessToken",
-        newAccessToken,
-        {
-          httpOnly: true,
-          secure: true,
-          sameSite: "strict"
-        }
-      );
-
-      res.cookie(
-        "refreshToken",
-        newRefreshToken,
-        {
-          httpOnly: true,
-          secure: true,
-          sameSite: "strict"
-        }
-      );
-
-      req.user = {
-        id: refreshDecoded.id,
-        role: refreshDecoded.role,
-        email: refreshDecoded.email
-      };
-
-      return next();
-
-    } catch {
-
-      return res.status(401).json({
-        message: "Unauthorized"
-      });
-
+    return res.status(403).json({
+      message: error.message || "Token expired/invalid"
+    })
     }
-
-  }
-
 };
+
+
 
 // ROLE AUTHORIZATION
 export const authorize = (

@@ -48,75 +48,94 @@ export const findRefreshTokenRepo = async(user_id: string) => {
   const result = await sql`
     SELECT * FROM refresh_tokens
     WHERE user_id=${user_id}
-    RETURNING *
   `;
   return result[0];
 };
 
-// UPDATE REFRESH TOKEN
-export const rotateRefreshTokenRepo = async (
-  userId: string,
-  hashedToken: string
-) => {
-  const result = await sql`
-    UPDATE refresh_tokens
-    SET
-      token = ${hashedToken},
-      expires_at = NOW() + INTERVAL '7 days',
-      revoked_at = NULL
-    WHERE user_id = ${userId}
-    RETURNING *
-  `;
-
-  return result[0];
-};
-
-// REVOKE ACCESS 
-export const revokeRefreshTokenRepo = async (
-  userId: string
-) => {
-  const result = await sql`
-    UPDATE refresh_tokens
-    SET
-      revoked_at = NOW()
-    WHERE user_id = ${userId}
-    RETURNING *
-  `;
-
-  return result[0];
-};
-
-// CREATE REFRESH TOKEN
+// =========================
+// CREATE SESSION (LOGIN)
+// =========================
 export const createRefreshTokenRepo = async (
   userId: string,
+  sessionId: string,
   token: string
 ) => {
-  const result = await sql`
+  return await sql`
     INSERT INTO refresh_tokens (
       user_id,
+      session_id,
       token,
       expires_at
     )
     VALUES (
       ${userId},
+      ${sessionId},
       ${token},
       NOW() + INTERVAL '7 days'
     )
-    RETURNING *
+    RETURNING *;
+  `;
+};
+
+
+// =========================
+// FIND ACTIVE SESSION
+// =========================
+export const findSessionByIdRepo = async (
+  userId: string,
+  sessionId: string
+) => {
+  const result = await sql`
+    SELECT * FROM refresh_tokens
+    WHERE user_id = ${userId}
+      AND session_id = ${sessionId}
+      AND revoked_at IS NULL
+      AND expires_at > NOW()
+    LIMIT 1;
   `;
 
   return result[0];
 };
 
 
-// UPDATE PASSWORD
-export const updatePasswordRepo = async (
+// =========================
+// ROTATE SESSION TOKEN
+// =========================
+export const rotateRefreshTokenRepo = async (
   userId: string,
-  passwordHash: string
+  sessionId: string,
+  hashedToken: string
 ) => {
-  await sql`
-    UPDATE users
-    SET password_hash = ${passwordHash}
-    WHERE id = ${userId};
+  const result = await sql`
+    UPDATE refresh_tokens
+    SET token = ${hashedToken},
+        expires_at = NOW() + INTERVAL '7 days',
+        updated_at = NOW()
+    WHERE user_id = ${userId}
+      AND session_id = ${sessionId}
+      AND revoked_at IS NULL
+    RETURNING *;
   `;
+
+  return result[0];
+};
+
+
+// =========================
+// REVOKE SESSION (LOGOUT)
+// =========================
+export const revokeRefreshTokenRepo = async (
+  userId: string,
+  sessionId: string
+) => {
+  const result = await sql`
+    UPDATE refresh_tokens
+    SET revoked_at = NOW()
+    WHERE user_id = ${userId}
+      AND session_id = ${sessionId}
+      AND revoked_at IS NULL
+    RETURNING *;
+  `;
+
+  return result[0];
 };
