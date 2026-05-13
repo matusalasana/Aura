@@ -1,7 +1,6 @@
 import { useProducts } from "../hooks/useProducts";
 import { useAddToCart } from "../../cart/hooks/useAddToCart";
 import ProductsGrid from "../components/ProductsGrid"
-import ProductFilters from "../components/ProductFilters"
 import Title from "../../../shared/ui/Title"
 
 const Collections = () => {
@@ -27,7 +26,6 @@ const Collections = () => {
         txt1="YOUR"
         txt2="COLLECTIONS"
       />
-      <ProductFilters />
       <ProductsGrid
         isLoading={isLoading}
         products={products}
