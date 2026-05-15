@@ -56,9 +56,11 @@ export const registerService = async (
   const refreshToken = await generateRefreshToken(payload);
   const accessToken = await generateAccessToken(payload);
   
-  await createRefreshTokenRepo(newUser.id, refreshToken);
+  const hashedRefreshToken = await hashToken(refreshToken);
   
-  return { accessToken, refreshToken, newUser };
+  await createRefreshTokenRepo(newUser.id, hashedRefreshToken);
+  
+  return { accessToken, refreshToken, user: newUser };
   
 };
 
@@ -85,15 +87,15 @@ export const loginService = async (
   if (!isMatch) {
     throw new Error("Invalid password");
   }
-
+  
   const payload = {
     id: user.id,
     role: user.role,
     email: user.email,
   };
 
-  const accessToken = generateAccessToken(payload);
-  const refreshToken = generateRefreshToken(payload);
+  const accessToken = await generateAccessToken(payload);
+  const refreshToken = await generateRefreshToken(payload);
   
   const hashedRefreshToken = await hashToken(refreshToken);
 
@@ -110,15 +112,10 @@ export const loginService = async (
 };
 
 // REFRESH
-export const refreshService = async (
-  refreshToken: string
-) => {
-  
+export const refreshService = async (refreshToken: string) => {
   if (!refreshToken) {
-    throw new Error(
-      "No refresh token"
-    );
-  };
+    throw new Error("No refresh token");
+  }
 
   const decoded = verifyRefreshToken(refreshToken);
 
@@ -128,21 +125,19 @@ export const refreshService = async (
     email: decoded.email
   };
 
-  const newAccessToken = generateAccessToken(payload);
-  const newRefreshToken = generateRefreshToken(payload);
+  const newAccessToken = await generateAccessToken(payload);
+  const newRefreshToken = await generateRefreshToken(payload);
 
   const hashed = await hashToken(newRefreshToken);
 
-  await rotateRefreshTokenRepo(
-    decoded.id,
-    hashed
-  );
+  await rotateRefreshTokenRepo(decoded.id, hashed);
 
   return {
-    accessToken,
+    newAccessToken,
     newRefreshToken,
   };
 };
+
 
 // LOGOUT
 export const logoutService = async (

@@ -59,7 +59,8 @@ export const registerUserRepo =
       RETURNING
         id,
         email,
-        full_name
+        full_name,
+        role
     `;
 
     return result[0];

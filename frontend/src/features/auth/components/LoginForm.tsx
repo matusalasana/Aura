@@ -3,15 +3,14 @@ import { type LoginInput, loginSchema } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useGetMe } from "../hooks/useGetMe";
+import { useGetMe } from "../../profile/hooks/useGetMe";
 import { useLogin } from "../hooks/useLogin";
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { mutate: onRefreshToken } = useRefreshToken();
   const { data: user, isLoading } = useGetMe();
   const { mutate: loginUser, isPending } = useLogin();
-  
+
   const {
     register,
     handleSubmit,
@@ -29,9 +28,7 @@ const LoginForm = () => {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Loader2 
-          className="animate-spin text-gray-600 dark:text-gray-300"
-        />
+        <Loader2 className="animate-spin text-gray-600 dark:text-gray-300" />
       </div>
     );
   }

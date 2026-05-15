@@ -58,7 +58,7 @@ export const login = async (
 
     return res.status(200)
       .json({
-        data: user,
+        user,
         accessToken,
       });
 
@@ -86,11 +86,9 @@ export const refresh = async (
     
     setRefreshTokenCookie(res, newRefreshToken);
 
-    return res
-      .status(200)
-      .json({
-        accessToken,
-      });
+    return res.status(200).json({
+      newAccessToken,
+    });
 
   } catch (err: any) {
     console.error("Refresh error:", err.message);

@@ -24,9 +24,6 @@ export const verifyJWT = async (
   // Extract token from header
   const accessToken = authHeader?.split(" ")[1];
 
-  // Refresh token from cookie
-  const refreshToken = req.cookies.refreshToken;
-
   try {
     // No access token
     if (!accessToken) {
@@ -41,8 +38,6 @@ export const verifyJWT = async (
 
     // Attach user to request
     req.user = decoded;
-    
-    console.log("Test attached user:", req.user);
 
     return next();
     
