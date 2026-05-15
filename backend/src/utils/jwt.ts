@@ -8,12 +8,6 @@ import {
 } from "../config/env";
 import { UserPayload } from "../types/index"
 
-console.log(ACCESS_TOKEN_SECRET);
-console.log(ACCESS_TOKEN_EXPIRY);
-console.log(REFRESH_TOKEN_SECRET);
-console.log(REFRESH_TOKEN_EXPIRY);
-console.log(NODE_ENV);
-
 
 if(!ACCESS_TOKEN_SECRET || !ACCESS_TOKEN_EXPIRY || !REFRESH_TOKEN_EXPIRY || !REFRESH_TOKEN_SECRET){
   throw new Error("Missing JWT env variables");
@@ -36,7 +30,7 @@ export const verifyAccessToken = (token: string) => {
 
 
 
-export const generateRefreshToken = (payload: any) => {
+export const generateRefreshToken = (payload: UserPayload) => {
   return jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
 };
 

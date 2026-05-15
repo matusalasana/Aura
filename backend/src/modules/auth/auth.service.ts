@@ -4,11 +4,13 @@ import {
   registerUserRepo,
   createRefreshTokenRepo,
   rotateRefreshTokenRepo,
-  revokeRefreshTokenRepo,
+  deleteRefreshTokenRepo,
   findSessionByIdRepo,
 } from "./auth.repository";
-
-import { randomUUID } from "crypto";
+import { 
+  RegisterInput,
+  LoginInput
+} from "./auth.validation"
 
 import {
   generateAccessToken,
@@ -23,87 +25,116 @@ import {
 } from "../../utils/hash";
 
 // REGISTER
-export const registerService = async (userData: any) => {
-  const { full_name, email, password_hash } = userData;
-
-  const exists = await findUserByEmailRepo(email);
-  if (exists) throw new Error("Email already exists");
-
-  const hashed = await hashPassword(password_hash);
-
-  return await registerUserRepo(
+export const registerService = async (
+  userData: RegisterInput) => {
+  const {
     full_name,
     email,
-    hashed
+    password_hash,
+  } = userData;
+
+  const exists = await findUserByEmailRepo(email);
+
+  if (exists) {
+    throw new Error("Email already exists");
+  };
+
+  const hashedPassword = await hashPassword(password_hash);
+
+  const newUser = await registerUserRepo(
+    full_name,
+    email,
+    hashedPassword
   );
+  
+  const payload = {
+    id: newUser.id,
+    role: newUser.role,
+    email: newUser.email
+  };
+  
+  const refreshToken = await generateRefreshToken(payload);
+  const accessToken = await generateAccessToken(payload);
+  
+  await createRefreshTokenRepo(newUser.id, refreshToken);
+  
+  return { accessToken, refreshToken, newUser };
+  
 };
 
 // LOGIN
-export const loginService = async (userData: any) => {
-  const { email, password_hash } = userData;
+export const loginService = async (
+  userData: LoginInput
+) => {
+  const {
+    email,
+    password_hash,
+  } = userData;
 
   const user = await findUserByEmailRepo(email);
-  if (!user) throw new Error("User not found");
 
-  const ok = await comparePassword(password_hash, user.password_hash);
-  if (!ok) throw new Error("Invalid password");
+  if (!user) {
+    throw new Error("User not found");
+  }
 
-  const sessionId = randomUUID();
+  const isMatch = await comparePassword(
+    password_hash,
+    user.password_hash
+  );
+
+  if (!isMatch) {
+    throw new Error("Invalid password");
+  }
 
   const payload = {
     id: user.id,
     role: user.role,
     email: user.email,
-    sessionId,
   };
 
   const accessToken = generateAccessToken(payload);
   const refreshToken = generateRefreshToken(payload);
-
+  
   const hashedRefreshToken = await hashToken(refreshToken);
 
-  await createRefreshTokenRepo(
+  await rotateRefreshTokenRepo(
     user.id,
-    sessionId,
     hashedRefreshToken
   );
 
   return {
-    user,
     accessToken,
     refreshToken,
+    user
   };
 };
 
 // REFRESH
-export const refreshService = async (refreshToken: string) => {
-  if (!refreshToken) throw new Error("No refresh token");
+export const refreshService = async (
+  refreshToken: string
+) => {
+  
+  if (!refreshToken) {
+    throw new Error(
+      "No refresh token"
+    );
+  };
 
   const decoded = verifyRefreshToken(refreshToken);
-
-  const session = await findSessionByIdRepo(
-    decoded.id,
-    decoded.sessionId
-  );
-
-  if (!session || session.revoked_at) {
-    throw new Error("Invalid session");
-  }
 
   const payload = {
     id: decoded.id,
     role: decoded.role,
-    email: decoded.email,
-    sessionId: decoded.sessionId,
+    email: decoded.email
   };
 
-  const accessToken = generateAccessToken(payload);
+  const newAccessToken = generateAccessToken(payload);
   const newRefreshToken = generateRefreshToken(payload);
 
   const hashed = await hashToken(newRefreshToken);
 
   await rotateRefreshTokenRepo(
-    decoded.sessionId,
+    decoded.id,
     hashed
   );
 
@@ -113,18 +144,36 @@ export const refreshService = async (refreshToken: string) => {
   };
 };
 
-// LOGOUT (single session)
-export const logoutService = async (refreshToken: string) => {
+// LOGOUT
+export const logoutService = async (
+  refreshToken: string
+) => {
+  
   const decoded = verifyRefreshToken(refreshToken);
 
-  await revokeRefreshTokenRepo(decoded.sessionId);
+  await deleteRefreshTokenRepo(
+    decoded.id
+  );
 };
 
 // CURRENT USER
-export const getCurrentUserService = async (userId: string) => {
-  const user = await findUserByIdRepo(userId);
-  if (!user) throw new Error("User not found");
+export const getCurrentUserService =
+  async (userId: string) => {
+    
+    if (!userId) {
+      throw new Error("user Id not found");
+    };
+    
+    const user = await findUserByIdRepo(userId);
 
-  const { password_hash, ...safe } = user;
-  return safe;
-};
+    if (!user) {
+      throw new Error("User not found");
+    };
+
+    const {
+      password_hash,
+      ...safe
+    } = user;
+
+    return safe;
+  };

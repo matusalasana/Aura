@@ -21,9 +21,8 @@ router.post("/login", validate(loginSchema), login);
 
 router.post("/refresh", refresh);
 
-router.post("/logout", verifyJWT, logout);
+router.post("/logout", logout);
 
 router.get("/me", verifyJWT, getCurrentUser);
-
 
 export default router;

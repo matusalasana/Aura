@@ -1,16 +1,15 @@
 import bcrypt from "bcryptjs";
 import { 
-  SALT_FOR_PWD_HASH,
-  SALT_FOR_TOKEN_HASH
+  SALT_ROUNDS
 } from "../config/env"
 
-if(!SALT_FOR_PWD_HASH){
+if(!SALT_ROUNDS){
   throw new Error("Hash Error: missing salt from .env")
 };
 
-// PASSWORD HASH
+// PASSWORD HASH AND VERIFICATION 
 export const hashPassword = async (password: string) => {
-  const hashedPassword = await bcrypt.hash(password, Number(SALT_FOR_PWD_HASH));
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
   
   return hashedPassword;
 }
@@ -21,9 +20,9 @@ export const comparePassword = async (password: string, hashedPassword:string) =
   return isMatch;
 }
 
-// REFRESH TOKEN HASH
+// REFRESH TOKEN  AND VERIFICATION
 export const hashToken = async (token: string) => {
-  const hashedToken = await bcrypt.hash(token, Number(SALT_FOR_TOKEN_HASH));
+  const hashedToken = await bcrypt.hash(token, SALT_ROUNDS);
   
   return hashedToken;
 }

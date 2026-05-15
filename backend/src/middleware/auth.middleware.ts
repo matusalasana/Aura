@@ -5,8 +5,7 @@ import {
 } from "express";
 
 import { 
-  verifyAccessToken,
-  generateRefreshToken
+  verifyAccessToken
 } from "../utils/jwt";
 
 
@@ -31,8 +30,9 @@ export const verifyJWT = async (
   try {
     // No access token
     if (!accessToken) {
+      console.log("No access token");
       return res.status(401).json({
-        message: "Unauthorized request",
+        message: "No access token",
       });
     }
 
@@ -47,11 +47,9 @@ export const verifyJWT = async (
     return next();
     
   } catch (error: any) {
-    
-    console.log(error.message || "Token expired/invalid");
-
-    return res.status(403).json({
-      message: error.message || "Token expired/invalid"
+    console.log(error.message || "Access token expired or invalid");
+    return res.status(401).json({
+      message: "Access token expired or invalid"
     })
     }
 };

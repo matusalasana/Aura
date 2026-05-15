@@ -1,23 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useGetMe } from "../../profile/hooks/useGetMe";
+import { useGetMe } from "../hooks/useGetMe";
 
 const ProtectRoutes = () => {
-  const { data: user, isLoading, isError } = useGetMe();
-
-  // Handle error first (more predictable)
-  if (isError) {
-    return <Navigate to="/login" replace />;
-  }
+  const { data: user, isLoading } = useGetMe();
 
   if (isLoading) {
-    return (
-      <div className="text-2xl">
-        Loading...
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
-  // Not authenticated
   if (!user) {
     return <Navigate to="/login" replace />;
   }

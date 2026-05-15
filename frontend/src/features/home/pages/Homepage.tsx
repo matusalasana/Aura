@@ -1,4 +1,4 @@
-
+import Tutorial from '../../../Tutorial';
 import Hero from '../components/Hero';
 import CategoriesSection from '../components/CategoriesSection';
 import FeaturedSection from '../components/FeaturedSection';
@@ -18,6 +18,8 @@ const HomePage = () => {
   
   return (
     <div className="space-y-32 pb-32">
+    
+    <Tutorial />
     
       {/* Hero Section */}
       <Hero />
