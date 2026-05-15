@@ -4,21 +4,16 @@ import { useGetMe } from "../../profile/hooks/useGetMe";
 const ProtectRoutes = () => {
   const { data: user, isLoading, isError } = useGetMe();
 
-  // Handle error first (more predictable)
-  if (isError) {
-    return <Navigate to="/login" replace />;
-  }
-
   if (isLoading) {
     return (
-      <div className="text-2xl">
-        Loading...
+      <div className="p-8 text-2xl font-medium">
+        Loading user profile...
       </div>
     );
   }
 
-  // Not authenticated
-  if (!user) {
+  // Redirect to login if request threw an error or user data came back empty
+  if (isError || !user) {
     return <Navigate to="/login" replace />;
   }
 

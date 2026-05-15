@@ -1,63 +1,74 @@
 import axios from 'axios';
 
-// Access token lives here — module-level
-let accessToken = null;
-
-export const setAccessToken   = (token: string) => { accessToken = token; };
-export const getAccessToken   = () => accessToken;
-export const clearAccessToken = () => { accessToken = null; };
+const BASE_URL = 'http://localhost:3000/api/v1';
 
 const API = axios.create({
-baseURL: 'http://localhost:3000/api/v1',
-withCredentials: true,
+  baseURL: BASE_URL,
+  withCredentials: true, // CRITICAL: This tells Axios to automatically send and receive cookies
 });
 
-// Attach access token to every outgoing request
-API.interceptors.request.use(
-(config) => {
-if (accessToken) {
-config.headers['Authorization'] = `Bearer ${accessToken}`;
-}
-return config;
-});
+// REMOVED: In-memory token variables, getters, and setters are no longer needed!
+// REMOVED: Request interceptor adding Authorization headers is no longer needed!
 
-// On 401 → try silent refresh, then retry the original request
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any) => {
+  failedQueue.forEach((promise) => {
+    if (error) {
+      promise.reject(error);
+    } else {
+      promise.resolve();
+    }
+  });
+  failedQueue = [];
+};
+
+// Response Interceptor to handle automatic silent token updates on 401
 API.interceptors.response.use(
-(response) => response,
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-async (error) => {
-const originalRequest = error.config;
+    if (
+      error.response?.status === 401 && 
+      !originalRequest._retry && 
+      originalRequest.url !== "/auth/refresh"
+    ) {
+      
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(() => {
+            // Cookie is now updated, retry automatically sends it
+            return API(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
 
-// Prevent infinite refresh loop  
-if (  
-  error.response?.status === 401 &&  
-  !originalRequest._retry &&  
-  originalRequest.url !== "/auth/refresh"  
-) {  
+      originalRequest._retry = true;
+      isRefreshing = true;
 
-  originalRequest._retry = true;  
-
-  try {  
-    const res = await API.post("/auth/refresh");  
-
-    setAccessToken(res.data.accessToken);  
-
-    originalRequest.headers["Authorization"] =  
-      `Bearer ${res.data.accessToken}`;  
-
-    return API(originalRequest);  
-
-  } catch (refreshError) {  
-
-    clearAccessToken();  
-
-    return Promise.reject(refreshError);  
-  }  
-}  
-
-return Promise.reject(error);
-
-}
+      try {
+        // The backend reads your old refresh cookie, updates both cookies, 
+        // and sends back the HTTP headers to store them.
+        await axios.post(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+        
+        processQueue(null);
+        
+        // Retry original request. The browser will automatically use the fresh cookie.
+        return API(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError);
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+    
+    return Promise.reject(error);
+  }
 );
 
 export default API;

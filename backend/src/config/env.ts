@@ -19,6 +19,7 @@ export const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY || '7d';
 
 // Cookie expiration (refresh)
 export const REFRESH_COOKIE_MAX_AGE = Number(process.env.REFRESH_COOKIE_MAX_AGE) || 1000*60*60*24*7;
+export const ACCESS_COOKIE_MAX_AGE = Number(process.env.ACCESS_COOKIE_MAX_AGE) || 1000*60*15;
 
 // Salt rounds
 export const SALT_ROUNDS = Number(process.env.PWD_SALT_ROUNDS) || 12;

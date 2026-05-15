@@ -18,11 +18,7 @@ export const verifyJWT = async (
   next: NextFunction
 ) => {
   
-  // Authorization: Bearer TOKEN
-  const authHeader = req.headers.authorization;
-
-  // Extract token from header
-  const accessToken = authHeader?.split(" ")[1];
+  const accessToken = req.cookies.accessToken;
 
   try {
     // No access token

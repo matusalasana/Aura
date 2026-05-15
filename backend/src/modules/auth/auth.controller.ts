@@ -10,7 +10,9 @@ import {
 
 import { 
   setRefreshTokenCookie,
-  clearRefreshTokenCookie
+  clearRefreshTokenCookie,
+  setAccessTokenCookie,
+  clearAccessTokenCookie
 } from "../../utils/cookies";
 
 // REGISTER
@@ -27,10 +29,10 @@ export const register = async (
     } = await registerService(req.body);
 
     setRefreshTokenCookie(res, refreshToken);
+    setAccessTokenCookie(res, accessToken);
     
     return res.status(201)
       .json({
-        accessToken,
         user
       });
     
@@ -55,11 +57,11 @@ export const login = async (
     } = await loginService(req.body);
     
     setRefreshTokenCookie(res, refreshToken);
-
+    setAccessTokenCookie(res, accessToken);
+    
     return res.status(200)
       .json({
         user,
-        accessToken,
       });
 
   } catch (err: any) {
@@ -85,14 +87,16 @@ export const refresh = async (
     } = await refreshService(refreshToken);
     
     setRefreshTokenCookie(res, newRefreshToken);
+    setAccessTokenCookie(res, newAccessToken);
 
     return res.status(200).json({
-      newAccessToken,
+      message: "Token refreshed"
     });
 
   } catch (err: any) {
     console.error("Refresh error:", err.message);
     clearRefreshTokenCookie(res);
+    clearAccessTokenCookie(res);
     return res.status(401).json({
       message: "Session expired",
     });
@@ -109,7 +113,8 @@ export const logout = async (
 
     await logoutService(refreshToken);
     
-    clearRefreshTokenCookie(res)
+    clearRefreshTokenCookie(res);
+    clearAccessTokenCookie(res);
 
     return res.status(200)
       .json({
@@ -134,7 +139,7 @@ export const getCurrentUser = async (
     const user = await getCurrentUserService(req.user!.id);
 
     return res.status(200).json({
-      data: user,
+      user
     });
 
   } catch (err: any) {
