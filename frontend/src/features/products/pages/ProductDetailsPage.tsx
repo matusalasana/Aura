@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import ProductDetailImages from "../components/ProductDetailImages"
 import ProductColor from "../components/ProductColor"
 import ProductSizes from "../components/ProductSizes"
+import ProductQuantity from "../components/ProductQuantity"
+import AddToCartBtn from "../components/AddToCartBtn"
 import Breadcrumb from "../../../shared/ui/Breadcrumb"
 import {
   ChevronRight,
@@ -35,7 +37,7 @@ const ProductDetailsPage = () => {
 
   
   
-  const [quantity, setQuantity] = useState(1);
+  
   const breadcrumbLinks = [
     { name: "Home", linkTo: "/" },
   ];
@@ -66,13 +68,7 @@ const ProductDetailsPage = () => {
 
   
 
-  const handleAddToCart = () => {
-
-    addToCart({
-      productId: product.id,
-      quantity
-    });
-  };
+  
 
   // ---------------- UI ----------------
   return (
@@ -106,35 +102,13 @@ const ProductDetailsPage = () => {
 
           <ProductColor />
           <ProductSizes />
+          <ProductQuantity />
+          <AddToCartBtn />
         <div>
-
-          {/* QUANTITY */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() =>
-                setQuantity((q) => Math.max(1, q - 1))
-              }
-            >
-              <Minus />
-            </button>
-
-            <span>{quantity}</span>
-
-            <button
-              onClick={() => setQuantity((q) => q + 1)}
-            >
-              <Plus />
-            </button>
-          </div>
+          
 
           {/* ADD TO CART */}
-          <button
-            onClick={handleAddToCart}
-            disabled={isPending}
-            className="w-full bg-black text-white py-3"
-          >
-            {isPending ? "Adding..." : "Add to Cart"}
-          </button>
+          
 
           {/* EXTRA */}
           <div className="text-sm text-black/60 space-y-2">
