@@ -18,7 +18,6 @@ interface ProductDetailImagesProps {
 
 const ProductDetailImages = ({images, product}: ProductDetailImagesProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  alert (setSelectedImage);
   
   return (
     <div>
@@ -27,7 +26,7 @@ const ProductDetailImages = ({images, product}: ProductDetailImagesProps) => {
             <AnimatePresence mode="wait">
               <motion.img
                 key={selectedImage}
-                src={images[selectedImage]}
+                src={images[selectedImage].url}
                 alt={product.name}
                 className="w-full h-full object-cover"
                 initial={{ opacity: 0 }}
@@ -76,7 +75,7 @@ const ProductDetailImages = ({images, product}: ProductDetailImagesProps) => {
                   }`}
                 >
                   <img
-                    src={img}
+                    src={img.url}
                     className="w-full h-full object-cover"
                   />
                 </button>

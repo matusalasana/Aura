@@ -52,7 +52,7 @@ const ProductDetailsPage = () => {
 
   // ---------------- SAFE DATA NORMALIZATION ----------------
   const images: string[] =
-    product.images.length > 0
+    product.images.length > 0 || product.images
       ? product.images
       : [FALLBACK_IMAGE];
 
