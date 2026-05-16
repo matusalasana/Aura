@@ -1,89 +1,84 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ChevronRight,
-  ChevronLeft,
-  Minus,
-  Plus,
-  Share2,
-  Info,
-  ShoppingBag,
-  Heart,
-} from "lucide-react";
+
+interface ProductImage {
+  url: string;
+  alt?: string;
+}
 
 interface ProductDetailImagesProps {
-  images: string[];
-  product: any;
+  images: ProductImage[];
+  product: {
+    name: string;
+  };
 }
 
-const ProductDetailImages = ({images, product}: ProductDetailImagesProps) => {
+const ProductDetailImages = ({ images, product }: ProductDetailImagesProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  
+
+  if (!images || images.length === 0) return null;
+
   return (
-    <div>
-          {/* Main Image */}
-          <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={selectedImage}
-                src={images[selectedImage].url}
-                alt={product.name}
-                className="w-full h-full object-cover"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+    <div className="w-full max-w-2xl space-y-4">
+      {/* Main Image Container */}
+      <div className="relative aspect-[3/4] w-full bg-neutral-50 overflow-hidden rounded-xl">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={selectedImage}
+            src={images[selectedImage]?.url}
+            alt={`${product.name} - View ${selectedImage + 1}`}
+            className="w-full h-full object-cover select-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          />
+        </AnimatePresence>
+
+        {/* Minimalist Slide Indicators */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10 bg-white/40 backdrop-blur-md px-2.5 py-1.5 rounded-full">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedImage(i)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  selectedImage === i ? "w-4 bg-neutral-900" : "w-1 bg-neutral-900/30"
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
               />
-            </AnimatePresence>
-
-            {/* Controls */}
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={() =>
-                    setSelectedImage((p) =>
-                      p === 0 ? images.length - 1 : p - 1
-                    )
-                  }
-                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-2"
-                >
-                  <ChevronLeft />
-                </button>
-
-                <button
-                  onClick={() =>
-                    setSelectedImage((p) => (p + 1) % images.length)
-                  }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-white p-2"
-                >
-                  <ChevronRight />
-                </button>
-              </>
-            )}
+            ))}
           </div>
+        )}
+      </div>
 
-          {/* Thumbnails */}
-          {images.length > 1 && (
-            <div className="grid grid-cols-4 gap-3 mt-4">
-              {images.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedImage(i)}
-                  className={`aspect-[3/4] overflow-hidden border ${
-                    selectedImage === i
-                      ? "border-black"
-                      : "border-transparent"
-                  }`}
-                >
-                  <img
-                    src={img.url}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
+      {/* Thumbnails */}
+      {images.length > 1 && (
+        <div className="grid grid-cols-5 gap-2.5">
+          {images.map((img, i) => (
+            <motion.button
+              key={i}
+              onClick={() => setSelectedImage(i)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`relative aspect-[3/4] rounded-lg overflow-hidden transition-all duration-200 bg-neutral-50 ${
+                selectedImage === i
+                  ? "ring-1 ring-neutral-900 ring-offset-2"
+                  : "opacity-60 hover:opacity-100"
+              }`}
+            >
+              <img
+                src={img.url}
+                alt={`${product.name} thumbnail ${i + 1}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </motion.button>
+          ))}
         </div>
-  )
-}
+      )}
+    </div>
+  );
+};
 
-export default ProductDetailImages
+export default ProductDetailImages;

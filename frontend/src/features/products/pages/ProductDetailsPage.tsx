@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductDetailImages from "../components/ProductDetailImages"
+import Breadcrumb from "../../../shared/ui/Breadcrumb"
 import {
   ChevronRight,
   ChevronLeft,
@@ -33,6 +34,9 @@ const ProductDetailsPage = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("Black");
   const [quantity, setQuantity] = useState(1);
+  const breadcrumbLinks = [
+    { name: "Home", linkTo: "/" },
+  ];
 
   if (isLoading) {
     return (
@@ -52,7 +56,7 @@ const ProductDetailsPage = () => {
 
   // ---------------- SAFE DATA NORMALIZATION ----------------
   const images: string[] =
-    product.images.length > 0 || product.images
+    product.images.length > 0
       ? product.images
       : [FALLBACK_IMAGE];
 
@@ -85,13 +89,9 @@ const ProductDetailsPage = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs uppercase text-black/50 mb-10">
-        <Link to="/">Home</Link>
-        <ChevronRight className="w-3 h-3" />
-        <Link to="/collections">Collections</Link>
-        <ChevronRight className="w-3 h-3" />
-        <span className="text-black">{product.name}</span>
-      </nav>
+      <Breadcrumb 
+        links={breadcrumbLinks}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* LEFT */}
