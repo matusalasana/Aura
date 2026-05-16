@@ -70,7 +70,7 @@ export const getProductByIdRepo = async (id: string) => {
       p.*,
       c.name as category_name,
       (
-        SELECT json_agg(pi.*)
+        SELECT COALESCE(json_agg(pi.*), '[]')
         FROM product_images pi
         WHERE pi.product_id = p.id
       ) as images
@@ -79,7 +79,7 @@ export const getProductByIdRepo = async (id: string) => {
     WHERE p.id = ${id}
   `;
 
-  return result[0];
+  return result[0] || [];
 };
 
 

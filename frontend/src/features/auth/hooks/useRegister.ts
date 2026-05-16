@@ -14,6 +14,10 @@ export const useRegister = () => {
       queryClient.invalidateQueries({
         queryKey: ['auth', 'me']
       });
+      
+      queryClient.invalidateQueries({
+        queryKey: ['cart', 'items']
+      });
     },
     onError: (error) => {
       toast.error(getApiErrorMessage(error))

@@ -22,10 +22,10 @@ const ProductCard = ({
       className="group relative"
     >
       {/* Image Container */}
-      <Link to={`/product/${product.id}`}>
+      <Link to={`/products/${product.id}`}>
         <div className="aspect-[3/4] overflow-hidden bg-aura-soft relative">
           <motion.img
-            src={"https://bxxwonszqwilodfqvjbv.supabase.co/storage/v1/object/public/product-images/New-Arrival-High-Quality-Male-Jacket.jpeg"}
+            src={product.image_url}
             alt={product.name}
             className="w-full h-full rounded-lg object-cover grayscale hover:grayscale-0 transition-all duration-700"
             whileHover={{ scale: 1.05 }}
@@ -42,7 +42,7 @@ const ProductCard = ({
       <div className="mt-4 space-y-1">
         <div className="flex justify-between items-start">
           <h3 className="text-xs uppercase tracking-widest font-medium overflow-hidden text-ellipsis whitespace-nowrap max-w-[70%]">
-            <Link to={`/product/${product.id}`} className="hover:text-aura-accent transition-colors text-gray-600 dark:text-white">
+            <Link to={`/products/${product.id}`} className="hover:text-aura-accent transition-colors text-gray-600 dark:text-white">
               {product.name}
             </Link>
           </h3>

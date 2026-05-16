@@ -4,11 +4,8 @@ const BASE_URL = 'http://localhost:3000/api/v1';
 
 const API = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true, // CRITICAL: This tells Axios to automatically send and receive cookies
+  withCredentials: true,
 });
-
-// REMOVED: In-memory token variables, getters, and setters are no longer needed!
-// REMOVED: Request interceptor adding Authorization headers is no longer needed!
 
 let isRefreshing = false;
 let failedQueue: any[] = [];

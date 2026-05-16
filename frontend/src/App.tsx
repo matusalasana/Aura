@@ -10,6 +10,7 @@ import RegisterationPage from "./features/auth/pages/RegisterationPage";
 import LoginPage from "./features/auth/pages/LoginPage";
 import ProductsPage from "./features/products/pages/ProductsPage";
 import Collections from "./features/products/pages/Collections";
+import ProductDetailsPage from "./features/products/pages/ProductDetailsPage";
 import CartPage from "./features/cart/pages/CartPage";
 import Homepage from "./features/home/pages/Homepage";
 import ProfilePage from "./features/profile/pages/ProfilePage";
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterationPage />} />
           <Route path="/collections" element={<Collections />} />
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/dev" element={<Dev />} />
