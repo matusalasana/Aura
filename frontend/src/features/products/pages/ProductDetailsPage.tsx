@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductDetailImages from "../components/ProductDetailImages"
+import ProductColor from "../components/ProductColor"
+import ProductSizes from "../components/ProductSizes"
 import Breadcrumb from "../../../shared/ui/Breadcrumb"
 import {
   ChevronRight,
@@ -31,8 +33,8 @@ const ProductDetailsPage = () => {
 
   const { mutate: addToCart, isPending } = useAddToCart();
 
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("Black");
+  
+  
   const [quantity, setQuantity] = useState(1);
   const breadcrumbLinks = [
     { name: "Home", linkTo: "/" },
@@ -62,38 +64,26 @@ const ProductDetailsPage = () => {
 
   const price = Number(product.price || 0);
 
-  const sizes = ["S", "M", "L", "XL"];
-  const colors = ["Black", "Blue", "Red"];
-
-  const colorMap: Record<string, string> = {
-    Black: "#000000",
-    Blue: "#2563eb",
-    Red: "#dc2626",
-  };
+  
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      alert("Please select a size");
-      return;
-    }
 
     addToCart({
       productId: product.id,
-      quantity,
-      size: selectedSize,
-      color: selectedColor,
+      quantity
     });
   };
 
   // ---------------- UI ----------------
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
-      {/* Breadcrumb */}
+
       <Breadcrumb 
         links={breadcrumbLinks}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      
         {/* LEFT */}
         <ProductDetailImages 
           product={product}
@@ -102,11 +92,11 @@ const ProductDetailsPage = () => {
 
         {/* RIGHT */}
         <div className="space-y-8">
+        
           <div>
             <h1 className="text-4xl font-serif">{product.name}</h1>
-
             <p className="text-xl mt-2">
-              {price.toFixed(2)} ETB
+              {Number(price).toFixed(2).toLocaleString()} ETB
             </p>
           </div>
 
@@ -114,54 +104,9 @@ const ProductDetailsPage = () => {
             {product.description}
           </p>
 
-          {/* COLORS */}
-          <div>
-            <p className="text-xs uppercase mb-2">
-              Color: {selectedColor}
-            </p>
-
-            <div className="flex gap-3">
-              {colors.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setSelectedColor(c)}
-                  className={`w-8 h-8 rounded-full border ${
-                    selectedColor === c
-                      ? "border-black"
-                      : "border-transparent"
-                  }`}
-                >
-                  <div
-                    className="w-full h-full rounded-full"
-                    style={{
-                      background: colorMap[c],
-                    }}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* SIZES */}
-          <div>
-            <p className="text-xs uppercase mb-2">Size</p>
-
-            <div className="grid grid-cols-4 gap-2">
-              {sizes.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSelectedSize(s)}
-                  className={`py-2 border ${
-                    selectedSize === s
-                      ? "bg-black text-white"
-                      : ""
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
+          <ProductColor />
+          <ProductSizes />
+        <div>
 
           {/* QUANTITY */}
           <div className="flex items-center gap-4">
@@ -197,8 +142,15 @@ const ProductDetailsPage = () => {
             <p>✔ 30-day returns</p>
           </div>
         </div>
+        
+        
+        
+        
+        
       </div>
+      
     </div>
+  </div>
   );
 };
 
