@@ -104,25 +104,14 @@ const ProductDetailsPage = () => {
           <ProductSizes />
           <ProductQuantity />
           <AddToCartBtn />
-        <div>
-          
-
-          {/* ADD TO CART */}
-          
 
           {/* EXTRA */}
           <div className="text-sm text-black/60 space-y-2">
             <p>✔ Free shipping</p>
             <p>✔ 30-day returns</p>
           </div>
-        </div>
-        
-        
-        
-        
         
       </div>
-      
     </div>
   </div>
   );
