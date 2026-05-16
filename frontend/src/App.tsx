@@ -17,6 +17,9 @@ import ProfilePage from "./features/profile/pages/ProfilePage";
 import About from "./shared/ui/About";
 import Dev from "./shared/ui/Dev";
 
+// Admin pages 
+import ProductsList from "./features/admin/products/pages/ProductsList";
+
 const App = () => {
   return (
     <>
@@ -40,6 +43,7 @@ const App = () => {
           {/* PROTECTED ROUTES */}
           <Route element={<ProtectRoutes />}>
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/admin/products" element={<ProductsList />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
           
