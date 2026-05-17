@@ -1,5 +1,6 @@
 import { CacheService } from '../../utils/CacheService';
 import { ProductFilters } from './products.validation';
+import { CreateProductInput } from './products.validation';
 import {
   getProductsRepo,
   getProductByIdRepo,
@@ -47,28 +48,34 @@ export const getProductByIdService = async (id: string) => {
 
 
 // CREATE
-export const createProductService = async (data: any) => {
-  const {
-    name,
-    description,
-    price,
-    stock,
-    rating_count,
-    average_rating,
-    category_id,
-    is_featured,
-    is_recommended
-  } = data;
+export const createProductService = async (
+  bodyData: CreateProductInput) => {
   
-  if(!name || !price || !stock || !rating_count || !average_rating || !category_id || !is_featured || !is_recommended){
-    throw new Error("Missing required fields")
+  const product = {
+    name: bodyData.name,
+    category_id: bodyData.category_id,
+    description: bodyData.description,
+    rating_count: bodyData.rating_count,
+    average_rating: bodyData.average_rating,
+    is_featured: bodyData.is_featured,
+    is_bestseller: bodyData.is_bestseller,
   }
   
-  const product = await createProductRepo(data);
+  const variants = bodyData.variants.map((v) => (
+    v
+  ));
+  
+  const images = bodyData.images.map((i) => i);
+  
+  const newProduct = await createProductRepo(
+    product,
+    images,
+    variants
+  );
 
   await CacheService.delByPattern('products:*');
 
-  return product;
+  return newProduct;
 };
 
 

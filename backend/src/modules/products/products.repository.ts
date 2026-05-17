@@ -105,44 +105,113 @@ export const getProductByIdRepo = async (id: string) => {
 
 
 // CREATE
-export const createProductRepo = async (data) => {
+export const createProductRepo = async (
+  product,
+  images,
+  variants
+) => {
+
   const {
     name,
-    description,
-    price,
-    stock,
     category_id,
+    description,
+    rating_count,
+    average_rating,
     is_featured,
-    is_recommended,
-  } = data;
-
-  const result = await sql`
-    INSERT INTO products (
-      name,
-      description,
-      price,
-      stock,
-      rating_count,
-      average_rating,
-      category_id,
-      is_featured,
-      is_recommended
-    )
-    VALUES (
-      ${name},
-      ${description},
-      ${price},
-      ${stock},
-      ${rating_count},
-      ${average_rating},
-      ${category_id},
-      ${is_featured},
-      ${is_recommended}
-    )
-    RETURNING *;
-  `;
-
-  return result[0];
+    is_bestseller
+  } = product;
+  
+  const {
+    color,
+    size,
+    price,
+    stock_quantity,
+    sku
+  } = variants;
+  
+  try{
+    
+    await sql`BEGIN`
+    
+    // 1. add to products table
+    const productResult = await sql`
+      INSERT INTO products (
+        name,
+        category_id,
+        description,
+        rating_count,
+        average_rating,
+        is_featured,
+        is_bestseller
+      )
+      VALUES (
+        ${name},
+        ${category_id},
+        ${description},
+        ${rating_count},
+        ${average_rating},
+        ${is_featured},
+        ${is_bestseller}
+      )
+      RETURNING *;
+    `;
+    
+    const productResultId = productResult[0].id;
+    
+    // 2. add product_images
+    const values = images
+      .map(img => {
+        const order = sql`(${productResultId}, ${img.url})`
+        return order;
+      })
+      .reduce((accumulated, current, indx) => {
+        return indx === 0 ? current : sql`${accumulated}, ${current}`;
+      });
+    
+    await sql`
+      INSERT INTO product_images (product_id, url)
+      VALUES ${values}
+    `;
+     
+    // 3. add to variants table 
+    const variantsValues = variants
+    .map(v => {
+      const order = sql`
+        (
+          ${productResultId},
+          ${v.color},
+          ${v.size},
+          ${v.price},
+          ${v.stock_quantity},
+          ${v.sku}
+        )
+      `
+      return order;
+    })
+    .reduce((accumulated, current) => {
+      return sql`${accumulated}, ${current}`;
+    });
+    
+    const variantsResult = await sql`
+      INSERT INTO product_variants (
+        product_id,
+        color,
+        size,
+        price,
+        stock_quantity,
+        sku
+      )
+      VALUES ${variantsValues}
+      
+    `;
+    await sql`COMMIT`
+    
+    return productResult[0];
+    
+  }catch(err){
+    await sql`ROLLBACK`
+    throw err
+  }
 };
 
 

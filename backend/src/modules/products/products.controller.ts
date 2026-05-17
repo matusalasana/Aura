@@ -56,7 +56,7 @@ export const getProductById = async (req: Request, res: Response) => {
 export const createProduct = async (req: Request, res: Response) => {
   try {
     const data = await createProductService(req.body);
-
+    
     return res.status(201).json(data);
   } catch (err: any) {
     console.log('Create product error:', err.message);

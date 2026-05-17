@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const createProductSchema = z.object({
   id: z.string().uuid().optional(),
+  category_id: z.string().uuid().min(1, "category is required"),
   name: z.string().min(2),
   description: z.string(),
   average_rating: z.number().positive(),
@@ -9,9 +10,20 @@ export const createProductSchema = z.object({
   is_featured: z.boolean().optional(),
   is_bestseller: z.boolean().optional(),
   
-  price: z.number().positive(),
-  stock: z.number().int().nonnegative(),
-  category_id: z.string().uuid()
+  variants: z.array(
+    z.object({
+    color: z.string().min(1, "Color is required"),
+    size: z.string().min(1, "Size is required"),
+    price: z.number().positive().min(100, "Amount must be greater than 100 ETB"),
+    stock_quantity: z.number().int().nonnegative(),
+    sku: z.string().min(1, "sku is required")
+  })),
+  
+  images: z.array(
+    z.object({
+    url: z.string().min(1, "Image is required"),
+  })),
+  
 });
 
 export const updateProductSchema = z.object({
