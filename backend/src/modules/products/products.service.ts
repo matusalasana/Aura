@@ -1,15 +1,16 @@
-import { CacheService } from '../../utils/CacheService.js';
+import { CacheService } from '../../utils/CacheService';
+import { ProductFilters } from './products.validation';
 import {
   getProductsRepo,
   getProductByIdRepo,
   createProductRepo,
   updateProductRepo,
   deleteProductRepo,
-} from './products.repository.js';
+} from './products.repository';
 
 
 // GET ALL
-export const getProductsService = async (filters: any) => {
+export const getProductsService = async (filters: ProductFilters) => {
   const cacheKey = `products:${JSON.stringify(filters)}`;
 
   const cachedData = await CacheService.get(cacheKey);
@@ -17,7 +18,7 @@ export const getProductsService = async (filters: any) => {
 
   const result = await getProductsRepo(filters);
 
-  await CacheService.set(cacheKey, result, 600);
+  await CacheService.set(cacheKey, result, 10);
 
   return result;
 };
@@ -39,7 +40,7 @@ export const getProductByIdService = async (id: string) => {
     throw new Error('Product not found');
   }
 
-  await CacheService.set(cacheKey, product, 3600);
+  await CacheService.set(cacheKey, product, 10);
 
   return product;
 };

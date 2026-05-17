@@ -8,7 +8,7 @@ export const getProductsRepo = async (filters) => {
     maxPrice,
     search,
     featured,
-    recommended,
+    bestseller,
     limit = 10,
     page = 1,
   } = filters;
@@ -20,7 +20,11 @@ export const getProductsRepo = async (filters) => {
       p.*, 
       c.name as category_name,
       (
-        SELECT url
+        SELECT COALESCE(MIN(pv.price), 0) FROM product_variants pv
+        WHERE pv.product_id = p.id
+      )::float as price,
+      (
+        SELECT pi.url
         FROM product_images pi
         WHERE pi.product_id = p.id
         LIMIT 1
@@ -35,19 +39,25 @@ export const getProductsRepo = async (filters) => {
   }
 
   if (minPrice) {
-    query = sql`${query} AND p.price >= ${minPrice}`;
+    query = sql`${query} AND (
+      SELECT COALESCE(MIN(pv.price), 0) FROM product_variants pv
+      WHERE pv.product_id = p.id
+    )::float as price, >= ${minPrice}`;
   }
 
   if (maxPrice) {
-    query = sql`${query} AND p.price <= ${maxPrice}`;
+    query = sql`${query} AND (
+      SELECT COALESCE(MIN(pv.price), 0) FROM product_variants pv
+      WHERE pv.product_id = p.id
+    )::float as price, <= ${maxPrice}`;
   }
 
   if (featured) {
     query = sql`${query} AND p.is_featured = true`;
   }
 
-  if (recommended) {
-    query = sql`${query} AND p.is_recommended = true`;
+  if (bestseller) {
+    query = sql`${query} AND p.is_bestseller = true`;
   }
 
   if (search) {
@@ -76,19 +86,22 @@ export const getProductByIdRepo = async (id: string) => {
   const result = await sql`
     SELECT 
       p.*,
-      c.name as category_name,
+      c.name AS category_name,
+
       (
-        SELECT COALESCE(json_agg(pi.*), '[]')
-        FROM product_images pi
-        WHERE pi.product_id = p.id
-      ) as images
+        SELECT COALESCE(json_agg(pv.*), '[]'::json)
+        FROM product_variants pv
+        WHERE pv.product_id = p.id
+      ) AS variants
+
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     WHERE p.id = ${id}
   `;
 
-  return result[0] || [];
+  return result[0] || null;
 };
+  
 
 
 // CREATE

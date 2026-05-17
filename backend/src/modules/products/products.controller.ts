@@ -17,7 +17,7 @@ export const getProducts = async (req: Request, res: Response) => {
       maxPrice: req.query.max_price ? Number(req.query.max_price) : undefined,
       search: req.query.search as string,
       featured: req.query.featured === 'true',
-      recommended: req.query.recommended === 'true',
+      bestseller: req.query.recommended === 'true',
       limit: req.query.limit ? Number(req.query.limit) : 10,
       page: req.query.page ? Number(req.query.page) : 1,
     };
