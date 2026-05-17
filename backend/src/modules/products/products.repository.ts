@@ -16,7 +16,15 @@ export const getProductsRepo = async (filters) => {
   const offset = (page - 1) * limit;
 
   let query = sql`
-    SELECT p.*, c.name as category_name
+    SELECT 
+      p.*, 
+      c.name as category_name,
+      (
+        SELECT url
+        FROM product_images pi
+        WHERE pi.product_id = p.id
+        LIMIT 1
+      ) as image_url
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     WHERE 1=1
