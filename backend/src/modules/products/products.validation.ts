@@ -12,17 +12,20 @@ export const createProductSchema = z.object({
   
   variants: z.array(
     z.object({
-    color: z.string().min(1, "Color is required"),
-    size: z.string().min(1, "Size is required"),
-    price: z.number().positive().min(100, "Amount must be greater than 100 ETB"),
-    stock_quantity: z.number().int().nonnegative(),
-    sku: z.string().min(1, "sku is required")
+      product_id: z.string().uuid().optional(),
+      color: z.string().min(1, "Color is required"),
+      size: z.string().min(1, "Size is required"),
+      price: z.number().positive().min(100, "Amount must be greater than 100 ETB"),
+      stock_quantity: z.number().int().nonnegative(),
+      sku: z.string().min(1, "sku is required")
   })),
   
   images: z.array(
     z.object({
-    url: z.string().min(1, "Image is required"),
-  })),
+      product_id: z.string().uuid().optional(),
+      url: z.string().min(1, "Image is required"),
+    })
+  ),
   
 });
 

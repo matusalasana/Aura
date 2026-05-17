@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction} from "express";
-
+import logger from "../utils/logger";
 export const validate = (schema) => (
   req: Request, 
   res: Response, 
@@ -9,6 +9,7 @@ export const validate = (schema) => (
 
   // return error if validation fails
   if (!result.success) {
+    logger.error(`${result.error}`)
     return res.status(400).json({
       message: "Validation failed",
       errors: result.error.format(),
