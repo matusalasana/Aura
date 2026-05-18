@@ -4,11 +4,15 @@ import { useLogout } from "../../auth/hooks/useLogout";
 
 const LogoutButton = () => {
   const navigate = useNavigate();
-  const { mutate: logout, isPending } = useLogout();
+
+  const { mutate: logout, isPending } = useLogout({
+    onSuccess: () => {
+      navigate("/");
+    },
+  });
 
   const handleLogout = () => {
     logout();
-    navigate("/");
   };
 
   return (
