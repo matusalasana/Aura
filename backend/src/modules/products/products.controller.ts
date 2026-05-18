@@ -71,7 +71,10 @@ export const createProduct = async (req: Request, res: Response) => {
 // UPDATE
 export const updateProduct = async (req: Request, res: Response) => {
   try {
-    const data = await updateProductService(req.params.id, req.body);
+    const data = await updateProductService(
+      req.params.id, 
+      req.body
+    );
 
     return res.status(200).json(data);
   } catch (err: any) {

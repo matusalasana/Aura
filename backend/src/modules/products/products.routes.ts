@@ -16,10 +16,10 @@ const router = Router();
 
 router.get('/', getProducts);
 router.get('/:id', getProductById);
-
+ 
 // Admin only routes
 router.post('/', verifyJWT, validate(createProductSchema), createProduct);
-router.patch('/:id', verifyJWT, authorize('admin'), updateProduct);
+router.patch('/:id', updateProduct);
 router.delete('/:id', verifyJWT, authorize('admin'), deleteProduct);
 
 export default router;
