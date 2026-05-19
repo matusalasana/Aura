@@ -1,14 +1,19 @@
 import { sql } from '../../config/db';
+import { 
+  CreateCategoryInput,
+  UpdateCategoryInput
+} from './categories.validation';
 
-
-const findAll = async() => {
+// GET ALL
+const getAll = async() => {
   return await sql`
   SELECT * FROM categories 
   ORDER BY name ASC
   `;
 };
 
-const create = async(data) => {
+// CREATE 
+const create = async(data: CreateCategoryInput) => {
   const { name, image_url } = data;
   const result = await sql`
     INSERT INTO categories
@@ -25,16 +30,27 @@ const create = async(data) => {
   return result[0];
 };
 
-const update(id: string, data: any) {
-  const keys = Object.keys(data);
-  const result = await sql`UPDATE categories SET ${sql(data, ...keys)} WHERE id = ${id} RETURNING *`;
+// UPDATE 
+const update = async (
+  id: string, 
+  data: UpdateCategoryInput
+) => {
+  const { name, image_url } = data;
+  const result = await sql`
+    UPDATE categories 
+    SET 
+      name = COALESCE(${name}, name),
+      image_url = COALESCE(${image_url}, image_url)
+    WHERE id = ${id} 
+    RETURNING *
+  `;
   return result[0];
 };
 
-const deleteOne(id: string) {
+// DELETE 
+const deleteOne = async(id: string) => {
   await sql`DELETE FROM categories WHERE id = ${id}`;
 };
-
 
 
 // HELPERS 
@@ -43,8 +59,8 @@ const findById = async(id: string) => {
   return result[0];
 };
 
-export CategoryRepository = {
-  findAll,
+export const CategoryRepository = {
+  getAll,
   findById,
   create,
   update,

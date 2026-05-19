@@ -4,7 +4,7 @@ import { asyncHandler } from '../../utils/asyncHandler';
 import { ApiResponse } from '../../utils/ApiResponse';
 
 // GET ALL
-export const getCategories = async (
+const getCategories = async (
   req: Request, 
   res: Response
 ) => {
@@ -25,7 +25,7 @@ export const getCategories = async (
 };
 
 // CREATE 
-export const createCategory = async (
+const createCategory = async (
   req: Request, 
   res: Response
 ) => {
@@ -46,7 +46,7 @@ export const createCategory = async (
 };
 
 // UPDATE 
-export const updateCategory = async (
+const updateCategory = async (
   req: Request, 
   res: Response
 ) => {
@@ -70,7 +70,7 @@ export const updateCategory = async (
 };
 
 // DELETE 
-export const deleteCategory = async (
+const deleteCategory = async (
   req: Request, 
   res: Response
 ) => {
@@ -91,3 +91,10 @@ export const deleteCategory = async (
         })
     }
 };
+
+export const CategoryController = {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory
+}

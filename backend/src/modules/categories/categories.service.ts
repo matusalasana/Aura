@@ -18,10 +18,18 @@ const create = async(
 const update = async(
   id: string, 
   data: UpdateCategoryInput) => {
+  const exists = await CategoryRepository.findById(id);
+  if(!exists){
+    throw new Error("Category not found");
+  }
   return await CategoryRepository.update(id, data);
 };
 
 const deleteOne = async(id: string) => {
+  const exists = await CategoryRepository.findById(id);
+  if(!exists){
+    throw new Error("Category not found");
+  }
   await CategoryRepository.deleteOne(id);
 };
 
