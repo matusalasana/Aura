@@ -15,7 +15,6 @@ export const variantsSchema = z.object({
   size: z.string().min(1, "Size is required"),
   price: z.number().positive().min(100, "Amount must be greater than 100 ETB"),
   stock_quantity: z.number().int().nonnegative(),
-  sku: z.string().min(10, "Must be at least 10 characters long")
 });
 
 export const imagesUploadSchema = z.object({

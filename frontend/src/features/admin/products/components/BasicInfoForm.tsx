@@ -148,7 +148,7 @@ const BasicInfoForm = () => {
           type="submit"
           className="bg-zinc-800 dark:bg-zinc-200 text-zinc-200 dark:text-zinc-800 py-4 w-full rounded-lg"
         >
-          "Submit Basic Info
+          Submit Basic Info
         </button>
 
       </form>
