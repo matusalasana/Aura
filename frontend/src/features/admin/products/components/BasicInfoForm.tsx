@@ -15,10 +15,16 @@ const BasicInfoForm = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(basicInfoSchema),
+    defaultValues: {
+      is_bestseller: false,
+      is_featured: true,
+    },
   });
 
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  
+  const [formData, setFormData] = useState<BasicInfoInput | null>(null); 
   
   const sizes = ["S", "M", "L", "XL"];
   
@@ -34,6 +40,7 @@ const BasicInfoForm = () => {
       ...data,
       size: selectedSize,
     };
+    setFormData(finalData)
   };
 
   return (
@@ -75,7 +82,7 @@ const BasicInfoForm = () => {
         {/* Category */}
         <div className="space-y-1 w-full">
           <select
-            {...register("category")}
+            {...register("category_id")}
             className="w-full border border-gray-300 px-3 py-2 rounded-lg 
                        focus:outline-none focus:ring-2 focus:ring-blue-500 
                        focus:border-blue-500 transition"
@@ -86,9 +93,9 @@ const BasicInfoForm = () => {
             <option value="Women">Women</option>
           </select>
 
-          {errors.category && (
+          {errors.category_id && (
             <p className="text-sm text-red-500">
-              {errors.category.message}
+              {errors.category_id.message}
             </p>
           )}
         </div>
@@ -116,7 +123,7 @@ const BasicInfoForm = () => {
             <input
               type="checkbox"
               id="bestseller"
-              {...register("bestseller")}
+              {...register("is_bestseller")}
             />
 
             <label htmlFor="bestseller">
@@ -128,8 +135,7 @@ const BasicInfoForm = () => {
             <input
               type="checkbox"
               id="featured"
-              defaultChecked
-              {...register("featured")}
+              {...register("is_featured")}
             />
 
             <label htmlFor="featured">
@@ -137,6 +143,13 @@ const BasicInfoForm = () => {
             </label>
           </div>
         </div>
+        
+        <button
+          type="submit"
+          className="bg-zinc-800 dark:bg-zinc-200 text-zinc-200 dark:text-zinc-800 py-4 w-full rounded-lg"
+        >
+          "Submit Basic Info
+        </button>
 
       </form>
     </div>
