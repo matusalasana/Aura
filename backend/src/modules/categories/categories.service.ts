@@ -1,20 +1,19 @@
 import { 
+  CategoryRepository
 } from './categories.repository';
 
-export class CategoryService {
-  static async getCategories() {
-    return await CategoryRepository.findAll();
+  const getCategories = async() => {
+    return await CategoryRepository.getAll();
   }
 
-  static async createCategory(data: any) {
+  const  async createCategory(data: any) {
     return await CategoryRepository.create(data);
   }
 
-  static async updateCategory(id: string, data: any) {
+  const  async updateCategory(id: string, data: any) {
     return await CategoryRepository.update(id, data);
   }
 
-  static async deleteCategory(id: string) {
+  const  async deleteCategory(id: string) {
     await CategoryRepository.delete(id);
   }
-}
