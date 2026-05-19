@@ -2,244 +2,232 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, X } from "lucide-react";
 
 // Internal imports
-import { addProductSchema } from "../types";
-import { useAddProduct } from "../hooks/useAddProduct";
+import { type VariantsInput, variantsSchema } from "../types";
 
 const VariantsForm = () => {
   const {
     register,
     handleSubmit,
-    reset,
+    setValue,
+    watch,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(addProductSchema),
+  } = useForm<VariantsInput>({
+    resolver: zodResolver(variantsSchema),
+    defaultValues: {
+      size: "",
+      color: "",
+      price: 0,
+    },
   });
 
-  const { mutate: addProduct, isPending } = useAddProduct();
+  // Watch form values
+  const selectedSize = watch("size");
+  const selectedColor = watch("color");
 
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
-  
+  // Optional state for testing submitted data
+  const [formData, setFormData] = useState<VariantsInput | null>(null);
+
+  // Sizes
   const sizes = ["S", "M", "L", "XL"];
-  
+
+  // Colors
   const colors = [
     { label: "Black", hexCode: "#000000" },
     { label: "White", hexCode: "#ffffff" },
     { label: "Blue", hexCode: "#3b82f6" },
-    { label: "Red", hexCode: "#dc2626" }
-  ]
+    { label: "Red", hexCode: "#dc2626" },
+  ];
 
-  const onFormSubmit = (data) => {
-    const finalData = {
-      ...data,
-      size: selectedSize,
-    };
+  // Submit handler
+  const onFormSubmit = (data: VariantsInput) => {
+    alert(data.color);
+    alert(data.size);
+    alert(data.price);
+    alert(data.stock_quantity);
+    alert(data.sku);
 
-    addProduct(finalData, {
-      onSuccess: () => {
-        reset();
-        setSelectedSize("");
-      },
-    });
+    setFormData(data);
   };
 
   return (
-    <div className="relative">
+    <form
+      onSubmit={handleSubmit(onFormSubmit)}
+      className="w-full max-w-md mx-auto bg-white shadow-xl rounded-xl p-6 border flex flex-col gap-6"
+    >
+      <h2 className="text-xl font-semibold">
+        Product Variants
+      </h2>
+
+      {/* ================= COLORS ================= */}
+      <div className="space-y-2">
+        <p className="font-medium">
+          Selected Color: {selectedColor || "None"}
+        </p>
+
+        <div className="flex gap-3">
+          {colors.map((color) => {
+            const isSelected =
+              selectedColor === color.label;
+
+            return (
+              <button
+                key={color.label}
+                type="button"
+                onClick={() => {
+                  setValue("color", color.label, {
+                    shouldValidate: true,
+                  });
+                }}
+                className={`
+                  w-8 h-8 rounded-full border transition-all
+                  ${
+                    isSelected
+                      ? "ring-2 ring-black ring-offset-2 scale-110"
+                      : "hover:scale-105"
+                  }
+                `}
+                style={{
+                  backgroundColor: color.hexCode,
+                }}
+                aria-label={`Color ${color.label}`}
+              />
+            );
+          })}
+        </div>
+
+        {/* Color Error */}
+        {errors.color && (
+          <p className="text-sm text-red-500">
+            {errors.color.message}
+          </p>
+        )}
+      </div>
+
+      {/* ================= SIZES ================= */}
+      <div className="space-y-2">
+        <p className="font-medium">
+          Selected Size: {selectedSize || "None"}
+        </p>
+
+        <div className="grid grid-cols-4 gap-2">
+          {sizes.map((size) => {
+            const isSelected =
+              selectedSize === size;
+
+            return (
+              <button
+                key={size}
+                type="button"
+                onClick={() => {
+                  setValue("size", size, {
+                    shouldValidate: true,
+                  });
+                }}
+                className={`
+                  py-3 rounded-md border font-medium transition-all
+                  ${
+                    isSelected
+                      ? "bg-black text-white border-black"
+                      : "bg-white hover:border-black"
+                  }
+                `}
+                aria-label={`Size ${size}`}
+              >
+                {size}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Size Error */}
+        {errors.size && (
+          <p className="text-sm text-red-500">
+            {errors.size.message}
+          </p>
+        )}
+      </div>
+
+      {/* ================= PRICE ================= */}
+      <div className="space-y-2">
+        <input
+          type="number"
+          placeholder="Price"
+          {...register("price", {
+            valueAsNumber: true,
+          })}
+          className="
+            w-full border border-gray-300
+            px-3 py-2 rounded-lg
+            focus:outline-none
+            focus:ring-2 focus:ring-blue-500
+          "
+        />
+
+        {errors.price && (
+          <p className="text-sm text-red-500">
+            {errors.price.message}
+          </p>
+        )}
+      </div>
+      
+      {/* ================= STOCK ================= */}
+      <div className="space-y-2">
+        <input
+          type="number"
+          placeholder="Stock"
+          {...register("stock_quantity", {
+            valueAsNumber: true,
+          })}
+          className="
+            w-full border border-gray-300
+            px-3 py-2 rounded-lg
+            focus:outline-none
+            focus:ring-2 focus:ring-blue-500
+          "
+        />
+
+        {errors.stock_quantity && (
+          <p className="text-sm text-red-500">
+            {errors.stock_quantity.message}
+          </p>
+        )}
+      </div>
+      
+      {/* ================= SKU ================= */}
+      <div className="space-y-2">
+        <input
+          type="text"
+          placeholder="eg. PROD-WHT-X"
+          {...register("sku")}
+          className="
+            w-full border border-gray-300
+            px-3 py-2 rounded-lg
+            focus:outline-none
+            focus:ring-2 focus:ring-blue-500
+          "
+        />
+
+        {errors.sku && (
+          <p className="text-sm text-red-500">
+            {errors.sku.message}
+          </p>
+        )}
+      </div>
+
+      {/* ================= SUBMIT ================= */}
       <button
-        type="button"
-        className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-50"
-        aria-label="Close form"
+        type="submit"
+        className="
+          bg-black text-white
+          py-3 rounded-lg
+          hover:opacity-90 transition
+        "
       >
-        <X size={20} />
+        Add Product
       </button>
-
-      <form
-        onSubmit={handleSubmit(onFormSubmit)}
-        className="w-full max-w-md mx-auto bg-base-100 shadow-xl rounded-xl p-6 border border-base-200 flex flex-col items-center gap-4"
-      >
-        <h2 className="text-lg font-semibold text-base-content">
-          Publish Product
-        </h2>
-
-        {/* Product name */}
-        <div className="space-y-1 w-full">
-          <input
-            type="text"
-            placeholder="Product name"
-            {...register("name")}
-            className="w-full border border-gray-300 px-3 py-2 rounded-lg 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 
-                       focus:border-blue-500 transition"
-          />
-
-          {errors.name && (
-            <p className="text-sm text-red-500">
-              {errors.name.message}
-            </p>
-          )}
-        </div>
-
-        {/* Category */}
-        <div className="space-y-1 w-full">
-          <select
-            {...register("category")}
-            className="w-full border border-gray-300 px-3 py-2 rounded-lg 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 
-                       focus:border-blue-500 transition"
-          >
-            <option value="">Select category</option>
-            <option value="Kids">Kids</option>
-            <option value="Men">Men</option>
-            <option value="Women">Women</option>
-          </select>
-
-          {errors.category && (
-            <p className="text-sm text-red-500">
-              {errors.category.message}
-            </p>
-          )}
-        </div>
-
-        {/* Description */}
-        <div className="space-y-1 w-full">
-          <textarea
-            placeholder="Product description"
-            {...register("description")}
-            className="w-full border border-gray-300 px-3 py-2 rounded-lg 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 
-                       focus:border-blue-500 transition"
-          />
-
-          {errors.description && (
-            <p className="text-sm text-red-500">
-              {errors.description.message}
-            </p>
-          )}
-        </div>
-
-        {/* Checkboxes */}
-        <div className="space-y-3 w-full">
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="bestseller"
-              {...register("bestseller")}
-            />
-
-            <label htmlFor="bestseller">
-              Bestseller
-            </label>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="featured"
-              defaultChecked
-              {...register("featured")}
-            />
-
-            <label htmlFor="featured">
-              Featured
-            </label>
-          </div>
-        </div>
-
-        {/* Colors */}
-        <div className="w-full">
-          <p className="mb-2 font-medium">Selected Color: {selectedColor}</p>
-
-          <div className="grid grid-cols-4 gap-2">
-            {colors.map((color) => {
-              const isSelected = selectedColor === color.label;
-
-              return (
-                <button
-                  key={color.label}
-                  type="button"
-                  onClick={() => setSelectedColor(color.label)}
-                  className={`w-6 h-6 rounded-full transition-all duration-200 active:scale-90 relative ${
-                    isSelected
-                      ? "ring-2 ring-neutral-950 ring-offset-2"
-                      : "hover:scale-105 ring-1 ring-neutral-200"
-                  }`}
-                  style={{ backgroundColor: color.hexCode }}
-                  aria-label={`Color ${color}`}
-                  aria-pressed={isSelected}
-                >                
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        
-        {/* Sizes */}
-        <div className="w-full">
-          <p className="mb-2 font-medium">Selected Size: {selectedSize}</p>
-
-          <div className="grid grid-cols-4 gap-2">
-            {sizes.map((size) => {
-              const isSelected = selectedSize === size;
-
-              return (
-                <button
-                  key={size}
-                  type="button"
-                  onClick={() => setSelectedSize(size)}
-                  className={`py-3 text-sm font-mono tracking-tight transition-all duration-200 active:scale-95 rounded-md border ${
-                    isSelected
-                      ? "bg-neutral-950 border-neutral-950 text-white font-medium"
-                      : "bg-white border-neutral-200 text-neutral-800 hover:border-neutral-400"
-                  }`}
-                  aria-label={`Size ${size}`}
-                  aria-pressed={isSelected}
-                >
-                  {size}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Price */}
-        <div className="space-y-1 w-full">
-          <input
-            type="number"
-            placeholder="Price"
-            {...register("price", {
-              valueAsNumber: true,
-            })}
-            className="w-full border border-gray-300 px-3 py-2 rounded-lg 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 
-                       focus:border-blue-500 transition"
-          />
-
-          {errors.price && (
-            <p className="text-sm text-red-500">
-              {errors.price.message}
-            </p>
-          )}
-        </div>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="bg-zinc-800 dark:bg-zinc-200 text-zinc-200 dark:text-zinc-800 py-4 w-full rounded-lg"
-          aria-label="Add product"
-          aria-busy={isPending}
-        >
-          {isPending ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            "Add Product"
-          )}
-        </button>
-      </form>
-    </div>
+    </form>
   );
 };
 
