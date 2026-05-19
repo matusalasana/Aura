@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 
 // Internal imports
 import { type BasicInfoInput, basicInfoSchema } from "../types";
+import { useCategories } from "../../categories/hooks/useCategories"
 
 const BasicInfoForm = () => {
   const {
@@ -21,6 +22,7 @@ const BasicInfoForm = () => {
     },
   });
 
+  const { data: categories, isLoading, isError } = useCategories();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   
@@ -40,6 +42,7 @@ const BasicInfoForm = () => {
       ...data,
       size: selectedSize,
     };
+    alert(data.category_id)
     setFormData(finalData)
   };
 
@@ -79,11 +82,17 @@ const BasicInfoForm = () => {
                        focus:border-blue-500 transition"
           >
             <option value="">Select category</option>
-            <option value="Kids">Kids</option>
-            <option value="Men">Men</option>
-            <option value="Women">Women</option>
+        
+            {categories?.map((category) => (
+              <option
+                key={category.id}
+                value={category.id}
+              >
+                {category.name}
+              </option>
+            ))}
           </select>
-
+        
           {errors.category_id && (
             <p className="text-sm text-red-500">
               {errors.category_id.message}
