@@ -44,21 +44,12 @@ const BasicInfoForm = () => {
   };
 
   return (
-    <div className="relative">
-      <button
-        type="button"
-        className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 z-50"
-        aria-label="Close form"
-      >
-        <X size={20} />
-      </button>
-
       <form
         onSubmit={handleSubmit(onFormSubmit)}
         className="w-full max-w-md mx-auto bg-base-100 shadow-xl rounded-xl p-6 border border-base-200 flex flex-col items-center gap-4"
       >
         <h2 className="text-lg font-semibold text-base-content">
-          Publish Product
+          Basic Product Info
         </h2>
 
         {/* Product name */}
@@ -152,7 +143,6 @@ const BasicInfoForm = () => {
         </button>
 
       </form>
-    </div>
   );
 }; 
 

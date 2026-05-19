@@ -1,41 +1,98 @@
 import { Request, Response } from 'express';
-import { CategoryService } from './categories.service';
+import { 
+  getCategoriesService,
+  createCategoryService,
+  updateCategoryService,
+  deleteCategoryService
+} from './categories.service';
 import { asyncHandler } from '../../utils/asyncHandler';
 import { ApiResponse } from '../../utils/ApiResponse';
 
-export class CategoryController {
-  static getCategories = asyncHandler(async (req: Request, res: Response) => {
-    const categories = await CategoryService.getCategories();
-
+// GET ALL
+export const getCategories = async (
+  req: Request, 
+  res: Response
+) => {
+  try{
+    const categories = await getCategoriesService();
     return res
       .status(200)
-      .json(ApiResponse(200, categories, 'Categories fetched successfully'));
-  });
+      .json(categories);
+      
+    }catch(err){
+      console.log("Get categories error:", err.message);
+      return res
+        .status(500)
+        .json({
+          message: `Get categories error: ${err.message}`
+        })
+    };
+};
 
-  static createCategory = asyncHandler(async (req: Request, res: Response) => {
-    const category = await CategoryService.createCategory(req.body);
-
+// CREATE 
+export const createCategory = async (
+  req: Request, 
+  res: Response
+) => {
+  try{
+    const newCategory = await createCategoryService(req.body);
     return res
       .status(201)
-      .json(ApiResponse(201, category, 'Category created successfully'));
-  });
+      .json(newCategory);
+      
+    }catch(err){
+      console.log("Create category error:", err.message);
+      return res
+        .status(400)
+        .json({
+          message: `Create category error: ${err.message}`
+        })
+    }
+};
 
-  static updateCategory = asyncHandler(async (req: Request, res: Response) => {
-    const category = await CategoryService.updateCategory(
+// UPDATE 
+export const updateCategory = async (
+  req: Request, 
+  res: Response
+) => {
+  try{
+    const updatedCategory = await updateCategoryService(
       req.params.id,
       req.body
     );
-
     return res
       .status(200)
-      .json(ApiResponse(200, category, 'Category updated successfully'));
-  });
+      .json(updatedCategory);
+      
+    }catch(err){
+      console.log("Update category error:", err.message);
+      return res
+        .status(400)
+        .json({
+          message: `Update category error: ${err.message}`
+        })
+    }
+};
 
-  static deleteCategory = asyncHandler(async (req: Request, res: Response) => {
-    await CategoryService.deleteCategory(req.params.id);
-
+// DELETE 
+export const deleteCategory = async (
+  req: Request, 
+  res: Response
+) => {
+  try{
+    const deleteConfirmation = await deleteCategoryService(
+      req.params.id
+    );
     return res
       .status(200)
-      .json(ApiResponse(200, {}, 'Category deleted successfully'));
-  });
-}
+      .json({message: "Category deleted"});
+      
+    }catch(err){
+      console.log("Delete category error:", err.message);
+      return res
+        .status(400)
+        .json({
+          message: `Delete category error: ${err.message}`
+        })
+    }
+};
