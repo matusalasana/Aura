@@ -1,8 +1,14 @@
 import { z } from "zod"
 
-export const createCategoriesSchema = z.object({
-  name: z.string().min(1, "Category name is required"),
+export const createCategorySchema = z.object({
+  name: z.string().min(2),
   image_url: z.string().min(1, "Category image is required"),
 });
 
-export type CreateCategoriesInput = z.infer<typeof createCategoriesSchema>;
+export const updateCategorySchema = z.object({
+  name: z.string(). optional(),
+  image_url: z.string().optional(),
+});
+
+export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;

@@ -1,10 +1,5 @@
 import { Request, Response } from 'express';
-import { 
-  getCategoriesService,
-  createCategoryService,
-  updateCategoryService,
-  deleteCategoryService
-} from './categories.service';
+import { CategoryService } from './categories.service';
 import { asyncHandler } from '../../utils/asyncHandler';
 import { ApiResponse } from '../../utils/ApiResponse';
 
@@ -14,7 +9,7 @@ export const getCategories = async (
   res: Response
 ) => {
   try{
-    const categories = await getCategoriesService();
+    const categories = await CategoryService.getAll();
     return res
       .status(200)
       .json(categories);
@@ -35,7 +30,7 @@ export const createCategory = async (
   res: Response
 ) => {
   try{
-    const newCategory = await createCategoryService(req.body);
+    const newCategory = await CategoryService.create(req.body);
     return res
       .status(201)
       .json(newCategory);
@@ -56,7 +51,7 @@ export const updateCategory = async (
   res: Response
 ) => {
   try{
-    const updatedCategory = await updateCategoryService(
+    const updatedCategory = await CategoryService.update(
       req.params.id,
       req.body
     );
@@ -80,7 +75,7 @@ export const deleteCategory = async (
   res: Response
 ) => {
   try{
-    const deleteConfirmation = await deleteCategoryService(
+    const deleteConfirmation = await CategoryService.deleteOne(
       req.params.id
     );
     return res

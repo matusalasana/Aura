@@ -1,19 +1,33 @@
 import { 
   CategoryRepository
 } from './categories.repository';
+import { 
+  CreateCategoryInput,
+  UpdateCategoryInput
+} from './categories.validation';
 
-  const getCategories = async() => {
-    return await CategoryRepository.getAll();
-  }
+const getAll = async() => {
+  return await CategoryRepository.getAll();
+};
 
-  const  async createCategory(data: any) {
-    return await CategoryRepository.create(data);
-  }
+const create = async(
+  data: CreateCategoriesInput) => {
+  return await CategoryRepository.create(data);
+};
 
-  const  async updateCategory(id: string, data: any) {
-    return await CategoryRepository.update(id, data);
-  }
+const update = async(
+  id: string, 
+  data: UpdateCategoryInput) => {
+  return await CategoryRepository.update(id, data);
+};
 
-  const  async deleteCategory(id: string) {
-    await CategoryRepository.delete(id);
-  }
+const deleteOne = async(id: string) => {
+  await CategoryRepository.deleteOne(id);
+};
+
+export const CategoryService = {
+  getAll,
+  create,
+  update,
+  deleteOne
+};
