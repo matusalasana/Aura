@@ -14,6 +14,7 @@ import ProductDetailsPage from "./features/products/pages/ProductDetailsPage";
 import CartPage from "./features/cart/pages/CartPage";
 import Homepage from "./features/home/pages/Homepage";
 import ProfilePage from "./features/profile/pages/ProfilePage";
+import ProductList from "./features/admin/products/pages/ProductList";
 import About from "./shared/ui/About";
 import Dev from "./shared/ui/Dev";
 
@@ -28,6 +29,7 @@ const App = () => {
         <Route element={<MainLayout />}>
         
           {/* PUBLIC ROUTES */}
+          <Route path="/admin" element={<ProductList />} />
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterationPage />} />
@@ -41,6 +43,8 @@ const App = () => {
           <Route element={<ProtectRoutes />}>
             <Route path="/cart" element={<CartPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            
+           
           </Route>
           
         </Route>
