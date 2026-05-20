@@ -52,3 +52,9 @@ const removeFromWishlist = async (req: Request, res: Response) => {
     });
   };
 };
+
+export const WishlistController = {
+  getWishlistItems,
+  addToWishlist,
+  removeFromWishlist
+};

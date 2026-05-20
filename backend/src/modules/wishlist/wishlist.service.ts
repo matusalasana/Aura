@@ -29,3 +29,9 @@ const remove = async(userId: string, productId: string) => {
   };
   await WishlistRepository.remove(userId, productId);
 };
+
+export const WishlistService = {
+  getAll,
+  add,
+  remove
+}
