@@ -1,21 +1,37 @@
 import { Request, Response } from 'express';
 import { WishlistService } from './wishlist.service';
-import { asyncHandler } from '../../utils/asyncHandler';
-import { ApiResponse } from '../../utils/ApiResponse';
 
-export class WishlistController {
-  static getWishlist = asyncHandler(async (req: Request, res: Response) => {
-    const list = await WishlistService.getWishlist(req.user!.id);
-    return res.status(200).json(new ApiResponse(200, list, 'Wishlist fetched successfully'));
-  });
 
-  static addToWishlist = asyncHandler(async (req: Request, res: Response) => {
-    const item = await WishlistService.addToWishlist(req.user!.id, req.body.productId);
-    return res.status(201).json(new ApiResponse(201, item, 'Added to wishlist'));
-  });
+const getWishlistItems = async (req: Request, res: Response) => {
+  try{
+    const list = await WishlistService.getAll(req.user!.id);
+  return res
+    .status(200)
+    .json(list);
+  }catch(err){
+    console.log("Get all wishlist items:", err.message);
+    res.status(500).json({
+      message: `Get all wishlist items: ${err.message}`
+    });
+  };
+};
 
-  static removeFromWishlist = asyncHandler(async (req: Request, res: Response) => {
-    await WishlistService.removeFromWishlist(req.user!.id, req.params.productId);
-    return res.status(200).json(new ApiResponse(200, {}, 'Removed from wishlist'));
-  });
+const addToWishlist = async(req: Request, res: Response) => {
+  try{
+    const newWishlistItem = await WishlistService.add(req.user!.id);
+  return res
+    .status(201)
+    .json(newWishlistItem);
+  }catch(err){
+    console.log("Add to wishlist err:", err.message);
+    res.status(500).json({
+      message: `Add to wishlist err: ${err.message}`
+    });
+  };
+};
+
+const removeFromWishlist = asyncHandler(async (req: Request, res: Response) => {
+  await WishlistService.removeFromWishlist(req.user!.id, req.params.productId);
+  return res.status(200).json(new ApiResponse(200, {}, 'Removed from wishlist'));
+});
 }
