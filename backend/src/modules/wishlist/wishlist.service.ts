@@ -8,6 +8,15 @@ const getAll = async(userId: string) => {
 }
 
 const add = async(userId: string, productId: string) => {
+  const exists = await WishlistRepository.findById(
+    productId
+  );
+  if(exists){
+    return await WishlistRepository.remove(
+      userId,
+      productId
+    );
+  }
   return await WishlistRepository.add(userId, productId);
 }
 
