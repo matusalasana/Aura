@@ -18,7 +18,10 @@ const getWishlistItems = async (req: Request, res: Response) => {
 
 const addToWishlist = async(req: Request, res: Response) => {
   try{
-    const newWishlistItem = await WishlistService.add(req.user!.id);
+    const newWishlistItem = await WishlistService.add(
+      req.user!.id,
+      req.body.product_id
+    );
   return res
     .status(201)
     .json(newWishlistItem);
