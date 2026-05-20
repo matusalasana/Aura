@@ -8,6 +8,9 @@ const getAll = async(userId: string) => {
 }
 
 const add = async(userId: string, productId: string) => {
+  if(!userId){
+    throw new Error("User id not found");
+  }
   const exists = await WishlistRepository.findById(
     productId
   );
@@ -20,6 +23,9 @@ const add = async(userId: string, productId: string) => {
   return await WishlistRepository.add(userId, productId);
 }
 
-const async remove(userId: string, productId: string) {
+const remove = async(userId: string, productId: string) => {
+  if(!userId){
+    throw new Error("User id not found");
+  };
   await WishlistRepository.remove(userId, productId);
-}
+};
