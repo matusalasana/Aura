@@ -31,8 +31,19 @@ const add = async (userId: string, productId: string) => {
     RETURNING *
   `;
   return result[0];
-}
+};
 
-const  remove (userId: string, productId: string) {
-  await sql`DELETE FROM wishlist WHERE user_id = ${userId} AND product_id = ${productId}`;
-}
+const remove = async(userId: string, productId: string) => {
+  await sql`
+    DELETE FROM wishlist 
+    WHERE 
+      user_id = ${userId} 
+      AND product_id = ${productId}`;
+};
+
+
+export const WishlistRepository = {
+  findAll,
+  add,
+  remove
+};
