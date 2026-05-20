@@ -18,11 +18,16 @@ const findAll = async(userId: string) => {
   `;
 };
 
-const  add = async (userId: string, productId: string) => {
+const add = async (userId: string, productId: string) => {
   const result = await sql`
-    INSERT INTO wishlist (user_id, product_id)
-    VALUES (${userId}, ${productId})
-    ON CONFLICT (user_id, product_id) DO NOTHING
+    INSERT INTO wishlist (
+      user_id, 
+      product_id
+    )
+    VALUES (
+      ${userId}, 
+      ${productId}
+    )
     RETURNING *
   `;
   return result[0];
