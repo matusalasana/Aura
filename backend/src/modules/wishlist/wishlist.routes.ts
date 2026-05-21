@@ -6,7 +6,7 @@ const router = Router();
 
 router.use(verifyJWT);
 
-router.get('/', WishlistController.getWishlist);
+router.get('/', WishlistController.getWishlistItems);
 router.post('/', WishlistController.addToWishlist);
 router.delete('/:productId', WishlistController.removeFromWishlist);
 

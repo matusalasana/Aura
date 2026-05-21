@@ -3,31 +3,37 @@ import { WishlistService } from './wishlist.service';
 
 
 // GET ALL
-const getWishlistItems = async (req: Request, res: Response) => {
+const getWishlistItems = async (
+  req: Request, 
+  res: Response
+) => {
   try{
     const list = await WishlistService.getAll(req.user!.id);
     return res
       .status(200)
       .json(list);
-  }catch(err){
-    console.log("Get all wishlist items:", err.message);
+  }catch(err: any){
+    console.log("Get all wishlist items err:", err.message);
     res.status(500).json({
-      message: `Get all wishlist items: ${err.message}`
+      message: `Get all wishlist items err: ${err.message}`
     });
   };
 };
 
 // ADD 
-const addToWishlist = async(req: Request, res: Response) => {
+const addToWishlist = async(
+  req: Request, 
+  res: Response
+) => {
   try{
     const newWishlistItem = await WishlistService.add(
       req.user!.id,
-      req.body.product_id
+      req.params.product_id
     );
     return res
       .status(201)
       .json(newWishlistItem);
-  }catch(err){
+  }catch(err: any){
     console.log("Add to wishlist err:", err.message);
     res.status(401).json({
       message: `Add to wishlist err: ${err.message}`
@@ -36,7 +42,10 @@ const addToWishlist = async(req: Request, res: Response) => {
 };
 
 // REMOVE 
-const removeFromWishlist = async (req: Request, res: Response) => {
+const removeFromWishlist = async (
+  req: Request, 
+  res: Response
+) => {
   try{
     const newWishlistItem = await WishlistService.remove(
       req.user!.id,
@@ -45,7 +54,7 @@ const removeFromWishlist = async (req: Request, res: Response) => {
   return res
     .status(200)
     .json({message: "item removed from wishlist"});
-  }catch(err){
+  }catch(err: any){
     console.log("Remove wishlist err:", err.message);
     res.status(401).json({
       message: `Remove wishlist err: ${err.message}`

@@ -1,6 +1,6 @@
 import { sql } from '../../config/db';
 
-const findAll = async(userId: string) => {
+const getAll = async(userId: string) => {
   return await sql`
     SELECT 
       w.*, 
@@ -41,9 +41,20 @@ const remove = async(userId: string, productId: string) => {
       AND product_id = ${productId}`;
 };
 
+const findById = async(productId: string) => {
+  const result = await sql`
+    SELECT * FROM wishlist
+    WHERE product_id = ${productId}
+    LIMIT 1
+  `;
+
+  return result[0];
+};
+
 
 export const WishlistRepository = {
-  findAll,
+  getAll,
   add,
-  remove
+  remove,
+  findById
 };
