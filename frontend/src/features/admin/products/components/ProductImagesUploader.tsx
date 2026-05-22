@@ -4,61 +4,99 @@ import { uploadMultipleToCloudinary } from "../../../../shared/utils/uploadToClo
 
 const ProductImagesUploader = () => {
   const [loading, setLoading] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
-  
+
+  // store actual files
+  const [files, setFiles] = useState<File[]>([]);
+
+  // store preview URLs
+  const [previews, setPreviews] = useState<string[]>([]);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
-  
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-  
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+
+    if (selectedFiles.length === 0) return;
+
+    // store files
+    setFiles((prev) => [...prev, ...selectedFiles]);
+
+    // create preview URLs
+    const previewUrls = selectedFiles.map((file) =>
+      URL.createObjectURL(file)
+    );
+
+    // store previews
+    setPreviews((prev) => [...prev, ...previewUrls]);
+  };
+
+  const handleSubmit = async () => {
     try {
       setLoading(true);
-  
-      const urls = await uploadMultipleToCloudinary(files);
-      setLoading(urls);
-  
+
+      // upload images to cloudinary
+      const imageUrls = await uploadMultipleToCloudinary(files);
+
+      console.log("Uploaded URLs:", imageUrls);
+
+      // later:
+      // await createProduct({ images: imageUrls })
+
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <div>
-      
-      <div className="flex gap-3 lg:gap-5 my-5">
-      {selectedImages.map((url) => (
-        <img 
-          src ={url} 
-          alt="Product images"
-          className="backdrop-blur w-20 h-20 object-cover rounded"
-        />
-      ))}
+
+      {/* previews */}
+      <div className="flex gap-3 mt-4 flex-wrap">
+        {previews.map((preview, index) => (
+          <img
+            key={index}
+            src={preview}
+            alt="preview"
+            className="w-24 h-24 object-cover rounded-lg border"
+          />
+        ))}
       </div>
 
+      {/* hidden input */}
       <input
         type="file"
         accept="image/*"
+        multiple
         onChange={handleChange}
         ref={inputRef}
         className="hidden"
       />
 
+      {/* select images button */}
       <button
+        type="button"
         onClick={() => inputRef.current?.click()}
         disabled={loading}
         className="flex gap-3 items-center justify-center bg-indigo-100 dark:text-white px-4 py-2 rounded-lg shadow-lg"
       >
-        <p>{loading ? "Uploading" : "Upload Image(s)"}</p>
-        <ImageUp size={16} className="text-indigo-600"/>
+        <p>Select Images</p>
+        <ImageUp size={16} className="text-indigo-600" />
       </button>
-      
-    </div>
-    
-  )
-  
-}
 
-export default ProductImagesUploader
+      {/* submit button */}
+      <button
+        type="button"
+        onClick={handleSubmit}
+        disabled={loading}
+        className="flex gap-3 items-center justify-center dark:text-white px-4 py-2 rounded-lg shadow-lg mt-4"
+      >
+        <p>{loading ? "Submitting..." : "Submit"}</p>
+      </button>
+
+    </div>
+  );
+};
+
+export default ProductImagesUploader;
