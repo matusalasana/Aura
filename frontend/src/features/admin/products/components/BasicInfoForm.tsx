@@ -1,5 +1,5 @@
 // External imports
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
@@ -11,24 +11,31 @@ import { type BasicInfoInput, basicInfoSchema } from "../types";
 import { useCategories } from "../../categories/hooks/useCategories"
 
 const BasicInfoForm = () => {
+  const setBasicData = useProductStore(
+    (state) => state.setBasicData
+  );
+  const basicInfo = useProductStore(
+    (state) => state.data
+  );
+  
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(basicInfoSchema),
     defaultValues: {
-      is_bestseller: false,
-      is_featured: true,
+      name: basicInfo?.name ?? "",
+      description: basicInfo?.description ?? "",
+      category_id: basicInfo?.category_id ?? "",
+      is_bestseller: basicInfo?.is_bestseller ?? false,
+      is_featured: basicInfo?.is_featured ?? true,
     },
   });
   
   const navigate = useNavigate();
-  
-  const setBasicData = useProductStore(
-    (state) => state.setBasicData
-  );
 
   const { data: categories, isLoading, isError } = useCategories();
   const [selectedSize, setSelectedSize] = useState("");
@@ -54,6 +61,12 @@ const BasicInfoForm = () => {
   
     navigate("/admin/products/variants");
   };
+  
+  useEffect(() => {
+    if(basicInfo.category_id){
+      setValue("category_id", basicInfo.category_id)
+    }
+  }, [setValue, isLoading, basicInfo.category_id])
 
   return (
       <form
