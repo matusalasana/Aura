@@ -15,6 +15,9 @@ import CartPage from "./features/cart/pages/CartPage";
 import Homepage from "./features/home/pages/Homepage";
 import ProfilePage from "./features/profile/pages/ProfilePage";
 import ProductList from "./features/admin/products/pages/ProductList";
+import BasicInfoForm from "./features/admin/products/components/BasicInfoForm";
+import VariantsForm from "./features/admin/products/components/VariantsForm";
+import ProductImagesUploader from "./features/admin/products/components/ProductImagesUploader";
 import About from "./shared/ui/About";
 import Dev from "./shared/ui/Dev";
 
@@ -30,6 +33,10 @@ const App = () => {
         
           {/* PUBLIC ROUTES */}
           <Route path="/admin" element={<ProductList />} />
+          <Route path="/admin/products/basic" element={<BasicInfoForm />} />
+          <Route path="/admin/products/variants" element={<VariantsForm />} />
+          <Route path="/admin/products/images" element={<ProductImagesUploader />} />
+          
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterationPage />} />

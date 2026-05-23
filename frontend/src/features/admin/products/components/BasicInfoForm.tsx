@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Internal imports
 import { type BasicInfoInput, basicInfoSchema } from "../types";
@@ -21,6 +22,8 @@ const BasicInfoForm = () => {
       is_featured: true,
     },
   });
+  
+  const navigate = useNavigate();
 
   const { data: categories, isLoading, isError } = useCategories();
   const [selectedSize, setSelectedSize] = useState("");
@@ -44,6 +47,7 @@ const BasicInfoForm = () => {
     };
     alert(data.category_id)
     setFormData(finalData)
+    navigate()
   };
 
   return (
