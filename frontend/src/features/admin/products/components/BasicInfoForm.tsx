@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useProductStore } from "../store/productStore";
 
-// Internal imports
+// Internal imports 
 import { type BasicInfoInput, basicInfoSchema } from "../types";
 import { useCategories } from "../../categories/hooks/useCategories"
 
@@ -24,12 +25,14 @@ const BasicInfoForm = () => {
   });
   
   const navigate = useNavigate();
+  
+  const setBasicData = useProductStore(
+    (state) => state.setBasicData
+  );
 
   const { data: categories, isLoading, isError } = useCategories();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  
-  const [formData, setFormData] = useState<BasicInfoInput | null>(null); 
   
   const sizes = ["S", "M", "L", "XL"];
   
@@ -44,10 +47,12 @@ const BasicInfoForm = () => {
     const finalData = {
       ...data,
       size: selectedSize,
+      color: selectedColor,
     };
-    alert(data.category_id)
-    setFormData(finalData)
-    navigate()
+  
+    setBasicData(finalData);
+  
+    navigate("/admin/products/variants");
   };
 
   return (
@@ -152,7 +157,7 @@ const BasicInfoForm = () => {
           type="submit"
           className="bg-zinc-800 dark:bg-zinc-200 text-zinc-200 dark:text-zinc-800 py-4 w-full rounded-lg"
         >
-          Submit Basic Info
+          Next
         </button>
 
       </form>
