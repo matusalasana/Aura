@@ -140,7 +140,7 @@ aura-commerce/
 ## 📥 Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/aura-commerce.git
+git clone git@github.com:matusalasana/Aura.git
 ```
 
 ---
