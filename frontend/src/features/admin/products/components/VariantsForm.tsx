@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // Internal imports
 import { type VariantsInput, variantsSchema } from "../types";
 import ProductVariantCard from "./ProductVariantCard";
-import { useProductStore } from "../store/productStore";
+import { useProductVariantsInfoStore } from "../store/productVariantsStore";
 
 const VariantsForm = () => {
   const {
@@ -29,9 +29,6 @@ const VariantsForm = () => {
   const selectedSize = watch("size");
   const selectedColor = watch("color");
   
-  // State management 
-  const basicData = useProductStore((state) => state.data);
-
   // Optional state for testing submitted data
   const [variants, setVariants] = useState<VariantsInput[]>([]);
 
@@ -64,10 +61,7 @@ const VariantsForm = () => {
         className="w-full max-w-md mx-auto bg-white shadow-xl rounded-xl p-6 border flex flex-col gap-6"
       >
         <h2 className="text-xl font-semibold">
-          Product Variants {basicData.size}
-        </h2>
-        <h2 className="text-xl font-semibold">
-          Product Variants {basicData.color}
+          Product Variants 
         </h2>
         
         {variants.length > 0 && (

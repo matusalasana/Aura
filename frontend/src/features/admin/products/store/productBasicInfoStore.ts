@@ -6,26 +6,9 @@ interface BasicInfoState {
   data: BasicInfoInput | null;
 
   setBasicData: (data: BasicInfoInput) => void;
-}
+};
 
 export const useProductBasicInfoStore = create<BasicInfoState>()(
-  persist(
-    (set) => ({
-      data: null,
-
-      setBasicData: (data) =>
-        set({
-          data,
-        }),
-    }),
-    {
-      name: "product-basic-info-storage",
-    }
-  )
-);
-
-
-export const useProductVariantsStore = create<BasicInfoState>()(
   persist(
     (set) => ({
       data: null,

@@ -4,17 +4,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useProductStore } from "../store/productStore";
+import { useProductBasicInfoStore } from "../store/productBasicInfoStore";
 
 // Internal imports 
 import { type BasicInfoInput, basicInfoSchema } from "../types";
 import { useCategories } from "../../categories/hooks/useCategories"
 
 const BasicInfoForm = () => {
-  const setBasicData = useProductStore(
+  const setBasicData = useProductBasicInfoStore(
     (state) => state.setBasicData
   );
-  const basicInfo = useProductStore(
+  const basicInfo = useProductBasicInfoStore(
     (state) => state.data
   );
   
@@ -98,6 +98,7 @@ const BasicInfoForm = () => {
         {/* Category */}
         <div className="space-y-1 w-full">
           <select
+            disabled={isLoading}
             {...register("category_id")}
             className="w-full border border-gray-300 px-3 py-2 rounded-lg 
                        focus:outline-none focus:ring-2 focus:ring-blue-500 
