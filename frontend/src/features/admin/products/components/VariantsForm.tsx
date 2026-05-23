@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // Internal imports
 import { type VariantsInput, variantsSchema } from "../types";
 import ProductVariantCard from "./ProductVariantCard";
-import { useProductVariantsInfoStore } from "../store/productVariantsStore";
+import { useVariantsStore } from "../store/productVariantsStore";
 
 const VariantsForm = () => {
   const {

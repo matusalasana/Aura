@@ -3,19 +3,19 @@ import { persist } from "zustand/middleware";
 import { type BasicInfoInput } from "../types";
 
 interface BasicInfoState {
-  data: BasicInfoInput | null;
+  basicInfo: BasicInfoInput | null;
 
-  setBasicData: (data: BasicInfoInput) => void;
+  setBasicData: (basicInfo: BasicInfoInput) => void;
 };
 
-export const useProductBasicInfoStore = create<BasicInfoState>()(
+export const useBasicInfoStore = create<BasicInfoState>()(
   persist(
     (set) => ({
-      data: null,
+      basicInfo: null,
 
-      setBasicData: (data) =>
+      setBasicData: (basicInfo) =>
         set({
-          data,
+          basicInfo,
         }),
     }),
     {

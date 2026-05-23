@@ -4,18 +4,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useProductBasicInfoStore } from "../store/productBasicInfoStore";
+import { useBasicInfoStore } from "../store/productBasicInfoStore";
 
 // Internal imports 
 import { type BasicInfoInput, basicInfoSchema } from "../types";
 import { useCategories } from "../../categories/hooks/useCategories"
 
 const BasicInfoForm = () => {
-  const setBasicData = useProductBasicInfoStore(
+  const setBasicData = useBasicInfoStore(
     (state) => state.setBasicData
   );
-  const basicInfo = useProductBasicInfoStore(
-    (state) => state.data
+  const basicInfo = useBasicInfoStore(
+    (state) => state.basicInfo
   );
   
   const {
@@ -51,22 +51,15 @@ const BasicInfoForm = () => {
   ]
 
   const onFormSubmit = (data: BasicInfoInput) => {
-    const finalData = {
-      ...data,
-      size: selectedSize,
-      color: selectedColor,
-    };
-  
-    setBasicData(finalData);
-  
+    setBasicData(data);
     navigate("/admin/products/variants");
   };
   
   useEffect(() => {
-    if(basicInfo.category_id){
-      setValue("category_id", basicInfo.category_id)
-    }
-  }, [setValue, isLoading, basicInfo.category_id])
+  if (basicInfo?.category_id) {
+    setValue("category_id", basicInfo.category_id);
+  }
+}, [setValue, isLoading, basicInfo?.category_id]);
 
   return (
       <form
