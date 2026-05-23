@@ -8,7 +8,7 @@ import {
 
 
 // OVERVIEW
-export const getAnalyticsOverview = async (req: Request, res: Response) => {
+const getAnalyticsOverview = async (req: Request, res: Response) => {
   try {
     const data = await getAnalyticsOverviewService();
     return res.status(200).json(data);
@@ -20,7 +20,7 @@ export const getAnalyticsOverview = async (req: Request, res: Response) => {
 
 
 // REVENUE
-export const getRevenueAnalytics = async (req: Request, res: Response) => {
+const getRevenueAnalytics = async (req: Request, res: Response) => {
   try {
     const data = await getRevenueAnalyticsService();
     return res.status(200).json(data);
@@ -32,7 +32,7 @@ export const getRevenueAnalytics = async (req: Request, res: Response) => {
 
 
 // USERS
-export const getUserAnalytics = async (req: Request, res: Response) => {
+const getUserAnalytics = async (req: Request, res: Response) => {
   try {
     const data = await getUsersCountService();
     return res.status(200).json(data);
@@ -44,7 +44,7 @@ export const getUserAnalytics = async (req: Request, res: Response) => {
 
 
 // TOP PRODUCTS
-export const getTopProductsAnalytics = async (req: Request, res: Response) => {
+const getTopProductsAnalytics = async (req: Request, res: Response) => {
   try {
     const data = await getTopProductsService();
     return res.status(200).json(data);
@@ -53,3 +53,10 @@ export const getTopProductsAnalytics = async (req: Request, res: Response) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+export const AnalyticsController = {
+  getAnalyticsOverview,
+  getRevenueAnalytics,
+  getUserAnalytics,
+  getTopProductsAnalytics
+}
