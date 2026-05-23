@@ -22,8 +22,6 @@ export const imagesUploadSchema = z.object({
   url: z.string().min(1, "Image is required"),
 });
 
-
-
 export type BasicInfoInput = z.infer<typeof basicInfoSchema>;
 export type VariantsInput = z.infer<typeof variantsSchema>;
 export type ImageUploadSchema = z.infer<typeof imagesUploadSchema>;
