@@ -5,18 +5,25 @@ import {
   getTopProductsRepo,
 } from './analytics.repository.js';
 
-export const getAnalyticsOverviewService = async () => {
+const getAnalyticsOverviewService = async () => {
   return await getOverviewRepo();
 };
 
-export const getRevenueAnalyticsService = async () => {
+const getRevenueAnalyticsService = async () => {
   return await getRevenueRepo();
 };
 
-export const getUsersCountService = async () => {
+const getUsersCountService = async () => {
   return await getUsersCountRepo();
 };
 
-export const getTopProductsService = async () => {
+const getTopProductsService = async () => {
   return await getTopProductsRepo();
 };
+
+export const AnalyticsService = {
+  getAnalyticsOverviewService,
+  getRevenueAnalyticsService,
+  getUsersCountService,
+  getTopProductsService
+}
