@@ -8,6 +8,7 @@ import ProductVariantCard from "./ProductVariantCard";
 import { useVariantsStore } from "../store/productVariantsStore";
 
 const SIZES = ["28", "29", "30", "32", "36", "38"];
+const inputFields = ["price", "stock_quantity"];
 const COLORS = [
   { label: "Black", hexCode: "#000000" },
   { label: "White", hexCode: "#ffffff" },
@@ -24,9 +25,7 @@ const DEFAULT_VALUES: VariantsInput = {
 
 const VariantsForm = () => {
   const navigate = useNavigate();
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-
-  const { variants, addVariant, deleteVariant, updateVariant } = useVariantsStore();
+  const { variants, addVariant, deleteVariant } = useVariantsStore();
 
   const {
     register,
@@ -47,16 +46,13 @@ const VariantsForm = () => {
 
   const clearForm = () => {
     reset(DEFAULT_VALUES);
-    setEditingIndex(null);
   };
 
   const handleAddVariant = async () => {
     if (!(await trigger())) return;
     
     const values = getValues();
-    const success = editingIndex !== null 
-      ? updateVariant(editingIndex, values) 
-      : addVariant(values);
+    const success = addVariant(values);
 
     if (!success) {
       alert("Variant with same color and size already exists.");
@@ -66,13 +62,6 @@ const VariantsForm = () => {
     clearForm();
   };
 
-  const handleEdit = (variant: VariantsInput, index: number) => {
-    setEditingIndex(index);
-    Object.entries(variant).forEach(([key, val]) => {
-      setValue(key as keyof VariantsInput, val);
-    });
-  };
-
   const onFormSubmit = () => {
     if (variants.length === 0) {
       toast.error("Please add at least one variant.");
@@ -80,10 +69,12 @@ const VariantsForm = () => {
     }
     navigate("/admin/products/images");
   };
-
   return (
     <form
-      onSubmit={handleSubmit(onFormSubmit)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onFormSubmit();
+      }}
       className="w-full max-w-md mx-auto bg-white dark:bg-zinc-900 shadow-xl rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 flex flex-col gap-6 text-zinc-900 dark:text-zinc-100"
     >
       <h2 className="text-xl font-semibold">Product Variants</h2>
@@ -96,7 +87,6 @@ const VariantsForm = () => {
               <ProductVariantCard
                 {...v}
                 onDelete={() => deleteVariant(index)}
-                onEdit={() => handleEdit(v, index)}
               />
             </div>
           ))}
@@ -154,7 +144,7 @@ const VariantsForm = () => {
       </div>
 
       {/* INPUT FIELDS */}
-      {(["price", "stock_quantity"] as const).map((field) => (
+      {inputFields.map((field) => (
         <div key={field} className="space-y-2">
           <input
             type="number"
@@ -172,7 +162,7 @@ const VariantsForm = () => {
         onClick={handleAddVariant}
         className="bg-black text-white dark:bg-white dark:text-black hover:opacity-90 py-3 rounded-lg font-medium transition-opacity"
       >
-        {editingIndex !== null ? "Update Variant" : "Add Variant"}
+        Add Variant
       </button>
 
       <button

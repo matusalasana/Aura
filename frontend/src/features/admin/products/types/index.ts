@@ -13,8 +13,8 @@ export const basicInfoSchema = z.object({
 export const variantsSchema = z.object({
   color: z.string().min(1, "Color is required"),
   size: z.string().min(1, "Size is required"),
-  price: z.number().positive().min(100, "Amount must be greater than 100 ETB"),
-  stock_quantity: z.number().int().nonnegative(),
+  price: z.number().positive().min(100, "Price must be greater than 100 ETB"),
+  stock_quantity: z.number().int().nonnegative().min(1, "minimum stock quantity is one"),
 });
 
 export const imagesUploadSchema = z.object({

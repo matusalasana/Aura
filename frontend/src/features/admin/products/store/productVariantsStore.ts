@@ -8,11 +8,6 @@ interface VariantsState {
   addVariant: (data: VariantsInput) => boolean;
 
   deleteVariant: (index: number) => void;
-
-  updateVariant: (
-    index: number,
-    data: VariantsInput
-  ) => void;
 }
 
 export const useVariantsStore = create<VariantsState>()(
@@ -45,13 +40,6 @@ export const useVariantsStore = create<VariantsState>()(
         ),
       })),
 
-    updateVariant: (index, data) =>
-      set((state) => ({
-        variants: state.variants.map(
-          (variant, i) =>
-            i === index ? data : variant
-        ),
-      })),
   }),
   
   {

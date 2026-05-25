@@ -13,8 +13,6 @@ interface VariantProps {
   stock_quantity: number;
 
   onDelete: () => void;
-
-  onEdit: () => void;
 }
 
 const ProductVariantCard = ({
@@ -23,7 +21,6 @@ const ProductVariantCard = ({
   price,
   stock_quantity,
   onDelete,
-  onEdit,
 }: VariantProps) => {
   return (
     <div
@@ -41,13 +38,6 @@ const ProductVariantCard = ({
         </div>
 
         <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={onEdit}
-          >
-            <Pencil size={18} />
-          </button>
-
           <button
             type="button"
             onClick={onDelete}
@@ -88,10 +78,7 @@ const ProductVariantCard = ({
           </p>
 
           <h2 className="text-lg font-bold">
-            $
-            {price.toFixed(
-              2
-            )}
+            {Number(price).toLocaleString()} ETB
           </h2>
         </div>
 
