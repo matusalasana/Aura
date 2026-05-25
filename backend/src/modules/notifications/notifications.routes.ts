@@ -1,24 +1,18 @@
 import { Router } from 'express';
 import { verifyJWT, authorize } from '../../middleware/auth.middleware';
 
-import {
-  getMyNotifications,
-  markNotificationRead,
-  getAllNotifications,
-  createNotification,
-  deleteNotification,
-} from './notifications.controller.js';
+import { NotificationController } from './notifications.controller.js';
 
 const router = Router();
 
 router.use(verifyJWT);
 
-router.get('/me', getMyNotifications);
-router.patch('/:id/read', markNotificationRead);
+router.get('/me', NotificationController.getMyNotifications);
+router.patch('/:id/read', NotificationController.markNotificationRead);
 
 // ADMIN
-router.get('/admin/all', authorize('admin'), getAllNotifications);
-router.post('/admin', authorize('admin'), createNotification);
-router.delete('/admin/:id', authorize('admin'), deleteNotification);
+router.get('/admin/all', authorize('admin'), NotificationController.getAllNotifications);
+router.post('/admin', authorize('admin'), NotificationController.createNotification);
+router.delete('/admin/:id', authorize('admin'), NotificationController.deleteNotification);
 
 export default router;

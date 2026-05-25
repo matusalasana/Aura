@@ -1,6 +1,23 @@
 {
   "name": "Aura Commerce Backend",
-  "description": "Production-grade e-commerce backend with Node.js, Express, Neon PostgreSQL, Redis caching, and JWT authentication.",
+  "description": "Aura Commerce Backend is a production-ready e-commerce API built with Node.js, Express, TypeScript, Neon PostgreSQL, Redis caching, JWT authentication, secure middleware, scalable architecture, and modern developer tooling.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": [
+    "JWT Authentication",
+    "Role-Based Authorization",
+    "Product Management",
+    "Category Management",
+    "Shopping Cart System",
+    "Wishlist Functionality",
+    "Order Processing",
+    "Redis Caching",
+    "REST API",
+    "Input Validation",
+    "Rate Limiting",
+    "Security Middleware",
+    "Error Handling",
+    "Logging & Monitoring",
+    "Cloud Deployment",
+    "TypeScript Support"
+  ]
 }

@@ -1,7 +1,7 @@
 import { sql } from "../../config/db.js";
 
 // OVERVIEW
-export const getOverviewRepo = async () => {
+const getOverviewRepo = async () => {
   const users = await sql`SELECT COUNT(*) FROM users`;
   const orders = await sql`SELECT COUNT(*) FROM orders`;
   const revenue = await sql`
@@ -21,7 +21,7 @@ export const getOverviewRepo = async () => {
 
 
 // REVENUE
-export const getRevenueRepo = async () => {
+const getRevenueRepo = async () => {
   const result = await sql`
     SELECT SUM(total_amount) as revenue
     FROM orders
@@ -35,7 +35,7 @@ export const getRevenueRepo = async () => {
 
 
 // USERS COUNT
-export const getUsersCountRepo = async () => {
+const getUsersCountRepo = async () => {
   const result = await sql`SELECT COUNT(*) as count FROM users`;
 
   return {
@@ -45,7 +45,7 @@ export const getUsersCountRepo = async () => {
 
 
 // TOP PRODUCTS
-export const getTopProductsRepo = async () => {
+const getTopProductsRepo = async () => {
   const result = await sql`
     SELECT 
       p.name,
@@ -60,3 +60,10 @@ export const getTopProductsRepo = async () => {
 
   return result;
 };
+
+export const AnalyticsRepository = {
+  getTopProductsRepo,
+  getUsersCountRepo,
+  getRevenueRepo,
+  getOverviewRepo
+}

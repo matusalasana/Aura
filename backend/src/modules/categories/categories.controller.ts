@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import { CategoryService } from './categories.service';
-import { asyncHandler } from '../../utils/asyncHandler';
-import { ApiResponse } from '../../utils/ApiResponse';
 
 // GET ALL
 const getCategories = async (

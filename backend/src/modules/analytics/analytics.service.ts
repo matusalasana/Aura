@@ -1,24 +1,21 @@
 import {
-  getOverviewRepo,
-  getRevenueRepo,
-  getUsersCountRepo,
-  getTopProductsRepo,
+  AnalyticsRepository
 } from './analytics.repository.js';
 
 const getAnalyticsOverviewService = async () => {
-  return await getOverviewRepo();
+  return await AnalyticsRepository.getOverviewRepo();
 };
 
 const getRevenueAnalyticsService = async () => {
-  return await getRevenueRepo();
+  return await AnalyticsRepository.getRevenueRepo();
 };
 
 const getUsersCountService = async () => {
-  return await getUsersCountRepo();
+  return await AnalyticsRepository.getUsersCountRepo();
 };
 
 const getTopProductsService = async () => {
-  return await getTopProductsRepo();
+  return await AnalyticsRepository.getTopProductsRepo();
 };
 
 export const AnalyticsService = {

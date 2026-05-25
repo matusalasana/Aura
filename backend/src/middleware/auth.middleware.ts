@@ -30,7 +30,7 @@ export const verifyJWT = async (
     }
 
     // Verify access token
-    const decoded = verifyAccessToken(accessToken);
+    const decoded = await verifyAccessToken(accessToken);
 
     // Attach user to request
     req.user = decoded;

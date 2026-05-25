@@ -1,8 +1,8 @@
 {
-  "name": "aura-store",
-	"author": "Sana - Full Stack Developer",
-	"description": "Aura is a modern full-stack e-commerce platform built with the PERN stack, featuring secure authentication, product management, shopping cart functionality, responsive UI, and a seamless shopping experience.",
-	"keywords": [
+  "name": "aura-store-backend",
+  "author": "Sana - Full Stack Developer",
+  "description": "Aura is a modern full-stack e-commerce platform built with the PERN stack, featuring secure authentication, product management, shopping cart functionality, responsive UI, and a seamless shopping experience.",
+  "keywords": [
     "ecommerce",
     "pern",
     "react",
@@ -22,18 +22,16 @@
     "dashboard"
   ],
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "build": "tsc",
     "start": "node dist/server.js",
-    "build": "tsc"
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
-    "@sentry/node": "^10.52.0",
-    "@types/cookie-parser": "^1.4.10",
-    "@types/cors": "^2.8.19",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -42,21 +40,20 @@
     "express-rate-limit": "^8.4.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "nodemon": "^3.1.14",
     "redis": "^5.12.1",
-    "vite": "^6.2.3",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.3"
+    "typescript": "~5.8.2"
   }
 }

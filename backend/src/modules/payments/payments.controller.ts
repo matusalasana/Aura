@@ -1,26 +1,58 @@
-import { asyncHandler } from '../../utils/asyncHandler';
-import { ApiResponse } from '../../utils/ApiResponse';
 import { Request, Response } from 'express';
 
-// Abstract provider layer
-export class PaymentController {
-  static createIntent = asyncHandler(async (req: Request, res: Response) => {
-    // In a real app, this would call Stripe SDK
+// PAYMENT INTENT
+const createIntent = async (req: Request, res: Response) => {
+  try {
     const { amount, currency = 'usd' } = req.body;
+
     const mockIntent = {
-      id: 'pi_' + Math.random().toString(36).substr(2, 9),
+      id: 'pi_' + Math.random().toString(36).substring(2, 11),
       amount,
       currency,
-      client_secret: 'secret_' + Math.random().toString(36).substr(2, 9),
+      client_secret:
+        'secret_' + Math.random().toString(36).substring(2, 11),
     };
-    return res.status(200).json(new ApiResponse(200, mockIntent, 'Payment intent created (Mock)'));
-  });
 
-  static confirmPayment = asyncHandler(async (req: Request, res: Response) => {
-    return res.status(200).json(new ApiResponse(200, { status: 'succeeded' }, 'Payment confirmed (Mock)'));
-  });
+    return res.status(200).json(mockIntent);
+  } catch (err: any) {
+    console.log('Create intent error:', err.message);
 
-  static webhook = asyncHandler(async (req: Request, res: Response) => {
+    return res.status(500).json({
+      message: `Create intent error: ${err.message}`,
+    });
+  }
+};
+
+// CONFIRM PAYMENT
+const confirmPayment = async (req: Request, res: Response) => {
+  try {
+    return res.status(200).json({
+      status: 'succeeded',
+    });
+  } catch (err: any) {
+    console.log('Confirm payment error:', err.message);
+
+    return res.status(500).json({
+      message: `Confirm payment error: ${err.message}`,
+    });
+  }
+};
+
+// WEBHOOK
+const webhook = async (req: Request, res: Response) => {
+  try {
     return res.status(200).send('Webhook Received');
-  });
-}
+  } catch (err: any) {
+    console.log('Webhook error:', err.message);
+
+    return res.status(500).json({
+      message: `Webhook error: ${err.message}`,
+    });
+  }
+};
+
+export const PaymentController = {
+  createIntent,
+  confirmPayment,
+  webhook,
+};
