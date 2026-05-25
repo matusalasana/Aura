@@ -1,19 +1,20 @@
 import { ImageUp } from "lucide-react";
-import React, { useState, useRef } from "react";
-import { uploadMultipleToCloudinary } from "../../../../shared/utils/uploadToCloudinary";
+import { useState, useRef } from "react";
 
 const ProductImagesUploader = () => {
   const [loading, setLoading] = useState(false);
 
   // store actual files
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[] | null>([]);
 
   // store preview URLs
   const [previews, setPreviews] = useState<string[]>([]);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     const selectedFiles = Array.from(e.target.files || []);
 
     if (selectedFiles.length === 0) return;
@@ -33,15 +34,6 @@ const ProductImagesUploader = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-
-      // upload images to cloudinary
-      const imageUrls = await uploadMultipleToCloudinary(files);
-
-      console.log("Uploaded URLs:", imageUrls);
-
-      // later:
-      // await createProduct({ images: imageUrls })
-
     } catch (err) {
       console.error(err);
     } finally {
