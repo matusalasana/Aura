@@ -18,7 +18,9 @@ router.get('/', getProducts);
 router.get('/:id', getProductById);
  
 // Admin only routes
-router.post('/', createProduct);
+
+// authorize('admin'), validate(createProductSchema),
+router.post('/',  createProduct);
 router.patch('/:id', verifyJWT, authorize('admin'), updateProduct);
 router.delete('/:id', verifyJWT, authorize('admin'), deleteProduct);
 
