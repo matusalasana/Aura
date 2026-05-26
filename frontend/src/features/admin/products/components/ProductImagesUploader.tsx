@@ -3,13 +3,16 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ImageUp, Loader2 } from "lucide-react";
 import ImagesBox from "./ImagesBox";
+import { useAddProduct } from "../hooks/useAddProduct";
 
 const ProductImagesUploader = () => {
+  const [finalData, setFinalData] = useState();
+  
   const [loading, setLoading] = useState(false);
 
   // actual files
   const [files, setFiles] = useState<File[]>([]);
-
+  
   // preview URLs
   const [previews, setPreviews] = useState<string[]>([]);
 
@@ -38,12 +41,12 @@ const ProductImagesUploader = () => {
       previews.forEach((preview) => URL.revokeObjectURL(preview));
     };
   }, [previews]);
+  
+  const { mutate: addProduct, isLoading } = useAddProducts();
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
-
-      console.log(files);
 
       // upload logic here
     } catch (err) {
@@ -129,7 +132,7 @@ const ProductImagesUploader = () => {
         >
           {loading && <Loader2 size={18} className="animate-spin" />}
 
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? "Submitting..." : "Publish Product"}
         </button>
       </div>
     </div>
