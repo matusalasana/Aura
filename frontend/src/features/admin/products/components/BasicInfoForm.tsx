@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBasicInfoStore } from "../store/productBasicInfoStore";
+import { useAddProduct } from "../hooks/useAddProduct";
 
 // Internal imports 
 import { type BasicInfoInput, basicInfoSchema } from "../types";
@@ -41,6 +42,8 @@ const BasicInfoForm = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   
+  const { mutate: addProduct, isPending } = useAddProduct();
+  
   const sizes = ["S", "M", "L", "XL"];
   
   const colors = [
@@ -52,6 +55,7 @@ const BasicInfoForm = () => {
 
   const onFormSubmit = (data: BasicInfoInput) => {
     setBasicData(data);
+    addProduct(data);
     navigate("/admin/products/variants");
   };
   

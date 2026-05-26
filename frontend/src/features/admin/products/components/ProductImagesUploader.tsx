@@ -4,9 +4,18 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ImageUp, Loader2 } from "lucide-react";
 import ImagesBox from "./ImagesBox";
 import { useAddProduct } from "../hooks/useAddProduct";
+import type { BasicInfoInput, VariantsInput, ImageUploadSchema } from "../store/productBasicInfoStore";
+import { useBasicInfoStore } from "../store/productBasicInfoStore";
+import { useVariantsStore } from "../store/productVariantsStore";
+
+type FinalFormData = {
+  basicInfo: BasicInfoInput,
+  variants: VariantsInput,
+  images: string[]
+}
 
 const ProductImagesUploader = () => {
-  const [finalData, setFinalData] = useState();
+  const [finalData, setFinalData] = useState<FinalFormData>({});
   
   const [loading, setLoading] = useState(false);
 
@@ -42,11 +51,21 @@ const ProductImagesUploader = () => {
     };
   }, [previews]);
   
-  const { mutate: addProduct, isLoading } = useAddProducts();
+  const { mutate: addProduct, isPending } = useAddProduct();
 
   const handleSubmit = async () => {
     try {
+      const basicInfo = useBasicInfoStore((state) => state.basicInfo)
+      const variants = useVariantsStore((state) => state.variants)
+      
       setLoading(true);
+      setFinalData({
+        basicInfo,
+        variants,
+        files
+      });
+      
+      addProduct(finalData)
 
       // upload logic here
     } catch (err) {
@@ -55,6 +74,7 @@ const ProductImagesUploader = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div
@@ -119,7 +139,7 @@ const ProductImagesUploader = () => {
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={loading || files.length === 0}
+          disabled={isPending || loading || files.length === 0}
           className="
             inline-flex items-center gap-2
             rounded-xl
@@ -132,7 +152,12 @@ const ProductImagesUploader = () => {
         >
           {loading && <Loader2 size={18} className="animate-spin" />}
 
-          {loading ? "Submitting..." : "Publish Product"}
+          {isPending 
+            ? "Submitting..." 
+            : loading
+            ? "Uploading"
+            : "Publish Product"
+          }
         </button>
       </div>
     </div>

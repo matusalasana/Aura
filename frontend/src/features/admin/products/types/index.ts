@@ -24,4 +24,4 @@ export const imagesUploadSchema = z.object({
 
 export type BasicInfoInput = z.infer<typeof basicInfoSchema>;
 export type VariantsInput = z.infer<typeof variantsSchema>;
-export type ImageUploadSchema = z.infer<typeof imagesUploadSchema>;
+export type ImageUploadInput = z.infer<typeof imagesUploadSchema>;

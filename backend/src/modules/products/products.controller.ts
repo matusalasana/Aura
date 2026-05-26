@@ -55,6 +55,7 @@ export const getProductById = async (req: Request, res: Response) => {
 // CREATE
 export const createProduct = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const data = await createProductService(req.body);
     
     return res.status(201).json(data);
