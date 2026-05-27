@@ -3,6 +3,7 @@ import { ImageUp, Loader2 } from "lucide-react";
 
 import ImagesBox from "./ImagesBox";
 import { useAddProduct } from "../hooks/useAddProduct";
+import { uploadToCloudinary } from "../../../../shared/utils/uploadToCloudinary";
 
 import {
   useBasicInfoStore,
@@ -14,14 +15,9 @@ import {
   type VariantsInput,
 } from "../store/productVariantsStore";
 
-type FinalFormData = {
-  basicInfo: BasicInfoInput;
-  variants: VariantsInput;
-  files: File[];
-};
-
 const ProductImagesUploader = () => {
   const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -53,48 +49,38 @@ const ProductImagesUploader = () => {
     };
   }, [previews]);
 
-  const handleSubmit = () => {
-    const formData = new FormData();
-   
-    // images
-    files.forEach((file) => {
-      formData.append("images", file);
-    });
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);  
+      
+      // 1. Map files to an array of upload promises
+      const uploadPromises = files.map((file) => uploadToCloudinary(file));  
   
-    // basic info
-    formData.append(
-      "category_id",
-      basicInfo.category_id
-    );
+      // 2. Wait for ALL promises to completely finish resolving
+      const uploadedImages = await Promise.all(uploadPromises);  
   
-    formData.append(
-      "name",
-      basicInfo.name
-    );
+      // 3. Extract URLs safely, filtering out any failed uploads (null values)
+      const images = uploadedImages
+        .filter((img) => img !== null) // Prevents crashes if an upload failed
+        .map((img) => img!.secure_url);  
   
-    formData.append(
-      "description",
-      basicInfo.description
-    );
+      // 4. build payload  
+      const payload = {  
+        ...basicInfo,  
+        variants,  
+        images, 
+      };  
   
-    formData.append(
-      "is_featured",
-      String(basicInfo.is_featured)
-    );
+      // 5. send to backend  
+      await addProduct(payload);  
   
-    formData.append(
-      "is_bestseller",
-      String(basicInfo.is_bestseller)
-    );
-  
-    // arrays/objects MUST be stringified
-    formData.append(
-      "variants",
-      JSON.stringify(variants)
-    );
-  
-    addProduct(formData);
+    } catch (err) {  
+      console.error("Submission failed:", err);  
+    } finally {  
+      setLoading(false);  
+    }
   };
+
 
   return (
     <div
@@ -127,6 +113,8 @@ const ProductImagesUploader = () => {
       />
 
       <ImagesBox
+        isPending={isPending}
+        loading={loading}
         previews={previews}
         onOpenUpload={() => inputRef.current?.click()}
       />
@@ -135,7 +123,7 @@ const ProductImagesUploader = () => {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          disabled={isPending}
+          disabled={loading || isPending}
           className="
             inline-flex items-center gap-2
             rounded-xl
@@ -155,7 +143,7 @@ const ProductImagesUploader = () => {
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={isPending || files.length === 0}
+          disabled={loading || isPending  || files.length === 0}
           className="
             inline-flex items-center gap-2
             rounded-xl
@@ -166,11 +154,15 @@ const ProductImagesUploader = () => {
             disabled:opacity-50
           "
         >
-          {isPending && (
+          {(loading || isPending ) && (
             <Loader2 size={18} className="animate-spin" />
           )}
 
-          {isPending ? "Submitting..." : "Publish Product"}
+          {
+            loading || isPending 
+              ? "Submitting..." 
+              : "Publish Product"
+          }
         </button>
       </div>
     </div>

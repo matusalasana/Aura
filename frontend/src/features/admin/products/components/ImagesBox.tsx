@@ -4,15 +4,18 @@ import { ImageUp } from "lucide-react";
 interface Props {
   previews: string[];
   onOpenUpload: () => void;
+  isPendig: boolean;
+  loading: boolean;
 }
 
-const ImagesBox = ({ previews, onOpenUpload }: Props) => {
+const ImagesBox = ({ previews, onOpenUpload, loading, isPendig }: Props) => {
   return (
     <div className="w-full">
       {/* upload box */}
       <button
         type="button"
         onClick={onOpenUpload}
+        disabled={loading || isPendig}
         className="
           w-full
           border-2 border-dashed

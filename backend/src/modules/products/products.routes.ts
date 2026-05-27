@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import multer from "multer";
 import { 
   getProducts,
   getProductById,
@@ -16,7 +15,6 @@ import {
   createProductSchema } from './products.validation';
 
 const router = Router();
-const upload = multer({ dest: 'uploads/' });
 
 router.get('/', getProducts);
 router.get('/:id', getProductById);
@@ -24,7 +22,7 @@ router.get('/:id', getProductById);
 // Admin only routes
 
 // authorize('admin'), validate(createProductSchema),
-router.post('/', upload.single('myFile'),  createProduct);
+router.post('/', createProduct);
 router.patch('/:id', verifyJWT, authorize('admin'), updateProduct);
 router.delete('/:id', verifyJWT, authorize('admin'), deleteProduct);
 
