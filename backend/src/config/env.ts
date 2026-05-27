@@ -23,3 +23,8 @@ export const ACCESS_COOKIE_MAX_AGE = Number(process.env.ACCESS_COOKIE_MAX_AGE) |
 
 // Salt rounds
 export const SALT_ROUNDS = Number(process.env.PWD_SALT_ROUNDS) || 12;
+
+// Cloudinary image management
+export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
