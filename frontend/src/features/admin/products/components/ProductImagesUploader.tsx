@@ -1,86 +1,105 @@
-// ProductImagesUploader.tsx
-
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ImageUp, Loader2 } from "lucide-react";
+
 import ImagesBox from "./ImagesBox";
 import { useAddProduct } from "../hooks/useAddProduct";
-import type { BasicInfoInput, VariantsInput, ImageUploadSchema } from "../store/productBasicInfoStore";
-import { useBasicInfoStore } from "../store/productBasicInfoStore";
-import { useVariantsStore } from "../store/productVariantsStore";
+
+import {
+  useBasicInfoStore,
+  type BasicInfoInput,
+} from "../store/productBasicInfoStore";
+
+import {
+  useVariantsStore,
+  type VariantsInput,
+} from "../store/productVariantsStore";
 
 type FinalFormData = {
-  basicInfo: BasicInfoInput,
-  variants: VariantsInput,
-  images: string[]
-}
+  basicInfo: BasicInfoInput;
+  variants: VariantsInput;
+  files: File[];
+};
 
 const ProductImagesUploader = () => {
-  const [finalData, setFinalData] = useState<FinalFormData>({});
-  
-  const [loading, setLoading] = useState(false);
-
-  // actual files
   const [files, setFiles] = useState<File[]>([]);
-  
-  // preview URLs
   const [previews, setPreviews] = useState<string[]>([]);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const basicInfo = useBasicInfoStore((state) => state.basicInfo);
+  const variants = useVariantsStore((state) => state.variants);
+
+  const { mutate: addProduct, isPending } = useAddProduct();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
 
     if (selectedFiles.length === 0) return;
 
-    // store files
     setFiles((prev) => [...prev, ...selectedFiles]);
 
-    // generate preview URLs
     const previewUrls = selectedFiles.map((file) =>
       URL.createObjectURL(file)
     );
 
-    // store previews
     setPreviews((prev) => [...prev, ...previewUrls]);
   };
 
-  // cleanup preview URLs
   useEffect(() => {
     return () => {
-      previews.forEach((preview) => URL.revokeObjectURL(preview));
+      previews.forEach((preview) => {
+        URL.revokeObjectURL(preview);
+      });
     };
   }, [previews]);
+
+  const handleSubmit = () => {
+    const formData = new FormData();
+   
+    // images
+    files.forEach((file) => {
+      formData.append("images", file);
+    });
   
-  const { mutate: addProduct, isPending } = useAddProduct();
-
-  const handleSubmit = async () => {
-    try {
-      const basicInfo = useBasicInfoStore((state) => state.basicInfo)
-      const variants = useVariantsStore((state) => state.variants)
-      
-      setLoading(true);
-      setFinalData({
-        basicInfo,
-        variants,
-        files
-      });
-      
-      addProduct(finalData)
-
-      // upload logic here
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+    // basic info
+    formData.append(
+      "category_id",
+      basicInfo.category_id
+    );
+  
+    formData.append(
+      "name",
+      basicInfo.name
+    );
+  
+    formData.append(
+      "description",
+      basicInfo.description
+    );
+  
+    formData.append(
+      "is_featured",
+      String(basicInfo.is_featured)
+    );
+  
+    formData.append(
+      "is_bestseller",
+      String(basicInfo.is_bestseller)
+    );
+  
+    // arrays/objects MUST be stringified
+    formData.append(
+      "variants",
+      JSON.stringify(variants)
+    );
+  
+    addProduct(formData);
   };
-  
 
   return (
     <div
       className="
-        w-full max-w-2xl
-        mx-auto
+        w-full max-w-2xl mx-auto
         rounded-2xl
         border border-zinc-200 dark:border-zinc-800
         bg-white dark:bg-zinc-950
@@ -88,7 +107,7 @@ const ProductImagesUploader = () => {
         shadow-sm
       "
     >
-      <div className="space-y-1 mb-6">
+      <div className="mb-6 space-y-1">
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Product Images
         </h2>
@@ -98,7 +117,6 @@ const ProductImagesUploader = () => {
         </p>
       </div>
 
-      {/* hidden input */}
       <input
         ref={inputRef}
         type="file"
@@ -108,18 +126,16 @@ const ProductImagesUploader = () => {
         className="hidden"
       />
 
-      {/* upload area */}
       <ImagesBox
         previews={previews}
         onOpenUpload={() => inputRef.current?.click()}
       />
 
-      {/* actions */}
-      <div className="flex items-center gap-3 mt-6">
+      <div className="mt-6 flex items-center gap-3">
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          disabled={loading}
+          disabled={isPending}
           className="
             inline-flex items-center gap-2
             rounded-xl
@@ -139,7 +155,7 @@ const ProductImagesUploader = () => {
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={isPending || loading || files.length === 0}
+          disabled={isPending || files.length === 0}
           className="
             inline-flex items-center gap-2
             rounded-xl
@@ -150,14 +166,11 @@ const ProductImagesUploader = () => {
             disabled:opacity-50
           "
         >
-          {loading && <Loader2 size={18} className="animate-spin" />}
+          {isPending && (
+            <Loader2 size={18} className="animate-spin" />
+          )}
 
-          {isPending 
-            ? "Submitting..." 
-            : loading
-            ? "Uploading"
-            : "Publish Product"
-          }
+          {isPending ? "Submitting..." : "Publish Product"}
         </button>
       </div>
     </div>
