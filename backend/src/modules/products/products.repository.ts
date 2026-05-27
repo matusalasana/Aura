@@ -167,7 +167,7 @@ export const createProductRepo = async (
     // 2. add product_images
     const values = images
       .map(img => {
-        const order = sql`(${productResultId}, ${img.url})`
+        const order = sql`(${productResultId}, ${img})`
         return order;
       })
       .reduce((accumulated, current, indx) => {

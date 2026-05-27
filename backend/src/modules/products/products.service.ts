@@ -11,6 +11,7 @@ import {
   updateProductRepo,
   deleteProductRepo,
 } from './products.repository';
+import { generateSKU } from "../../utils/generateSKU"
 
 
 // GET ALL
@@ -64,11 +65,14 @@ export const createProductService = async (
     is_bestseller: bodyData.is_bestseller,
   }
   
-  const variants = bodyData.variants.map((v) => (
-    v
-  ));
+  const variants = bodyData.variants.map((v) => ({
+    sku: generateSKU(),
+    ...v
+  }));
   
-  const images = bodyData.images.map((i) => i);
+  console.log(variants)
+  
+  const images = bodyData.images;
   
   const newProduct = await createProductRepo(
     product,
