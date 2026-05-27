@@ -4,7 +4,7 @@ import {
   CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET
-} from "../../config/cloudinary";
+} from "../../config/env";
 
 export const generateUploadSignature = async (
   req: Request,

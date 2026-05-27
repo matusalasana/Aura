@@ -11,6 +11,7 @@ import reviewRoutes from "../modules/reviews/reviews.routes";
 import wishlistRoutes from "../modules/wishlist/wishlist.routes";
 import paymentRoutes from "../modules/payments/payments.routes";
 import notificationRoutes from "../modules/notifications/notifications.routes";
+import uploadRoutes from "../modules/uploads/uploads.routes";
 
 const router = Router();
 
@@ -25,5 +26,6 @@ router.use("/reviews", reviewRoutes);
 router.use("/wishlist", wishlistRoutes);
 router.use("/payments", paymentRoutes);
 router.use("/notifications", notificationRoutes);
+router.use("/uploads", uploadRoutes);
 
 export default router;
