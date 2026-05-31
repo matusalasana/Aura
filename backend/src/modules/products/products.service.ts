@@ -95,7 +95,13 @@ const update = async (
 
 // DELETE
 const deleteOne = async (id: string) => {
-  await deleteProductRepo(id);
+  
+  const product = await ProductsRepository.getProductById(id);
+  if (!product) {
+    throw new Error('Product not found');
+  }
+  
+  await ProductsRepository.deleteOne(id);
 
   await CacheService.del(`product:${id}`);
   await CacheService.delByPattern('products:*');
