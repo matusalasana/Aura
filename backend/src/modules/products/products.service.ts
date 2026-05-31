@@ -4,24 +4,17 @@ import {
   CreateProductInput,
   UpdateProductInput 
 } from './products.validation';
-import {
-  getProductsRepo,
-  getProductByIdRepo,
-  createProductRepo,
-  updateProductRepo,
-  deleteProductRepo,
-} from './products.repository';
-import { generateSKU } from "../../utils/generateSKU"
+import { ProductsRepository } from './products.repository';
 
 
 // GET ALL
-export const getProductsService = async (filters: ProductFilters) => {
+const getAll = async (filters: ProductFilters) => {
   const cacheKey = `products:${JSON.stringify(filters)}`;
 
   const cachedData = await CacheService.get(cacheKey);
   if (cachedData) return cachedData;
 
-  const result = await getProductsRepo(filters);
+  const result = await ProductsRepository.getAll(filters);
 
   await CacheService.set(cacheKey, result, 10);
 
@@ -30,7 +23,7 @@ export const getProductsService = async (filters: ProductFilters) => {
 
 
 // GET BY ID
-export const getProductByIdService = async (id: string) => {
+const getOne = async (id: string) => {
   
   if(!id){
     throw new Error("Id is not found");
@@ -52,7 +45,7 @@ export const getProductByIdService = async (id: string) => {
 
 
 // CREATE
-export const createProductService = async (
+const create = async (
   bodyData: CreateProductInput) => {
   
   const product = {
@@ -87,7 +80,7 @@ export const createProductService = async (
 
 
 // UPDATE
-export const updateProductService = async (
+const update = async (
   id: string,
   data: UpdateProductInput
 ) => {
@@ -126,12 +119,13 @@ export const updateProductService = async (
   
   
 
-  const updatedProduct = await updateProductRepo(
-    id,
-    productData,
-    data.images,
-    data.variants
-  );
+  const updatedProduct = 
+    await ProductsRepository.updateProductRepo(
+      id,
+      productData,
+      data.images,
+      data.variants
+    );
 
   await CacheService.del(`product:${id}`);
   await CacheService.delByPattern('products:*');
@@ -141,9 +135,17 @@ export const updateProductService = async (
 
 
 // DELETE
-export const deleteProductService = async (id: string) => {
+const deleteOne = async (id: string) => {
   await deleteProductRepo(id);
 
   await CacheService.del(`product:${id}`);
   await CacheService.delByPattern('products:*');
 };
+
+export const ProductsService = {
+  getAll,
+  getOne,
+  create,
+  update,
+  deleteOne
+}

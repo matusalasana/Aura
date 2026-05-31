@@ -1,14 +1,12 @@
 import { sql } from "../../config/db.js";
 
 // GET ALL
-export const getProductsRepo = async (filters) => {
+const getAll = async (filters) => {
   const {
     categoryId,
     minPrice,
     maxPrice,
     search,
-    featured,
-    bestseller,
     limit = 10,
     page = 1,
   } = filters;
@@ -18,17 +16,7 @@ export const getProductsRepo = async (filters) => {
   let query = sql`
     SELECT 
       p.*, 
-      c.name as category_name,
-      (
-        SELECT COALESCE(MIN(pv.price), 0) FROM product_variants pv
-        WHERE pv.product_id = p.id
-      )::float as price,
-      (
-        SELECT pi.url
-        FROM product_images pi
-        WHERE pi.product_id = p.id
-        LIMIT 1
-      ) as image_url
+      c.name as category_name
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     WHERE 1=1
@@ -39,32 +27,18 @@ export const getProductsRepo = async (filters) => {
   }
 
   if (minPrice) {
-    query = sql`${query} AND (
-      SELECT COALESCE(MIN(pv.price), 0) FROM product_variants pv
-      WHERE pv.product_id = p.id
-    )::float as price, >= ${minPrice}`;
+    query = sql`${query} p.price, >= ${minPrice}`;
   }
 
   if (maxPrice) {
-    query = sql`${query} AND (
-      SELECT COALESCE(MIN(pv.price), 0) FROM product_variants pv
-      WHERE pv.product_id = p.id
-    )::float as price, <= ${maxPrice}`;
-  }
-
-  if (featured) {
-    query = sql`${query} AND p.is_featured = true`;
-  }
-
-  if (bestseller) {
-    query = sql`${query} AND p.is_bestseller = true`;
+    query = sql`${query} p.price, <= ${maxPrice}`;
   }
 
   if (search) {
     query = sql`
       ${query}
       AND (
-        p.name ILIKE ${"%" + search + "%"}
+        p.title ILIKE ${"%" + search + "%"}
         OR p.description ILIKE ${"%" + search + "%"}
       )
     `;
@@ -82,7 +56,7 @@ export const getProductsRepo = async (filters) => {
 
 
 // GET BY ID
-export const getProductByIdRepo = async (id: string) => {
+const getById = async (id: string) => {
   const result = await sql`
     SELECT 
       p.*,
@@ -111,7 +85,7 @@ export const getProductByIdRepo = async (id: string) => {
 
 
 // CREATE
-export const createProductRepo = async (
+const create = async (
   product,
   images,
   variants
@@ -222,7 +196,7 @@ export const createProductRepo = async (
 
 
 // UPDATE
-export const updateProductRepo = async (
+const update = async (
   id,
   productData,
   images,
@@ -287,7 +261,7 @@ export const updateProductRepo = async (
 
 
 // DELETE
-export const deleteProductRepo = async (id) => {
+const deleteOne = async (id) => {
   const result = await sql`
     DELETE FROM products
     WHERE id = ${id}
@@ -296,3 +270,12 @@ export const deleteProductRepo = async (id) => {
 
   return result[0];
 };
+
+
+export const ProductsRepository = {
+  getAll,
+  getById,
+  create,
+  update,
+  deleteOne
+}
