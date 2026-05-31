@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, X } from "lucide-react";
+import Categories from "./productFilters/Categories"
 
 const ProductFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+
   // Filter Content Component to avoid repetition
   const FilterContent = () => (
     <>
+    
       {/* Header */}
       <div className="flex items-center justify-between lg:justify-start gap-3">
         <div className="flex items-center gap-3">
@@ -27,26 +30,10 @@ const ProductFilters = () => {
           <X size={20} />
         </button>
       </div>
+      
 
       {/* Categories */}
-      <div className="space-y-4">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
-          Categories
-        </h3>
-        <div className="space-y-3">
-          {["Men", "Women", "Kids"].map((item) => (
-            <label key={item} className="flex items-center gap-3 cursor-pointer group">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-700 bg-transparent text-black dark:text-white focus:ring-zinc-500"
-              />
-              <span className="text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-black dark:group-hover:text-white transition-colors">
-                {item}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
+      <Categories/>
 
       {/* Product Type */}
       <div className="space-y-4">
