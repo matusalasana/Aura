@@ -56,7 +56,7 @@ const getAll = async (filters) => {
 
 
 // GET BY ID
-const getById = async (id: string) => {
+const getProductById = async (id: string) => {
   const result = await sql`
     SELECT 
       p.*,
@@ -68,117 +68,76 @@ const getById = async (id: string) => {
 
   return result[0] || null;
 };
-  
+
+
+// GET VENDOR BY ID
+const getVendorById = async (id: string) => {
+  const result = await sql`
+    SELECT *
+    FROM vendors 
+    WHERE id = ${id}
+  `;
+
+  return result[0] || null;
+};
+
+
+// GET CATEGORY BY ID
+const getCategoryById = async (id: string) => {
+  const result = await sql`
+    SELECT *
+    FROM categories 
+    WHERE id = ${id}
+  `;
+
+  return result[0] || null;
+};
 
 
 // CREATE
 const create = async (
-  product,
-  images,
-  variants
+  data
 ) => {
 
   const {
-    name,
-    category_id,
-    description,
-    rating_count,
-    average_rating,
-    is_featured,
-    is_bestseller
-  } = product;
+    title, 
+    description, 
+    price, 
+    stock, 
+    vendor_id, 
+    category_id, 
+    sizes=[], 
+    colors=[], 
+    images=[]
+  } = data;
   
-  const {
-    color,
-    size,
-    price,
-    stock_quantity,
-    sku
-  } = variants;
-  
-  try{
+  const result = await sql`
+    INSERT INTO products (
+      title, 
+      description, 
+      price, 
+      stock, 
+      vendor_id, 
+      category_id, 
+      sizes, 
+      colors, 
+      images
+    )
+    VALUES (
+      ${title},
+      ${description},
+      ${price},
+      ${stock},
+      ${vendor_id},
+      ${category_id},
+      ${sizes},
+      ${colors},
+      ${images}
+    )
+    RETURNING *;
+  `;
     
-    await sql`BEGIN`
-    
-    // 1. add to products table
-    const productResult = await sql`
-      INSERT INTO products (
-        name,
-        category_id,
-        description,
-        rating_count,
-        average_rating,
-        is_featured,
-        is_bestseller
-      )
-      VALUES (
-        ${name},
-        ${category_id},
-        ${description},
-        ${rating_count},
-        ${average_rating},
-        ${is_featured},
-        ${is_bestseller}
-      )
-      RETURNING *;
-    `;
-    
-    const productResultId = productResult[0].id;
-    
-    // 2. add product_images
-    const values = images
-      .map(img => {
-        const order = sql`(${productResultId}, ${img})`
-        return order;
-      })
-      .reduce((accumulated, current, indx) => {
-        return indx === 0 ? current : sql`${accumulated}, ${current}`;
-      });
-    
-    await sql`
-      INSERT INTO product_images (product_id, url)
-      VALUES ${values}
-    `;
-     
-    // 3. add to variants table 
-    const variantsValues = variants
-    .map(v => {
-      const order = sql`
-        (
-          ${productResultId},
-          ${v.color},
-          ${v.size},
-          ${v.price},
-          ${v.stock_quantity},
-          ${v.sku}
-        )
-      `
-      return order;
-    })
-    .reduce((accumulated, current) => {
-      return sql`${accumulated}, ${current}`;
-    });
-    
-    const variantsResult = await sql`
-      INSERT INTO product_variants (
-        product_id,
-        color,
-        size,
-        price,
-        stock_quantity,
-        sku
-      )
-      VALUES ${variantsValues}
-      
-    `;
-    await sql`COMMIT`
-    
-    return productResult[0];
-    
-  }catch(err){
-    await sql`ROLLBACK`
-    throw err
-  }
+    return result[0];
 };
 
 
@@ -261,8 +220,10 @@ const deleteOne = async (id) => {
 
 export const ProductsRepository = {
   getAll,
-  getById,
+  getProductById,
   create,
   update,
-  deleteOne
+  deleteOne,
+  getCategoryById,
+  getVendorById
 }

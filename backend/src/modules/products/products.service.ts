@@ -33,7 +33,7 @@ const getOne = async (id: string) => {
   const cachedData = await CacheService.get(cacheKey);
   if (cachedData) return cachedData;
 
-  const product = await ProductsRepository.getById(id);
+  const product = await ProductsRepository.getProductById(id);
   if (!product) {
     throw new Error('Product not found');
   }
@@ -47,31 +47,21 @@ const getOne = async (id: string) => {
 // CREATE
 const create = async (
   bodyData: CreateProductInput) => {
-  
-  const product = {
-    name: bodyData.name,
-    category_id: bodyData.category_id,
-    description: bodyData.description,
-    rating_count: bodyData.rating_count,
-    average_rating: bodyData.average_rating,
-    is_featured: bodyData.is_featured,
-    is_bestseller: bodyData.is_bestseller,
+  const { vendor_id, category_id } = bodyData;
+
+  const vendorExists = 
+    await ProductsRepository.getVendorById(vendor_id);
+  if(!vendorExists){
+    throw new Error("Vendor not found")
   }
   
-  const variants = bodyData.variants.map((v) => ({
-    sku: generateSKU(),
-    ...v
-  }));
-  
-  console.log(variants)
-  
-  const images = bodyData.images;
-  
-  const newProduct = await createProductRepo(
-    product,
-    images,
-    variants
-  );
+  const categoryExists = 
+    await ProductsRepository.getCategoryById(category_id);
+  if(!categoryExists){
+    throw new Error("Category not found")
+  }
+    
+  const newProduct = await ProductsRepository.create(bodyData);
 
   await CacheService.delByPattern('products:*');
 

@@ -50,14 +50,12 @@ const getOne = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   try {
     
-    console.log(req.body)
-
-    const data = await createProductService(req.body);
+    const newProduct = await ProductsService.create(req.body);
     
-    return res.status(201).json(data);
+    return res.status(201).json(newProduct);
+    
   } catch (err: any) {
     console.log('Create product error:', err.message);
-
     return res.status(400).json({
       message: err.message,
     });
