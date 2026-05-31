@@ -3,7 +3,7 @@ import { AuthService } from "./auth.service";
 import { Cookie } from "../../utils/cookies";
 
 // REGISTER
-export const register = async (
+const register = async (
   req: Request,
   res: Response
 ) => {
@@ -29,11 +29,12 @@ export const register = async (
 };
 
 // LOGIN
-export const login = async (
+const login = async (
   req: Request,
   res: Response
 ) => {
   try {
+    const oldRefreshToken = req.cookies.refreshToken;
     const {
       accessToken,
       refreshToken,
@@ -44,7 +45,7 @@ export const login = async (
     Cookie.setAccessToken(res, accessToken);
     
     return res.status(200)
-      .json({user});
+      .json(user);
 
   } catch (err: any) {
     console.error("Login error:", err.message);
@@ -56,7 +57,7 @@ export const login = async (
 };
 
 // REFRESH
-export const refresh = async (
+const refresh = async (
   req: Request,
   res: Response
 ) => {
@@ -86,7 +87,7 @@ export const refresh = async (
 };
 
 // LOGOUT
-export const logout = async (
+const logout = async (
   req: Request,
   res: Response
 ) => {
@@ -112,7 +113,7 @@ export const logout = async (
 };
 
 // CURRENT USER
-export const getCurrentUser = async (
+const getMe = async (
   req: Request,
   res: Response
 ) => {
@@ -131,3 +132,12 @@ export const getCurrentUser = async (
     });
   }
 };
+
+
+export const AuthController = {
+  register,
+  login,
+  refresh,
+  logout,
+  getMe
+}

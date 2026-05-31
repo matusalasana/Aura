@@ -52,18 +52,18 @@ const login = async (
 ) => {
   const {
     email,
-    password_hash,
+    password,
   } = userData;
 
-  const user = await findUserByEmail(email);
+  const user = await AuthRepository.findUserByEmail(email);
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  const isMatch = await comparePassword(
-    password_hash,
-    user.password_hash
+  const isMatch = await HashUtils.comparePassword(
+    password,
+    user.password
   );
 
   if (!isMatch) {
@@ -79,9 +79,10 @@ const login = async (
   const accessToken = await JWT.generateAccessToken(payload);
   const refreshToken = await JWT.generateRefreshToken(payload);
   
-  const hashedRefreshToken = await hashToken(refreshToken);
+  const hashedRefreshToken = 
+    await HashUtils.hashToken(refreshToken);
 
-  await rotateRefreshToken(
+  await AuthRepository.rotateRefreshToken(
     user.id,
     hashedRefreshToken
   );
@@ -112,7 +113,7 @@ const refresh = async (refreshToken: string) => {
 
   const hashed = await hashToken(newRefreshToken);
 
-  await rotateRefreshToken(decoded.id, hashed);
+  await AuthRepository.rotateRefreshToken(decoded.id, hashed);
 
   return {
     newAccessToken,
@@ -128,7 +129,7 @@ const logout = async (
   
   const decoded = JWT.verifyRefreshToken(refreshToken);
 
-  await deleteRefreshToken(
+  await AuthRepository.deleteRefreshToken(
     decoded.id
   );
 };
