@@ -60,20 +60,7 @@ const getById = async (id: string) => {
   const result = await sql`
     SELECT 
       p.*,
-      c.name AS category_name,
-
-      (
-        SELECT COALESCE(json_agg(pi.*), '[]'::json)
-        FROM product_images pi
-        WHERE pi.product_id = p.id
-      ) AS images,
-      
-      (
-        SELECT COALESCE(json_agg(pv.*), '[]'::json)
-        FROM product_variants pv
-        WHERE pv.product_id = p.id
-      ) AS variants
-
+      c.name AS category_name
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     WHERE p.id = ${id}

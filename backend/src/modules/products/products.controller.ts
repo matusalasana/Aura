@@ -33,7 +33,7 @@ const getAll = async (req: Request, res: Response) => {
 const getOne = async (req: Request, res: Response) => {
   try {
     const id = req.params.id as string;
-    const data = await getProductByIdService(req.params.id);
+    const data = await ProductsService.getOne(req.params.id);
 
     return res.status(200).json(data);
   } catch (err: any) {

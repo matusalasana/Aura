@@ -33,7 +33,7 @@ const getOne = async (id: string) => {
   const cachedData = await CacheService.get(cacheKey);
   if (cachedData) return cachedData;
 
-  const product = await getProductByIdRepo(id);
+  const product = await ProductsRepository.getById(id);
   if (!product) {
     throw new Error('Product not found');
   }
