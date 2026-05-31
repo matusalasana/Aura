@@ -1,4 +1,4 @@
-import { useGetMe } from "../hooks/useGetMe";
+import { useGetMe } from "../../auth/hooks/useGetMe";
 import LogoutButton from "../components/LogoutButton"
 
 const ProfilePage = () => {

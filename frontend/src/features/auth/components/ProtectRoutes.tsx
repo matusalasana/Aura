@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useGetMe } from "../../profile/hooks/useGetMe";
+import { useGetMe } from "../hooks/useGetMe";
 
 const ProtectRoutes = () => {
   const { data: user, isLoading, isError } = useGetMe();

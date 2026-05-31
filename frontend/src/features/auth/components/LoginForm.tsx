@@ -4,7 +4,7 @@ import { type LoginInput, loginSchema } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Eye, EyeOff, Lock, Mail } from "lucide-react"; // Added Lock and Mail
 import { useNavigate, Navigate } from "react-router-dom";
-import { useGetMe } from "../../profile/hooks/useGetMe";
+import { useGetMe } from "../hooks/useGetMe";
 import { useLogin } from "../hooks/useLogin";
 
 const LoginForm = () => {
