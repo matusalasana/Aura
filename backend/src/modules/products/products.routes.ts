@@ -14,10 +14,8 @@ router.get('/', ProductsController.getAll);
 router.get('/:id', ProductsController.getOne);
  
 // Admin only routes
-
-// authorize('admin'), validate(createProductSchema),
-router.post('/', ProductsController.create);
-router.patch('/:id', ProductsController.update);
-router.delete('/:id', ProductsController.deleteOne);
+router.post('/', verifyJWT, authorize('ADMIN', 'VENDOR'), ProductsController.create);
+router.patch('/:id', verifyJWT, authorize('ADMIN', 'VENDOR'), ProductsController.update);
+router.delete('/:id', verifyJWT, authorize('ADMIN', 'VENDOR'), ProductsController.deleteOne);
 
 export default router;
