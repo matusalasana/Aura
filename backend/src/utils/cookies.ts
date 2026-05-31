@@ -19,19 +19,27 @@ const refreshCookieOptions = {
     maxAge: REFRESH_COOKIE_MAX_AGE
   };
 
-export const setRefreshTokenCookie = (res: Response, token: string) => {
+
+const setAccessToken = (res: Response, token: string) => {
+  res.cookie('accessToken', token, accessCookieOptions);
+};
+
+const clearAccessToken = (res: Response) => {
+  res.clearCookie('accessToken');
+};
+
+const setRefreshToken = (res: Response, token: string) => {
   res.cookie('refreshToken', token, refreshCookieOptions);
 };
 
-export const clearRefreshTokenCookie = (res: Response) => {
+const clearRefreshToken = (res: Response) => {
   res.clearCookie('refreshToken');
 };
 
 
-export const setAccessTokenCookie = (res: Response, token: string) => {
-  res.cookie('accessToken', token, accessCookieOptions);
-};
-
-export const clearAccessTokenCookie = (res: Response) => {
-  res.clearCookie('accessToken');
-};
+export const Cookie = {
+  setAccessToken,
+  setRefreshToken,
+  clearAccessToken,
+  clearRefreshToken
+}
