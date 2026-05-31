@@ -14,32 +14,15 @@ export const createProductSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
-  id: z.string().uuid().min(1, "Id of the product you're trying to update is required"),
+  id: z.string().uuid().min(1, "Product id required"),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  price: z.number().positive().optional(),
+  stock: z.number().int().nonnegative(),
   category_id: z.string().uuid().optional(),
-  name: z.string().min(2),
-  description: z.string(),
-  average_rating: z.number().positive(),
-  rating_count: z.int().nonnegative(),
-  is_featured: z.boolean().optional(),
-  is_bestseller: z.boolean().optional(),
-  
-  variants: z.array(
-    z.object({
-      product_id: z.string().uuid().optional(),
-      color: z.string().min(1, "Color is required"),
-      size: z.string().min(1, "Size is required"),
-      price: z.number().positive().min(100, "Amount must be greater than 100 ETB"),
-      
-      sku: z.string().min(1, "sku is required")
-  })),
-  
-  images: z.array(
-    z.object({
-      product_id: z.string().uuid().optional(),
-      url: z.string().min(1, "Image is required"),
-    })
-  ),
-  
+  sizes: z.array(z.string()).optional().default([]),
+  colors: z.array(z.string()).optional().default([]),
+  images: z.array(z.string()).optional().default([]),
 });
 
 export interface ProductFilters {

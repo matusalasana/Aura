@@ -66,15 +66,15 @@ const create = async (req: Request, res: Response) => {
 // UPDATE
 const update = async (req: Request, res: Response) => {
   try {
-    const data = await updateProductService(
+    const data = await ProductsService.update(
       req.params.id, 
       req.body
     );
 
     return res.status(200).json(data);
+    
   } catch (err: any) {
     console.log('Update product error:', err.message);
-
     return res.status(400).json({
       message: err.message,
     });

@@ -17,7 +17,7 @@ router.get('/:id', ProductsController.getOne);
 
 // authorize('admin'), validate(createProductSchema),
 router.post('/', ProductsController.create);
-router.patch('/:id', verifyJWT, authorize('admin'), ProductsController.update);
+router.patch('/:id', ProductsController.update);
 router.delete('/:id', verifyJWT, authorize('admin'), ProductsController.deleteOne);
 
 export default router;

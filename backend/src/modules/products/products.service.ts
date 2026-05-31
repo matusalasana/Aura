@@ -74,47 +74,16 @@ const update = async (
   id: string,
   data: UpdateProductInput
 ) => {
-
-  const productData: Record<string, any> = {};
-
-  // ONLY ADD FIELDS THAT EXIST VALIDATION (PATCH METHOD)
   
-  if (data.name !== undefined) {
-    productData.name = data.name;
-  }
-
-  if (data.category_id !== undefined) {
-    productData.category_id = data.category_id;
-  }
-
-  if (data.description !== undefined) {
-    productData.description = data.description;
-  }
-
-  if (data.rating_count !== undefined) {
-    productData.rating_count = data.rating_count;
-  }
-
-  if (data.average_rating !== undefined) {
-    productData.average_rating = data.average_rating;
-  }
-
-  if (data.is_featured !== undefined) {
-    productData.is_featured = data.is_featured;
-  }
-
-  if (data.is_bestseller !== undefined) {
-    productData.is_bestseller = data.is_bestseller;
+  const product = await ProductsRepository.getProductById(id);
+  if (!product) {
+    throw new Error('Product not found');
   }
   
-  
-
   const updatedProduct = 
-    await ProductsRepository.updateProductRepo(
+    await ProductsRepository.update(
       id,
-      productData,
-      data.images,
-      data.variants
+      data
     );
 
   await CacheService.del(`product:${id}`);
