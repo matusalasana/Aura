@@ -147,7 +147,7 @@ const getMe =
       throw new Error("user Id not found");
     };
     
-    const user = await findUserById(userId);
+    const user = await AuthRepository.findUserById(userId);
 
     if (!user) {
       throw new Error("User not found");

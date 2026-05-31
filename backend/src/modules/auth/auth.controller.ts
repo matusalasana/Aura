@@ -119,9 +119,7 @@ const getMe = async (
     
     const user = await AuthService.getMe(req.user!.id);
 
-    return res.status(200).json({
-      user
-    });
+    return res.status(200).json(user);
 
   } catch (err: any) {
     console.log("Get me error:", err.message);
