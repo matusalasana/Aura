@@ -95,12 +95,13 @@ const login = async (
 };
 
 // REFRESH
-const refresh = async (refreshToken: string) => {
-  if (!refreshToken) {
+const refresh = async (oldRefreshToken: string) => {
+  
+  if (!oldRefreshToken) {
     throw new Error("No refresh token");
   }
 
-  const decoded = JWT.verifyRefreshToken(refreshToken);
+  const decoded = JWT.verifyRefreshToken(oldRefreshToken);
 
   const payload = {
     id: decoded.id,
@@ -111,7 +112,7 @@ const refresh = async (refreshToken: string) => {
   const newAccessToken = await JWT.generateAccessToken(payload);
   const newRefreshToken = await JWT.generateRefreshToken(payload);
 
-  const hashed = await hashToken(newRefreshToken);
+  const hashed = await HashUtils.hashToken(newRefreshToken);
 
   await AuthRepository.rotateRefreshToken(decoded.id, hashed);
 

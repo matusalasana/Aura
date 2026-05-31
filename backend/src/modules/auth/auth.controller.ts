@@ -62,19 +62,17 @@ const refresh = async (
   res: Response
 ) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const oldRefreshToken = req.cookies.refreshToken;
 
     const {
       newAccessToken,
       newRefreshToken,
-    } = await AuthService.refresh(refreshToken);
+    } = await AuthService.refresh(oldRefreshToken);
     
     Cookie.setRefreshToken(res, newRefreshToken);
     Cookie.setAccessToken(res, newAccessToken);
 
-    return res.status(200).json({
-      message: "Token refreshed"
-    });
+    return res.status(200).json({ message: "Token refreshed" });
 
   } catch (err: any) {
     console.error("Refresh error:", err.message);
