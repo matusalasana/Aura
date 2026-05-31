@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
+  first_name: z.string().min(3),
+  last_name: z.string().min(3),
   email: z.string().email().trim(),
-  password_hash: z.string().min(8),
-  full_name: z.string().min(3)
+  password: z.string().min(8),
 });
 
 export const loginSchema = z.object({

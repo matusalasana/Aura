@@ -1,48 +1,26 @@
-import {
-  findUserByEmailRepo,
-  findUserByIdRepo,
-  registerUserRepo,
-  createRefreshTokenRepo,
-  rotateRefreshTokenRepo,
-  deleteRefreshTokenRepo,
-  findSessionByIdRepo,
-} from "./auth.repository";
+import { AuthRepository } from "./auth.repository";
 import { 
   RegisterInput,
   LoginInput
 } from "./auth.validation"
-
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  verifyRefreshToken,
-} from "../../utils/jwt";
-
-import {
-  hashPassword,
-  comparePassword,
-  hashToken,
-} from "../../utils/hash";
+import { JWT } from "../../utils/jwt";
+import { HashUtils } from "../../utils/hash";
 
 // REGISTER
-export const registerService = async (
-  userData: RegisterInput) => {
-  const {
-    full_name,
-    email,
-    password_hash,
-  } = userData;
-
-  const exists = await findUserByEmailRepo(email);
+const register = async (userData: RegisterInput) => {
+  const { first_name, last_name, email, password } = userData;
+  const exists = await AuthRepository.findUserByEmail(email);
 
   if (exists) {
     throw new Error("Email already exists");
   };
 
-  const hashedPassword = await hashPassword(password_hash);
+  const hashedPassword = 
+    await HashUtils.hashPassword(password);
 
-  const newUser = await registerUserRepo(
-    full_name,
+  const newUser = await AuthRepository.register(
+    first_name, 
+    last_name,
     email,
     hashedPassword
   );
@@ -53,19 +31,23 @@ export const registerService = async (
     email: newUser.email
   };
   
-  const refreshToken = await generateRefreshToken(payload);
-  const accessToken = await generateAccessToken(payload);
+  const refreshToken = await JWT.generateRefreshToken(payload);
+  const accessToken = await JWT.generateAccessToken(payload);
   
-  const hashedRefreshToken = await hashToken(refreshToken);
+  const hashedRefreshToken = 
+    await HashUtils.hashToken(refreshToken);
   
-  await createRefreshTokenRepo(newUser.id, hashedRefreshToken);
+  await AuthRepository.createRefreshToken(
+    newUser.id, 
+    hashedRefreshToken
+  );
   
   return { accessToken, refreshToken, user: newUser };
   
 };
 
 // LOGIN
-export const loginService = async (
+const login = async (
   userData: LoginInput
 ) => {
   const {
@@ -73,7 +55,7 @@ export const loginService = async (
     password_hash,
   } = userData;
 
-  const user = await findUserByEmailRepo(email);
+  const user = await findUserByEmail(email);
 
   if (!user) {
     throw new Error("User not found");
@@ -94,12 +76,12 @@ export const loginService = async (
     email: user.email,
   };
 
-  const accessToken = await generateAccessToken(payload);
-  const refreshToken = await generateRefreshToken(payload);
+  const accessToken = await JWT.generateAccessToken(payload);
+  const refreshToken = await JWT.generateRefreshToken(payload);
   
   const hashedRefreshToken = await hashToken(refreshToken);
 
-  await rotateRefreshTokenRepo(
+  await rotateRefreshToken(
     user.id,
     hashedRefreshToken
   );
@@ -112,12 +94,12 @@ export const loginService = async (
 };
 
 // REFRESH
-export const refreshService = async (refreshToken: string) => {
+const refresh = async (refreshToken: string) => {
   if (!refreshToken) {
     throw new Error("No refresh token");
   }
 
-  const decoded = verifyRefreshToken(refreshToken);
+  const decoded = JWT.verifyRefreshToken(refreshToken);
 
   const payload = {
     id: decoded.id,
@@ -125,12 +107,12 @@ export const refreshService = async (refreshToken: string) => {
     email: decoded.email
   };
 
-  const newAccessToken = await generateAccessToken(payload);
-  const newRefreshToken = await generateRefreshToken(payload);
+  const newAccessToken = await JWT.generateAccessToken(payload);
+  const newRefreshToken = await JWT.generateRefreshToken(payload);
 
   const hashed = await hashToken(newRefreshToken);
 
-  await rotateRefreshTokenRepo(decoded.id, hashed);
+  await rotateRefreshToken(decoded.id, hashed);
 
   return {
     newAccessToken,
@@ -140,26 +122,26 @@ export const refreshService = async (refreshToken: string) => {
 
 
 // LOGOUT
-export const logoutService = async (
+const logout = async (
   refreshToken: string
 ) => {
   
-  const decoded = verifyRefreshToken(refreshToken);
+  const decoded = JWT.verifyRefreshToken(refreshToken);
 
-  await deleteRefreshTokenRepo(
+  await deleteRefreshToken(
     decoded.id
   );
 };
 
 // CURRENT USER
-export const getCurrentUserService =
+const getMe =
   async (userId: string) => {
     
     if (!userId) {
       throw new Error("user Id not found");
     };
     
-    const user = await findUserByIdRepo(userId);
+    const user = await findUserById(userId);
 
     if (!user) {
       throw new Error("User not found");
@@ -172,3 +154,11 @@ export const getCurrentUserService =
 
     return safe;
   };
+  
+export const AuthService = {
+  register,
+  login,
+  logout,
+  refresh,
+  getMe
+}

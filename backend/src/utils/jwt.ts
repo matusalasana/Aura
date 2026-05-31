@@ -42,3 +42,10 @@ export const verifyRefreshToken = (token: string) => {
   }
 };
 
+
+export const JWT = {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken
+}

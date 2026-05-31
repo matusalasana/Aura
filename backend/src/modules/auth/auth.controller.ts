@@ -1,19 +1,6 @@
 import { Request, Response } from "express";
-
-import {
-  registerService,
-  loginService,
-  logoutService,
-  getCurrentUserService,
-  refreshService,
-} from "./auth.service";
-
-import { 
-  setRefreshTokenCookie,
-  clearRefreshTokenCookie,
-  setAccessTokenCookie,
-  clearAccessTokenCookie
-} from "../../utils/cookies";
+import { AuthService } from "./auth.service";
+import { Cookie } from "../../utils/cookies";
 
 // REGISTER
 export const register = async (
@@ -21,21 +8,18 @@ export const register = async (
   res: Response
 ) => {
   try {
-    
     const { 
       accessToken, 
       refreshToken,
       user
-    } = await registerService(req.body);
+    } = await AuthService.register(req.body);
 
-    setRefreshTokenCookie(res, refreshToken);
-    setAccessTokenCookie(res, accessToken);
+    Cookie.setRefreshToken(res, refreshToken);
+    Cookie.setAccessToken(res, accessToken);
     
     return res.status(201)
-      .json({
-        user
-      });
-    
+      .json(user);
+      
   } catch (err: any) {
     console.log("Register error:", err.message);
     return res.status(400).json({
@@ -54,15 +38,13 @@ export const login = async (
       accessToken,
       refreshToken,
       user
-    } = await loginService(req.body);
+    } = await AuthService.login(req.body);
     
-    setRefreshTokenCookie(res, refreshToken);
-    setAccessTokenCookie(res, accessToken);
+    Cookie.setRefreshToken(res, refreshToken);
+    Cookie.setAccessToken(res, accessToken);
     
     return res.status(200)
-      .json({
-        user,
-      });
+      .json({user});
 
   } catch (err: any) {
     console.error("Login error:", err.message);
@@ -84,10 +66,10 @@ export const refresh = async (
     const {
       newAccessToken,
       newRefreshToken,
-    } = await refreshService(refreshToken);
+    } = await AuthService.refresh(refreshToken);
     
-    setRefreshTokenCookie(res, newRefreshToken);
-    setAccessTokenCookie(res, newAccessToken);
+    Cookie.setRefreshToken(res, newRefreshToken);
+    Cookie.setAccessToken(res, newAccessToken);
 
     return res.status(200).json({
       message: "Token refreshed"
@@ -95,8 +77,8 @@ export const refresh = async (
 
   } catch (err: any) {
     console.error("Refresh error:", err.message);
-    clearRefreshTokenCookie(res);
-    clearAccessTokenCookie(res);
+    Cookie.clearRefreshToken(res);
+    Cookie.clearAccessToken(res);
     return res.status(401).json({
       message: "Session expired",
     });
@@ -111,10 +93,10 @@ export const logout = async (
   try {
     const refreshToken = req.cookies.refreshToken;
 
-    await logoutService(refreshToken);
+    await AuthService.logout(refreshToken);
     
-    clearRefreshTokenCookie(res);
-    clearAccessTokenCookie(res);
+    Cookie.clearRefreshToken(res);
+    Cookie.clearAccessToken(res);
 
     return res.status(200)
       .json({
@@ -136,7 +118,7 @@ export const getCurrentUser = async (
 ) => {
   try {
     
-    const user = await getCurrentUserService(req.user!.id);
+    const user = await AuthService.getMe(req.user!.id);
 
     return res.status(200).json({
       user
