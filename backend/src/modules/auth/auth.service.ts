@@ -125,10 +125,14 @@ const refresh = async (oldRefreshToken: string) => {
 
 // LOGOUT
 const logout = async (
-  refreshToken: string
+  oldRefreshToken: string
 ) => {
   
-  const decoded = JWT.verifyRefreshToken(refreshToken);
+  if (!oldRefreshToken) {
+    throw new Error("No refresh token");
+  }
+  
+  const decoded = JWT.verifyRefreshToken(oldRefreshToken);
 
   await AuthRepository.deleteRefreshToken(
     decoded.id
