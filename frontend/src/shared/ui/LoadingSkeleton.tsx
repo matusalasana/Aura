@@ -1,20 +1,22 @@
 interface Props {
   amount?: number;
   height?: string;
-  style?: string;
+  itemStyle?: string;
+  containerStyle?: string;
 }
 
 const LoadingSkeleton = ({
   amount = 1,
-  style = "flex flex-wrap gap-5 w-full",
   height = "h-20",
+  itemStyle = "",
+  containerStyle = "",
 }: Props) => {
   return (
-    <div className={style}>
+    <div className={`w-full ${containerStyle}`}>
       {Array.from({ length: amount }).map((_, i) => (
         <div
           key={i}
-          className={`skeleton w-full ${height}`}
+          className={`animate-pulse bg-gray-300 rounded ${height} ${itemStyle}`}
         />
       ))}
     </div>

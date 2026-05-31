@@ -25,7 +25,7 @@ const ProductCard = ({
       <Link to={`/products/${product.id}`}>
         <div className="aspect-[3/4] overflow-hidden bg-aura-soft relative">
           <motion.img
-            src={product.image_url}
+            src={product.images[0]}
             alt={product.name}
             className="w-full h-full rounded-lg object-cover grayscale hover:grayscale-0 transition-all duration-700"
             whileHover={{ scale: 1.05 }}

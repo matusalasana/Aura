@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface ProductImage {
-  url: string;
-  alt?: string;
-}
-
 interface ProductDetailImagesProps {
-  images: ProductImage[];
+  images: string [];
   product: {
     name: string;
   };
@@ -25,7 +20,7 @@ const ProductDetailImages = ({ images, product }: ProductDetailImagesProps) => {
         <AnimatePresence mode="wait">
           <motion.img
             key={selectedImage}
-            src={images[selectedImage]?.url}
+            src={images[selectedImage]}
             alt={`${product.name} - View ${selectedImage + 1}`}
             className="w-full h-full object-cover select-none"
             initial={{ opacity: 0 }}
@@ -68,7 +63,7 @@ const ProductDetailImages = ({ images, product }: ProductDetailImagesProps) => {
               }`}
             >
               <img
-                src={img.url}
+                src={img}
                 alt={`${product.name} thumbnail ${i + 1}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
