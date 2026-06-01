@@ -1,24 +1,22 @@
-import { useState } from "react";
 import { useCategories } from "../../../home/hooks/useCategories";
-import { useProductsFiltersStore } from "../../store/productsFiltersStore"
 
 interface Props {
- categoriesFilters: string[];
+  categoriesFilters: string[];
+  setCategories: (category: string) => void;
 }
 
-const Categories = ({categoriesFilters}: Props) => {
+const Categories = ({
+  categoriesFilters,
+  setCategories,
+}: Props) => {
   const {
     data: categories = [],
     isLoading,
     isError,
   } = useCategories();
 
-  const { 
-    filteringCategories,
-    setCategoriesFilters } = useProductsFiltersStore();
-
   const handleCategoryChange = (category: string) => {
-    setCategoriesFilters(category)
+    setCategories(category);
   };
 
   if (isError) {
@@ -27,7 +25,7 @@ const Categories = ({categoriesFilters}: Props) => {
 
   return (
     <div className="space-y-4 text-xs">
-      <h3 className=" font-bold uppercase tracking-widest">
+      <h3 className="font-bold uppercase tracking-widest">
         Categories
       </h3>
 
@@ -40,8 +38,10 @@ const Categories = ({categoriesFilters}: Props) => {
             <input
               disabled={isLoading}
               type="checkbox"
-              checked={filteringCategories.includes(item.name)}
-              onChange={() => handleCategoryChange(item.name)}
+              checked={categoriesFilters.includes(item.id)}
+              onChange={() =>
+                handleCategoryChange(item.id)
+              }
             />
 
             <span>{item.name}</span>

@@ -5,12 +5,19 @@ import Categories from "./productFilters/Categories"
 
 const ProductFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
+  const handleFiltersChange = (category: string) => {
+    setSelectedFilters((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
 
   // Filter Content Component to avoid repetition
   const FilterContent = () => (
     <>
-    
       {/* Header */}
       <div className="flex items-center justify-between lg:justify-start gap-3">
         <div className="flex items-center gap-3">
@@ -33,7 +40,10 @@ const ProductFilters = () => {
       
 
       {/* Categories */}
-      <Categories/>
+      <Categories
+        setCategories={(category) => handleFiltersChange(category)}
+        categoriesFilters={selectedFilters}
+      />
 
       {/* Product Type */}
       <div className="space-y-4">
