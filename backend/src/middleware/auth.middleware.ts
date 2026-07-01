@@ -4,21 +4,19 @@ import {
   NextFunction,
 } from "express";
 
-import { 
-  verifyAccessToken
-} from "../utils/jwt";
+import { JWT } from "../utils/jwt";
 
 
-type Role = "user" | "admin";
+type Role = "customer" | "admin" | "vendor" | "support";
 
 
-export const verifyJWT = async (
+export const authenticate = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   
-  const accessToken = req.cookies.accessToken;
+  const accessToken = req.cookies?.accessToken;
 
   try {
     // No access token
