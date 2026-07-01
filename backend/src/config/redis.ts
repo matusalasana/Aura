@@ -1,26 +1,47 @@
 import { createClient } from 'redis';
-import { REDIS_URL } from './env';
+import { Env } from './env.js';
 import logger from '../utils/logger';
 
-const redisClient = createClient({
-  url: REDIS_URL,
+
+export const redisClient = createClient({
+  url: Env.REDIS_URL,
 });
 
-redisClient.on('error', (err) => logger.error('Redis Client Error', err));
-redisClient.on('connect', () => logger.info('✅ Redis connected'));
+let redisErrorLogged = false;
+let redisReconnectCooldown = false;
+
+redisClient.on('ready', () => {
+  logger.info('✅ Redis connected');
+});
+
+redisClient.on('error', (err) => {
+  if (redisReconnectCooldown) return;
+
+  logger.warn(`⚠️ Redis Error: ${err.message}`);
+
+  redisErrorLogged = true;
+  redisReconnectCooldown = true;
+
+  // reset after cooldown
+  setTimeout(() => {
+    redisReconnectCooldown = false;
+  }, 30000); // 30 seconds
+});
 
 export const connectRedis = async () => {
-  if (!REDIS_URL) {
-    logger.warn('⚠️ REDIS_URL not provided. Redis caching will be skipped.');
-    return null;
+  if (!Env.REDIS_URL) {
+    logger.warn(
+      '⚠️ REDIS_URL missing. Running without Redis.'
+    );
+
+    return;
   }
+
   try {
     await redisClient.connect();
-    return redisClient;
   } catch (err) {
-    logger.error('❌ Redis connection failed:', err);
-    return null;
+    logger.warn(
+      '⚠️ Failed to connect Redis. Falling back to database.'
+    );
   }
 };
-
-export { redisClient };

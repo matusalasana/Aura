@@ -1,6 +1,6 @@
 import { app } from './app';
-import { PORT, NODE_ENV } from './config/env';
-import { connectDB } from './config/db';
+import { Env } from './config/env';
+import { connectDB } from './db';
 import { connectRedis } from './config/redis';
 import logger from './utils/logger';
 
@@ -10,11 +10,14 @@ const startServer = async () => {
     await connectDB();
 
     // 2. Connect to Redis (Caching)
-    await connectRedis();
+    connectRedis();
 
     // 3. Start Express Server
-    app.listen(Number(PORT), '0.0.0.0', () => {
-      logger.info(`🚀 Server running on http://localhost:${PORT}`);
+    app.listen(Number(Env.PORT), '0.0.0.0', () => {
+      logger.info(`🔥 AURA Server running`);
+      logger.info(`🌐 Address: http://localhost:${Env.PORT}`);
+      logger.info(`⚙️ Environment: ${Env.NODE_ENV}`);
+      logger.info(`💻 Developer: https://sana-matusala-portfolio.vercel.app`);
     });
   } catch (error) {
     logger.error('Failed to start server:', error);

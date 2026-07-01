@@ -28,7 +28,10 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "push": "drizzle-kit push",
+    "migrate": "drizzle-kit migrate",
+    "generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -36,12 +39,13 @@
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.2",
     "express": "^4.21.2",
     "express-rate-limit": "^8.4.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
+    "pg": "^8.22.0",
     "redis": "^5.12.1",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
@@ -54,9 +58,12 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.1.0",
     "@types/node": "^22.14.0",
+    "@types/pg": "^8.20.0",
     "autoprefixer": "^10.4.21",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
     "tailwindcss": "^4.1.14",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.4",
     "typescript": "~5.8.2"
   }
 }
