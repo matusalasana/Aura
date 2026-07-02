@@ -1,25 +1,21 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-
-    "moduleResolution": "bundler",
-    "moduleDetection": "force",
-
-    "jsx": "react-jsx",
-
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     },
-
+    
+    "outDir": "./dist",
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "isolatedModules": true,
-
-    "noEmit": true,
-    "useDefineForClassFields": false
+    
+    "noEmit": true
   },
   "include": ["src"]
 }

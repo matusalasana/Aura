@@ -1,15 +1,22 @@
-import { transporter } from "@/config/mail";
-import { Env } from "@/config/env";
+import { transporter } from "../config/email";
+import nodemailer from "nodemailer";
+import { Env } from "../config/env";
 
-export async function sendEmail(
+export const sendEmail = async ({
+  to,
+  subject,
+  template
+}: {
   to: string,
   subject: string,
-  html: string
-) {
-  await transporter.sendMail({
+  template: string
+}) => {
+  const info = await transporter.sendMail({
     from: Env.EMAIL_FROM,
     to,
     subject,
-    html,
+    html: template,
   });
+  
+  console.log("Message sent:", info.messageId);
 }

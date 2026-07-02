@@ -35,7 +35,7 @@ const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
 // EMAIL
 const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = process.env.SMTP_PORT;
+const SMTP_PORT = Number(process.env.SMTP_PORT) || 2525;
 const SMTP_SECURE = process.env.SMTP_SECURE;
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;

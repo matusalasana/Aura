@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-// import authRoutes from "../modules/auth/auth.routes";
+import authRoutes from "../modules/auth/auth.routes";
 // import productRoutes from "../modules/products/products.routes";
 // import categoryRoutes from "../modules/categories/categories.routes";
 // import cartRoutes from "../modules/cart/cart.routes";
@@ -13,9 +13,9 @@ import { Router } from "express";
 // import notificationRoutes from "../modules/notifications/notifications.routes";
 // import uploadRoutes from "../modules/uploads/uploads.routes";
 
-// const router = Router();
+const router = Router();
 
-// router.use("/auth", authRoutes);
+router.use("/auth", authRoutes);
 // router.use("/products", productRoutes);
 // router.use("/categories", categoryRoutes);
 // router.use("/cart", cartRoutes);
@@ -28,4 +28,4 @@ import { Router } from "express";
 // router.use("/notifications", notificationRoutes);
 // router.use("/uploads", uploadRoutes);
 
-// export default router;
+export default router;

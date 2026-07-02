@@ -10,12 +10,12 @@ if(!Env.ACCESS_TOKEN_SECRET || !Env.ACCESS_TOKEN_EXPIRY || !Env.REFRESH_TOKEN_EX
 
 
 const generateAccessToken = (payload: UserPayload) => {
-  return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
+  return jwt.sign(payload, Env.ACCESS_TOKEN_SECRET, { expiresIn: Env.ACCESS_TOKEN_EXPIRY });
 };
 
 const verifyAccessToken = (token: string) => {
   try {
-    return jwt.verify(token, ACCESS_TOKEN_SECRET);
+    return jwt.verify(token, Env.ACCESS_TOKEN_SECRET);
   } catch (error) {
     throw new Error("Invalid access token");
   }
@@ -25,12 +25,12 @@ const verifyAccessToken = (token: string) => {
 
 
 const generateRefreshToken = (payload: UserPayload) => {
-  return jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
+  return jwt.sign(payload, Env.REFRESH_TOKEN_SECRET, { expiresIn: Env.REFRESH_TOKEN_EXPIRY });
 };
 
 const verifyRefreshToken = (token: string) => {
   try {
-    return jwt.verify(token, REFRESH_TOKEN_SECRET);
+    return jwt.verify(token, Env.REFRESH_TOKEN_SECRET);
   } catch (error) {
     throw new Error("Invalid refresh token");
   }

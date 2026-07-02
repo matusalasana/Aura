@@ -1,126 +1,235 @@
-import { sql } from "../../config/db";
+import { db } from "../../db";
+import { users } from "../../db/schema/users";
+import { refreshTokens } from "../../db/schema/refreshTokens";
+import { otps } from "../../db/schema/otps";
 
-// FIND USER BY EMAIL
-const findUserByEmail =
-  async (email: string) => {
-    const result = await sql`
-      SELECT *
-      FROM users
-      WHERE email = ${email}
-      LIMIT 1
-    `;
-
-    return result[0];
-  };
-
-// FIND USER BY ID
-const findUserById =
-  async (id: string) => {
-    const result = await sql`
-      SELECT *
-      FROM users
-      WHERE id = ${id}
-      LIMIT 1
-    `;
-
-    return result[0];
-  };
+import { eq, and, gt, lt } from "drizzle-orm";
 
 
+const findUserByEmail = async (email: string) => {
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
 
-// CREATE USER
-const register =
-  async (
-    first_name: string,
-    last_name: string,
-    email: string,
-    password: string
-  ) => {
-    const result = await sql`
-      INSERT INTO users (
-        first_name,
-        last_name,
-        email,
-        password
+  return user[0] || null;
+};
+
+const findUserById = async (id: string) => {
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, id))
+    .limit(1);
+
+  return user[0] || null;
+};
+
+const createUser = async (data: {
+  name: string;
+  email: string;
+  passwordHash: string;
+  role: "customer" | "vendor" | "admin" | "support";
+}) => {
+  const [user] = await db
+    .insert(users)
+    .values({
+      name: data.name,
+      email: data.email,
+      passwordHash: data.passwordHash,
+      role: data.role,
+      isVerified: true,
+    })
+    .returning();
+
+  return user;
+};
+
+const updatePassword = async ({
+  email,
+  passwordHash,
+}: {
+  email: string;
+  passwordHash: string;
+}) => {
+  await db
+    .update(users)
+    .set({
+      passwordHash,
+      updatedAt: new Date(),
+    })
+    .where(eq(users.email, email));
+};
+
+const createRefreshToken = async ({
+  userId,
+  tokenHash,
+  expiresAt,
+  device,
+  ipAddress,
+}: {
+  userId: string;
+  tokenHash: string;
+  expiresAt: Date;
+  device?: string;
+  ipAddress?: string;
+}) => {
+  const [session] = await db
+    .insert(refreshTokens)
+    .values({
+      userId,
+      tokenHash,
+      expiresAt,
+      device,
+      ipAddress,
+      revoked: false,
+    })
+    .returning();
+
+  return session;
+};
+
+const findRefreshToken = async ({
+  userId,
+  tokenHash,
+}: {
+  userId: string;
+  tokenHash: string;
+}) => {
+  const session = await db
+    .select()
+    .from(refreshTokens)
+    .where(
+      and(
+        eq(refreshTokens.userId, userId),
+        eq(refreshTokens.tokenHash, tokenHash)
       )
-      VALUES (
-        ${first_name},
-        ${last_name},
-        ${email},
-        ${password}
+    )
+    .limit(1);
+
+  return session[0] || null;
+};
+
+const revokeRefreshToken = async (tokenHash: string) => {
+  await db
+    .update(refreshTokens)
+    .set({
+      revoked: true,
+    })
+    .where(eq(refreshTokens.tokenHash, tokenHash));
+};
+
+const revokeAllUserTokens = async (userId: string) => {
+  await db
+    .update(refreshTokens)
+    .set({
+      revoked: true,
+    })
+    .where(eq(refreshTokens.userId, userId));
+};
+
+const deleteExpiredTokens = async () => {
+  await db
+    .delete(refreshTokens)
+    .where(lt(refreshTokens.expiresAt, new Date()));
+};
+
+// FIND OTP
+const findOTP = async ({
+  email,
+  type,
+}: {
+  email: string;
+  type: string;
+}) => {
+
+  const result = await db
+    .select()
+    .from(otps)
+    .where(
+      and(
+        eq(otps.email, email),
+        eq(otps.type, type),
+        gt(otps.expiresAt, new Date())
       )
-      RETURNING
-        id,
-        email,
-        first_name,
-        last_name,
-        role
-    `;
+    )
+    .limit(1);
 
-    return result[0];
-  };
+  return result[0] || null;
+};
+
+// CREATE OTP
+const createOTP = async ({
+  email,
+  codeHash,
+  type,
+  expiresAt,
+  usedAt,
+}: {
+  email: string;
+  codeHash: string;
+  type: string;
+  expiresAt: string;
+  usedAt: string;
+}) => {
+
+  const result = await db
+    .insert(otps)
+    .values({
+      email,
+      codeHash,
+      type,
+      usedAt: new Date(),
+      expiresAt: new Date(
+        Date.now() + 10 * 60 * 1000
+      ),
+    })
+    .returning();
+
+  return result[0];
+};
+
+// DELETE OTP
+const deleteOTP = async ({
+  email,
+  type,
+}: {
+  email: string;
+  type: string;
+}) => {
+
+  const result = await db
+    .delete(otps)
+    .where(
+      and(
+        eq(otps.email, email),
+        eq(otps.type, type)
+      )
+    )
+    .returning();
+
+  return result;
+};
+
+
+
+export const AuthRepository = {
+  // users
+  findUserByEmail,
+  findUserById,
+  createUser,
+  updatePassword,
+
+  // refresh tokens
+  createRefreshToken,
+  findRefreshToken,
+  revokeRefreshToken,
+  revokeAllUserTokens,
+  deleteExpiredTokens,
   
-// CREATE REFRESH TOKEN
-const createRefreshToken =
-  async (
-    userId: string,
-    hashedToken: string
-  ) => {
-    const result = await sql`
-      UPDATE refresh_tokens
-      SET
-        token = ${hashedToken},
-        expires_at =
-          NOW() + INTERVAL '7 days'
-      WHERE user_id = ${userId}
-        AND revoked_at IS NULL
-      RETURNING *
-    `;
-
-    return result[0];
-  };
-
-// ROTATE REFRESH TOKEN
-const rotateRefreshToken =
-  async (
-    userId: string,
-    hashedToken: string
-  ) => {
-    const result = await sql`
-      UPDATE refresh_tokens
-      SET
-        token = ${hashedToken},
-        expires_at =
-          NOW() + INTERVAL '7 days'
-      WHERE user_id = ${userId}
-        AND revoked_at IS NULL
-      RETURNING *
-    `;
-
-    return result[0];
-  };
-
-// REVOKE TOKEN
-const deleteRefreshToken =
-  async (
-    userId: string,
-  ) => {
-    const result = await sql`
-      DELETE FROM refresh_tokens
-      WHERE user_id = ${userId}
-
-      RETURNING *
-    `;
-
-    return result[0];
-  };
-  
-  
-  export const AuthRepository = {
-    findUserByEmail,
-    findUserById,
-    createRefreshToken,
-    register,
-    rotateRefreshToken,
-    deleteRefreshToken
-  }
+  // otps
+  findOTP,
+  deleteOTP,
+  createOTP,
+};

@@ -1,7 +1,10 @@
-export function verifyEmailTemplate(
-  name: string,
-  otp: string
-) {
+export function verifyEmailTemplate({
+  name,
+  otp,
+}:{
+  name: string;
+  otp:string;
+}) {
   return `
     <!DOCTYPE html>
     <html>

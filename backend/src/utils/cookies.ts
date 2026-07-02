@@ -1,22 +1,18 @@
 import { Response } from "express";
-import { 
-  REFRESH_COOKIE_MAX_AGE,
-  ACCESS_COOKIE_MAX_AGE,
-  NODE_ENV
-} from "../config/env";
+import {  Env } from "../config/env";
 
 const accessCookieOptions = {
     httpOnly: true,
-    secure: NODE_ENV === 'production',
+    secure: Env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: ACCESS_COOKIE_MAX_AGE
+    maxAge: Env.ACCESS_COOKIE_MAX_AGE
   };
   
 const refreshCookieOptions = {
     httpOnly: true,
-    secure: NODE_ENV === 'production',
+    secure: Env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: REFRESH_COOKIE_MAX_AGE
+    maxAge: Env.REFRESH_COOKIE_MAX_AGE
   };
 
 

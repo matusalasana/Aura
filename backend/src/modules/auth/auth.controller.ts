@@ -1,139 +1,276 @@
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import { Cookie } from "../../utils/cookies";
+import { logger } from "../../utils/logger";
 
-// REGISTER
-const register = async (
-  req: Request,
-  res: Response
-) => {
+import { AuthService } from "./auth.service";
+import logger from "../../utils/logger";
+
+/* -------------------------- REGISTER CUSTOMER -------------------------- */
+
+const registerCustomer = async (req, res) => {
   try {
-    const { 
-      accessToken, 
-      refreshToken,
-      user
-    } = await AuthService.register(req.body);
+    const { name, email, password } = req.body;
 
-    Cookie.setRefreshToken(res, refreshToken);
-    Cookie.setAccessToken(res, accessToken);
-    
-    return res.status(201)
-      .json(user);
-      
-  } catch (err: any) {
-    console.log("Register error:", err.message);
+    await AuthService.registerCustomer({
+      name,
+      email,
+      password,
+    });
+
+    return res.status(200).json({
+      message: "OTP sent to your email",
+    });
+  } catch (err) {
+    logger.error(`Register customer error: ${err.cause || err.message}`);
+
     return res.status(400).json({
       message: err.message,
     });
   }
 };
 
-// LOGIN
-const login = async (
-  req: Request,
-  res: Response
-) => {
+const registerVendor = async (req, res) => {
   try {
-    const oldRefreshToken = req.cookies.refreshToken;
     const {
+      name,
+      email,
+      password,
+      store_name,
+      description,
+    } = req.body;
+
+    const files = req.files as any;
+
+    const vendor = await AuthService.registerVendor({
+      userId: req.user?.userId,
+
+      name,
+      email,
+      password,
+
+      store_name,
+      description,
+
+      logo_buffer: files?.logo?.[0]?.buffer,
+      banner_buffer: files?.banner?.[0]?.buffer,
+      license_buffer: files?.license?.[0]?.buffer,
+    });
+
+    return res.status(200).json({
+      message: "OTP sent to your email",
+    });
+  } catch (error) {
+    logger.error(`Register vendor error: ${error.message}`);
+
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+
+const verifyEmail = async (req: Request, res: Response) => {
+  try {
+    const {
+      user,
       accessToken,
       refreshToken,
-      user
-    } = await AuthService.login(req.body);
-    
+    } = await AuthService.verifyEmail(req.body);
+
     Cookie.setRefreshToken(res, refreshToken);
-    Cookie.setAccessToken(res, accessToken);
-    
-    return res.status(200)
-      .json(user);
 
-  } catch (err: any) {
-    console.error("Login error:", err.message);
-    
-    return res.status(401).json({
-      message: err.message,
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully.",
+      accessToken,
+      user,
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
 
-// REFRESH
-const refresh = async (
-  req: Request,
-  res: Response
-) => {
+const login = async (req: Request, res: Response) => {
   try {
-    const oldRefreshToken = req.cookies.refreshToken;
-
     const {
-      newAccessToken,
-      newRefreshToken,
-    } = await AuthService.refresh(oldRefreshToken);
-    
-    Cookie.setRefreshToken(res, newRefreshToken);
-    Cookie.setAccessToken(res, newAccessToken);
+      user,
+      accessToken,
+      refreshToken,
+    } = await AuthService.login(req.body);
 
-    return res.status(200).json({ message: "Token refreshed" });
+    Cookie.setRefreshToken(res, refreshToken);
 
-  } catch (err: any) {
-    console.error("Refresh error:", err.message);
-    Cookie.clearRefreshToken(res);
-    Cookie.clearAccessToken(res);
-    return res.status(401).json({
-      message: "Session expired",
+    return res.status(200).json({
+      success: true,
+      message: "Login successful.",
+      accessToken,
+      user,
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
 
-// LOGOUT
-const logout = async (
-  req: Request,
-  res: Response
-) => {
+const refresh = async (req: Request, res: Response) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const { accessToken, refreshToken } =
+      await AuthService.refresh(req.cookies.refreshToken);
 
-    await AuthService.logout(refreshToken);
-    
-    Cookie.clearRefreshToken(res);
-    Cookie.clearAccessToken(res);
+    Cookie.setRefreshToken(res, refreshToken);
 
-    return res.status(200)
-      .json({
-        message: "Logged out successfully",
-      });
+    return res.status(200).json({
+      success: true,
+      accessToken,
+    });
+  } catch (error: any) {
+    logger.error(error);
 
-  } catch (err: any) {
-    console.log("Logout error:", err.message);
-    return res.status(400).json({
-      message: err.message,
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
 
-// CURRENT USER
-const getMe = async (
-  req: Request,
-  res: Response
-) => {
+const logout = async (req: Request, res: Response) => {
   try {
-    
-    const user = await AuthService.getMe(req.user!.id);
+    await AuthService.logout(req.cookies.refreshToken);
 
-    return res.status(200).json(user);
+    Cookie.clearRefreshToken(res);
 
-  } catch (err: any) {
-    console.log("Get me error:", err.message);
-    return res.status(404).json({
-      message: err.message,
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully.",
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
     });
   }
 };
 
+const logoutAll = async (req: Request, res: Response) => {
+  try {
+    await AuthService.logoutAll(req.user.id);
+
+    Cookie.clearRefreshToken(res);
+
+    return res.status(200).json({
+      success: true,
+      message: "All sessions revoked successfully.",
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    await AuthService.forgotPassword(req.body);
+
+    return res.status(200).json({
+      success: true,
+      message: "Password reset OTP sent.",
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const resetPassword = async (req: Request, res: Response) => {
+  try {
+    await AuthService.resetPassword(req.body);
+
+    return res.status(200).json({
+      success: true,
+      message: "Password reset successfully.",
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const resendOTP = async (req: Request, res: Response) => {
+  try {
+    await AuthService.resendOTP(req.body);
+
+    return res.status(200).json({
+      success: true,
+      message: "OTP sent successfully.",
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getMe = async (req: Request, res: Response) => {
+  try {
+    const user = await AuthService.getMe(req.user.id);
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error: any) {
+    logger.error(error);
+
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 export const AuthController = {
-  register,
+  registerCustomer,
+  registerVendor,
+  
+  verifyEmail,
+  
   login,
+  
   refresh,
+  
   logout,
-  getMe
-}
+  logoutAll,
+  
+  getMe,
+  
+  forgotPassword,
+  resetPassword,
+  resendOTP,
+};
