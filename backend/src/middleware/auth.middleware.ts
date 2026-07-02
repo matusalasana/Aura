@@ -16,7 +16,15 @@ export const authenticate = async (
   next: NextFunction
 ) => {
   
-  const accessToken = req.cookies?.accessToken;
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(401).json({
+      message: "No access token",
+    });
+  }
+  
+  const accessToken = authHeader.split(" ")[1];
 
   try {
     // No access token
