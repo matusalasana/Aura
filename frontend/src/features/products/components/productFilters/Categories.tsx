@@ -39,9 +39,7 @@ const Categories = ({
               disabled={isLoading}
               type="checkbox"
               checked={categoriesFilters.includes(item.id)}
-              onChange={() =>
-                handleCategoryChange(item.id)
-              }
+              onChange={() => handleCategoryChange(item.id)}
             />
 
             <span>{item.name}</span>
