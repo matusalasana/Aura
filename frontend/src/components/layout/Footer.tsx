@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Twitter, Facebook, ArrowRight } from 'lucide-react';
+import { MessageCircleMore } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -12,9 +12,9 @@ const Footer = () => {
             Elevating everyday essentials through conscious design and premium craftsmanship. Join us in our journey towards timeless elegance.
           </p>
           <div className="flex space-x-4">
-            <a href="#" className="hover:text-aura-accent transition-colors"><Instagram className="w-5 h-5" strokeWidth={1.5} /></a>
-            <a href="#" className="hover:text-aura-accent transition-colors"><Twitter className="w-5 h-5" strokeWidth={1.5} /></a>
-            <a href="#" className="hover:text-aura-accent transition-colors"><Facebook className="w-5 h-5" strokeWidth={1.5} /></a>
+            <a href="#" className="hover:text-aura-accent transition-colors"><MessageCircleMore className="w-5 h-5" strokeWidth={1.5} /></a>
+            <a href="#" className="hover:text-aura-accent transition-colors"><MessageCircleMore className="w-5 h-5" strokeWidth={1.5} /></a>
+            <a href="#" className="hover:text-aura-accent transition-colors"><MessageCircleMore className="w-5 h-5" strokeWidth={1.5} /></a>
           </div>
         </div>
 
