@@ -1,0 +1,31 @@
+{
+  "hash": "f5d3e35c",
+  "configHash": "ae22b186",
+  "lockfileHash": "290a369e",
+  "browserHash": "deb828eb",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "75183c21",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "e2185606",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "a8781a2c",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-HCL24KPZ": {
+      "file": "chunk-HCL24KPZ.js"
+    }
+  }
+}
