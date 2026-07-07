@@ -13,6 +13,7 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// REQUEST INTERCEPTOR
 api.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
 
@@ -23,32 +24,35 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+
+// RESPONSE INTERCEPTOR
+let refreshPromise = null;
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
+    const original = error.config;
+    if (error.response?.status === 403 && !original._retry) {
+      original._retry = true;
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-
-      try {
-        const { data } = await api.post("/auth/refresh");
-
-        setAccessToken(data.accessToken);
-
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-
-        return api(originalRequest);
-      } catch {
-        clearAccessToken();
-
-        return Promise.reject(error);
+      // dedupe concurrent refresh calls if multiple requests 403 at once
+      if (!refreshPromise) {
+        refreshPromise = api.post('/refresh').then((res) => {
+          setAccessToken(res.data.accessToken);
+          refreshPromise = null;
+          return res.data.accessToken;
+        }).catch((err) => {
+          refreshPromise = null;
+          setAccessToken(null);
+          window.location.href = '/login';
+          throw err;
+        });
       }
-    }
 
+      const newToken = await refreshPromise;
+      original.headers.Authorization = `Bearer ${newToken}`;
+      return api(original);
+    }
     return Promise.reject(error);
   }
 );
