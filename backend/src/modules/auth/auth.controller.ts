@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import { Cookie } from "../../utils/cookies";
-import { logger } from "../../utils/logger";
-
-import { AuthService } from "./auth.service";
 import logger from "../../utils/logger";
 
 /* -------------------------- REGISTER CUSTOMER -------------------------- */
