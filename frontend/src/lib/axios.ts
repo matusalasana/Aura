@@ -1,8 +1,15 @@
 import axios from "axios";
-import { getAccessToken, setAccessToken, clearAccessToken } from "../utils/token";
+import { getAccessToken, setAccessToken, clearAccessToken } from "@/utils/token";
+
+let BASE_URL;
+if(import.meta.env.DEV){
+  BASE_URL="http://localhost:9000/api/v1"
+}else{
+  BASE_URL = import.meta.env.VITE_API_URL
+}
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 

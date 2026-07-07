@@ -10,6 +10,8 @@ import Home from "../dashboard/customer/pages/Home";
 // Customer pages
 import ProtectedCustomerRoutes from "@/features/auth/components/ProtectedCustomerRoutes";
 
+import RegisterCustomer from "@/features/auth/pages/RegisterCustomer"
+
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +23,11 @@ export const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+      {
+        path: "/login",
+        element: <RegisterCustomer />
+      },
+      
       // Customer Protected Pages
       {
         element: <ProtectedCustomerRoutes />,

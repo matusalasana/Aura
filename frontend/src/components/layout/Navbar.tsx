@@ -1,142 +1,212 @@
-import { Link } from "react-router-dom";
-import {
-  Bell,
-  Heart,
-  Menu,
-  Search,
-  ShoppingCart,
-  User,
-} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, ShoppingBag, User } from "lucide-react";
+import { useState } from "react";
+import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
+import ThemeToggle from "../ui/ThemeToggle";
 
-export default function Navbar() {
+const Navbar = () => {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const { data: user } = useCurrentUser();
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "Categories", path: "/categories" },
+    { name: "About", path: "/about" },
+  ];
+
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-20 max-w-7xl items-center gap-6 px-4 lg:px-8">
+    <header
+      className="
+        sticky top-0 z-50
+        border-b border-zinc-200
+        bg-white/80
+        backdrop-blur-md
+        dark:border-zinc-800
+        dark:bg-zinc-950/80
+      "
+    >
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* Logo */}
         <Link
           to="/"
-          className="flex items-center gap-2 shrink-0"
+          className="
+            text-2xl font-bold
+            text-zinc-900
+            dark:text-zinc-100
+          "
         >
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-600 text-lg font-bold text-white shadow-lg">
-            A
-          </div>
-
-          <span className="hidden text-2xl font-black tracking-tight text-slate-900 sm:block">
-            Aura
-          </span>
+          Aura<span className="text-amber-500">.</span>
         </Link>
 
-        {/* Navigation */}
-        <nav className="hidden items-center gap-8 lg:flex">
-          <Link
-            to="/products"
-            className="font-medium text-slate-700 transition hover:text-indigo-600"
+
+        {/* Desktop Links */}
+        <div className="hidden items-center gap-8 md:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className="
+                text-sm font-medium
+                text-zinc-600
+                transition
+                hover:text-amber-500
+                dark:text-zinc-400
+                dark:hover:text-amber-400
+              "
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+
+
+        {/* Desktop Actions */}
+        <div className="hidden items-center gap-3 md:flex">
+
+          <ThemeToggle />
+
+          <button
+            onClick={() => navigate("/cart")}
+            className="
+              rounded-lg p-2
+              text-zinc-600
+              transition
+              hover:bg-zinc-100
+              dark:text-zinc-400
+              dark:hover:bg-zinc-800
+            "
           >
-            Products
-          </Link>
+            <ShoppingBag size={20} />
+          </button>
 
-          <Link
-            to="/vendors"
-            className="font-medium text-slate-700 transition hover:text-indigo-600"
-          >
-            Vendors
-          </Link>
 
-          <Link
-            to="/categories"
-            className="font-medium text-slate-700 transition hover:text-indigo-600"
-          >
-            Categories
-          </Link>
+          {user ? (
+            <button
+              onClick={() => navigate("/profile")}
+              className="
+                flex items-center gap-2
+                rounded-lg
+                bg-amber-500
+                px-4 py-2
+                text-sm font-semibold
+                text-white
+                transition
+                hover:bg-amber-600
+              "
+            >
+              <User size={16} />
+              Account
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="
+                rounded-lg
+                bg-amber-500
+                px-4 py-2
+                text-sm font-semibold
+                text-white
+                transition
+                hover:bg-amber-600
+              "
+            >
+              Login
+            </button>
+          )}
 
-          <Link
-            to="/deals"
-            className="font-medium text-slate-700 transition hover:text-indigo-600"
-          >
-            Deals
-          </Link>
-        </nav>
+        </div>
 
-        {/* Search */}
-        <div className="hidden flex-1 lg:flex">
-          <div className="relative w-full max-w-xl">
 
-            <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-              size={18}
-            />
+        {/* Mobile Toggle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="
+            rounded-lg p-2
+            text-zinc-700
+            dark:text-zinc-300
+            md:hidden
+          "
+        >
+          {open ? <X /> : <Menu />}
+        </button>
 
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="h-12 w-full rounded-full border border-slate-200 bg-slate-50 pl-11 pr-5 outline-none transition-all focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
-            />
+      </nav>
+
+
+      {/* Mobile Menu */}
+      {open && (
+        <div
+          className="
+            border-t border-zinc-200
+            bg-white
+            px-4 py-5
+            dark:border-zinc-800
+            dark:bg-zinc-950
+            md:hidden
+          "
+        >
+          <div className="flex flex-col gap-5">
+
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setOpen(false)}
+                className="
+                  text-sm font-medium
+                  text-zinc-700
+                  hover:text-amber-500
+                  dark:text-zinc-300
+                  dark:hover:text-amber-400
+                "
+              >
+                {link.name}
+              </Link>
+            ))}
+
+
+            <div className="flex items-center justify-between pt-2">
+              <ThemeToggle />
+
+              {user ? (
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="
+                    rounded-lg
+                    bg-amber-500
+                    px-4 py-2
+                    text-sm font-semibold
+                    text-white
+                  "
+                >
+                  Profile
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate("/login")}
+                  className="
+                    rounded-lg
+                    bg-amber-500
+                    px-4 py-2
+                    text-sm font-semibold
+                    text-white
+                  "
+                >
+                  Login
+                </button>
+              )}
+            </div>
 
           </div>
         </div>
+      )}
 
-        {/* Right Side */}
-        <div className="ml-auto flex items-center gap-2">
-
-          <button className="hidden rounded-xl p-3 transition hover:bg-slate-100 lg:flex">
-            <Heart size={22} />
-          </button>
-
-          <button className="hidden rounded-xl p-3 transition hover:bg-slate-100 lg:flex">
-            <Bell size={22} />
-          </button>
-
-          <button className="relative rounded-xl p-3 transition hover:bg-slate-100">
-
-            <ShoppingCart size={22} />
-
-            <span className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[11px] font-semibold text-white">
-              3
-            </span>
-
-          </button>
-
-          <button className="hidden items-center gap-2 rounded-full border border-slate-200 p-1 pr-3 transition hover:border-indigo-500 hover:bg-slate-50 lg:flex">
-
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100">
-              <User
-                size={18}
-                className="text-indigo-600"
-              />
-            </div>
-
-            <span className="text-sm font-semibold">
-              Account
-            </span>
-
-          </button>
-
-          <button className="rounded-xl p-3 transition hover:bg-slate-100 lg:hidden">
-            <Menu size={24} />
-          </button>
-
-        </div>
-      </div>
-
-      {/* Mobile Search */}
-      <div className="border-t border-slate-100 p-4 lg:hidden">
-
-        <div className="relative">
-
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-          />
-
-          <input
-            placeholder="Search products..."
-            className="h-12 w-full rounded-full border border-slate-200 bg-slate-50 pl-11 pr-4 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-          />
-
-        </div>
-
-      </div>
     </header>
   );
-}
+};
+
+export default Navbar;
