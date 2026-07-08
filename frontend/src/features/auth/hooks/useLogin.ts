@@ -7,7 +7,7 @@ import { type LoginInput } from "../schemas"
 
 const loginUser = async (data: LoginInput) => {
   const res = await api.post(`/auth/login`, data)
-  return res.data.user
+  return res.data
 }
 
 export const useLogin = () => {

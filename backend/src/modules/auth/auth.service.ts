@@ -130,7 +130,7 @@ const registerVendor = async ({
     expiresAt: new Date(Date.now() + OTP_TTL * 1000),
   });
 
-  await sendEmail({
+  sendEmail({
     to: email,
     subject: "Verify your vendor account",
     template: verifyEmailTemplate({
@@ -337,7 +337,7 @@ const forgotPassword = async ({ email }) => {
     expiresAt: new Date(Date.now() + OTP_TTL * 1000),
   });
 
-  await sendEmail({
+  sendEmail({
     to: email,
     subject: "Password reset code",
     template: resetPasswordTemplate({
@@ -411,7 +411,7 @@ const resendOTP = async ({ email, type }) => {
   });
 
   if(type === "reset_password"){
-    await sendEmail({
+    sendEmail({
       to: email,
       subject: "Password reset code",
       template: resetPasswordTemplate({

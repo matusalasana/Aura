@@ -31,20 +31,25 @@ let refreshPromise = null;
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+    const token = getAccessToken();
+
+    if (!token) {
+      return Promise.reject(error);
+    }
     const original = error.config;
-    if (error.response?.status === 403 && !original._retry) {
+    if ((error.response?.status === 403 || error.response?.status === 401) && !original._retry) {
       original._retry = true;
 
       // dedupe concurrent refresh calls if multiple requests 403 at once
       if (!refreshPromise) {
-        refreshPromise = api.post('/refresh').then((res) => {
+        refreshPromise = api.post('/auth/refresh').then((res) => {
           setAccessToken(res.data.accessToken);
           refreshPromise = null;
           return res.data.accessToken;
         }).catch((err) => {
           refreshPromise = null;
           setAccessToken(null);
-          window.location.href = '/login';
+          window.location.href = "/login-customer";
           throw err;
         });
       }

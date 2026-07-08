@@ -5,7 +5,7 @@ import {
 } from "express";
 
 import { JWT } from "../utils/jwt";
-
+import logger from "../utils/logger"
 
 type Role = "customer" | "admin" | "vendor" | "support";
 
@@ -29,7 +29,7 @@ export const authenticate = async (
   try {
     // No access token
     if (!accessToken) {
-      console.log("No access token");
+      logger.error("No access token");
       return res.status(401).json({
         message: "No access token",
       });
@@ -44,7 +44,7 @@ export const authenticate = async (
     return next();
     
   } catch (error: any) {
-    console.log(error.message || "Access token expired or invalid");
+    logger.error(error.message || "Access token expired or invalid");
     return res.status(401).json({
       message: "Access token expired or invalid"
     })

@@ -1,22 +1,25 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import ErrorPage from "@/pages/ErrorPage"
 
 // Layouts 
-import AppLayout from "../layouts/AppLayout";
+import AppLayout from "@/layouts/AppLayout";
 
 // Public pages
-import Home from "../dashboard/customer/pages/Home";
+import Home from "@/dashboard/customer/pages/Home";
 
 // Customer pages
 import ProtectedCustomerRoutes from "@/features/auth/components/ProtectedCustomerRoutes";
 
 import RegisterCustomer from "@/features/auth/pages/RegisterCustomer"
+import LoginCustomer from "@/features/auth/pages/LoginCustomer"
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <AppLayout />,
+    errorElement: <ErrorPage />,
     children: [
       // Customer Public Pages
       {
@@ -24,7 +27,11 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/login",
+        path: "/login-customer",
+        element: <LoginCustomer />
+      },
+      {
+        path: "/register-customer",
         element: <RegisterCustomer />
       },
       
@@ -36,23 +43,6 @@ export const router = createBrowserRouter([
             path: "/order",
             element: <h1> Orders page</h1>
           }
-        ],
-      },
-    ],
-  },
-
-  // Vendor Protected Routes 
-  {
-    path: "/",
-    element: <ProtectedCustomerRoutes />, 
-    children: [
-      {
-        element: <AppLayout />,
-        children: [
-          {
-            index: true,
-            element: <h1>Admin Dashboard </h1>,
-          },
         ],
       },
     ],

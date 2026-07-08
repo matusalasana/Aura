@@ -1,8 +1,8 @@
-import api from "../../api";
+import api from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { getErrorMessage } from "@utils/getErrorMessage";
-import { RegisterCustomerInput } from "../../types/auth";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { type  RegisterCustomerInput } from "../types";
 
 const registerCustomer = async (data: RegisterCustomerInput) => {
   const res = await api.post("/auth/register/customer", data);
