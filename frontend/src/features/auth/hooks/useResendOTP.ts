@@ -1,8 +1,8 @@
-import api from "../../api";
+import api from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { ResendOTPInput } from "../../types/auth";
-import { getErrorMessage } from "@utils/getErrorMessage";
+import { type ResendOTPInput } from "../types";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const resendOTP = async (data: ResendOTPInput) => {
   const res = await api.post("/auth/resend-otp", data);

@@ -7,9 +7,9 @@ import { CacheService } from "../../utils/CacheService";
 import { generateOTP } from "../../utils/otp";
 
 import { sendEmail } from "../../utils/email";
-import { verifyEmailTemplate } from "../../templates/verify-email";
+import { verifyEmailTemplate } from "../../templates/verifyEmail";
 import { welcome } from "../../templates/welcome";
-import { resetPasswordTemplate } from "../../templates/reset-password";
+import { resetPasswordTemplate } from "../../templates/resetPassword";
 
 import { uploadToCloudinary } from "../../utils/cloudinary";
 
@@ -341,7 +341,7 @@ const forgotPassword = async ({ email }) => {
     to: email,
     subject: "Password reset code",
     template: resetPasswordTemplate({
-      name: "🔐",
+      name: user.name,
       resetLink: otp,
     }),
   });
@@ -396,10 +396,14 @@ const resendOTP = async ({ email, type }) => {
   const otpHash = await HashUtils.hashOTP(otp);
 
   const cacheKey = getOtpKey(type, email);
+  const pending = await CacheService.get(cacheKey);
 
   await CacheService.set(
     cacheKey,
-    { email, otp: otpHash },
+    {
+      ...pending,
+      otp: otpHash
+    },
     OTP_TTL
   );
 
@@ -415,17 +419,17 @@ const resendOTP = async ({ email, type }) => {
       to: email,
       subject: "Password reset code",
       template: resetPasswordTemplate({
-        name: "🔐",
+        name: pending.name,
         resetLink: otp,
       }),
     });
   }
-  if(type === "verify-emai"){
+  if(type === "verify_email"){
     await sendEmail({
       to: email,
       subject: "Email verification code",
       template: verifyEmailTemplate({
-        name: "",
+        name: pending.name,
         otp,
       }),
     });

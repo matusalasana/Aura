@@ -18,11 +18,11 @@ const registerCustomer = async (req, res) => {
     return res.status(200).json({
       message: "OTP sent to your email",
     });
-  } catch (err) {
-    logger.error(`Register customer error: ${err.cause || err.message}`);
+  } catch (error: any) {
+    logger.error(`Register customer error: ${error.cause || error.message}`);
 
     return res.status(400).json({
-      message: err.message,
+      message: error.message,
     });
   }
 };
@@ -57,7 +57,7 @@ const registerVendor = async (req, res) => {
     return res.status(200).json({
       message: "OTP sent to your email",
     });
-  } catch (error) {
+  } catch (error: any) {
     logger.error(`Register vendor error: ${error.message}`);
 
     return res.status(400).json({
@@ -84,7 +84,7 @@ const verifyEmail = async (req: Request, res: Response) => {
       user,
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,
@@ -110,7 +110,7 @@ const login = async (req: Request, res: Response) => {
       user,
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,
@@ -131,7 +131,7 @@ const refresh = async (req: Request, res: Response) => {
       accessToken,
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
     console.log(error)
 
     return res.status(error.statusCode || 500).json({
@@ -152,7 +152,7 @@ const logout = async (req: Request, res: Response) => {
       message: "Logged out successfully.",
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,
@@ -172,7 +172,7 @@ const logoutAll = async (req: Request, res: Response) => {
       message: "All sessions revoked successfully.",
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,
@@ -190,7 +190,7 @@ const forgotPassword = async (req: Request, res: Response) => {
       message: "Password reset OTP sent.",
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,
@@ -208,7 +208,7 @@ const resetPassword = async (req: Request, res: Response) => {
       message: "Password reset successfully.",
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,
@@ -226,7 +226,7 @@ const resendOTP = async (req: Request, res: Response) => {
       message: "OTP sent successfully.",
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,
@@ -244,7 +244,7 @@ const getMe = async (req: Request, res: Response) => {
       user,
     });
   } catch (error: any) {
-    logger.error(`${err.cause || err.message}`)
+    logger.error(`${error.cause || error.message}`)
 
     return res.status(error.statusCode || 500).json({
       success: false,

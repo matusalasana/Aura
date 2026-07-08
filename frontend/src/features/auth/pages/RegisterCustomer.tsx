@@ -8,6 +8,8 @@ import { type RegisterInput, registerSchema } from "../schemas";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useRegisterCustomer } from "../hooks/useRegisterCustomer";
 import { useVerifyEmail } from "../hooks/useVerifyEmail";
+import { useResendOTP } from "../hooks/useResendOTP";
+
 import OTPCard from "../components/OTPCard"
 
 const RegisterCustomer = () => {
@@ -16,8 +18,12 @@ const RegisterCustomer = () => {
   const { data: user, isLoading: userLoading } = useCurrentUser();
   const { mutate: registerUser, isPending: registerPending } = useRegisterCustomer();
   const { mutate: verifyEmail, isPending: verifyEmailPending } = useVerifyEmail();
+  const { mutate: resendOTP, isPending: otpResendPending } = useResendOTP();
   
-  const isPending = verifyEmailPending | registerPending;
+  const isPending =
+    verifyEmailPending ||
+    registerPending ||
+    otpResendPending;
   
   const [isOTPOpen, setIsOTPOpen] = useState(false);
   const [otpEmail, setOTPEmail] = useState<null | string>("");
@@ -51,6 +57,14 @@ const RegisterCustomer = () => {
       },
     })
   };
+  
+  const handleOtpResend = (email: string, type: string) => {
+    const data = {
+      email,
+      type
+    }
+    resendOTP(data)
+  }
 
 
   if (userLoading) {
@@ -84,10 +98,13 @@ const RegisterCustomer = () => {
     >
       { 
         isOTPOpen && 
-          <OTPCard 
+          <OTPCard
             email={otpEmail}
-            onComplete={handleOtpComplete} 
-          /> 
+            onComplete={handleOtpComplete}
+            onResend={handleOtpResend}
+            pending={otpResendPending}
+            type="verify_email"
+          />
       }
       
       <form

@@ -3,10 +3,13 @@ import { OTPInput, REGEXP_ONLY_DIGITS } from "input-otp";
 interface OTPProps {
   onComplete: (code: string) => void;
   email: string;
+  type: string;
+  onResend: (email: string, type: string) => void
+  pending: boolean;
 }
 
 
-const OTPCard = ({onComplete, email}: OTPProps) => {
+const OTPCard = ({onComplete, email, type, onResend, pending}: OTPProps) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
@@ -56,8 +59,9 @@ const OTPCard = ({onComplete, email}: OTPProps) => {
             Didn't receive a code?
           </p>
           <button
+            disabled={pending}
             className="font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
-            onClick={() => console.log("Resend requested")}
+            onClick={() => onResend(email, type)}
           >
             Resend
           </button>

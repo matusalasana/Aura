@@ -66,6 +66,7 @@ export interface ResetPasswordInput {
 
 export interface ResendOTPInput {
   email: string;
+  type: string;
 }
 
 /* ========================= RESPONSES ========================= */
