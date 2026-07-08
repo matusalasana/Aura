@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useNavigate, Navigate } from "react-router-dom";
@@ -6,12 +7,20 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { type RegisterInput, registerSchema } from "../schemas";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useRegisterCustomer } from "../hooks/useRegisterCustomer";
+import { useVerifyEmail } from "../hooks/useVerifyEmail";
+import OTPCard from "../components/OTPCard"
 
 const RegisterCustomer = () => {
   const navigate = useNavigate();
 
   const { data: user, isLoading: userLoading } = useCurrentUser();
-  const { mutate: registerUser, isPending } = useRegisterCustomer();
+  const { mutate: registerUser, isPending: registerPending } = useRegisterCustomer();
+  const { mutate: verifyEmail, isPending: verifyEmailPending } = useVerifyEmail();
+  
+  const isPending = verifyEmailPending | registerPending;
+  
+  const [isOTPOpen, setIsOTPOpen] = useState(false);
+  const [otpEmail, setOTPEmail] = useState<null | string>("");
 
   const {
     register,
@@ -21,13 +30,26 @@ const RegisterCustomer = () => {
     resolver: zodResolver(registerSchema),
   });
 
-
   const onSubmit = (data: RegisterInput) => {
+    setOTPEmail(data.email)
     registerUser(data, {
       onSuccess: () => {
-        navigate("/login");
+        setIsOTPOpen(true);
       },
     });
+  };
+  
+  const handleOtpComplete = (code: string) => {
+    const data = {
+      email: otpEmail,
+      otp: code
+    }
+    verifyEmail(data, {
+      onSuccess: () => {
+        setIsOTPOpen(false);
+        navigate("/")
+      },
+    })
   };
 
 
@@ -60,6 +82,14 @@ const RegisterCustomer = () => {
         dark:bg-zinc-950
       "
     >
+      { 
+        isOTPOpen && 
+          <OTPCard 
+            email={otpEmail}
+            onComplete={handleOtpComplete} 
+          /> 
+      }
+      
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="

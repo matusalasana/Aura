@@ -1,9 +1,9 @@
-import api from "../../api";
+import api from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { setAccessToken } from "../../utils/token";
-import { VerifyEmailInput } from "../../types/auth";
-import { getErrorMessage } from "@utils/getErrorMessage";
+import { setAccessToken } from "@/utils/token";
+import { type VerifyEmailInput } from "../types";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const verifyEmail = async (data: VerifyEmailInput) => {
   const res = await api.post("/auth/verify-email", data);

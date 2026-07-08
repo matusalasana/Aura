@@ -15,6 +15,7 @@
     "@tanstack/react-query": "^5.101.2",
     "axios": "^1.18.1",
     "framer-motion": "^12.42.2",
+    "input-otp": "^1.4.2",
     "lucide-react": "^1.23.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
