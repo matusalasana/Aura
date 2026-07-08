@@ -9,6 +9,7 @@ import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useRegisterCustomer } from "../hooks/useRegisterCustomer";
 import { useVerifyEmail } from "../hooks/useVerifyEmail";
 import { useResendOTP } from "../hooks/useResendOTP";
+import { useCountdown } from "../hooks/useCountdown"
 
 import OTPCard from "../components/OTPCard"
 
@@ -19,11 +20,11 @@ const RegisterCustomer = () => {
   const { mutate: registerUser, isPending: registerPending } = useRegisterCustomer();
   const { mutate: verifyEmail, isPending: verifyEmailPending } = useVerifyEmail();
   const { mutate: resendOTP, isPending: otpResendPending } = useResendOTP();
+  const { countdown, isRunning, start } = useCountdown(60);
   
   const isPending =
     verifyEmailPending ||
-    registerPending ||
-    otpResendPending;
+    registerPending;
   
   const [isOTPOpen, setIsOTPOpen] = useState(false);
   const [otpEmail, setOTPEmail] = useState<null | string>("");
@@ -63,7 +64,12 @@ const RegisterCustomer = () => {
       email,
       type
     }
-    resendOTP(data)
+    resendOTP(data,{
+      onSuccess: () => {
+        start(60)
+      }
+    }
+    )
   }
 
 
@@ -102,8 +108,9 @@ const RegisterCustomer = () => {
             email={otpEmail}
             onComplete={handleOtpComplete}
             onResend={handleOtpResend}
-            pending={otpResendPending}
+            resending={otpResendPending || isRunning}
             type="verify_email"
+            countdown={countdown}
           />
       }
       

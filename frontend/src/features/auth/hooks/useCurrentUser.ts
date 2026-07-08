@@ -11,6 +11,7 @@ export const useCurrentUser = () => {
   return useQuery({
     queryKey: ["auth"],
     queryFn: getCurrentUser,
+    refetchOnWindowFocus: false,
     retry: false,
     staleTime: 1000*60*30,
   });

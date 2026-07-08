@@ -341,7 +341,7 @@ const forgotPassword = async ({ email }) => {
     to: email,
     subject: "Password reset code",
     template: resetPasswordTemplate({
-      name: user.name,
+      name: user.name | "",
       resetLink: otp,
     }),
   });
@@ -419,7 +419,7 @@ const resendOTP = async ({ email, type }) => {
       to: email,
       subject: "Password reset code",
       template: resetPasswordTemplate({
-        name: pending.name,
+        name: pending.name | "",
         resetLink: otp,
       }),
     });
@@ -429,7 +429,7 @@ const resendOTP = async ({ email, type }) => {
       to: email,
       subject: "Email verification code",
       template: verifyEmailTemplate({
-        name: pending.name,
+        name: pending.name | "",
         otp,
       }),
     });

@@ -5,11 +5,25 @@ interface OTPProps {
   email: string;
   type: string;
   onResend: (email: string, type: string) => void
-  pending: boolean;
+  resending: boolean;
+  countdown: number;
 }
 
 
-const OTPCard = ({onComplete, email, type, onResend, pending}: OTPProps) => {
+const OTPCard = ({
+  onComplete, 
+  email, 
+  type, 
+  onResend, 
+  resending,
+  countdown,
+}: OTPProps) => {
+  
+  const canResend = resending;
+  
+  const handleResend = () => {
+    onResend(email, type);
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
@@ -59,13 +73,16 @@ const OTPCard = ({onComplete, email, type, onResend, pending}: OTPProps) => {
             Didn't receive a code?
           </p>
           <button
-            disabled={pending}
-            className="font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
-            onClick={() => onResend(email, type)}
+            disabled={canResend}
+            onClick={handleResend}
+            className="font-semibold text-amber-600 hover:text-amber-700 disabled:text-amber-300 dark:text-amber-400 dark:hover:text-amber-300"
           >
             Resend
           </button>
-          <span className="text-zinc-400 dark:text-zinc-600 ml-1">59s</span>
+          <span className="text-zinc-400 dark:text-zinc-600 ml-1">
+            {
+              countdown > 0 ? countdown : ""
+            }</span>
         </div>
       </div>
     </div>
