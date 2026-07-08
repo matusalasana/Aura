@@ -1,8 +1,8 @@
-import api from "../../api"
+import api from "@/lib/axios"
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { clearAccessToken } from "../../utils/token";
-import { getErrorMessage } from "../../utils/getErrorMessage";
+import { clearAccessToken } from "@/utils/token";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const logoutUser = async () => {
   await api.post("/auth/logout");

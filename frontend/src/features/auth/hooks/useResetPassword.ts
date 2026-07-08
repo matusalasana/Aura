@@ -1,8 +1,8 @@
-import api from "../../api";
+import api from "@/lib/axios"
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { ResetPasswordInput } from "../../types/auth";
-import { getErrorMessage } from "@utils/getErrorMessage";
+import { type ResetPasswordInput } from "../types";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const resetPassword = async (data: ResetPasswordInput) => {
   const res = await api.post("/auth/reset-password", data);

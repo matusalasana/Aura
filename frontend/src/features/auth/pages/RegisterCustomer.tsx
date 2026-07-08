@@ -27,7 +27,7 @@ const RegisterCustomer = () => {
     registerPending;
   
   const [isOTPOpen, setIsOTPOpen] = useState(false);
-  const [otpEmail, setOTPEmail] = useState<null | string>("");
+  const [otpEmail, setOTPEmail] = useState<string>("");
 
   const {
     register,

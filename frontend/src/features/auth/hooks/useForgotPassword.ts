@@ -1,8 +1,8 @@
-import api from "../../api";
+import api from "@/lib/axios"
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { ForgotPasswordInput } from "../../types/auth";
-import { getErrorMessage } from "@utils/getErrorMessage";
+import { type ForgotPasswordInput } from "../types";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const forgotPassword = async (data: ForgotPasswordInput) => {
   const res = await api.post("/auth/forgot-password", data);

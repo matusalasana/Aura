@@ -1,8 +1,8 @@
-import api from "../../api";
+import api from "@/lib/axios"
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { getErrorMessage } from "@utils/getErrorMessage";
-import { RegisterVendorInput } from "../../types/auth";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { type RegisterVendorInput } from "../types";
 
 const registerVendor = async (data: RegisterVendorInput) => {
   const formData = new FormData();

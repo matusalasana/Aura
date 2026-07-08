@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessToken, setAccessToken, clearAccessToken } from "@/utils/token";
+import { getAccessToken, setAccessToken } from "@/utils/token";
 
 let BASE_URL;
 if(import.meta.env.DEV){
@@ -26,7 +26,7 @@ api.interceptors.request.use((config) => {
 
 
 // RESPONSE INTERCEPTOR
-let refreshPromise = null;
+let refreshPromise: any = null;
 
 api.interceptors.response.use(
   (response) => response,

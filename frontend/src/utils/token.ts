@@ -1,8 +1,11 @@
-let accessToken: string | null = null;
+
+type Token = string | null
+
+let accessToken: Token = null;
 
 export const getAccessToken = () => accessToken;
 
-export const setAccessToken = (token: string) => {
+export const setAccessToken = (token: Token) => {
   accessToken = token;
 };
 
