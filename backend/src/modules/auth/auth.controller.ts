@@ -1,11 +1,15 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { AuthService } from "./auth.service";
 import { Cookie } from "../../utils/cookies";
 import logger from "../../utils/logger";
 
-/* -------------------------- REGISTER CUSTOMER -------------------------- */
 
-const registerCustomer = async (req, res) => {
+// REGISTER CUSTOMER
+const registerCustomer = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { name, email, password } = req.body;
 
@@ -19,15 +23,16 @@ const registerCustomer = async (req, res) => {
       message: "OTP sent to your email",
     });
   } catch (error: any) {
-    logger.error(`Register customer error: ${error.cause || error.message}`);
-
-    return res.status(400).json({
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const registerVendor = async (req, res) => {
+// REGISTER VENDOR
+const registerVendor = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const {
       name,
@@ -58,16 +63,16 @@ const registerVendor = async (req, res) => {
       message: "OTP sent to your email",
     });
   } catch (error: any) {
-    logger.error(`Register vendor error: ${error.message}`);
-
-    return res.status(400).json({
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-
-const verifyEmail = async (req: Request, res: Response) => {
+// VERIFY EMAIL
+const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const {
       user,
@@ -84,16 +89,16 @@ const verifyEmail = async (req: Request, res: Response) => {
       user,
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const login = async (req: Request, res: Response) => {
+// LOGIN
+const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const {
       user,
@@ -110,16 +115,16 @@ const login = async (req: Request, res: Response) => {
       user,
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const refresh = async (req: Request, res: Response) => {
+// LOGIN
+const refresh = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { accessToken, refreshToken } =
       await AuthService.refresh(req.cookies.refreshToken);
@@ -131,17 +136,16 @@ const refresh = async (req: Request, res: Response) => {
       accessToken,
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-    console.log(error)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const logout = async (req: Request, res: Response) => {
+// LOGOUT
+const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     await AuthService.logout(req.cookies.refreshToken);
 
@@ -152,16 +156,16 @@ const logout = async (req: Request, res: Response) => {
       message: "Logged out successfully.",
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const logoutAll = async (req: Request, res: Response) => {
+// LOGOUT ALL
+const logoutAll = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     await AuthService.logoutAll(req.user.id);
 
@@ -172,16 +176,16 @@ const logoutAll = async (req: Request, res: Response) => {
       message: "All sessions revoked successfully.",
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const forgotPassword = async (req: Request, res: Response) => {
+// FORGOT PASSWORD
+const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     await AuthService.forgotPassword(req.body);
 
@@ -190,16 +194,16 @@ const forgotPassword = async (req: Request, res: Response) => {
       message: "Password reset OTP sent.",
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const resetPassword = async (req: Request, res: Response) => {
+// RESET PASSWORD
+const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     await AuthService.resetPassword(req.body);
 
@@ -208,16 +212,16 @@ const resetPassword = async (req: Request, res: Response) => {
       message: "Password reset successfully.",
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const resendOTP = async (req: Request, res: Response) => {
+// RESEND OTP
+const resendOTP = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     await AuthService.resendOTP(req.body);
 
@@ -226,16 +230,16 @@ const resendOTP = async (req: Request, res: Response) => {
       message: "OTP sent successfully.",
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 
-const getMe = async (req: Request, res: Response) => {
+// GET ME
+const getMe = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = await AuthService.getMe(req.user.id);
 
@@ -244,12 +248,7 @@ const getMe = async (req: Request, res: Response) => {
       user,
     });
   } catch (error: any) {
-    logger.error(`${error.cause || error.message}`)
-
-    return res.status(error.statusCode || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error)
   }
 };
 

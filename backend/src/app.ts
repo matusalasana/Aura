@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
 import { loggerMiddleware } from './middleware/logger.middleware';
+import { errorHandler } from "./middleware/errorHandler";
 import routes from "./routes/index";
 // import {
 //   CLIENT_ORIGIN,
@@ -53,3 +54,6 @@ app.use('/api/v1', limiter);
 
 // API Routes
 app.use("/api/v1", routes)
+
+// Error handler
+app.use(errorHandler);
