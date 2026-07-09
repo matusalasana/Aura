@@ -167,7 +167,7 @@ const logoutAll = async (
   next: NextFunction
 ) => {
   try {
-    await AuthService.logoutAll(req.user.id);
+    await AuthService.logoutAll(req.user?.userId);
 
     Cookie.clearRefreshToken(res);
 
@@ -241,7 +241,7 @@ const getMe = async (
   next: NextFunction
 ) => {
   try {
-    const user = await AuthService.getMe(req.user.id);
+    const user = await AuthService.getMe(req.user?.userId);
 
     return res.status(200).json({
       success: true,

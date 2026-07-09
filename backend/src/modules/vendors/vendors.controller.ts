@@ -11,7 +11,7 @@ const createVendor = async (
     const files = req.files as any;
 
     const vendor = await VendorService.createVendor({
-      userId: req.user.id,
+      userId: req.user?.userId,
 
       ...req.body,
 
@@ -37,7 +37,7 @@ const getMyVendor = async (
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorService.getMyVendor(req.user.id);
+    const vendor = await VendorService.getMyVendor(req.user?.userId);
 
     return res.status(200).json({
       success: true,
@@ -58,7 +58,7 @@ const updateMyVendor = async (
     const files = req.files as any;
 
     const vendor = await VendorService.updateMyVendor({
-      userId: req.user.id,
+      userId: req.user?.userId,
 
       ...req.body,
 
