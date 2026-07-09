@@ -1,7 +1,11 @@
+import BecomeVendor from "@/components/common/BecomeVendor";
+
 
 const Home = () => {
   return (
-    <div className="text-4xl font-bold">Customer home page</div>
+    <div>
+      <BecomeVendor />
+    </div>
   )
 }
 

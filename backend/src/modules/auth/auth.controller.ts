@@ -27,46 +27,6 @@ const registerCustomer = async (
   }
 };
 
-// REGISTER VENDOR
-const registerVendor = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const {
-      name,
-      email,
-      password,
-      store_name,
-      description,
-    } = req.body;
-
-    const files = req.files as any;
-
-    const vendor = await AuthService.registerVendor({
-      userId: req.user?.userId,
-
-      name,
-      email,
-      password,
-
-      store_name,
-      description,
-
-      logo_buffer: files?.logo?.[0]?.buffer,
-      banner_buffer: files?.banner?.[0]?.buffer,
-      license_buffer: files?.license?.[0]?.buffer,
-    });
-
-    return res.status(200).json({
-      message: "OTP sent to your email",
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
-
 // VERIFY EMAIL
 const verifyEmail = async (
   req: Request,
@@ -119,14 +79,14 @@ const login = async (
   }
 };
 
-// LOGIN
+// REFRESH 
 const refresh = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { accessToken, refreshToken } =
+    const { accessToken } =
       await AuthService.refresh(req.cookies.refreshToken);
 
     Cookie.setRefreshToken(res, refreshToken);
@@ -254,7 +214,6 @@ const getMe = async (
 
 export const AuthController = {
   registerCustomer,
-  registerVendor,
   
   verifyEmail,
   

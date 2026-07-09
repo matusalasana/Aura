@@ -11,9 +11,8 @@ import { verifyEmailTemplate } from "../../templates/verifyEmail";
 import { welcome } from "../../templates/welcome";
 import { resetPasswordTemplate } from "../../templates/resetPassword";
 
-import { uploadToCloudinary } from "../../utils/cloudinary";
 
-/* -------------------------------- CONSTANTS -------------------------------- */
+// CONSTANTS
 
 const OTP_TTL = 600;
 
@@ -68,82 +67,8 @@ const registerCustomer = async ({
   return { message: "OTP sent successfully" };
 };
 
-/* ------------------------------- REGISTER VENDOR ---------------------------- */
 
-const registerVendor = async ({
-  userId,
-  name,
-  email,
-  password,
-
-  store_name,
-  description,
-
-  logo_buffer,
-  banner_buffer,
-  license_buffer,
-}) => {
-  const exists = await AuthRepository.findVendorByEmail(email);
-  if (exists) throw new Error("Vendor already exists");
-
-  const passwordHash = await HashUtils.hashPassword(password);
-
-  const [logo, banner, license] = await Promise.all([
-    uploadToCloudinary(logo_buffer, `vendors/logo/${userId}`),
-    uploadToCloudinary(banner_buffer, `vendors/banner/${userId}`),
-    uploadToCloudinary(license_buffer, `vendors/license/${userId}`, {
-      type: "private",
-    }),
-  ]);
-
-  const otp = generateOTP();
-  const otpHash = await HashUtils.hashOTP(otp);
-
-  const cacheKey = getOtpKey("verify_email", email);
-
-
-
-  await CacheService.set(
-    cacheKey,
-    {
-      name,
-      email,
-      passwordHash,
-      role: "vendor",
-
-      storeName: store_name,
-      description,
-
-      logoUrl: logo.secure_url,
-      bannerUrl: banner.secure_url,
-      licensePublicId: license.public_id,
-
-      otp: otpHash,
-    },
-    OTP_TTL
-  );
-
-  await AuthRepository.createOTP({
-    email,
-    codeHash: otpHash,
-    type: "verify_email",
-    expiresAt: new Date(Date.now() + OTP_TTL * 1000),
-  });
-
-  sendEmail({
-    to: email,
-    subject: "Verify your vendor account",
-    template: verifyEmailTemplate({
-      name: store_name,
-      otp,
-    }),
-  });
-
-  return { message: "OTP sent successfully" };
-};
-
-/* ------------------------------- VERIFY EMAIL ------------------------------- */
-
+// VERIFY EMAIL
 const verifyEmail = async ({ email, otp }) => {
   const cacheKey = getOtpKey("verify_email", email);
 
@@ -205,7 +130,7 @@ const verifyEmail = async ({ email, otp }) => {
   };
 };
 
-/* ---------------------------------- LOGIN ---------------------------------- */
+// LOGIN
 
 const login = async ({ email, password }) => {
   const user = await AuthRepository.findUserByEmail(email);
@@ -252,7 +177,7 @@ const login = async ({ email, password }) => {
   };
 };
 
-/* -------------------------------- REFRESH ---------------------------------- */
+// REFRESH
 
 const refresh = async ({ refreshToken }) => {
   if (!refreshToken) throw new Error("Missing refresh token");
@@ -278,7 +203,7 @@ const refresh = async ({ refreshToken }) => {
   return { accessToken };
 };
 
-/* -------------------------------- LOGOUT ----------------------------------- */
+// LOGOUT
 
 const logout = async ({ refreshToken }) => {
   const tokenHash = await HashUtils.hashToken(refreshToken);
@@ -288,7 +213,7 @@ const logout = async ({ refreshToken }) => {
   return { message: "Logged out successfully" };
 };
 
-/* ------------------------------- LOGOUT ALL -------------------------------- */
+// LOGOUT ALL
 
 const logoutAll = async ({ userId }) => {
   await AuthRepository.revokeAllUserTokens(userId);
@@ -296,7 +221,7 @@ const logoutAll = async ({ userId }) => {
   return { message: "All sessions revoked" };
 };
 
-/* ---------------------------------- ME ------------------------------------- */
+// GETME
 
 const getMe = async ({ userId }) => {
   const user = await AuthRepository.findUserById(userId);
@@ -312,7 +237,7 @@ const getMe = async ({ userId }) => {
   };
 };
 
-/* --------------------------- FORGOT PASSWORD ------------------------------- */
+// FORGOT PASSWORD
 
 const forgotPassword = async ({ email }) => {
   const user = await AuthRepository.findUserByEmail(email);
@@ -349,7 +274,7 @@ const forgotPassword = async ({ email }) => {
   return { message: "OTP sent successfully" };
 };
 
-/* ---------------------------- RESET PASSWORD ------------------------------- */
+// RESET PASSWORD
 
 const resetPassword = async ({ email, otp, password }) => {
   const cacheKey = getOtpKey("reset_password", email);
@@ -389,7 +314,7 @@ const resetPassword = async ({ email, otp, password }) => {
   return { message: "Password reset successful" };
 };
 
-/* ------------------------------- RESEND OTP -------------------------------- */
+// RESEND OTP
 
 const resendOTP = async ({ email, type }) => {
   const otp = generateOTP();
@@ -438,11 +363,10 @@ const resendOTP = async ({ email, type }) => {
   return { message: "OTP resent successfully" };
 };
 
-/* -------------------------------- EXPORT ----------------------------------- */
+// EXPORT
 
 export const AuthService = {
   registerCustomer,
-  registerVendor,
   verifyEmail,
   login,
   refresh,

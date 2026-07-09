@@ -2,18 +2,23 @@ import { uploadToCloudinary } from "../../utils/cloudinary";
 import { VendorRepository } from "./vendors.repository";
 
 
-/* ------------------------------ CREATE VENDOR ------------------------------ */
-
+// CREATE VENDOR
 const createVendor = async ({
   userId,
 
-  store_name,
-  description,
+  body,
 
   logo_buffer,
   banner_buffer,
   license_buffer,
 }) => {
+  const {
+    store_name,
+    description,
+    payout_email,
+    tin_number,
+  } = body;
+  
   const existing = await VendorRepository.findByUserId(userId);
 
   if (existing) {
@@ -32,22 +37,24 @@ const createVendor = async ({
     ),
   ]);
 
-  return VendorRepository.create({
+  return VendorRepository.createVendor({
     userId,
 
-    store_name,
+    storeName: store_name,
+    payoutEmail: payout_email,
+    tinNumber: tin_number,
     description,
+    
 
-    logo: logo.secure_url,
-    banner: banner.secure_url,
-    license: license.public_id,
+    logoUrl: logo.secure_url,
+    bannerUrl: banner.secure_url,
+    licensePublicId: license.public_id,
 
     status: "pending",
   });
 };
 
-/* ----------------------------- GET MY VENDOR ------------------------------ */
-
+// GET MY VENDOR
 const getMyVendor = async (userId: string) => {
   const vendor = await VendorRepository.findByUserId(userId);
 
@@ -58,69 +65,51 @@ const getMyVendor = async (userId: string) => {
   return vendor;
 };
 
-/* --------------------------- UPDATE MY VENDOR ----------------------------- */
-
+// UPDATE MY VENDOR
 const updateMyVendor = async ({
   userId,
-
-  store_name,
-  description,
-
-  logo_buffer,
-  banner_buffer,
-  license_buffer,
+  body
 }) => {
+  const {
+    store_name,
+    description,
+    payout_email,
+    tin_number,
+  } = body;
+  
   const vendor = await VendorRepository.findByUserId(userId);
 
   if (!vendor) {
     throw new Error("Vendor not found");
   }
 
-  const updates: any = {
-    store_name,
-    description,
-  };
-
-  if (logo_buffer) {
-    const logo = await uploadToCloudinary(
-      logo_buffer,
-      `vendors/logo/${userId}`
-    );
-
-    updates.logo = logo.secure_url;
+  const data = {};
+  
+  if(store_name !== undefined){
+    data.storeName = store_name;
+  }
+  
+  if(description !== undefined){
+    data.description = description;
+  }
+  
+  if(payout_email !== undefined){
+    data.payoutEmail = payout_email;
   }
 
-  if (banner_buffer) {
-    const banner = await uploadToCloudinary(
-      banner_buffer,
-      `vendors/banner/${userId}`
-    );
-
-    updates.banner = banner.secure_url;
-  }
-
-  if (license_buffer) {
-    const license = await uploadToCloudinary(
-      license_buffer,
-      `vendors/license/${userId}`,
-      {
-        type: "private",
-      }
-    );
-
-    updates.license = license.public_id;
-  }
-
-  return VendorRepository.update(vendor.id, updates);
+  return VendorRepository.update({
+    id:vendor.id, 
+    data
+  });
 };
 
-/* ---------------------------- GET ALL VENDORS ----------------------------- */
+// GET ALL VENDORS
 
 const getAllVendors = async (query: any) => {
   return VendorRepository.findAll(query);
 };
 
-/* -------------------------- GET VENDOR BY SLUG ---------------------------- */
+// GET VENDOR BY SLUG
 
 const getVendorBySlug = async (slug: string) => {
   const vendor = await VendorRepository.findBySlug(slug);
@@ -132,7 +121,7 @@ const getVendorBySlug = async (slug: string) => {
   return vendor;
 };
 
-/* ---------------------------- APPROVE VENDOR ------------------------------ */
+// APPROVE VENDOR
 
 const approveVendor = async (vendorId: string) => {
   return VendorRepository.update(vendorId, {
@@ -140,7 +129,7 @@ const approveVendor = async (vendorId: string) => {
   });
 };
 
-/* ----------------------------- REJECT VENDOR ------------------------------ */
+// REJECT VENDOR
 
 const rejectVendor = async (
   vendorId: string,
@@ -152,7 +141,7 @@ const rejectVendor = async (
   });
 };
 
-/* ---------------------------- SUSPEND VENDOR ------------------------------ */
+// SUSPEND VENDOR
 
 const suspendVendor = async (vendorId: string) => {
   return VendorRepository.update(vendorId, {
@@ -160,7 +149,7 @@ const suspendVendor = async (vendorId: string) => {
   });
 };
 
-/* --------------------------- UNSUSPEND VENDOR ----------------------------- */
+// UNSUSPEND VENDOR
 
 const unsuspendVendor = async (vendorId: string) => {
   return VendorRepository.update(vendorId, {
@@ -168,9 +157,9 @@ const unsuspendVendor = async (vendorId: string) => {
   });
 };
 
-/* -------------------------------- EXPORT --------------------------------- */
+// EXPORT
 
-export const VendorService = {
+export const VendorsService = {
   createVendor,
 
   getMyVendor,

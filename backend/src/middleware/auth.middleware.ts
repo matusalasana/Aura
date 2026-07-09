@@ -36,7 +36,7 @@ export const authenticate = async (
     }
 
     // Verify access token
-    const decoded = await verifyAccessToken(accessToken);
+    const decoded = await JWT.verifyAccessToken(accessToken);
 
     // Attach user to request
     req.user = decoded;

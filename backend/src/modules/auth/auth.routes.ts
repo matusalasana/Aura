@@ -8,7 +8,6 @@ const router = Router();
 
 // register
 router.post("/register/customer", AuthController.registerCustomer);
-router.post("/register/vendor", AuthController.registerVendor);
 
 // email verification
 router.post("/verify-email", AuthController.verifyEmail);

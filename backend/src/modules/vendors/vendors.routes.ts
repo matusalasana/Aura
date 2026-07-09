@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { VendorController } from "./vendors.controller";
+import { VendorsController } from "./vendors.controller";
 
 import { authenticate } from "../../middlewares/authenticate";
 import { authorize } from "../../middlewares/authorize";
@@ -7,15 +7,15 @@ import { upload } from "../../middlewares/upload";
 
 const router = Router();
 
-/* -------------------------------- PUBLIC -------------------------------- */
+// PUBLIC
 
 // Get all approved vendors
-router.get("/", VendorController.getAllVendors);
+router.get("/", VendorsController.getAllVendors);
 
 // Get vendor by slug
-router.get("/:slug", VendorController.getVendorBySlug);
+router.get("/:slug", VendorsController.getVendorBySlug);
 
-/* ----------------------------- AUTHENTICATED ----------------------------- */
+// AUTHENTICATED
 
 // Create vendor
 router.post(
@@ -26,14 +26,14 @@ router.post(
     { name: "banner", maxCount: 1 },
     { name: "license", maxCount: 1 },
   ]),
-  VendorController.createVendor
+  VendorsController.createVendor
 );
 
 // Get my vendor profile
 router.get(
   "/me",
   authenticate,
-  VendorController.getMyVendor
+  VendorsController.getMyVendor
 );
 
 // Update my vendor profile
@@ -45,37 +45,36 @@ router.patch(
     { name: "banner", maxCount: 1 },
     { name: "license", maxCount: 1 },
   ]),
-  VendorController.updateMyVendor
+  VendorsController.updateMyVendor
 );
 
-/* -------------------------------- ADMIN --------------------------------- */
-
+// ADMIN
 router.patch(
   "/:id/approve",
   authenticate,
   authorize("admin"),
-  VendorController.approveVendor
+  VendorsController.approveVendor
 );
 
 router.patch(
   "/:id/reject",
   authenticate,
   authorize("admin"),
-  VendorController.rejectVendor
+  VendorsController.rejectVendor
 );
 
 router.patch(
   "/:id/suspend",
   authenticate,
   authorize("admin"),
-  VendorController.suspendVendor
+  VendorsController.suspendVendor
 );
 
 router.patch(
   "/:id/unsuspend",
   authenticate,
   authorize("admin"),
-  VendorController.unsuspendVendor
+  VendorsController.unsuspendVendor
 );
 
 export default router;

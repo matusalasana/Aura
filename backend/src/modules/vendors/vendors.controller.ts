@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { VendorService } from "./vendors.service";
+import { VendorsService } from "./vendors.service";
+
 
 // CREATE VENDOR
 const createVendor = async (
@@ -10,10 +11,10 @@ const createVendor = async (
   try {
     const files = req.files as any;
 
-    const vendor = await VendorService.createVendor({
+    const vendor = await VendorsService.createVendor({
       userId: req.user?.userId,
 
-      ...req.body,
+      body: req.body,
 
       logo_buffer: files?.logo?.[0]?.buffer,
       banner_buffer: files?.banner?.[0]?.buffer,
@@ -37,7 +38,7 @@ const getMyVendor = async (
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorService.getMyVendor(req.user?.userId);
+    const vendor = await VendorsService.getMyVendor(req.user?.userId);
 
     return res.status(200).json({
       success: true,
@@ -55,17 +56,11 @@ const updateMyVendor = async (
   next: NextFunction
 ) => {
   try {
-    const files = req.files as any;
 
-    const vendor = await VendorService.updateMyVendor({
-      userId: req.user?.userId,
-
-      ...req.body,
-
-      logo_buffer: files?.logo?.[0]?.buffer,
-      banner_buffer: files?.banner?.[0]?.buffer,
-      license_buffer: files?.license?.[0]?.buffer,
-    });
+    const vendor = await VendorsService.updateMyVendor({
+        userId: req.user?.userId,
+        body: req.body,
+      });
 
     return res.status(200).json({
       success: true,
@@ -84,7 +79,7 @@ const getAllVendors = async (
   next: NextFunction
 ) => {
   try {
-    const vendors = await VendorService.getAllVendors(req.query);
+    const vendors = await VendorsService.getAllVendors(req.query);
 
     return res.status(200).json({
       success: true,
@@ -102,7 +97,7 @@ const getVendorBySlug = async (
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorService.getVendorBySlug(req.params.slug);
+    const vendor = await VendorsService.getVendorBySlug(req.params.slug);
 
     return res.status(200).json({
       success: true,
@@ -120,7 +115,7 @@ const approveVendor = async (
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorService.approveVendor(req.params.id);
+    const vendor = await VendorsService.approveVendor(req.params.id);
 
     return res.status(200).json({
       success: true,
@@ -139,7 +134,7 @@ const rejectVendor = async (
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorService.rejectVendor(
+    const vendor = await VendorsService.rejectVendor(
       req.params.id,
       req.body.reason
     );
@@ -161,7 +156,7 @@ const suspendVendor = async (
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorService.suspendVendor(req.params.id);
+    const vendor = await VendorsService.suspendVendor(req.params.id);
 
     return res.status(200).json({
       success: true,
@@ -180,7 +175,7 @@ const unsuspendVendor = async (
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorService.unsuspendVendor(req.params.id);
+    const vendor = await VendorsService.unsuspendVendor(req.params.id);
 
     return res.status(200).json({
       success: true,
@@ -192,11 +187,103 @@ const unsuspendVendor = async (
   }
 };
 
-export const VendorController = {
+// UPDATE VENDOR PROFILE 
+const updateProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try{
+    const updated = await VendorsService.updateProfile({
+      userId: req.user.userId,
+      body: req.body
+    });
+    
+    res.status(200).json({
+      success: true,
+      updated
+    });
+  }catch (error: any) {
+    next(error);
+  }
+};
+
+// UPLOAD LOGO 
+const uploadLogo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try{
+    const { message } = await VendorsService.uploadLogo({
+      userId: req.user.userId,
+      logo_buffer: req.file?.buffer,
+    });
+    
+    res.status(200).json({
+      success: true,
+      message
+    });
+  }catch (error: any) {
+    next(error);
+  }
+};
+
+// UPLOAD BANNER 
+const uploadBanner = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try{
+    const { message } = await VendorsService.uploadBanner({
+      userId: req.user.userId,
+      banner_buffer: req.file?.buffer,
+    });
+    
+    res.status(200).json({
+      success: true,
+      message
+    });
+  }catch (error: any) {
+    next(error);
+  }
+};
+
+// UPLOAD LICENSE 
+const uploadLicense = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try{
+    const { message } = await VendorsService.uploadLicense({
+      userId: req.user.userId,
+      license_buffer: req.file?.buffer,
+    });
+    
+    res.status(200).json({
+      success: true,
+      message
+    });
+  }catch (error: any) {
+    next(error);
+  }
+};
+
+
+
+export const VendorsController = {
   createVendor,
 
   getMyVendor,
   updateMyVendor,
+  
+  updateProfile,
+  
+  uploadLogo,
+  uploadBanner,
+  uploadLicense,
 
   getAllVendors,
   getVendorBySlug,
