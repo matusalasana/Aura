@@ -100,19 +100,24 @@ const verifyEmail = async ({ email, otp }) => {
     email,
     type: "verify_email",
   });
+  
+  const sessionId = randomUUID();
 
   const refreshToken = await JWT.generateRefreshToken({
     userId: user.id,
+    sessionId,
     role: user.role,
   });
 
   const accessToken = await JWT.generateAccessToken({
     userId: user.id,
+    sessionId,
     role: user.role,
   });
 
   await AuthRepository.createRefreshToken({
     userId: user.id,
+    sessionId,
     tokenHash: await HashUtils.hashToken(refreshToken),
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   });
@@ -147,19 +152,24 @@ const login = async ({ email, password }) => {
   if (!user.isVerified) {
     throw new Error("Please verify your email first");
   }
+  
+  const sessionId = randomUUID();
 
   const refreshToken = await JWT.generateRefreshToken({
     userId: user.id,
+    sessionId,
     role: user.role,
   });
 
   const accessToken = await JWT.generateAccessToken({
     userId: user.id,
+    sessionId,
     role: user.role,
   });
 
   await AuthRepository.createRefreshToken({
     userId: user.id,
+    sessionId,
     tokenHash: await HashUtils.hashToken(refreshToken),
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   });
@@ -179,16 +189,20 @@ const login = async ({ email, password }) => {
 
 // REFRESH
 
-const refresh = async ({ refreshToken }) => {
+const refresh = async (refreshToken) => {
   if (!refreshToken) throw new Error("Missing refresh token");
 
   const decoded = await JWT.verifyRefreshToken(refreshToken);
-
+  
+  if (!decoded) throw new Error("Invalid refresh token");
+  
   const tokenHash = await HashUtils.hashToken(refreshToken);
+  
+  if (!tokenHash) throw new Error("Invalid or Expired refresh token");
 
   const session = await AuthRepository.findRefreshToken({
     userId: decoded.userId,
-    tokenHash,
+    sessionId: decoded.sessionId,
   });
 
   if (!session || session.revoked) {
@@ -196,6 +210,7 @@ const refresh = async ({ refreshToken }) => {
   }
 
   const accessToken = await JWT.generateAccessToken({
+    sessionId: decoded.sessionId,
     userId: decoded.userId,
     role: decoded.role,
   });
@@ -223,7 +238,7 @@ const logoutAll = async ({ userId }) => {
 
 // GETME
 
-const getMe = async ({ userId }) => {
+const getMe = async (userId) => {
   const user = await AuthRepository.findUserById(userId);
 
   if (!user) throw new Error("User not found");

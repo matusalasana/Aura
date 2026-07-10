@@ -65,11 +65,13 @@ const updatePassword = async ({
 const createRefreshToken = async ({
   userId,
   tokenHash,
+  sessionId,
   expiresAt,
   device,
   ipAddress,
 }: {
   userId: string;
+  sessionId: string;
   tokenHash: string;
   expiresAt: Date;
   device?: string;
@@ -80,6 +82,7 @@ const createRefreshToken = async ({
     .values({
       userId,
       tokenHash,
+      sessionId,
       expiresAt,
       device,
       ipAddress,
@@ -92,10 +95,10 @@ const createRefreshToken = async ({
 
 const findRefreshToken = async ({
   userId,
-  tokenHash,
+  sessionId,
 }: {
   userId: string;
-  tokenHash: string;
+  sessionId: string;
 }) => {
   const session = await db
     .select()
@@ -103,7 +106,7 @@ const findRefreshToken = async ({
     .where(
       and(
         eq(refreshTokens.userId, userId),
-        eq(refreshTokens.tokenHash, tokenHash)
+        eq(refreshTokens.sessionId, sessionId)
       )
     )
     .limit(1);

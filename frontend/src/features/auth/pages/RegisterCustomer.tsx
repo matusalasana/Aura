@@ -262,7 +262,7 @@ const RegisterCustomer = () => {
 
           <button
             type="button"
-            onClick={() => navigate("/login-customer")}
+            onClick={() => navigate("/login")}
             className="
               font-semibold
               text-amber-600

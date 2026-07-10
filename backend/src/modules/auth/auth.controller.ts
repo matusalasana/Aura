@@ -86,10 +86,7 @@ const refresh = async (
   next: NextFunction
 ) => {
   try {
-    const { accessToken } =
-      await AuthService.refresh(req.cookies.refreshToken);
-
-    Cookie.setRefreshToken(res, refreshToken);
+    const { accessToken } = await AuthService.refresh(req.cookies.refreshToken);
 
     return res.status(200).json({
       success: true,

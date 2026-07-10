@@ -160,7 +160,7 @@ const LoginCustomer = () => {
           Don't have an account?{" "}
           <button
             type="button"
-            onClick={() => navigate("/register-customer")}
+            onClick={() => navigate("/register/customer")}
             className="
               font-semibold
               text-amber-600

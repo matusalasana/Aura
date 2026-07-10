@@ -21,6 +21,8 @@ export const refreshTokens = pgTable(
         onDelete: "cascade",
       })
       .notNull(),
+    
+    sessionId: uuid("session_id").notNull(),
 
     tokenHash: varchar("token_hash", {
       length: 255,

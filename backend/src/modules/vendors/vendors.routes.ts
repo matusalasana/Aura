@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { VendorsController } from "./vendors.controller";
 
-import { authenticate } from "../../middlewares/authenticate";
-import { authorize } from "../../middlewares/authorize";
-import { upload } from "../../middlewares/upload";
+import { authenticate } from "../../middleware/auth.middleware";
+import { authorize } from "../../middleware/auth.middleware";
+import { upload } from "../../middleware/upload.middleware";
 
 const router = Router();
 
