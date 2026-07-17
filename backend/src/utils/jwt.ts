@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Env } from "../config/env";
-import { UserPayload } from "../types/index"
+import { type UserPayload } from "../modules/auth/auth.validation"
 
 
 if(!Env.ACCESS_TOKEN_SECRET || !Env.ACCESS_TOKEN_EXPIRY || !Env.REFRESH_TOKEN_EXPIRY || !Env.REFRESH_TOKEN_SECRET){
@@ -15,7 +15,7 @@ const generateAccessToken = (payload: UserPayload) => {
 
 const verifyAccessToken = (token: string) => {
   try {
-    return jwt.verify(token, Env.ACCESS_TOKEN_SECRET);
+    return jwt.verify(token, Env.ACCESS_TOKEN_SECRET) as UserPayload;
   } catch (error) {
     throw new Error("Invalid access token");
   }
@@ -30,7 +30,7 @@ const generateRefreshToken = (payload: UserPayload) => {
 
 const verifyRefreshToken = (token: string) => {
   try {
-    return jwt.verify(token, Env.REFRESH_TOKEN_SECRET);
+    return jwt.verify(token, Env.REFRESH_TOKEN_SECRET) as UserPayload;
   } catch (error) {
     throw new Error("Invalid refresh token");
   }

@@ -2,6 +2,8 @@ import { db } from "../../db";
 import { users } from "../../db/schema/users";
 import { refreshTokens } from "../../db/schema/refreshTokens";
 import { otps } from "../../db/schema/otps";
+import { type OTPType } from "./auth.validation";
+import { type RegisterCustomerDBInput } from "./auth.validation"
 
 import { eq, and, gt, lt } from "drizzle-orm";
 
@@ -26,12 +28,8 @@ const findUserById = async (id: string) => {
   return user[0] || null;
 };
 
-const createUser = async (data: {
-  name: string;
-  email: string;
-  passwordHash: string;
-  role: "customer" | "vendor" | "admin" | "support";
-}) => {
+const registerCustomer = async (
+  data: RegisterCustomerDBInput) => {
   const [user] = await db
     .insert(users)
     .values({
@@ -144,7 +142,7 @@ const findOTP = async ({
   type,
 }: {
   email: string;
-  type: string;
+  type: OTPType;
 }) => {
 
   const result = await db
@@ -172,9 +170,9 @@ const createOTP = async ({
 }: {
   email: string;
   codeHash: string;
-  type: string;
-  expiresAt: string;
-  usedAt: string;
+  type: OTPType;
+  expiresAt: Date;
+  usedAt?: string;
 }) => {
 
   const result = await db
@@ -199,7 +197,7 @@ const deleteOTP = async ({
   type,
 }: {
   email: string;
-  type: string;
+  type: OTPType;
 }) => {
 
   const result = await db
@@ -221,7 +219,7 @@ export const AuthRepository = {
   // users
   findUserByEmail,
   findUserById,
-  createUser,
+  registerCustomer,
   updatePassword,
 
   // refresh tokens

@@ -1,7 +1,7 @@
-export function welcomeTemplate(
+export const welcomeTemplate = (
   name: string,
   dashboardLink: string
-) {
+) => {
   return `
     <!DOCTYPE html>
     <html>

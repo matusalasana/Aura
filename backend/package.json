@@ -26,7 +26,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsup src/server.ts --format esm --clean",
     "start": "node dist/server.js",
     "check": "tsc --noEmit",
     "push": "drizzle-kit push",

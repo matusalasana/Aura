@@ -1,13 +1,17 @@
 import { Router } from "express";
 import { AuthController } from "./auth.controller";
 import { validate } from "../../middleware/validation.middleware";
-import { registerSchema, loginSchema } from "./auth.validation";
+import { registerCustomerSchema, loginSchema } from "./auth.validation";
 import { authenticate } from "../../middleware/auth.middleware";
 
 const router = Router();
 
 // register
-router.post("/register/customer", AuthController.registerCustomer);
+router.post(
+  "/register/customer", 
+  validate(registerCustomerSchema), 
+  AuthController.registerCustomer
+);
 
 // email verification
 router.post("/verify-email", AuthController.verifyEmail);

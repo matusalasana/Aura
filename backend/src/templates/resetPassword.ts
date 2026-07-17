@@ -1,7 +1,10 @@
-export function resetPasswordTemplate(
+export function resetPasswordTemplate({
+  name,
+  resetLink
+}: {
   name: string,
   resetLink: string
-) {
+}) {
   return `
     <!DOCTYPE html>
     <html>

@@ -157,13 +157,30 @@ const unsuspendVendor = async (vendorId: string) => {
   });
 };
 
-// EXPORT
+// UPLOAD LOGO 
+const uploadLogo = async ({
+  userId,
+  logo_buffer
+}) => {
+  
+  if(!userId) throw new Error("User id not found");
+  
+  if(!logo_buffer) throw new Error("Logo is required")
+  
+  await uploadToCloudinary(logo_buffer, `vendors/logo/${userId}`),
+  
+  await VendorRepository.uploadLogo(vendorId);
+};
 
+
+// EXPORT
 export const VendorsService = {
   createVendor,
 
   getMyVendor,
   updateMyVendor,
+  
+  uploadLogo,
 
   getAllVendors,
   getVendorBySlug,

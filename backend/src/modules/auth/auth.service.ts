@@ -8,24 +8,30 @@ import { generateOTP } from "../../utils/otp";
 
 import { sendEmail } from "../../utils/email";
 import { verifyEmailTemplate } from "../../templates/verifyEmail";
-import { welcome } from "../../templates/welcome";
 import { resetPasswordTemplate } from "../../templates/resetPassword";
+import type {  
+  RegisterCustomerInput,
+  ResetPasswordInput,
+  OTPType,
+  ResendOTPInput
+} from "./auth.validation"
+
 
 
 // CONSTANTS
-
 const OTP_TTL = 600;
+const getOtpKey = ({
+  type, 
+  email}: {type: OTPType, email: string}
+) => `otp:${type}:${email}`;
 
-const getOtpKey = (type: string, email: string) =>
-  `otp:${type}:${email}`;
 
-/* ------------------------------- REGISTER USER ------------------------------ */
-
+// REGISTER USER
 const registerCustomer = async ({
   name,
   email,
   password,
-}) => {
+}: RegisterCustomerInput) => {
   const existing = await AuthRepository.findUserByEmail(email);
   if (existing) throw new Error("User already exists");
 
@@ -62,14 +68,17 @@ const registerCustomer = async ({
       name,
       otp,
     }),
-  });
+  });q
  
   return { message: "OTP sent successfully" };
 };
 
 
 // VERIFY EMAIL
-const verifyEmail = async ({ email, otp }) => {
+const verifyEmail = async ({ email, otp }: {
+  email: string,
+  otp: string
+}) => {
   const cacheKey = getOtpKey("verify_email", email);
 
   let pending = await CacheService.get(cacheKey);
@@ -86,7 +95,7 @@ const verifyEmail = async ({ email, otp }) => {
   const isValid = await HashUtils.compareOTP(otp, pending.otp || pending.codeHash);
   if (!isValid) throw new Error("Invalid OTP");
 
-  const user = await AuthRepository.createUser({
+  const user = await AuthRepository.registerCustomer({
     name: pending.name,
     email: pending.email,
     passwordHash: pending.passwordHash,
@@ -137,7 +146,10 @@ const verifyEmail = async ({ email, otp }) => {
 
 // LOGIN
 
-const login = async ({ email, password }) => {
+const login = async ({ email, password }: {
+  email: string,
+  password: string
+}) => {
   const user = await AuthRepository.findUserByEmail(email);
 
   if (!user) throw new Error("Invalid credentials");
@@ -188,8 +200,7 @@ const login = async ({ email, password }) => {
 };
 
 // REFRESH
-
-const refresh = async (refreshToken) => {
+const refresh = async (refreshToken: string) => {
   if (!refreshToken) throw new Error("Missing refresh token");
 
   const decoded = await JWT.verifyRefreshToken(refreshToken);
@@ -219,8 +230,7 @@ const refresh = async (refreshToken) => {
 };
 
 // LOGOUT
-
-const logout = async ({ refreshToken }) => {
+const logout = async (refreshToken: string) => {
   const tokenHash = await HashUtils.hashToken(refreshToken);
 
   await AuthRepository.revokeRefreshToken(tokenHash);
@@ -230,7 +240,7 @@ const logout = async ({ refreshToken }) => {
 
 // LOGOUT ALL
 
-const logoutAll = async ({ userId }) => {
+const logoutAll = async (userId: string) => {
   await AuthRepository.revokeAllUserTokens(userId);
 
   return { message: "All sessions revoked" };
@@ -238,7 +248,7 @@ const logoutAll = async ({ userId }) => {
 
 // GETME
 
-const getMe = async (userId) => {
+const getMe = async (userId: string) => {
   const user = await AuthRepository.findUserById(userId);
 
   if (!user) throw new Error("User not found");
@@ -254,7 +264,7 @@ const getMe = async (userId) => {
 
 // FORGOT PASSWORD
 
-const forgotPassword = async ({ email }) => {
+const forgotPassword = async (email: string) => {
   const user = await AuthRepository.findUserByEmail(email);
 
   if (!user) throw new Error("User not found");
@@ -281,7 +291,7 @@ const forgotPassword = async ({ email }) => {
     to: email,
     subject: "Password reset code",
     template: resetPasswordTemplate({
-      name: user.name | "",
+      name: user.name || "",
       resetLink: otp,
     }),
   });
@@ -291,7 +301,7 @@ const forgotPassword = async ({ email }) => {
 
 // RESET PASSWORD
 
-const resetPassword = async ({ email, otp, password }) => {
+const resetPassword = async ({ email, otp, password }: ResetPasswordInput) => {
   const cacheKey = getOtpKey("reset_password", email);
 
   let data = await CacheService.get(cacheKey);
@@ -331,7 +341,7 @@ const resetPassword = async ({ email, otp, password }) => {
 
 // RESEND OTP
 
-const resendOTP = async ({ email, type }) => {
+const resendOTP = async ({ email, type }: ResendOTPInput) => {
   const otp = generateOTP();
   const otpHash = await HashUtils.hashOTP(otp);
 
@@ -359,7 +369,7 @@ const resendOTP = async ({ email, type }) => {
       to: email,
       subject: "Password reset code",
       template: resetPasswordTemplate({
-        name: pending.name | "",
+        name: pending.name || "",
         resetLink: otp,
       }),
     });
@@ -369,7 +379,7 @@ const resendOTP = async ({ email, type }) => {
       to: email,
       subject: "Email verification code",
       template: verifyEmailTemplate({
-        name: pending.name | "",
+        name: pending.name || "",
         otp,
       }),
     });

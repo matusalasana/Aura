@@ -6,8 +6,7 @@ import {
 
 import { JWT } from "../utils/jwt";
 import logger from "../utils/logger"
-
-type Role = "customer" | "admin" | "vendor" | "support";
+import { type Role } from "../modules/auth/auth.validation"
 
 
 export const authenticate = async (

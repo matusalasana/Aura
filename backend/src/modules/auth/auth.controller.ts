@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { AuthService } from "./auth.service";
 import { Cookie } from "../../utils/cookies";
 import logger from "../../utils/logger";
+import { type RegisterCustomerInput } from "./auth.validation"
 
 
 // REGISTER CUSTOMER
@@ -13,11 +14,13 @@ const registerCustomer = async (
   try {
     const { name, email, password } = req.body;
 
-    await AuthService.registerCustomer({
+    const data: RegisterCustomerInput = {
       name,
       email,
       password,
-    });
+    };
+    
+    await AuthService.registerCustomer(data);
 
     return res.status(200).json({
       message: "OTP sent to your email",
@@ -104,7 +107,8 @@ const logout = async (
   next: NextFunction
 ) => {
   try {
-    await AuthService.logout(req.cookies.refreshToken);
+    const refreshToken = req.cookies.refreshToken as string;
+    await AuthService.logout(refreshToken);
 
     Cookie.clearRefreshToken(res);
 

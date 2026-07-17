@@ -187,27 +187,6 @@ const unsuspendVendor = async (
   }
 };
 
-// UPDATE VENDOR PROFILE 
-const updateProfile = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try{
-    const updated = await VendorsService.updateProfile({
-      userId: req.user.userId,
-      body: req.body
-    });
-    
-    res.status(200).json({
-      success: true,
-      updated
-    });
-  }catch (error: any) {
-    next(error);
-  }
-};
-
 // UPLOAD LOGO 
 const uploadLogo = async (
   req: Request,
@@ -278,8 +257,6 @@ export const VendorsController = {
 
   getMyVendor,
   updateMyVendor,
-  
-  updateProfile,
   
   uploadLogo,
   uploadBanner,
