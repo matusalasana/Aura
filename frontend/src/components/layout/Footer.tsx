@@ -1,52 +1,49 @@
-import { Link } from 'react-router-dom';
-import { MessageCircleMore } from 'lucide-react';
+import React from 'react';
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
-    <footer className="bg-aura-black text-aura-white pt-24 pb-12">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-        {/* Brand Section */}
-        <div className="space-y-6">
-          <h2 className="text-4xl font-serif italic tracking-tighter">Aura</h2>
-          <p className="text-sm font-light text-aura-soft/70 leading-relaxed max-w-xs">
-            Elevating everyday essentials through conscious design and premium craftsmanship. Join us in our journey towards timeless elegance.
-          </p>
-          <div className="flex space-x-4">
-            <a href="#" className="hover:text-aura-accent transition-colors"><MessageCircleMore className="w-5 h-5" strokeWidth={1.5} /></a>
-            <a href="#" className="hover:text-aura-accent transition-colors"><MessageCircleMore className="w-5 h-5" strokeWidth={1.5} /></a>
-            <a href="#" className="hover:text-aura-accent transition-colors"><MessageCircleMore className="w-5 h-5" strokeWidth={1.5} /></a>
+    <footer className="bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-6 py-12 lg:px-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+          {/* Brand Column */}
+          <div className="col-span-2 md:col-span-1">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Aura</h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+              The premier marketplace connecting unique local vendors with fashion lovers.
+            </p>
           </div>
+
+          {/* Links Columns */}
+          {[
+            { title: "Shop", links: ["New Arrivals", "Trending", "Categories", "Vendors"] },
+            { title: "Support", links: ["FAQ", "Shipping", "Returns", "Contact"] },
+            { title: "Legal", links: ["Privacy", "Terms", "Cookies", "Licenses"] },
+          ].map((section, idx) => (
+            <div key={idx}>
+              <h4 className="font-bold text-gray-900 dark:text-white mb-4">{section.title}</h4>
+              <ul className="space-y-3">
+                {section.links.map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-gray-600 dark:text-gray-400 text-sm hover:text-amber-500 transition-colors">
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        {/* Links: Shopping */}
-        <div className="space-y-6">
-          <h3 className="text-xs uppercase tracking-[0.2em] font-semibold text-aura-accent">Shop</h3>
-          <ul className="space-y-4">
-            <li><Link to="/category/women" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">Women</Link></li>
-            <li><Link to="/category/men" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">Men</Link></li>
-            <li><Link to="/category/kids" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">Kids</Link></li>
-            <li><Link to="/new-arrivals" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">New Arrivals</Link></li>
-          </ul>
-        </div>
-
-        {/* Links: Services */}
-        <div className="space-y-6">
-          <h3 className="text-xs uppercase tracking-[0.2em] font-semibold text-aura-accent">Support</h3>
-          <ul className="space-y-4">
-            <li><Link to="/shipping" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">Shipping & Returns</Link></li>
-            <li><Link to="/faq" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">FAQ</Link></li>
-            <li><Link to="/contact" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">Contact Us</Link></li>
-            <li><Link to="/terms" className="text-sm text-aura-soft/60 hover:text-aura-white hover:translate-x-1 transition-all inline-block uppercase tracking-wider font-light">Terms & Conditions</Link></li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mt-24 pt-8 border-t border-aura-soft/10 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-[10px] uppercase tracking-[0.3em] font-light text-aura-soft/30">
-        <p>&copy; 2026 AURA. ALL RIGHTS RESERVED.</p>
-        <div className="flex space-x-8">
-          <Link to="/developers" className="hover:text-aura-white">DEVELOPER(S)</Link>
-          <a href="#" className="hover:text-aura-white">PRIVACY POLICY</a>
-          <a href="#" className="hover:text-aura-white">ACCESSIBILITY</a>
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 dark:text-gray-600 text-sm">
+            © 2026 Aura Marketplace. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <span className="text-amber-500 font-bold tracking-widest text-sm uppercase">
+              Designed for Aura
+            </span>
+          </div>
         </div>
       </div>
     </footer>

@@ -1,10 +1,9 @@
 import React from 'react';
 
 const categories = [
-  { name: "Sustainable Wear", count: "1.2k+ items", bg: "bg-amber-100 dark:bg-amber-900/20" },
-  { name: "Vintage Finds", count: "850+ items", bg: "bg-amber-100 dark:bg-amber-900/20" },
-  { name: "Streetwear", count: "2.1k+ items", bg: "bg-amber-100 dark:bg-amber-900/20" },
-  { name: "Activewear", count: "940+ items", bg: "bg-amber-100 dark:bg-amber-900/20" },
+  { name: "Women", count: "1.2k+ items", bg: "bg-amber-100 dark:bg-amber-900/20" },
+  { name: "Men", count: "2.1k+ items", bg: "bg-amber-100 dark:bg-amber-900/20" },
+  { name: "Kids", count: "940+ items", bg: "bg-amber-100 dark:bg-amber-900/20" },
 ];
 
 const TrendingCategories: React.FC = () => {
