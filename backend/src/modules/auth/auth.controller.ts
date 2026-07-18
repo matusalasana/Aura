@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AuthService } from "./auth.service";
 import { Cookie } from "../../utils/cookies";
-import logger from "../../utils/logger";
 import { type RegisterCustomerInput } from "./auth.validation"
 
 

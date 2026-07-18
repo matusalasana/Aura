@@ -1,7 +1,10 @@
-export const welcomeTemplate = (
-  name: string,
-  dashboardLink: string
-) => {
+export const welcomeTemplate = ({
+  name,
+  dashboardLink
+}: {
+  name: string;
+  dashboardLink: string;
+}) => {
   return `
     <!DOCTYPE html>
     <html>

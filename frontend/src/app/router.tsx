@@ -9,7 +9,10 @@ import AppLayout from "@/layouts/AppLayout";
 import Home from "@/dashboard/customer/pages/Home";
 
 // Customer pages
-import ProtectedCustomerRoutes from "@/features/auth/components/ProtectedCustomerRoutes";
+import ProtectedRoutes from "@/features/auth/components/ProtectedRoutes";
+
+// Vendor pages
+import VendorDashboard from "@/dashboard/vendor/pages/VendorDashboard";
 
 import RegisterCustomer from "@/features/auth/pages/RegisterCustomer"
 import LoginCustomer from "@/features/auth/pages/LoginCustomer"
@@ -37,13 +40,25 @@ export const router = createBrowserRouter([
       
       // Customer Protected Pages
       {
-        element: <ProtectedCustomerRoutes />,
+        element: <ProtectedRoutes />,
         children: [
           {
             path: "/order",
             element: <h1> Orders page</h1>
           }
         ],
+      },
+    ],
+  },
+  
+  // Vendor protected routes
+  {
+    path: "/vendor",
+    element: <ProtectedRoutes role={["vendor", "customer"]} />, 
+    children: [
+      {
+        index: true,
+        element: <VendorDashboard />,
       },
     ],
   },

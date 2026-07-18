@@ -347,6 +347,7 @@ const resendOTP = async ({ email, type }: ResendOTPInput) => {
 
   const cacheKey = getOtpKey(type, email);
   const pending = await CacheService.get(cacheKey);
+  if (!pending) throw new Error("OTP session not found. Please start over.");
 
   await CacheService.set(
     cacheKey,

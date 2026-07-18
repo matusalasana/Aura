@@ -166,13 +166,11 @@ const createOTP = async ({
   codeHash,
   type,
   expiresAt,
-  usedAt,
 }: {
   email: string;
   codeHash: string;
   type: OTPType;
   expiresAt: Date;
-  usedAt?: string;
 }) => {
 
   const result = await db
@@ -181,10 +179,7 @@ const createOTP = async ({
       email,
       codeHash,
       type,
-      usedAt: new Date(),
-      expiresAt: new Date(
-        Date.now() + 10 * 60 * 1000
-      ),
+      expiresAt,
     })
     .returning();
 
