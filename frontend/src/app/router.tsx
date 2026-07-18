@@ -4,6 +4,7 @@ import ErrorPage from "@/pages/ErrorPage"
 
 // Layouts 
 import AppLayout from "@/layouts/AppLayout";
+import VendorLayout from "@/layouts/VendorLayout";
 
 // Public pages
 import Home from "@/dashboard/customer/pages/Home";
@@ -57,8 +58,13 @@ export const router = createBrowserRouter([
     element: <ProtectedRoutes role={["vendor", "customer"]} />, 
     children: [
       {
-        index: true,
-        element: <VendorDashboard />,
+        element: <VendorLayout />,
+        children: [
+          {
+            index: true,
+            element: <VendorDashboard />,
+          },
+        ]
       },
     ],
   },
