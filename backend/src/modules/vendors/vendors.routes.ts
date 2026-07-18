@@ -33,7 +33,7 @@ router.post(
 router.get(
   "/me",
   authenticate,
-  VendorsController.getMyVendor
+  VendorsController.getCurrentVendor
 );
 
 // Update my vendor profile

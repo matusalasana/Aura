@@ -1,54 +1,190 @@
-import React from 'react';
 
-const VendorDashboard = () => {
+import { Plus, Search } from "lucide-react";
+
+const products = [
+  {
+    id: 1,
+    name: "Nike Hoodie",
+    stock: 25,
+    price: 35,
+    status: "In Stock",
+  },
+  {
+    id: 2,
+    name: "Oversized Tee",
+    stock: 4,
+    price: 20,
+    status: "Low Stock",
+  },
+  {
+    id: 3,
+    name: "Cargo Pants",
+    stock: 0,
+    price: 45,
+    status: "Out of Stock",
+  },
+  {
+    id: 4,
+    name: "Denim Jacket",
+    stock: 17,
+    price: 60,
+    status: "In Stock",
+  },
+];
+
+const stats = [
+  {
+    title: "Products",
+    value: 128,
+  },
+  {
+    title: "Low Stock",
+    value: 12,
+  },
+  {
+    title: "Out of Stock",
+    value: 3,
+  },
+];
+
+export default function VendorDashboard() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 transition-colors duration-300">
+    <div className="space-y-6">
       {/* Header */}
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Vendor Dashboard</h1>
-        <p className="text-gray-600 dark:text-gray-400">Welcome back, here's your sales summary.</p>
-      </header>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
+            Inventory
+          </h1>
+          <p className="text-sm text-zinc-500">
+            Manage your products and stock.
+          </p>
+        </div>
 
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {[
-          { title: "Total Sales", value: "$12,450" },
-          { title: "Active Products", value: "84" },
-          { title: "Pending Orders", value: "12" },
-        ].map((metric, index) => (
-          <div key={index} className="bg-white dark:bg-gray-900 p-6 rounded-xl border-l-4 border-amber-500 shadow-sm">
-            <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400">{metric.title}</h2>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{metric.value}</p>
+        <button className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-amber-600">
+          <Plus size={18} />
+          Add Product
+        </button>
+      </div>
+
+      {/* Stats */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        {stats.map((item) => (
+          <div
+            key={item.title}
+            className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+          >
+            <p className="text-sm text-zinc-500">{item.title}</p>
+            <h2 className="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+              {item.value}
+            </h2>
           </div>
         ))}
       </div>
 
-      {/* Orders Table */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Orders</h2>
+      {/* Toolbar */}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="relative w-full md:max-w-sm">
+          <Search
+            size={18}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+          />
+
+          <input
+            type="text"
+            placeholder="Search products..."
+            className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm outline-none transition focus:border-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
+          />
         </div>
-        <table className="w-full text-left">
-          <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-            <tr>
-              <th className="p-4">Order ID</th>
-              <th className="p-4">Customer</th>
-              <th className="p-4">Total</th>
-              <th className="p-4">Status</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 dark:text-gray-400">
-            <tr className="border-b border-gray-100 dark:border-gray-800">
-              <td className="p-4 text-amber-600 dark:text-amber-500 font-medium">#ORD-7721</td>
-              <td className="p-4">John Doe</td>
-              <td className="p-4">$120.00</td>
-              <td className="p-4"><span className="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded text-xs">Pending</span></td>
-            </tr>
-          </tbody>
-        </table>
+
+        <select className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-white">
+          <option>All</option>
+          <option>In Stock</option>
+          <option>Low Stock</option>
+          <option>Out of Stock</option>
+        </select>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead className="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+              <tr>
+                <th className="px-6 py-4 text-sm font-semibold">Product</th>
+                <th className="px-6 py-4 text-sm font-semibold">Stock</th>
+                <th className="px-6 py-4 text-sm font-semibold">Price</th>
+                <th className="px-6 py-4 text-sm font-semibold">Status</th>
+                <th className="px-6 py-4 text-right text-sm font-semibold">
+                  Action
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {products.map((product) => (
+                <tr
+                  key={product.id}
+                  className="border-b border-zinc-200 last:border-0 dark:border-zinc-800"
+                >
+                  <td className="px-6 py-4 font-medium text-zinc-900 dark:text-white">
+                    {product.name}
+                  </td>
+
+                  <td className="px-6 py-4">{product.stock}</td>
+
+                  <td className="px-6 py-4">${product.price}</td>
+
+                  <td className="px-6 py-4">
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        product.status === "In Stock"
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          : product.status === "Low Stock"
+                          ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                          : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      }`}
+                    >
+                      {product.status}
+                    </span>
+                  </td>
+
+                  <td className="px-6 py-4 text-right">
+                    <button className="rounded-md border border-zinc-200 px-3 py-1.5 text-sm transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between">
+        <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm dark:border-zinc-700">
+          Previous
+        </button>
+
+        <div className="flex gap-2">
+          <button className="rounded-md bg-amber-500 px-3 py-1.5 text-sm text-white">
+            1
+          </button>
+
+          <button className="rounded-md border border-zinc-200 px-3 py-1.5 text-sm dark:border-zinc-700">
+            2
+          </button>
+
+          <button className="rounded-md border border-zinc-200 px-3 py-1.5 text-sm dark:border-zinc-700">
+            3
+          </button>
+        </div>
+
+        <button className="rounded-lg border border-zinc-200 px-4 py-2 text-sm dark:border-zinc-700">
+          Next
+        </button>
       </div>
     </div>
   );
-};
-
-export default VendorDashboard;
+}

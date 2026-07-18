@@ -8,7 +8,7 @@ const VendorLayout = () => {
   return (
     <div className="min-h-screen flex flex-col dark:bg-zinc-900">
       <VendorTopbar />
-      <VendorSidebar />
+      
 
       <main className="flex-1">
       <ScrollToTop />

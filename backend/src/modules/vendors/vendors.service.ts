@@ -1,5 +1,5 @@
 import { uploadToCloudinary } from "../../utils/cloudinary";
-import { VendorRepository } from "./vendors.repository";
+import { VendorsRepository } from "./vendors.repository";
 
 
 // CREATE VENDOR
@@ -19,7 +19,7 @@ const createVendor = async ({
     tin_number,
   } = body;
   
-  const existing = await VendorRepository.findByUserId(userId);
+  const existing = await VendorsRepository.findByUserId(userId);
 
   if (existing) {
     throw new Error("Vendor already exists");
@@ -37,7 +37,7 @@ const createVendor = async ({
     ),
   ]);
 
-  return VendorRepository.createVendor({
+  return VendorsRepository.createVendor({
     userId,
 
     storeName: store_name,
@@ -55,8 +55,8 @@ const createVendor = async ({
 };
 
 // GET MY VENDOR
-const getMyVendor = async (userId: string) => {
-  const vendor = await VendorRepository.findByUserId(userId);
+const getCurrentVendor = async (userId: string) => {
+  const vendor = await VendorsRepository.findByUserId(userId);
 
   if (!vendor) {
     throw new Error("Vendor not found");
@@ -77,7 +77,7 @@ const updateMyVendor = async ({
     tin_number,
   } = body;
   
-  const vendor = await VendorRepository.findByUserId(userId);
+  const vendor = await VendorsRepository.findByUserId(userId);
 
   if (!vendor) {
     throw new Error("Vendor not found");
@@ -97,7 +97,7 @@ const updateMyVendor = async ({
     data.payoutEmail = payout_email;
   }
 
-  return VendorRepository.update({
+  return VendorsRepository.update({
     id:vendor.id, 
     data
   });
@@ -106,13 +106,13 @@ const updateMyVendor = async ({
 // GET ALL VENDORS
 
 const getAllVendors = async (query: any) => {
-  return VendorRepository.findAll(query);
+  return VendorsRepository.findAll(query);
 };
 
 // GET VENDOR BY SLUG
 
 const getVendorBySlug = async (slug: string) => {
-  const vendor = await VendorRepository.findBySlug(slug);
+  const vendor = await VendorsRepository.findBySlug(slug);
 
   if (!vendor) {
     throw new Error("Vendor not found");
@@ -124,7 +124,7 @@ const getVendorBySlug = async (slug: string) => {
 // APPROVE VENDOR
 
 const approveVendor = async (vendorId: string) => {
-  return VendorRepository.update(vendorId, {
+  return VendorsRepository.update(vendorId, {
     status: "approved",
   });
 };
@@ -135,7 +135,7 @@ const rejectVendor = async (
   vendorId: string,
   reason: string
 ) => {
-  return VendorRepository.update(vendorId, {
+  return VendorsRepository.update(vendorId, {
     status: "rejected",
     rejection_reason: reason,
   });
@@ -144,7 +144,7 @@ const rejectVendor = async (
 // SUSPEND VENDOR
 
 const suspendVendor = async (vendorId: string) => {
-  return VendorRepository.update(vendorId, {
+  return VendorsRepository.update(vendorId, {
     status: "suspended",
   });
 };
@@ -152,7 +152,7 @@ const suspendVendor = async (vendorId: string) => {
 // UNSUSPEND VENDOR
 
 const unsuspendVendor = async (vendorId: string) => {
-  return VendorRepository.update(vendorId, {
+  return VendorsRepository.update(vendorId, {
     status: "approved",
   });
 };
@@ -169,7 +169,7 @@ const uploadLogo = async ({
   
   await uploadToCloudinary(logo_buffer, `vendors/logo/${userId}`),
   
-  await VendorRepository.uploadLogo(vendorId);
+  await VendorsRepository.uploadLogo(vendorId);
 };
 
 
@@ -177,7 +177,7 @@ const uploadLogo = async ({
 export const VendorsService = {
   createVendor,
 
-  getMyVendor,
+  getCurrentVendor,
   updateMyVendor,
   
   uploadLogo,

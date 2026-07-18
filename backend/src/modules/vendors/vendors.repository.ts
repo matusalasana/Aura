@@ -78,7 +78,7 @@ const findAll = async () => {
 };
 
 // EXPORT
-export const VendorRepository = {
+export const VendorsRepository = {
   findByUserId,
   findById,
   findBySlug,

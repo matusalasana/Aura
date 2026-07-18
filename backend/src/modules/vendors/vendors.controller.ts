@@ -32,13 +32,13 @@ const createVendor = async (
 };
 
 // GET MY VENDOR
-const getMyVendor = async (
+const getCurrentVendor = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const vendor = await VendorsService.getMyVendor(req.user?.userId);
+    const vendor = await VendorsService.getCurrentVendor(req.user?.userId);
 
     return res.status(200).json({
       success: true,
@@ -255,7 +255,7 @@ const uploadLicense = async (
 export const VendorsController = {
   createVendor,
 
-  getMyVendor,
+  getCurrentVendor,
   updateMyVendor,
   
   uploadLogo,
