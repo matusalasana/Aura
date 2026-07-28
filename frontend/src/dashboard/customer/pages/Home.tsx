@@ -4,17 +4,16 @@ import Hero from "../components/Hero";
 import ValueProps from "../components/ValueProps";
 import FeaturedVendors from "../components/FeaturedVendors";
 import TrendingCategories from "../components/TrendingCategories";
-import Input from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
 
 
 const Home = () => {
   return (
     <div>
-      <Input
-        label="Email"
-        type="email"
-        placeholder="john@example.com"
-      />
+    <div className="btn-primary">
+    This is card
+    </div>
+      <Button fullWidth={true} variant="danger">Edit</Button>
       <Hero />
       <ValueProps />
       <FeaturedVendors />
