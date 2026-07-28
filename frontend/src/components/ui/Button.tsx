@@ -33,39 +33,21 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         disabled={disabled || loading}
         className={clsx(
-          "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200",
-          "focus:outline-none focus:ring-4",
-          "disabled:cursor-not-allowed disabled:opacity-60",
           fullWidth && "w-full",
 
-          // Sizes
           {
-            "h-9 px-3 text-sm": size === "sm",
-            "h-11 px-5 text-sm": size === "md",
-            "h-12 px-6 text-base": size === "lg",
+            "btn-primary": variant === "primary",
+            "btn-secondary": variant === "secondary",
+            "btn-outline": variant === "outline",
+            "btn-danger": variant === "danger",
+            "bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800":
+              variant === "ghost",
           },
 
-          // Variants
           {
-            // Amber primary
-            "btn-primary":
-              variant === "primary",
-
-            // Zinc secondary
-            "btn-secondary":
-              variant === "secondary",
-
-            // Outline
-            "btn-outline":
-              variant === "outline",
-
-            // Ghost
-            "btn-ghost":
-              variant === "ghost",
-
-            // Danger
-            "btn-danger":
-              variant === "danger",
+            "px-3 py-1.5 text-xs": size === "sm",
+            "px-4 py-2 text-sm": size === "md",
+            "px-6 py-3 text-base": size === "lg",
           },
 
           className
@@ -76,9 +58,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
         {loading && (
           <svg
-            className="h-4 w-4 animate-spin"
+            className="size-4 animate-spin"
             viewBox="0 0 24 24"
             fill="none"
+            aria-hidden="true"
           >
             <circle
               cx="12"

@@ -23,54 +23,53 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const helperId =
+      helperText || error ? `${id ?? props.name}-description` : undefined;
+
     return (
-      <div className="w-full space-y-1.5">
+      <div className="w-full space-y-2">
         {label && (
-          <label
-            htmlFor={id}
-            className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
+          <label htmlFor={id} className="label">
             {label}
           </label>
         )}
 
         <div className="relative">
           {leftIcon && (
-            <div className="absolute inset-y-0 left-3 flex items-center text-zinc-400">
+            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-zinc-400">
               {leftIcon}
-            </div>
+            </span>
           )}
 
           <input
             ref={ref}
             id={id}
+            aria-invalid={!!error}
+            aria-describedby={helperId}
             className={clsx(
-              "w-full rounded-xl border bg-white px-4 py-2.5 text-sm outline-none transition",
-              "placeholder:text-zinc-400",
-              "border-zinc-300 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/15",
-              "dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100",
-              "dark:placeholder:text-zinc-500",
-              "disabled:cursor-not-allowed disabled:opacity-60",
+              "input",
               leftIcon && "pl-10",
               rightIcon && "pr-10",
               error &&
-                "border-red-500 focus:border-red-500 focus:ring-red-500/15",
+                "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20",
               className
             )}
             {...props}
           />
 
           {rightIcon && (
-            <div className="absolute inset-y-0 right-3 flex items-center text-zinc-400">
+            <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
               {rightIcon}
-            </div>
+            </span>
           )}
         </div>
 
         {error ? (
-          <p className="text-sm text-red-500">{error}</p>
+          <p id={helperId} className="error-text">
+            {error}
+          </p>
         ) : helperText ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p id={helperId} className="muted text-sm">
             {helperText}
           </p>
         ) : null}

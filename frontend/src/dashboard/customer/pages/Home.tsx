@@ -10,7 +10,7 @@ import Button from "@/components/ui/Button";
 const Home = () => {
   return (
     <div>
-    <div className="btn-primary">
+    <div className="btn">
     This is card
     </div>
       <Button fullWidth={true} variant="danger">Edit</Button>
