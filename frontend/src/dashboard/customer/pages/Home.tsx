@@ -4,15 +4,15 @@ import Hero from "../components/Hero";
 import ValueProps from "../components/ValueProps";
 import FeaturedVendors from "../components/FeaturedVendors";
 import TrendingCategories from "../components/TrendingCategories";
-import Textarea from "@/components/ui/Textarea";
+import Checkbox from "@/components/ui/Checkbox";
 
 
 const Home = () => {
   return (
     <div>
-      <Textarea 
-        label={"description"} 
-        placeholder="danger"
+      <Checkbox 
+        description={"description but just not my mom made me mad me more money me more 💰"} 
+        label="danger"
       />
       <Hero />
       <ValueProps />
