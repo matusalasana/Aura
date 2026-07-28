@@ -26,8 +26,8 @@ const createProduct = async ({
     throw new Error("Vendor not found");
   }
 
-  if (vendor.status !== "approved") {
-    throw new Error("Vendor is not approved");
+  if (vendor.status !== "active") {
+    throw new Error("Vendor is not active");
   }
 
 

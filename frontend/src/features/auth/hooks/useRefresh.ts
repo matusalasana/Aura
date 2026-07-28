@@ -2,7 +2,6 @@ import api from "@/lib/axios"
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { setAccessToken } from "@/utils/token";
-import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const refresh = async () => {
   const res = await api.post("/auth/refresh");
@@ -24,7 +23,7 @@ export const useRefresh = () => {
     },
 
     onError: (error) => {
-      toast.error(getErrorMessage(error));
+      console.log(error);
     },
   });
 };

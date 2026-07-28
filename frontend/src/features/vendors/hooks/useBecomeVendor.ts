@@ -17,8 +17,9 @@ export const useBecomeVendor = () => {
   return useMutation({
     mutationFn: becomeVendor,
 
-    onSuccess: (data) => {
-      toast.success(data.message);
+    onSuccess: ({ message, vendor }) => {
+      toast.success(message || "Vendor application sent successfully");
+      queryClient.setQueryData(["vendors"], vendor);
     },
 
     onError: (error) => {

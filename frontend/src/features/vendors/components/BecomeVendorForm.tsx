@@ -72,6 +72,8 @@ const BecomeVendorForm = () => {
     formData.append("logo", data.logo);
     formData.append("banner", data.banner);
     formData.append("license", data.license);
+    formData.append("tin_number", data.tin_number);
+    formData.append("payout_email", data.payout_email);
   
     becomeVendor(formData);
   };

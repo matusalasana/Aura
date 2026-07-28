@@ -10,7 +10,10 @@ const createVendor = async (
 ) => {
   try {
     const files = req.files as any;
-
+    
+    console.log("The files are:", req.files);
+    console.log("The body data is:", req.body);
+    
     const vendor = await VendorsService.createVendor({
       userId: req.user?.userId,
 

@@ -6,22 +6,10 @@ export const createVendorSchema = z.object({
     .min(3, "Store name must be at least 3 characters")
     .max(50, "Store name must not exceed 50 characters")
     .trim(),
-    
-  logo_url: z
-    .string()
-    .min(1, "Logo url is required"),
-    
-  banner_url: z.string(),
   
-  status: z.string(),
-  
-  payout_email: z.string(),
+  payout_email: z.string().optional(),
   
   tin_number: z.string(),
-  
-  logo_public_id: z.string(),
-  
-  banner_public_id: z.string(),
 
   description: z
     .string()
@@ -29,6 +17,20 @@ export const createVendorSchema = z.object({
     .max(500, "Description must not exceed 500 characters")
     .trim(),
 });
+
+
+export type CreateVendorDBInput = {
+  storeName: string;
+  logoUrl: string;
+  bannerUrl: string;
+  status: string;
+  payoutEmail: string;
+  tinNumber: string;
+  logoPublicId: string;
+  bannerPublicId: string;
+  licensePublicId: string;
+  description: string;
+};
 
 
 export const updateVendorSchema = z.object({

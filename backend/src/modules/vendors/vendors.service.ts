@@ -1,5 +1,6 @@
 import { uploadToCloudinary } from "../../utils/cloudinary";
 import { VendorsRepository } from "./vendors.repository";
+import { createVendorSchema } from "./vendors.validation"
 
 
 // CREATE VENDOR
@@ -12,12 +13,17 @@ const createVendor = async ({
   banner_buffer,
   license_buffer,
 }) => {
+  
+  const validated = createVendorSchema.parse(body)
+  
   const {
     store_name,
     description,
     payout_email,
     tin_number,
-  } = body;
+  } = validated;
+  
+  console.log("The validated data is:", validated)
   
   const existing = await VendorsRepository.findByUserId(userId);
 

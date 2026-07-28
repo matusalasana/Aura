@@ -4,6 +4,7 @@ import {
   NextFunction,
 } from "express";
 
+import { AuthRepository } from "../modules/auth/auth.repository";
 import { JWT } from "../utils/jwt";
 import logger from "../utils/logger"
 import { type Role } from "../modules/auth/auth.validation"
@@ -51,12 +52,9 @@ export const authenticate = async (
 };
 
 
-
 // ROLE AUTHORIZATION
-export const authorize = (
-  ...roles: Role[]
-) => {
-  return (
+export const authorize = (...allowedRoles: Role[]) => {
+  return async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -66,14 +64,15 @@ export const authorize = (
         message: "Unauthorized",
       });
     }
+    
+    const user = await AuthRepository.findUserById(req.user.userId)
+    
+    const userRole = user.role;
+    
 
-    if (
-      !req.user.role ||
-      !roles.includes(req.user.role as Role)
-    ) {
-      return res.status(403).json({
-        message: "Forbidden",
-      });
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      logger.warn(`Unauthorized access attempt by user ${req.user.id} to ${req.originalUrl}`);
+      return res.status(403).json({ message: "Forbidden: You do not have the required role" });
     }
 
     next();

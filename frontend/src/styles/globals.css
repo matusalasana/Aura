@@ -2,15 +2,32 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-sans: "Space Grotesk", sans-serif;
+  
+  --color-border: #000000;
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-amber-50 text-black font-sans antialiased;
 }
 
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
 
 @import "./theme.css";
 @import "./utilities.css";
