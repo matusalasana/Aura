@@ -4,15 +4,15 @@ import Hero from "../components/Hero";
 import ValueProps from "../components/ValueProps";
 import FeaturedVendors from "../components/FeaturedVendors";
 import TrendingCategories from "../components/TrendingCategories";
-import Checkbox from "@/components/ui/Checkbox";
+import ProgressIndicator from "@/components/ui/ProgressIndicator";
 
 
 const Home = () => {
   return (
     <div>
-      <Checkbox 
-        description={"description but just not my mom made me mad me more money me more 💰"} 
-        label="danger"
+      <ProgressIndicator 
+        steps={["1", "2", "3", "4", "5"]} 
+        currentStep={1}
       />
       <Hero />
       <ValueProps />
