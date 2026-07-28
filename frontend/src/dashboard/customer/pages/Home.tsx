@@ -4,16 +4,16 @@ import Hero from "../components/Hero";
 import ValueProps from "../components/ValueProps";
 import FeaturedVendors from "../components/FeaturedVendors";
 import TrendingCategories from "../components/TrendingCategories";
-import Button from "@/components/ui/Button";
+import Textarea from "@/components/ui/Textarea";
 
 
 const Home = () => {
   return (
     <div>
-    <div className="btn">
-    This is card
-    </div>
-      <Button fullWidth={true} variant="danger">Edit</Button>
+      <Textarea 
+        label={"description"} 
+        placeholder="danger"
+      />
       <Hero />
       <ValueProps />
       <FeaturedVendors />
