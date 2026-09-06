@@ -1,39 +1,38 @@
-
-/* Button */
+/* ========================================
+   BUTTONS
+======================================== */
 
 @utility btn {
-  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50;
 }
 
 @utility btn-primary {
-  @apply btn bg-amber-500 text-white hover:bg-amber-600 focus:ring-2 focus:ring-amber-500/50;
+  @apply btn bg-primary text-white hover:opacity-90 focus:ring-2 focus:ring-primary/50;
 }
 
 @utility btn-secondary {
-  @apply btn bg-zinc-100 text-zinc-900 hover:bg-zinc-200 focus:ring-2 focus:ring-zinc-400/20 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700;
+  @apply btn bg-secondary text-white hover:opacity-90 focus:ring-2 focus:ring-secondary/30;
 }
 
 @utility btn-outline {
-  @apply btn border border-zinc-300 bg-transparent text-zinc-700 hover:bg-zinc-100 focus:ring-2 focus:ring-zinc-400/20 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800;
+  @apply btn border border-border bg-transparent text-content hover:bg-muted focus:ring-2 focus:ring-primary/30;
 }
 
 @utility btn-ghost {
-  @apply btn bg-transparent text-zinc-700 hover:bg-zinc-100 focus-ring dark:text-zinc-200 dark:hover:bg-zinc-800;
+  @apply btn bg-transparent text-content hover:bg-muted focus:ring-2 focus:ring-primary/30;
 }
 
 @utility btn-danger {
-  @apply btn bg-red-500 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-500/20;
+  @apply btn bg-danger text-white hover:opacity-90 focus:ring-2 focus:ring-danger/30;
 }
 
 
-/* Layout */
+/* ========================================
+   LAYOUT
+======================================== */
 
 @utility flex-center {
   @apply flex items-center justify-center;
-}
-
-@utility container-custom {
-  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
 @utility flex-between {
@@ -52,15 +51,21 @@
   @apply grid place-items-center;
 }
 
+@utility container-custom {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
 @utility section {
   @apply py-12 md:py-16 lg:py-24;
 }
 
 
-/* Form */
+/* ========================================
+   FORMS
+======================================== */
 
 @utility input {
-  @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm transition-colors outline-none placeholder:text-zinc-400 disabled:cursor-not-allowed disabled:opacity-50 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white;
+  @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-content outline-none transition-colors placeholder:text-secondary disabled:cursor-not-allowed disabled:opacity-50 focus:border-primary focus:ring-2 focus:ring-primary/20;
 }
 
 @utility textarea {
@@ -68,60 +73,83 @@
 }
 
 @utility label {
-  @apply mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300;
+  @apply mb-2 block text-sm font-medium text-content;
 }
 
 @utility error-text {
-  @apply text-sm text-red-500;
+  @apply text-sm text-danger;
 }
 
 
-/* Text */
-
-@utility text-gradient {
-  @apply bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent;
-}
+/* ========================================
+   TEXT
+======================================== */
 
 @utility heading {
-  @apply font-bold tracking-tight text-zinc-900 dark:text-white;
+  @apply font-bold tracking-tight text-content;
 }
 
 @utility subheading {
-  @apply text-zinc-600 dark:text-zinc-400;
+  @apply text-secondary;
 }
 
 @utility muted {
-  @apply text-zinc-500 dark:text-zinc-400;
+  @apply text-secondary;
+}
+
+@utility text-gradient {
+  @apply bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent;
 }
 
 @utility link {
-  @apply text-amber-500 hover:text-amber-600 hover:underline;
+  @apply text-primary hover:underline hover:opacity-80;
 }
 
 
-/* Badges */
+/* ========================================
+   BADGES
+======================================== */
 
 @utility badge {
-  @apply inline-flex items-center rounded-full bg-zinc-100 px-2 py-1 text-xs font-medium dark:bg-zinc-800;
+  @apply inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-content;
 }
 
 @utility badge-success {
-  @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+  @apply inline-flex items-center rounded-full bg-green-100 px-2.5 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400;
 }
 
 @utility badge-warning {
-  @apply bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400;
+  @apply inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400;
 }
 
 @utility badge-danger {
-  @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+  @apply inline-flex items-center rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400;
+}
+
+@utility badge-primary {
+  @apply inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary;
 }
 
 
-/* Loading */
+/* ========================================
+   CARDS
+======================================== */
+
+@utility card {
+  @apply rounded-xl border border-border bg-card p-6 shadow-sm;
+}
+
+@utility card-hover {
+  @apply card transition-shadow duration-200 hover:shadow-md;
+}
+
+
+/* ========================================
+   LOADING
+======================================== */
 
 @utility skeleton {
-  @apply animate-pulse rounded-md bg-zinc-200 dark:bg-zinc-800;
+  @apply animate-pulse rounded-md bg-muted;
 }
 
 @utility loading {
@@ -129,18 +157,26 @@
 }
 
 
-/* Images */
+/* ========================================
+   IMAGES
+======================================== */
+
+@utility image {
+  @apply w-full rounded-2xl border border-border;
+}
 
 @utility image-cover {
   @apply h-full w-full object-cover;
 }
 
 @utility avatar {
-  @apply rounded-full object-cover;
+  @apply aspect-square rounded-full object-cover;
 }
 
 
-/* Animations */
+/* ========================================
+   TRANSITIONS
+======================================== */
 
 @utility transition-default {
   @apply transition-all duration-200;
@@ -155,21 +191,27 @@
 }
 
 
-/* Focus */
+/* ========================================
+   FOCUS
+======================================== */
 
 @utility focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-amber-500/50;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/50;
 }
 
 
-/* Disabled */
+/* ========================================
+   DISABLED
+======================================== */
 
 @utility disabled {
   @apply pointer-events-none opacity-50;
 }
 
 
-/* Truncate */
+/* ========================================
+   TRUNCATION
+======================================== */
 
 @utility truncate-1 {
   @apply truncate;
@@ -181,11 +223,4 @@
 
 @utility truncate-3 {
   @apply line-clamp-3;
-}
-
-
-/* Card */
-
-@utility card {
-  @apply rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
 }

@@ -7,7 +7,6 @@ import { AuthController } from "./auth.controller.js"
 
 export const authHandler = toNodeHandler(auth);
 
-
 const router = Router();
 
 

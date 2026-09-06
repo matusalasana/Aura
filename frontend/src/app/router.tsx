@@ -15,8 +15,8 @@ import ProtectedRoutes from "@/features/auth/components/ProtectedRoutes";
 // Vendor pages
 import VendorDashboard from "@/dashboard/vendor/pages/VendorDashboard";
 
-import RegisterCustomer from "@/features/auth/pages/RegisterCustomer"
-import LoginCustomer from "@/features/auth/pages/LoginCustomer"
+import Signup from "@/features/auth/pages/Signup"
+import Signin from "@/features/auth/pages/Signin"
 
 
 export const router = createBrowserRouter([
@@ -31,12 +31,12 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/login",
-        element: <LoginCustomer />
+        path: "/sign-in",
+        element: <Signin />
       },
       {
-        path: "/register/customer",
-        element: <RegisterCustomer />
+        path: "/sign-up",
+        element: <Signup />
       },
       
       // Customer Protected Pages

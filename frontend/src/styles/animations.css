@@ -1,3 +1,18 @@
+@theme {
+  /* ========================================
+     ANIMATION TIMING
+  ======================================== */
+
+  --animate-duration-fast: 150ms;
+  --animate-duration-normal: 200ms;
+  --animate-duration-slow: 300ms;
+}
+
+
+/* ========================================
+   FADE
+======================================== */
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -8,6 +23,245 @@
   }
 }
 
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+
+/* ========================================
+   SLIDE
+======================================== */
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+/* ========================================
+   SCALE
+======================================== */
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+
+/* ========================================
+   SPIN
+======================================== */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ========================================
+   PULSE
+======================================== */
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+
+/* ========================================
+   BOUNCE
+======================================== */
+
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+
+/* ========================================
+   SHAKE
+======================================== */
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+
+/* ========================================
+   SHIMMER
+======================================== */
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+
+  to {
+    background-position: 200% 0;
+  }
+}
+
+
+/* ========================================
+   UTILITY CLASSES
+======================================== */
+
 @utility animate-fade-in {
-  animation: fade-in .3s ease;
+  animation: fade-in 200ms ease-out both;
+}
+
+@utility animate-fade-out {
+  animation: fade-out 200ms ease-in both;
+}
+
+@utility animate-slide-up {
+  animation: slide-up 300ms ease-out both;
+}
+
+@utility animate-slide-down {
+  animation: slide-down 300ms ease-out both;
+}
+
+@utility animate-slide-left {
+  animation: slide-left 300ms ease-out both;
+}
+
+@utility animate-slide-right {
+  animation: slide-right 300ms ease-out both;
+}
+
+@utility animate-scale-in {
+  animation: scale-in 200ms ease-out both;
+}
+
+@utility animate-scale-out {
+  animation: scale-out 200ms ease-in both;
+}
+
+@utility animate-spin {
+  animation: spin 800ms linear infinite;
+}
+
+@utility animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@utility animate-bounce-soft {
+  animation: bounce-soft 1.5s ease-in-out infinite;
+}
+
+@utility animate-shake {
+  animation: shake 300ms ease-in-out;
+}
+
+@utility animate-shimmer {
+  animation: shimmer 1.5s linear infinite;
+}
+
+
+/* ========================================
+   ACCESSIBILITY
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -36,41 +36,7 @@ const envSchema = z.object({
     .string()
     .url()
     .default("http://localhost:3000"),
-
-  // Token secrets
-  ACCESS_TOKEN_SECRET: z
-    .string()
-    .min(1, "ACCESS_TOKEN_SECRET is required"),
-  REFRESH_TOKEN_SECRET: z
-    .string()
-    .min(1, "REFRESH_TOKEN_SECRET is required"),
-
-  // Token expiration
-  ACCESS_TOKEN_EXPIRY: z
-    .string()
-    .default("15m"),
-  REFRESH_TOKEN_EXPIRY: z
-    .string()
-    .default("7d"),
-
-  // Cookie expiration
-  REFRESH_COOKIE_MAX_AGE: z.coerce
-    .number()
-    .positive()
-    .default(1000 * 60 * 60 * 24 * 7),
-
-  ACCESS_COOKIE_MAX_AGE: z.coerce
-    .number()
-    .positive()
-    .default(1000 * 60 * 15),
-
-  // Password hashing
-  PWD_SALT_ROUNDS: z.coerce
-    .number()
-    .int()
-    .positive()
-    .default(12),
-
+  
   // Cloudinary
   CLOUDINARY_CLOUD_NAME: z.string().optional(),
   CLOUDINARY_API_KEY: z.string().optional(),
@@ -112,18 +78,12 @@ export const Env = {
 
   SENTRY_DSN: parsedEnv.SENTRY_DSN,
 
-  CLIENT_ORIGIN: parsedEnv.CLIENT_ORIGIN,
-  SERVER_ORIGIN: parsedEnv.SERVER_ORIGIN,
-
-  ACCESS_COOKIE_MAX_AGE: parsedEnv.ACCESS_COOKIE_MAX_AGE,
-  ACCESS_TOKEN_EXPIRY: parsedEnv.ACCESS_TOKEN_EXPIRY,
-  ACCESS_TOKEN_SECRET: parsedEnv.ACCESS_TOKEN_SECRET,
-
-  REFRESH_COOKIE_MAX_AGE: parsedEnv.REFRESH_COOKIE_MAX_AGE,
-  REFRESH_TOKEN_EXPIRY: parsedEnv.REFRESH_TOKEN_EXPIRY,
-  REFRESH_TOKEN_SECRET: parsedEnv.REFRESH_TOKEN_SECRET,
-
-  SALT_ROUNDS: parsedEnv.PWD_SALT_ROUNDS,
+  CLIENT_ORIGIN: parsedEnv.NODE_ENV === "production" 
+    ? parsedEnv.CLIENT_ORIGIN
+    : "http://localhost:5173",
+  SERVER_ORIGIN: parsedEnv.NODE_ENV === "production" 
+    ? parsedEnv.SERVER_ORIGIN
+    : "http://localhost:3000",
 
   CLOUDINARY_API_SECRET: parsedEnv.CLOUDINARY_API_SECRET,
   CLOUDINARY_API_KEY: parsedEnv.CLOUDINARY_API_KEY,

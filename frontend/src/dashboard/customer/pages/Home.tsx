@@ -5,11 +5,20 @@ import ValueProps from "../components/ValueProps";
 import FeaturedVendors from "../components/FeaturedVendors";
 import TrendingCategories from "../components/TrendingCategories";
 import ProgressIndicator from "@/components/ui/ProgressIndicator";
+import { useSignout } from "@/features/auth/hooks/useSignout"
 
 
 const Home = () => {
+  const { mutate: signout, isPending } = useSignout();
   return (
     <div>
+      <button
+        onClick={() => signout()}
+        disabled={isPending}
+        className="btn btn-danger"
+      >
+        {isPending ? "Signing Out..." : "Sign Out" }
+      </button>
       <Hero />
       <ValueProps />
       <FeaturedVendors />

@@ -1,22 +1,20 @@
-import api from "@/lib/axios"
+import api from "@/lib/authApi"
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { clearAccessToken } from "@/utils/token";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
-const logoutUser = async () => {
-  await api.post("/auth/logout");
+const signout = async () => {
+  await api.post("/sign-out");
 };
 
-export const useLogout = () => {
+export const useSignout = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: logoutUser,
+    mutationFn: signout,
 
     onSuccess: () => {
-      clearAccessToken();
-
+      
       queryClient.removeQueries({
         queryKey: ["auth"],
       });
