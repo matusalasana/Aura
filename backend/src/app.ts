@@ -10,6 +10,7 @@ import { rateLimit } from 'express-rate-limit';
 import { loggerMiddleware } from './middleware/logger';
 import { errorHandler } from "./middleware/errorHandler";
 import routes from "./routes/index";
+import { authHandler } from "@/modules/auth/auth.routes";
 import { resolveTenant } from "./middleware/resolveTenant"
 import { Env } from "@/config/env";
 
@@ -57,7 +58,8 @@ app.use(loggerMiddleware);
 app.use('/api/v1', limiter);
 
 // API Routes
-app.use("/api/v1", resolveTenant, routes)
+app.all("/api/auth/{*any}", authHandler);
+app.use("/api/v1", resolveTenant, routes);
 
 // Error handlers
 Sentry.setupExpressErrorHandler(app);
