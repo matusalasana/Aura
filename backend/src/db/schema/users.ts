@@ -8,6 +8,8 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 
+import { stores } from "./stores";
+
 export const roleEnum = pgEnum("role", [
   "customer",
   "vendor",
@@ -20,38 +22,43 @@ export const users = pgTable("users",
     id: uuid("id")
         .defaultRandom()
         .primaryKey(),
+        
+    storeId: uuid("store_id")
+      .notNull()
+      .unique()
+      .references(() => stores.id, { onDelete: "cascade" }),
 
-  name: varchar("name", { length: 100 })
-        .notNull(),
-
-  email: varchar("email", { length: 255 })
-          .notNull()
-          .unique(),
-
-  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
-
-  avatar: varchar("avatar", { length: 500 }),
-
-  role: roleEnum("role")
-        .default("customer")
-        .notNull(),
-
-  isVerified: boolean("is_verified")
-              .default(false)
-              .notNull(),
-
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-  })
-    .defaultNow()
-    .notNull(),
-
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-  })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
+    name: varchar("name", { length: 100 })
+          .notNull(),
+  
+    email: varchar("email", { length: 255 })
+            .notNull()
+            .unique(),
+  
+    passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+  
+    avatar: varchar("avatar", { length: 500 }),
+  
+    role: roleEnum("role")
+          .default("customer")
+          .notNull(),
+  
+    isVerified: boolean("is_verified")
+                .default(false)
+                .notNull(),
+  
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+    })
+      .defaultNow()
+      .notNull(),
+  
+    updatedAt: timestamp("updated_at", {
+      withTimezone: true,
+    })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   },
   (table) => ({
     emailIdx: index("users_email_idx").on(table.email),

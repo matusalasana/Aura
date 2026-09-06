@@ -3,9 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
-import { loggerMiddleware } from './middleware/logger.middleware';
+import { loggerMiddleware } from './middleware/logger';
 import { errorHandler } from "./middleware/errorHandler";
 import routes from "./routes/index";
+import { resolveTenant } from "./middleware/resolveTenant"
 // import {
 //   CLIENT_ORIGIN,
 //   SERVER_ORIGIN
@@ -53,7 +54,7 @@ app.use(loggerMiddleware);
 app.use('/api/v1', limiter);
 
 // API Routes
-app.use("/api/v1", routes)
+app.use("/api/v1", resolveTenant, routes)
 
 // Error handler
 app.use(errorHandler);

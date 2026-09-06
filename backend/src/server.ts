@@ -1,16 +1,16 @@
 import { app } from './app';
 import { Env } from './config/env';
 import { connectDB } from './db';
-import { connectRedis } from './config/redis';
 import logger from './utils/logger';
+import { testRedis } from "./config/redis";
 
 const startServer = async () => {
   try {
     // 1. Connect to Database (Neon)
     await connectDB();
 
-    // 2. Connect to Redis (Caching)
-    connectRedis();
+    // 2. Connect to Redis 
+    await testRedis();
 
     // 3. Start Express Server
     app.listen(Number(Env.PORT), '0.0.0.0', () => {

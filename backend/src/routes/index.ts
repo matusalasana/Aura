@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import authRoutes from "../modules/auth/auth.routes";
-import vendorsRoutes from "../modules/vendors/vendors.routes";
-import productRoutes from "../modules/products/products.routes";
+// import authRoutes from "../modules/auth/auth.routes";
+// import vendorsRoutes from "../modules/vendors/vendors.routes";
+// import productRoutes from "../modules/products/products.routes";
 // import categoryRoutes from "../modules/categories/categories.routes";
 // import cartRoutes from "../modules/cart/cart.routes";
 // import orderRoutes from "../modules/orders/orders.routes";
@@ -16,9 +16,9 @@ import productRoutes from "../modules/products/products.routes";
 
 const router = Router();
 
-router.use("/auth", authRoutes);
-router.use("/vendors", vendorsRoutes);
-router.use("/products", productRoutes);
+// router.use("/auth", authRoutes);
+// router.use("/vendors", vendorsRoutes);
+// router.use("/products", productRoutes);
 // router.use("/categories", categoryRoutes);
 // router.use("/cart", cartRoutes);
 // router.use("/orders", orderRoutes);

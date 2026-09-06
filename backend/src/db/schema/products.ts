@@ -4,46 +4,26 @@ import {
   uuid,
   varchar,
   text,
-  numeric,
-  integer,
-  boolean,
   timestamp,
   index,
 } from "drizzle-orm/pg-core";
 
-import { vendors } from "./vendors";
+import { stores } from "./stores";
+import { categories } from "./categories";
 
 export const products = pgTable(
   "products",
   {
     id: uuid("id").defaultRandom().primaryKey(),
 
-    vendorId: uuid("vendor_id")
-      .references(() => vendors.id, {
-        onDelete: "cascade",
-      })
-      .notNull(),
+    storeId: uuid("store_id").notNull().references(() => stores.id),
+    
+    categoryId: uuid('category_id').references(() => categories.id, { onDelete: 'set null' }),
 
-    name: varchar("name", { length: 150 }).notNull(),
-
+    name: varchar("name", { length: 200 }).notNull(),
+    slug: text('slug').notNull().unique(),
+    
     description: text("description"),
-
-    price: numeric("price", {
-      precision: 10,
-      scale: 2,
-    }).notNull(),
-
-    stock: integer("stock").notNull().default(0),
-
-    thumbnail: text("thumbnail"),
-
-    category: varchar("category", {
-      length: 80,
-    }).notNull(),
-
-    isPublished: boolean("is_published")
-      .default(false)
-      .notNull(),
 
     createdAt: timestamp("created_at")
       .defaultNow()
@@ -54,7 +34,7 @@ export const products = pgTable(
       .notNull(),
   },
   (table) => ({
-    vendorIdx: index("products_vendor_idx").on(table.vendorId),
-    categoryIdx: index("products_category_idx").on(table.category),
+    storeIdx: index("products_store_idx").on(table.storeId),
+    storeCategoryIdx: index("products_store_category_idx").on(table.storeId, table.categoryId),
   })
 );

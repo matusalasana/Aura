@@ -16,6 +16,7 @@ export const registerCustomerSchema = z.object({
   name: z.string().min(5),
   email: z.string().email().trim(),
   password: z.string().min(8, "Password must be al least 8 characters"),
+  storeId: z.uuid().min(1, "Store id is required"),
 });
 
 export const loginSchema = z.object({

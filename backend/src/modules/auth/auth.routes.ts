@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { AuthController } from "./auth.controller";
-import { validate } from "../../middleware/validation.middleware";
+import { validate } from "../../middleware/validation";
 import { registerCustomerSchema, loginSchema } from "./auth.validation";
-import { authenticate } from "../../middleware/auth.middleware";
+import { authenticate } from "../../middleware/authenticate";
 
 const router = Router();
 
@@ -10,7 +10,7 @@ const router = Router();
 router.post(
   "/register/customer", 
   validate(registerCustomerSchema), 
-  AuthController.registerCustomer
+  AuthController.registerUser
 );
 
 // email verification

@@ -31,10 +31,13 @@
     "check": "tsc --noEmit",
     "push": "drizzle-kit push",
     "migrate": "drizzle-kit migrate",
+    "seed": "tsx src/db/seeds/index.ts",
+    "drop-schema": "tsx src/db/schema/reset.ts",
     "generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
+    "@upstash/redis": "^1.38.4",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
@@ -53,6 +56,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",

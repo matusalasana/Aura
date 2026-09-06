@@ -1,47 +1,24 @@
-import { createClient } from 'redis';
-import { Env } from './env.js';
-import logger from '../utils/logger';
+import { Redis } from "@upstash/redis";
+import { Env } from "@/config/env";
+import logger from "@/utils/logger";
 
-
-export const redisClient = createClient({
-  url: Env.REDIS_URL,
+const redis = new Redis({
+  url: Env.UPSTASH_REDIS_REST_URL,
+  token: Env.UPSTASH_REDIS_REST_TOKEN,
 });
 
-let redisErrorLogged = false;
-let redisReconnectCooldown = false;
-
-redisClient.on('ready', () => {
-  logger.info('✅ Redis connected');
-});
-
-redisClient.on('error', (err) => {
-  if (redisReconnectCooldown) return;
-
-  logger.warn(`⚠️ Redis Error: ${err.message}`);
-
-  redisErrorLogged = true;
-  redisReconnectCooldown = true;
-
-  // reset after cooldown
-  setTimeout(() => {
-    redisReconnectCooldown = false;
-  }, 30000); // 30 seconds
-});
-
-export const connectRedis = async () => {
-  if (!Env.REDIS_URL) {
-    logger.warn(
-      '⚠️ REDIS_URL missing. Running without Redis.'
-    );
-
-    return;
-  }
-
+export const testRedis = async() => {
   try {
-    await redisClient.connect();
-  } catch (err) {
-    logger.warn(
-      '⚠️ Failed to connect Redis. Falling back to database.'
-    );
+    await redis.set("test:key", "Working!");
+
+    const value = await redis.get("test:key");
+
+    logger.info(`Redis: ${value}`);
+
+    return value;
+  } catch (error) {
+    logger.error("Redis connection failed:", error);
   }
-};
+}
+
+export default redis;

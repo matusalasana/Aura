@@ -5,12 +5,13 @@ import { HashUtils } from "../../utils/hash";
 import { JWT } from "../../utils/jwt";
 import { CacheService } from "../../utils/CacheService";
 import { generateOTP } from "../../utils/otp";
-
 import { sendEmail } from "../../utils/email";
 import { verifyEmailTemplate } from "../../templates/verifyEmail";
 import { resetPasswordTemplate } from "../../templates/resetPassword";
+import { scopedUsers } from "../../db/scoped/users"
+import { scopedStores } from "../../db/scoped/stores"
 import type {  
-  RegisterCustomerInput,
+  registerUserInput,
   ResetPasswordInput,
   OTPType,
   ResendOTPInput
@@ -27,12 +28,24 @@ const getOtpKey = ({
 
 
 // REGISTER USER
-const registerCustomer = async ({
+const registerUser = async ({
   name,
   email,
   password,
-}: RegisterCustomerInput) => {
-  const existing = await AuthRepository.findUserByEmail(email);
+  storeId,
+  storeName
+}: registerUserInput) => {
+  
+  const existing = await scopedUsers.findByEmail({
+    email,
+    storeId
+  });
+  
+  if (!storeId) throw new Error("storeId not  found");
+  
+  const store = await scopedStores.findById(storeId);
+  if (!store) throw new Error("store not found");
+  
   if (existing) throw new Error("User already exists");
 
   const passwordHash = await HashUtils.hashPassword(password);
@@ -63,12 +76,12 @@ const registerCustomer = async ({
 
   sendEmail({
     to: email,
-    subject: "Verify your Aura account",
+    subject: `Verify your ${storeName} account`,
     template: verifyEmailTemplate({
       name,
       otp,
     }),
-  });q
+  });
  
   return { message: "OTP sent successfully" };
 };
@@ -95,7 +108,7 @@ const verifyEmail = async ({ email, otp }: {
   const isValid = await HashUtils.compareOTP(otp, pending.otp || pending.codeHash);
   if (!isValid) throw new Error("Invalid OTP");
 
-  const user = await AuthRepository.registerCustomer({
+  const user = await AuthRepository.registerUser({
     name: pending.name,
     email: pending.email,
     passwordHash: pending.passwordHash,
@@ -392,7 +405,7 @@ const resendOTP = async ({ email, type }: ResendOTPInput) => {
 // EXPORT
 
 export const AuthService = {
-  registerCustomer,
+  registerUser,
   verifyEmail,
   login,
   refresh,

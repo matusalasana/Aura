@@ -3,33 +3,13 @@ import { users } from "../../db/schema/users";
 import { refreshTokens } from "../../db/schema/refreshTokens";
 import { otps } from "../../db/schema/otps";
 import { type OTPType } from "./auth.validation";
-import { type RegisterCustomerDBInput } from "./auth.validation"
+import { type registerUserDBInput } from "./auth.validation"
 
 import { eq, and, gt, lt } from "drizzle-orm";
 
 
-const findUserByEmail = async (email: string) => {
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
-
-  return user[0] || null;
-};
-
-const findUserById = async (id: string) => {
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, id))
-    .limit(1);
-
-  return user[0] || null;
-};
-
-const registerCustomer = async (
-  data: RegisterCustomerDBInput) => {
+const registerUser = async (
+  data: registerUserDBInput) => {
   const [user] = await db
     .insert(users)
     .values({
@@ -212,9 +192,7 @@ const deleteOTP = async ({
 
 export const AuthRepository = {
   // users
-  findUserByEmail,
-  findUserById,
-  registerCustomer,
+  registerUser,
   updatePassword,
 
   // refresh tokens

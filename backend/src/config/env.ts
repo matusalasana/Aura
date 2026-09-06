@@ -1,75 +1,137 @@
+import { z } from "zod";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Basic
-const NODE_ENV = process.env.NODE_ENV || 'development';
-const PORT = process.env.PORT || 3000;
-const DATABASE_URL = process.env.DATABASE_URL;
 
-// REDIS
-const REDIS_URL = process.env.REDIS_URL;
 
-// ORIGINS
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:5173";
-const SERVER_ORIGIN = process.env.SERVER_ORIGIN ||  "http://localhost:3000";
+const envSchema = z.object({
+  // Basic
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
+  PORT: z.coerce.number().int().positive().default(3000),
 
-// Token secret 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+  // Databases
+  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
-// Token expiration 
-const ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY || '15m';
-const REFRESH_TOKEN_EXPIRY = process.env.REFRESH_TOKEN_EXPIRY || '7d';
+  // Authentication
+  BETTER_AUTH_SECRET: z.string().min(1),
+  BETTER_AUTH_URL: z.string().url(),
 
-// Cookie expiration (refresh)
-const REFRESH_COOKIE_MAX_AGE = Number(process.env.REFRESH_COOKIE_MAX_AGE) || 1000*60*60*24*7;
-const ACCESS_COOKIE_MAX_AGE = Number(process.env.ACCESS_COOKIE_MAX_AGE) || 1000*60*15;
+  // Google OAuth
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
 
-// Salt rounds
-const SALT_ROUNDS = Number(process.env.PWD_SALT_ROUNDS) || 12;
+  // Sentry 
+  SENTRY_AUTH_TOKEN: z.string().min(1, "SENTRY_AUTH_TOKEN is required"),
 
-// Cloudinary image management
-const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
-const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
-const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+  // Origins
+  CLIENT_ORIGIN: z
+    .string()
+    .url()
+    .default("http://localhost:5173"),
+  SERVER_ORIGIN: z
+    .string()
+    .url()
+    .default("http://localhost:3000"),
 
-// EMAIL
-const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = Number(process.env.SMTP_PORT) || 2525;
-const SMTP_SECURE = process.env.SMTP_SECURE;
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
-const EMAIL_FROM = process.env.EMAIL_FROM;
+  // Token secrets
+  ACCESS_TOKEN_SECRET: z
+    .string()
+    .min(1, "ACCESS_TOKEN_SECRET is required"),
+  REFRESH_TOKEN_SECRET: z
+    .string()
+    .min(1, "REFRESH_TOKEN_SECRET is required"),
 
+  // Token expiration
+  ACCESS_TOKEN_EXPIRY: z
+    .string()
+    .default("15m"),
+  REFRESH_TOKEN_EXPIRY: z
+    .string()
+    .default("7d"),
+
+  // Cookie expiration
+  REFRESH_COOKIE_MAX_AGE: z.coerce
+    .number()
+    .positive()
+    .default(1000 * 60 * 60 * 24 * 7),
+
+  ACCESS_COOKIE_MAX_AGE: z.coerce
+    .number()
+    .positive()
+    .default(1000 * 60 * 15),
+
+  // Password hashing
+  PWD_SALT_ROUNDS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(12),
+
+  // Cloudinary
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional(),
+
+  // Email
+  SMTP_HOST: z.string().optional(),
+
+  SMTP_PORT: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(2525),
+
+  SMTP_SECURE: z.coerce.boolean().default(false),
+
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  EMAIL_FROM: z.string().optional(),
+
+});
+
+const parsedEnv = envSchema.parse(process.env);
 
 export const Env = {
-  DATABASE_URL,
-  NODE_ENV,
-  PORT,
   
-  REDIS_URL,
+  NODE_ENV: parsedEnv.NODE_ENV,
+  PORT: parsedEnv.PORT,
   
-  CLIENT_ORIGIN,
-  SERVER_ORIGIN,
-  
-  ACCESS_COOKIE_MAX_AGE,
-  ACCESS_TOKEN_EXPIRY,
-  ACCESS_TOKEN_SECRET,
-  
-  REFRESH_COOKIE_MAX_AGE,
-  REFRESH_TOKEN_EXPIRY,
-  REFRESH_TOKEN_SECRET,
-  
-  SALT_ROUNDS,
-  
-  CLOUDINARY_API_SECRET,
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_CLOUD_NAME,
-  
-  SMTP_HOST,
-  SMTP_PORT,
-  SMTP_SECURE,
-  SMTP_USER,
-  SMTP_PASS,
-  EMAIL_FROM,
+  DATABASE_URL: parsedEnv.DATABASE_URL,
+  UPSTASH_REDIS_REST_URL: parsedEnv.UPSTASH_REDIS_REST_URL,
+  UPSTASH_REDIS_REST_TOKEN: parsedEnv.UPSTASH_REDIS_REST_TOKEN,
+
+  BETTER_AUTH_URL: parsedEnv.BETTER_AUTH_URL,
+  BETTER_AUTH_SECRET: parsedEnv.BETTER_AUTH_SECRET,
+
+  GOOGLE_CLIENT_ID: parsedEnv.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: parsedEnv.GOOGLE_CLIENT_SECRET,
+
+  CLIENT_ORIGIN: parsedEnv.CLIENT_ORIGIN,
+  SERVER_ORIGIN: parsedEnv.SERVER_ORIGIN,
+
+  ACCESS_COOKIE_MAX_AGE: parsedEnv.ACCESS_COOKIE_MAX_AGE,
+  ACCESS_TOKEN_EXPIRY: parsedEnv.ACCESS_TOKEN_EXPIRY,
+  ACCESS_TOKEN_SECRET: parsedEnv.ACCESS_TOKEN_SECRET,
+
+  REFRESH_COOKIE_MAX_AGE: parsedEnv.REFRESH_COOKIE_MAX_AGE,
+  REFRESH_TOKEN_EXPIRY: parsedEnv.REFRESH_TOKEN_EXPIRY,
+  REFRESH_TOKEN_SECRET: parsedEnv.REFRESH_TOKEN_SECRET,
+
+  SALT_ROUNDS: parsedEnv.PWD_SALT_ROUNDS,
+
+  CLOUDINARY_API_SECRET: parsedEnv.CLOUDINARY_API_SECRET,
+  CLOUDINARY_API_KEY: parsedEnv.CLOUDINARY_API_KEY,
+  CLOUDINARY_CLOUD_NAME: parsedEnv.CLOUDINARY_CLOUD_NAME,
+
+  SMTP_HOST: parsedEnv.SMTP_HOST,
+  SMTP_PORT: parsedEnv.SMTP_PORT,
+  SMTP_SECURE: parsedEnv.SMTP_SECURE,
+  SMTP_USER: parsedEnv.SMTP_USER,
+  SMTP_PASS: parsedEnv.SMTP_PASS,
+  EMAIL_FROM: parsedEnv.EMAIL_FROM,
+
 };

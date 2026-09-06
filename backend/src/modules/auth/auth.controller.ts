@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { AuthService } from "./auth.service";
 import { Cookie } from "../../utils/cookies";
-import { type RegisterCustomerInput } from "./auth.validation"
+import { type registerUserInput } from "./auth.validation"
 
 
-// REGISTER CUSTOMER
-const registerCustomer = async (
+// REGISTER USER
+const registerUser = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -13,13 +13,15 @@ const registerCustomer = async (
   try {
     const { name, email, password } = req.body;
 
-    const data: RegisterCustomerInput = {
+    const data: registerUserInput = {
       name,
       email,
       password,
+      storeId: req.storeId,
+      storeName: req.store.host,
     };
     
-    await AuthService.registerCustomer(data);
+    await AuthService.registerUser(data);
 
     return res.status(200).json({
       message: "OTP sent to your email",
@@ -213,7 +215,7 @@ const getMe = async (
 };
 
 export const AuthController = {
-  registerCustomer,
+  registerUser,
   
   verifyEmail,
   
