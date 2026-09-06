@@ -29,17 +29,21 @@
     "build": "tsup src/server.ts --format esm --clean",
     "start": "node dist/server.js",
     "check": "tsc --noEmit",
+    
     "push": "drizzle-kit push",
     "migrate": "drizzle-kit migrate",
+    "generate": "drizzle-kit generate",
+    
     "seed": "tsx src/db/seeds/index.ts",
-    "drop-schema": "tsx src/db/schema/reset.ts",
-    "generate": "drizzle-kit generate"
+    "schema:drop": "tsx src/db/schema/reset.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
     "@sentry/node": "^10.73.0",
     "@upstash/redis": "^1.38.4",
+    "auth": "^1.7.3",
     "bcryptjs": "^3.0.3",
+    "better-auth": "^1.7.3",
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
