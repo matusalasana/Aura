@@ -3,14 +3,19 @@ import { type SigninInput, signinSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useNavigate, Navigate } from "react-router-dom";
+
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useSignin } from "../hooks/useSignin";
+import { useSocialSignin } from "@/features/auth/hooks/useSocialSignin"
 
 const Signin = () => {
   const navigate = useNavigate();
 
   const { data: user, isLoading } = useCurrentUser();
-  const { mutate: signinUser, isPending } = useSignin();
+  const { mutate: signinUser, isPending: signingin } = useSignin();
+  const { mutate: signinWithSocial, isPending: signingInWithSocial} = useSocialSignin();
+  
+  const isPending = signingin || signingInWithSocial;
 
   const {
     register,
@@ -103,7 +108,7 @@ const Signin = () => {
           disabled={isPending}
           className="btn-primary w-full"
         >
-          {isPending ? (
+          {signingin ? (
             <>
               <Loader2 className="h-5 w-5 animate-spin" />
               Signing in...
@@ -111,6 +116,24 @@ const Signin = () => {
           ) : (
             "Sign In"
           )}
+        </button>
+
+        <button
+          onClick={() => signinWithSocial("google")}
+          disabled={isPending}
+          className="btn btn-secondary w-full space-x-2"
+          type="button"
+        >
+         <img 
+           src="images/google.svg" 
+           alt="google logo"
+           className="w-5 h-5 rounded"
+          /> 
+          <p className="text-accent">
+            {signingInWithSocial 
+              ? "Continuing with Google ..." 
+              : "Continue with Google " }
+          </p>
         </button>
 
         {/* Register */}

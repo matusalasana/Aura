@@ -1,26 +1,20 @@
-import api from "@/lib/authApi"
+import { authClient } from "@/lib/authClient"
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { getErrorMessage } from "@/utils/getErrorMessage";
 import { type SigninInput } from "../schemas"
 
 const signin = async (data: SigninInput) => {
-  const res = await api.post(`/sign-in/email`, data)
+  const res = await authClient.signIn.email({
+    email: data.email,
+    password: data.password,
+    callbackURL: "/"
+  })
   return res.data.data
 }
 
 export const useSignin = () => {
   const queryClient = useQueryClient()
   return useMutation ({
-    mutationFn: signin, 
-    onSuccess: () => {
-    
-      queryClient.invalidateQueries(["auth"]);
-    
-      toast.success("You have logged in successfully");
-    },
-    onError: (error) => {
-      toast.error(getErrorMessage(error))
-    }
+    mutationFn: signin
   })
 }

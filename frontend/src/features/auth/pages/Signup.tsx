@@ -6,12 +6,16 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { type SignupInput, signupSchema } from "../schemas";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useSignup } from "../hooks/useSignup";
+import { useSocialSignin } from "@/features/auth/hooks/useSocialSignin"
 
 const Signup = () => {
   const navigate = useNavigate();
 
   const { data: user, isLoading: userLoading } = useCurrentUser();
-  const { mutate: signupUser, isPending } = useSignup();
+  const { mutate: signupUser, isPending: signingin } = useSignup();
+  const { mutate: signinWithSocial, isPending: signingInWithSocial} = useSocialSignin();
+
+  const isPending = signingin || signingInWithSocial;
 
   const {
     register,
@@ -125,7 +129,7 @@ const Signup = () => {
           disabled={isPending}
           className="btn-primary w-full"
         >
-          {isPending ? (
+          {signingin ? (
             <>
               <Loader2 className="h-5 w-5 animate-spin" />
               Creating account...
@@ -135,12 +139,30 @@ const Signup = () => {
           )}
         </button>
 
+        <button
+          onClick={() => signinWithSocial("google")}
+          disabled={isPending}
+          className="btn btn-secondary w-full space-x-2"
+          type="button"
+        >
+         <img 
+           src="images/google.svg" 
+           alt="google logo"
+           className="w-5 h-5 rounded"
+          /> 
+          <p className="text-accent">
+            {signingInWithSocial 
+              ? "Continuing with Google ..." 
+              : "Continue with Google " }
+          </p>
+        </button>
+
         {/* Login */}
         <p className="text-center text-sm muted">
           Already have an account?{" "}
           <button
             type="button"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/sign-in")}
             className="link font-semibold"
           >
             Login

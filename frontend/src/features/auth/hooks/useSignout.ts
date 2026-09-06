@@ -1,10 +1,10 @@
-import api from "@/lib/authApi"
+import { authClient } from "@/lib/authClient"
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const signout = async () => {
-  await api.post("/sign-out");
+  await authClient.signOut();
 };
 
 export const useSignout = () => {
