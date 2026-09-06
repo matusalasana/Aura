@@ -25,7 +25,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().optional(),
 
   // Sentry 
-  SENTRY_AUTH_TOKEN: z.string().min(1, "SENTRY_AUTH_TOKEN is required"),
+  SENTRY_DSN: z.string().url().min(1, "SENTRY_DSN is required"),
 
   // Origins
   CLIENT_ORIGIN: z
@@ -109,6 +109,8 @@ export const Env = {
 
   GOOGLE_CLIENT_ID: parsedEnv.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: parsedEnv.GOOGLE_CLIENT_SECRET,
+
+  SENTRY_DSN: parsedEnv.SENTRY_DSN,
 
   CLIENT_ORIGIN: parsedEnv.CLIENT_ORIGIN,
   SERVER_ORIGIN: parsedEnv.SERVER_ORIGIN,

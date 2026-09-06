@@ -1,16 +1,19 @@
+import "./instrument";
+
+import * as Sentry from "@sentry/node";
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
+  
 import { loggerMiddleware } from './middleware/logger';
 import { errorHandler } from "./middleware/errorHandler";
 import routes from "./routes/index";
 import { resolveTenant } from "./middleware/resolveTenant"
-// import {
-//   CLIENT_ORIGIN,
-//   SERVER_ORIGIN
-// } from "./config/env";
+import { Env } from "@/config/env";
+
+
 
 export const app = express();
 
@@ -22,8 +25,8 @@ const limiter = rateLimit({
 });
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "localhost:3000",
+  Env.CLIENT_ORIGIN,
+  Env.SERVER_ORIGIN,
 ];
 
 // Security & Base Middlewares
@@ -56,5 +59,6 @@ app.use('/api/v1', limiter);
 // API Routes
 app.use("/api/v1", resolveTenant, routes)
 
-// Error handler
-app.use(errorHandler);
+// Error handlers
+Sentry.setupExpressErrorHandler(app);
+app.use(errorHandler)
