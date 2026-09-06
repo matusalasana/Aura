@@ -54,7 +54,7 @@ app.use(cookieParser());
 app.use(loggerMiddleware);
 
 // Rate Limiter
-app.use('/api/v1', limiter);
+app.use('/api', limiter);
 
 // API Routes
 app.all("/api/auth/{*any}", authHandler);

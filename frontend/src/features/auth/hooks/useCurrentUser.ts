@@ -1,11 +1,10 @@
-import api from "@/lib/axios"
+import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
-
 const getCurrentUser = async () => {
-  const res = await api.get("/auth/me")
-  return res.data.user
-}
+  const res = await api.get("/auth/me");
+  return res.data.data;
+};
 
 export const useCurrentUser = () => {
   return useQuery({
@@ -13,6 +12,6 @@ export const useCurrentUser = () => {
     queryFn: getCurrentUser,
     refetchOnWindowFocus: false,
     retry: false,
-    staleTime: 1000*60*30,
+    staleTime: 1000 * 60 * 30,
   });
 };

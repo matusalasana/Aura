@@ -1,23 +1,21 @@
-import api from "@/lib/axios"
+import api from "@/lib/authApi"
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { setAccessToken } from "../../../utils/token"
 import { type LoginInput } from "../schemas"
 
 const loginUser = async (data: LoginInput) => {
-  const res = await api.post(`/auth/login`, data)
-  return res.data
+  const res = await api.post(`/sign-in/email`, data)
+  return res.data.data
 }
 
 export const useLogin = () => {
   const queryClient = useQueryClient()
   return useMutation ({
     mutationFn: loginUser, 
-    onSuccess: ({ user, accessToken }) => {
-      setAccessToken(accessToken);
+    onSuccess: () => {
     
-      queryClient.setQueryData(["auth"], user);
+      queryClient.invalidateQueries(["auth"]);
     
       toast.success("You have logged in successfully");
     },

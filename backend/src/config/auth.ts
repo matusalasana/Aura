@@ -20,5 +20,9 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+
+  trustedOrigins: [
+    Env.CLIENT_ORIGIN,
+  ],
   
 });
