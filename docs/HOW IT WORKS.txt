@@ -1,0 +1,781 @@
+
+Full Backend + Frontend Structure + Complete Build Steps
+
+IMPORTANT:
+This architecture is:
+
+- MVP-first
+- maintainable
+- realistic
+- not over-engineered
+
+Goal:
+Build fast → validate → refactor later.
+
+---
+
+🧠 CORE MENTAL MODEL
+
+The MOST IMPORTANT idea
+
+Build vertically.
+
+BAD:
+
+Build all DB first
+→ all backend
+→ all frontend
+→ everything breaks
+
+GOOD:
+
+Build one feature completely:
+DB → API → UI → Test
+
+Example:
+Auth completely done before products.
+
+---
+
+🏗️ PROJECT STRUCTURE
+
+app/
+│
+├── client/
+└── server/
+
+---
+
+⚙️ BACKEND ARCHITECTURE (EXPRESS)
+
+---
+
+📁 BACKEND FOLDER STRUCTURE
+
+server/
+│
+├── src/
+│   │
+│   ├── config/
+│   │   ├── db.ts
+│   │   └── env.ts
+│   │
+│   ├── modules/
+│   │   │
+│   │   ├── auth/
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── auth.validation.ts
+│   │   │   └── auth.sql.ts
+│   │   │
+│   │   ├── users/
+│   │   ├── vendors/
+│   │   ├── products/
+│   │   ├── cart/
+│   │   ├── orders/
+│   │   ├── reviews/
+│   │   └── admin/
+│   │
+│   ├── middleware/
+│   │   ├── auth.middleware.ts
+│   │   ├── error.middleware.ts
+│   │   └── validate.middleware.ts
+│   │
+│   ├── utils/
+│   │   ├── generate-id.ts
+│   │   ├── jwt.ts
+│   │   └── response.ts
+│   │
+│   ├── types/
+│   │
+│   ├── app.ts
+│   └── server.ts
+│
+├── sql/
+│   ├── schema.sql
+│   └── seed.sql
+│
+├── package.json
+├── tsconfig.json
+└── .env
+
+---
+
+🧠 BACKEND MENTAL MODEL
+
+Route
+→ defines endpoint
+
+Controller
+→ handles req/res
+
+Service
+→ business logic
+
+SQL
+→ database queries
+
+---
+
+🧱 REQUEST FLOW
+
+Frontend Request
+        │
+        ▼
+Routes
+        │
+        ▼
+Middleware
+(auth / validation)
+        │
+        ▼
+Controller
+        │
+        ▼
+Service
+        │
+        ▼
+Raw SQL Queries
+        │
+        ▼
+Neon PostgreSQL
+
+---
+
+⚡ DATABASE SETUP (NEON)
+
+---
+
+Step 1 — Create Neon Database
+
+Use:
+
+- Neon
+
+Get:
+
+- DATABASE_URL
+
+Example:
+
+DATABASE_URL=postgresql://username:password@ep-xxx.neon.tech/dbname
+
+---
+
+Step 2 — Install PostgreSQL Driver
+
+Inside server:
+
+npm install pg
+
+---
+
+Step 3 — Database Connection
+
+import { Pool } from "pg";
+
+export const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+---
+
+🧠 SQL ORGANIZATION CONCEPT
+
+Each module owns its SQL.
+
+Example:
+
+products/
+├── product.sql.ts
+
+NOT one gigantic queries file.
+
+---
+
+Example
+
+export const CREATE_PRODUCT = `
+INSERT INTO products (
+  id,
+  title,
+  description,
+  price,
+  stock,
+  vendor_id,
+  category_id,
+  sizes,
+  colors
+)
+VALUES (
+  $1,$2,$3,$4,$5,$6,$7,$8,$9
+)
+RETURNING *;
+`;
+
+---
+
+🎨 FRONTEND ARCHITECTURE (NEXT.JS)
+
+---
+
+📁 FRONTEND FOLDER STRUCTURE
+
+client/
+│
+├── src/
+│   │
+│   ├── app/
+│   │   ├── (public)/
+│   │   ├── (auth)/
+│   │   ├── vendor/
+│   │   ├── admin/
+│   │   └── dashboard/
+│   │
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── layout/
+│   │   ├── product/
+│   │   ├── cart/
+│   │   └── forms/
+│   │
+│   ├── modules/
+│   │   ├── auth/
+│   │   ├── products/
+│   │   ├── vendors/
+│   │   ├── cart/
+│   │   └── orders/
+│   │
+│   ├── services/
+│   │   ├── api.ts
+│   │   └── auth.ts
+│   │
+│   ├── hooks/
+│   │
+│   ├── store/
+│   │
+│   ├── lib/
+│   │
+│   ├── types/
+│   │
+│   └── utils/
+│
+├── public/
+├── package.json
+└── .env
+
+---
+
+🧠 FRONTEND MENTAL MODEL
+
+Pages
+→ structure
+
+Components
+→ reusable UI
+
+Modules
+→ feature logic
+
+Services
+→ API communication
+
+Store
+→ global state
+
+---
+
+🚀 COMPLETE BUILD ORDER
+
+IMPORTANT:
+DO NOT skip order.
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+❌❌❌❌❌❌❌❌❌❌❌❌❌
+🔐 PHASE 1 — AUTH SYSTEM
+
+Build FIRST.
+
+---
+
+Step 1 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Create:
+
+- users table
+
+---
+
+Step 2 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Build:
+
+- register API
+
+---
+
+Step 3 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Build:
+
+- login API
+
+---
+
+Step 4 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Add:
+
+- bcrypt password hashing
+- JWT generation
+
+---
+
+Step 5 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Build auth middleware.
+
+---
+
+Step 6 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Frontend:
+
+- login page
+- register page
+
+---
+
+Step 7 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Store auth state.
+
+Use:
+
+- Zustand
+
+---
+
+🧠 AUTH MENTAL MODEL
+
+Everything depends on auth.
+Finish auth before continuing.
+
+---
+
+
+❌❌❌❌❌❌❌❌❌❌❌❌❌
+👕 PHASE 2 — PRODUCTS
+
+MOST IMPORTANT business feature.
+
+---
+
+Step 8 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Create:
+
+- categories table
+- products table
+- product_images table
+
+---
+
+Step 9 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Build backend:
+
+- create product
+- get products
+- get product by id
+- update product
+- delete product
+
+---
+
+Step 10 ❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+Frontend:
+
+- homepage
+- product listing page
+- product detail page
+
+---
+
+Step 11 
+
+Add:
+
+- pagination
+- filtering
+- search
+
+---
+
+🧠 PRODUCT MENTAL MODEL
+
+Products are center of marketplace.
+Everything connects to products.
+
+---
+
+🏪 PHASE 3 — VENDOR SYSTEM
+
+---
+
+Step 12
+
+Create vendor table.
+
+---
+
+Step 13
+
+Vendor features:
+
+- create store
+- edit store
+- upload products
+
+---
+
+Step 14
+
+Vendor dashboard:
+
+- products list
+- orders list
+- revenue UI
+
+---
+
+🧠 VENDOR MENTAL MODEL
+
+Vendor is just specialized user.
+
+---
+
+🛒 PHASE 4 — CART SYSTEM
+
+---
+
+Step 15
+
+Create:
+
+- carts table
+- cart_items table
+
+---
+
+Step 16
+
+Backend:
+
+- add to cart
+- remove item
+- update quantity
+- get cart
+
+---
+
+Step 17
+
+Frontend:
+
+- cart page
+- cart drawer
+
+---
+
+🧠 CART MENTAL MODEL
+
+Cart = temporary memory before checkout.
+
+---
+
+📦 PHASE 5 — ORDERS
+
+MOST IMPORTANT SYSTEM.
+
+---
+
+Step 18
+
+Create:
+
+- orders table
+- order_items table
+
+---
+
+Step 19
+
+Checkout flow:
+
+Cart
+→ checkout
+→ create order
+→ clear cart
+
+---
+
+Step 20
+
+Backend:
+
+- create order
+- vendor orders
+- customer orders
+- update order status
+
+---
+
+Step 21
+
+Frontend:
+
+- checkout page
+- orders page
+
+---
+
+🧠 ORDER MENTAL MODEL
+
+Order = frozen snapshot of purchase.
+
+---
+
+⭐ PHASE 6 — REVIEWS
+
+---
+
+Step 22
+
+Create reviews table.
+
+---
+
+Step 23
+
+Backend:
+
+- create review
+- get product reviews
+
+---
+
+Step 24
+
+Frontend:
+
+- review section
+- ratings UI
+
+---
+
+👑 PHASE 7 — ADMIN
+
+---
+
+Step 25
+
+Admin features:
+
+- manage users
+- manage products
+- manage vendors
+
+---
+
+Step 26
+
+Frontend:
+
+- admin dashboard
+
+---
+
+☁️ PHASE 8 — IMAGE UPLOADS
+
+---
+
+Step 27
+
+Use:
+
+- Cloudinary
+
+---
+
+🧠 IMAGE MENTAL MODEL
+
+Database stores image URLs only.
+NOT image files.
+
+---
+
+🎨 PHASE 9 — UI POLISH
+
+---
+
+Step 28
+
+Add:
+
+- loading skeletons
+- empty states
+- responsive layout
+- modals
+- toasts
+
+---
+
+🧪 PHASE 10 — TESTING
+
+---
+
+Step 29
+
+Test user journeys:
+
+Can user:
+- register?
+- login?
+- buy product?
+- checkout?
+- vendor create product?
+
+---
+
+🚀 PHASE 11 — DEPLOYMENT
+
+---
+
+Step 30 — Deploy Backend
+
+Use:
+
+- Render
+  or
+- Railway
+
+---
+
+Step 31 — Deploy Frontend
+
+Use:
+
+- Vercel
+
+---
+
+Step 32 — Configure Environment Variables
+
+Backend:
+
+DATABASE_URL=
+JWT_SECRET=
+CLOUDINARY_NAME=
+CLOUDINARY_KEY=
+CLOUDINARY_SECRET=
+
+Frontend:
+
+NEXT_PUBLIC_API_URL=
+
+---
+
+🧠 MOST IMPORTANT ENGINEERING RULES
+
+---
+
+Rule 1
+
+Build vertically.
+
+Complete ONE feature fully.
+
+---
+
+Rule 2
+
+Do NOT over-abstract.
+
+---
+
+Rule 3
+
+Refactor AFTER duplication appears.
+
+---
+
+Rule 4
+
+Deploy early.
+
+---
+
+Rule 5
+
+MVP is NOT enterprise architecture.
+
+---
+
+Rule 6
+
+Simple systems are easier to scale mentally.
+
+---
+
+🔥 FINAL MASTER MENTAL MODEL
+
+Database
+→ stores truth
+
+Backend
+→ business logic
+
+Frontend
+→ user interaction
+
+Deployment
+→ makes system real
+
+---
+
+FINAL BUILD ORDER SUMMARY
+
+1. Setup project
+2. Setup Neon DB
+3. Build auth
+4. Build products
+5. Build vendors
+6. Build cart
+7. Build orders
+8. Build reviews
+9. Build admin
+10. Polish UI
+11. Deploy
+12. Refactor gradually

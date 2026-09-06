@@ -1,0 +1,111 @@
+
+
+AUTH
+____________________________________________________
+POST   /api/v1/auth/register
+POST   /api/v1/auth/login
+POST   /api/v1/auth/logout
+POST   /api/v1/auth/refresh
+GET    /api/v1/auth/me
+POST   /api/v1/auth/forgot-password
+POST   /api/v1/auth/reset-password
+POST   /api/v1/auth/verify-email
+____________________________________________________
+
+
+USERS
+____________________________________________________
+GET    /api/v1/admin/users
+DELETE /api/v1/admin/users/:id
+____________________________________________________
+
+
+PRODUCTS
+____________________________________________________
+GET    /api/v1/products
+GET    /api/v1/products/:id
+GET    /api/v1/products?featured=true
+GET    /api/v1/products?recommended=true
+
+POST   /api/v1/admin/products
+PATCH  /api/v1/admin/products/:id
+DELETE /api/v1/admin/products/:id
+____________________________________________________
+
+
+CATEGORIES
+____________________________________________________
+GET    /api/v1/categories
+POST   /api/v1/admin/categories
+PATCH  /api/v1/admin/categories/:id
+DELETE /api/v1/admin/categories/:id
+____________________________________________________
+
+
+CART
+____________________________________________________
+GET    /api/v1/cart
+POST   /api/v1/cart/items
+PATCH  /api/v1/cart/items/:id
+DELETE /api/v1/cart/items/:id
+DELETE /api/v1/cart
+____________________________________________________
+
+
+ORDERS
+____________________________________________________
+POST   /api/v1/orders
+GET    /api/v1/orders
+GET    /api/v1/orders/:id
+PATCH  /api/v1/orders/:id
+
+GET    /api/v1/admin/orders
+PATCH  /api/v1/admin/orders/:id
+____________________________________________________
+
+
+PAYMENTS
+____________________________________________________
+POST   /api/v1/payments/intent
+POST   /api/v1/payments/confirm
+POST   /api/v1/payments/webhook
+____________________________________________________
+
+
+REVIEWS
+____________________________________________________
+GET    /api/v1/products/:productId/reviews
+GET    /api/v1/reviews/me
+POST   /api/v1/reviews
+PATCH  /api/v1/reviews/:id
+DELETE /api/v1/reviews/:id
+____________________________________________________
+
+
+WISHLIST
+____________________________________________________
+GET    /api/v1/wishlist
+POST   /api/v1/wishlist
+DELETE /api/v1/wishlist/:productId
+____________________________________________________
+
+
+ANALYTICS
+____________________________________________________
+GET /api/v1/admin/analytics/overview
+GET /api/v1/admin/analytics/revenue
+GET /api/v1/admin/analytics/top-products
+GET /api/v1/admin/analytics/users
+____________________________________________________
+
+
+NOTIFICATIONS
+____________________________________________________
+GET    /api/v1/notifications/me
+PATCH  /api/v1/notifications/:id/read
+
+GET    /api/v1/admin/notifications
+GET    /api/v1/admin/notifications/:id
+POST   /api/v1/admin/notifications
+DELETE /api/v1/admin/notifications/:id
+____________________________________________________

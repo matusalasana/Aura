@@ -10,10 +10,6 @@ import ProgressIndicator from "@/components/ui/ProgressIndicator";
 const Home = () => {
   return (
     <div>
-      <ProgressIndicator 
-        steps={["1", "2", "3", "4", "5"]} 
-        currentStep={1}
-      />
       <Hero />
       <ValueProps />
       <FeaturedVendors />
