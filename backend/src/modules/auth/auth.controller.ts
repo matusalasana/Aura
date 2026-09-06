@@ -1,234 +1,232 @@
 import { Request, Response, NextFunction } from "express";
 import { AuthService } from "./auth.service";
-import { Cookie } from "../../utils/cookies";
 import { type registerUserInput } from "./auth.validation"
 
 
-// REGISTER USER
-const registerUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { name, email, password } = req.body;
+// // REGISTER USER
+// const registerUser = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const { name, email, password } = req.body;
 
-    const data: registerUserInput = {
-      name,
-      email,
-      password,
-      storeId: req.storeId,
-      storeName: req.store.host,
-    };
+//     const data: registerUserInput = {
+//       name,
+//       email,
+//       password,
+//       storeId: req.storeId,
+//       storeName: req.store.host,
+//     };
     
-    await AuthService.registerUser(data);
+//     await AuthService.registerUser(data);
 
-    return res.status(200).json({
-      message: "OTP sent to your email",
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       message: "OTP sent to your email",
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// VERIFY EMAIL
-const verifyEmail = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const {
-      user,
-      accessToken,
-      refreshToken,
-    } = await AuthService.verifyEmail(req.body);
+// // VERIFY EMAIL
+// const verifyEmail = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const {
+//       user,
+//       accessToken,
+//       refreshToken,
+//     } = await AuthService.verifyEmail(req.body);
 
-    Cookie.setRefreshToken(res, refreshToken);
+//     Cookie.setRefreshToken(res, refreshToken);
 
-    return res.status(200).json({
-      success: true,
-      message: "Email verified successfully.",
-      accessToken,
-      user,
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       message: "Email verified successfully.",
+//       accessToken,
+//       user,
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// LOGIN
-const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const {
-      user,
-      accessToken,
-      refreshToken,
-    } = await AuthService.login(req.body);
+// // LOGIN
+// const login = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const {
+//       user,
+//       accessToken,
+//       refreshToken,
+//     } = await AuthService.login(req.body);
 
-    Cookie.setRefreshToken(res, refreshToken);
+//     Cookie.setRefreshToken(res, refreshToken);
 
-    return res.status(200).json({
-      success: true,
-      message: "Login successful.",
-      accessToken,
-      user,
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       message: "Login successful.",
+//       accessToken,
+//       user,
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// REFRESH 
-const refresh = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { accessToken } = await AuthService.refresh(req.cookies.refreshToken);
+// // REFRESH 
+// const refresh = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const { accessToken } = await AuthService.refresh(req.cookies.refreshToken);
 
-    return res.status(200).json({
-      success: true,
-      accessToken,
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       accessToken,
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// LOGOUT
-const logout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const refreshToken = req.cookies.refreshToken as string;
-    await AuthService.logout(refreshToken);
+// // LOGOUT
+// const logout = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const refreshToken = req.cookies.refreshToken as string;
+//     await AuthService.logout(refreshToken);
 
-    Cookie.clearRefreshToken(res);
+//     Cookie.clearRefreshToken(res);
 
-    return res.status(200).json({
-      success: true,
-      message: "Logged out successfully.",
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       message: "Logged out successfully.",
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// LOGOUT ALL
-const logoutAll = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await AuthService.logoutAll(req.user?.userId);
+// // LOGOUT ALL
+// const logoutAll = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     await AuthService.logoutAll(req.user?.userId);
 
-    Cookie.clearRefreshToken(res);
+//     Cookie.clearRefreshToken(res);
 
-    return res.status(200).json({
-      success: true,
-      message: "All sessions revoked successfully.",
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       message: "All sessions revoked successfully.",
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// FORGOT PASSWORD
-const forgotPassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await AuthService.forgotPassword(req.body);
+// // FORGOT PASSWORD
+// const forgotPassword = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     await AuthService.forgotPassword(req.body);
 
-    return res.status(200).json({
-      success: true,
-      message: "Password reset OTP sent.",
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       message: "Password reset OTP sent.",
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// RESET PASSWORD
-const resetPassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await AuthService.resetPassword(req.body);
+// // RESET PASSWORD
+// const resetPassword = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     await AuthService.resetPassword(req.body);
 
-    return res.status(200).json({
-      success: true,
-      message: "Password reset successfully.",
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       message: "Password reset successfully.",
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
 
-// RESEND OTP
-const resendOTP = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await AuthService.resendOTP(req.body);
+// // RESEND OTP
+// const resendOTP = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     await AuthService.resendOTP(req.body);
 
-    return res.status(200).json({
-      success: true,
-      message: "OTP sent successfully.",
-    });
-  } catch (error: any) {
-    next(error)
-  }
-};
+//     return res.status(200).json({
+//       success: true,
+//       message: "OTP sent successfully.",
+//     });
+//   } catch (error: any) {
+//     next(error)
+//   }
+// };
+
 
 // GET ME
 const getMe = async (
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ) => {
-  try {
-    const user = await AuthService.getMe(req.user?.userId);
+  const user = await AuthService.getMe(req.user!.id);
 
-    return res.status(200).json({
-      success: true,
-      user,
-    });
-  } catch (error: any) {
-    next(error)
-  }
+  res.json({
+    success: true,
+    data: user,
+  });
 };
 
+
+
+
 export const AuthController = {
-  registerUser,
+  // registerUser,
   
-  verifyEmail,
+  // verifyEmail,
   
-  login,
+  // login,
   
-  refresh,
+  // refresh,
   
-  logout,
-  logoutAll,
+  // logout,
+  // logoutAll,
   
   getMe,
   
-  forgotPassword,
-  resetPassword,
-  resendOTP,
+  // forgotPassword,
+  // resetPassword,
+  // resendOTP,
 };

@@ -1,11 +1,9 @@
-import { Request } from "express";
+import type { User } from "better-auth";
 
 declare global {
   namespace Express {
     interface Request {
-      storeId: string;
-      user: any;
-      role: string;
+      user?: User;
     }
   }
 }

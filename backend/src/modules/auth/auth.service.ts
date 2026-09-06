@@ -1,418 +1,412 @@
 import { randomUUID } from "crypto";
 
 import { AuthRepository } from "./auth.repository";
-import { HashUtils } from "../../utils/hash";
-import { JWT } from "../../utils/jwt";
-import { CacheService } from "../../utils/CacheService";
-import { generateOTP } from "../../utils/otp";
-import { sendEmail } from "../../utils/email";
-import { verifyEmailTemplate } from "../../templates/verifyEmail";
-import { resetPasswordTemplate } from "../../templates/resetPassword";
-import { scopedUsers } from "../../db/scoped/users"
-import { scopedStores } from "../../db/scoped/stores"
-import type {  
-  registerUserInput,
-  ResetPasswordInput,
-  OTPType,
-  ResendOTPInput
-} from "./auth.validation"
+// import { HashUtils } from "../../utils/hash";
+// import { JWT } from "../../utils/jwt";
+// import { CacheService } from "../../utils/CacheService";
+// import { generateOTP } from "../../utils/otp";
+// import { sendEmail } from "../../utils/email";
+// import { verifyEmailTemplate } from "../../templates/verifyEmail";
+// import { resetPasswordTemplate } from "../../templates/resetPassword";
+// import { scopedUsers } from "../../db/scoped/users"
+// import { scopedStores } from "../../db/scoped/stores"
+// import type {  
+//   registerUserInput,
+//   ResetPasswordInput,
+//   OTPType,
+//   ResendOTPInput
+// } from "./auth.validation"
 
 
 
-// CONSTANTS
-const OTP_TTL = 600;
-const getOtpKey = ({
-  type, 
-  email}: {type: OTPType, email: string}
-) => `otp:${type}:${email}`;
+// // CONSTANTS
+// const OTP_TTL = 600;
+// const getOtpKey = ({
+//   type, 
+//   email}: {type: OTPType, email: string}
+// ) => `otp:${type}:${email}`;
 
 
-// REGISTER USER
-const registerUser = async ({
-  name,
-  email,
-  password,
-  storeId,
-  storeName
-}: registerUserInput) => {
+// // REGISTER USER
+// const registerUser = async ({
+//   name,
+//   email,
+//   password,
+//   storeId,
+//   storeName
+// }: registerUserInput) => {
   
-  const existing = await scopedUsers.findByEmail({
-    email,
-    storeId
-  });
+//   const existing = await scopedUsers.findByEmail({
+//     email,
+//     storeId
+//   });
   
-  if (!storeId) throw new Error("storeId not  found");
+//   if (!storeId) throw new Error("storeId not  found");
   
-  const store = await scopedStores.findById(storeId);
-  if (!store) throw new Error("store not found");
+//   const store = await scopedStores.findById(storeId);
+//   if (!store) throw new Error("store not found");
   
-  if (existing) throw new Error("User already exists");
+//   if (existing) throw new Error("User already exists");
 
-  const passwordHash = await HashUtils.hashPassword(password);
+//   const passwordHash = await HashUtils.hashPassword(password);
 
-  const otp = generateOTP();
-  const otpHash = await HashUtils.hashOTP(otp);
+//   const otp = generateOTP();
+//   const otpHash = await HashUtils.hashOTP(otp);
 
-  const cacheKey = getOtpKey("verify_email", email);
+//   const cacheKey = getOtpKey("verify_email", email);
 
-  await CacheService.set(
-    cacheKey,
-    {
-      name,
-      email,
-      passwordHash,
-      role: "customer",
-      otp: otpHash,
-    },
-    OTP_TTL
-  );
+//   await CacheService.set(
+//     cacheKey,
+//     {
+//       name,
+//       email,
+//       passwordHash,
+//       role: "customer",
+//       otp: otpHash,
+//     },
+//     OTP_TTL
+//   );
 
-  await AuthRepository.createOTP({
-    email,
-    codeHash: otpHash,
-    type: "verify_email",
-    expiresAt: new Date(Date.now() + OTP_TTL * 1000),
-  });
+//   await AuthRepository.createOTP({
+//     email,
+//     codeHash: otpHash,
+//     type: "verify_email",
+//     expiresAt: new Date(Date.now() + OTP_TTL * 1000),
+//   });
 
-  sendEmail({
-    to: email,
-    subject: `Verify your ${storeName} account`,
-    template: verifyEmailTemplate({
-      name,
-      otp,
-    }),
-  });
+//   sendEmail({
+//     to: email,
+//     subject: `Verify your ${storeName} account`,
+//     template: verifyEmailTemplate({
+//       name,
+//       otp,
+//     }),
+//   });
  
-  return { message: "OTP sent successfully" };
-};
+//   return { message: "OTP sent successfully" };
+// };
 
 
-// VERIFY EMAIL
-const verifyEmail = async ({ email, otp }: {
-  email: string,
-  otp: string
-}) => {
-  const cacheKey = getOtpKey("verify_email", email);
+// // VERIFY EMAIL
+// const verifyEmail = async ({ email, otp }: {
+//   email: string,
+//   otp: string
+// }) => {
+//   const cacheKey = getOtpKey("verify_email", email);
 
-  let pending = await CacheService.get(cacheKey);
+//   let pending = await CacheService.get(cacheKey);
 
-  if (!pending) {
-    pending = await AuthRepository.findOTP({
-      email,
-      type: "verify_email",
-    });
-  }
+//   if (!pending) {
+//     pending = await AuthRepository.findOTP({
+//       email,
+//       type: "verify_email",
+//     });
+//   }
 
-  if (!pending) throw new Error("OTP expired or invalid");
+//   if (!pending) throw new Error("OTP expired or invalid");
 
-  const isValid = await HashUtils.compareOTP(otp, pending.otp || pending.codeHash);
-  if (!isValid) throw new Error("Invalid OTP");
+//   const isValid = await HashUtils.compareOTP(otp, pending.otp || pending.codeHash);
+//   if (!isValid) throw new Error("Invalid OTP");
 
-  const user = await AuthRepository.registerUser({
-    name: pending.name,
-    email: pending.email,
-    passwordHash: pending.passwordHash,
-    role: pending.role,
-    isVerified: true,
-  });
+//   const user = await AuthRepository.registerUser({
+//     name: pending.name,
+//     email: pending.email,
+//     passwordHash: pending.passwordHash,
+//     role: pending.role,
+//     isVerified: true,
+//   });
 
-  await CacheService.del(cacheKey);
+//   await CacheService.del(cacheKey);
 
-  await AuthRepository.deleteOTP({
-    email,
-    type: "verify_email",
-  });
+//   await AuthRepository.deleteOTP({
+//     email,
+//     type: "verify_email",
+//   });
   
-  const sessionId = randomUUID();
+//   const sessionId = randomUUID();
 
-  const refreshToken = await JWT.generateRefreshToken({
-    userId: user.id,
-    sessionId,
-    role: user.role,
-  });
+//   const refreshToken = await JWT.generateRefreshToken({
+//     userId: user.id,
+//     sessionId,
+//     role: user.role,
+//   });
 
-  const accessToken = await JWT.generateAccessToken({
-    userId: user.id,
-    sessionId,
-    role: user.role,
-  });
+//   const accessToken = await JWT.generateAccessToken({
+//     userId: user.id,
+//     sessionId,
+//     role: user.role,
+//   });
 
-  await AuthRepository.createRefreshToken({
-    userId: user.id,
-    sessionId,
-    tokenHash: await HashUtils.hashToken(refreshToken),
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  });
+//   await AuthRepository.createRefreshToken({
+//     userId: user.id,
+//     sessionId,
+//     tokenHash: await HashUtils.hashToken(refreshToken),
+//     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+//   });
 
-  return {
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      isVerified: user.isVerified,
-    },
-    accessToken,
-    refreshToken,
-  };
-};
+//   return {
+//     user: {
+//       id: user.id,
+//       name: user.name,
+//       email: user.email,
+//       role: user.role,
+//       isVerified: user.isVerified,
+//     },
+//     accessToken,
+//     refreshToken,
+//   };
+// };
 
-// LOGIN
+// // LOGIN
 
-const login = async ({ email, password }: {
-  email: string,
-  password: string
-}) => {
-  const user = await AuthRepository.findUserByEmail(email);
+// const login = async ({ email, password }: {
+//   email: string,
+//   password: string
+// }) => {
+//   const user = await AuthRepository.findUserByEmail(email);
 
-  if (!user) throw new Error("Invalid credentials");
+//   if (!user) throw new Error("Invalid credentials");
 
-  const valid = await HashUtils.comparePassword(
-    password,
-    user.passwordHash
-  );
+//   const valid = await HashUtils.comparePassword(
+//     password,
+//     user.passwordHash
+//   );
 
-  if (!valid) throw new Error("Invalid credentials");
+//   if (!valid) throw new Error("Invalid credentials");
 
-  if (!user.isVerified) {
-    throw new Error("Please verify your email first");
-  }
+//   if (!user.isVerified) {
+//     throw new Error("Please verify your email first");
+//   }
   
-  const sessionId = randomUUID();
+//   const sessionId = randomUUID();
 
-  const refreshToken = await JWT.generateRefreshToken({
-    userId: user.id,
-    sessionId,
-    role: user.role,
-  });
+//   const refreshToken = await JWT.generateRefreshToken({
+//     userId: user.id,
+//     sessionId,
+//     role: user.role,
+//   });
 
-  const accessToken = await JWT.generateAccessToken({
-    userId: user.id,
-    sessionId,
-    role: user.role,
-  });
+//   const accessToken = await JWT.generateAccessToken({
+//     userId: user.id,
+//     sessionId,
+//     role: user.role,
+//   });
 
-  await AuthRepository.createRefreshToken({
-    userId: user.id,
-    sessionId,
-    tokenHash: await HashUtils.hashToken(refreshToken),
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  });
+//   await AuthRepository.createRefreshToken({
+//     userId: user.id,
+//     sessionId,
+//     tokenHash: await HashUtils.hashToken(refreshToken),
+//     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+//   });
 
-  return {
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      isVerified: user.isVerified,
-    },
-    accessToken,
-    refreshToken,
-  };
-};
+//   return {
+//     user: {
+//       id: user.id,
+//       name: user.name,
+//       email: user.email,
+//       role: user.role,
+//       isVerified: user.isVerified,
+//     },
+//     accessToken,
+//     refreshToken,
+//   };
+// };
 
-// REFRESH
-const refresh = async (refreshToken: string) => {
-  if (!refreshToken) throw new Error("Missing refresh token");
+// // REFRESH
+// const refresh = async (refreshToken: string) => {
+//   if (!refreshToken) throw new Error("Missing refresh token");
 
-  const decoded = await JWT.verifyRefreshToken(refreshToken);
+//   const decoded = await JWT.verifyRefreshToken(refreshToken);
   
-  if (!decoded) throw new Error("Invalid refresh token");
+//   if (!decoded) throw new Error("Invalid refresh token");
   
-  const tokenHash = await HashUtils.hashToken(refreshToken);
+//   const tokenHash = await HashUtils.hashToken(refreshToken);
   
-  if (!tokenHash) throw new Error("Invalid or Expired refresh token");
+//   if (!tokenHash) throw new Error("Invalid or Expired refresh token");
 
-  const session = await AuthRepository.findRefreshToken({
-    userId: decoded.userId,
-    sessionId: decoded.sessionId,
-  });
+//   const session = await AuthRepository.findRefreshToken({
+//     userId: decoded.userId,
+//     sessionId: decoded.sessionId,
+//   });
 
-  if (!session || session.revoked) {
-    throw new Error("Invalid session");
-  }
+//   if (!session || session.revoked) {
+//     throw new Error("Invalid session");
+//   }
 
-  const accessToken = await JWT.generateAccessToken({
-    sessionId: decoded.sessionId,
-    userId: decoded.userId,
-    role: decoded.role,
-  });
+//   const accessToken = await JWT.generateAccessToken({
+//     sessionId: decoded.sessionId,
+//     userId: decoded.userId,
+//     role: decoded.role,
+//   });
 
-  return { accessToken };
-};
+//   return { accessToken };
+// };
 
-// LOGOUT
-const logout = async (refreshToken: string) => {
-  const tokenHash = await HashUtils.hashToken(refreshToken);
+// // LOGOUT
+// const logout = async (refreshToken: string) => {
+//   const tokenHash = await HashUtils.hashToken(refreshToken);
 
-  await AuthRepository.revokeRefreshToken(tokenHash);
+//   await AuthRepository.revokeRefreshToken(tokenHash);
 
-  return { message: "Logged out successfully" };
-};
+//   return { message: "Logged out successfully" };
+// };
 
-// LOGOUT ALL
+// // LOGOUT ALL
 
-const logoutAll = async (userId: string) => {
-  await AuthRepository.revokeAllUserTokens(userId);
+// const logoutAll = async (userId: string) => {
+//   await AuthRepository.revokeAllUserTokens(userId);
 
-  return { message: "All sessions revoked" };
-};
+//   return { message: "All sessions revoked" };
+// };
 
-// GETME
+// // GETME
 
 const getMe = async (userId: string) => {
   const user = await AuthRepository.findUserById(userId);
 
   if (!user) throw new Error("User not found");
 
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    isVerified: user.isVerified,
-  };
+  return user;
 };
 
-// FORGOT PASSWORD
+// // FORGOT PASSWORD
 
-const forgotPassword = async (email: string) => {
-  const user = await AuthRepository.findUserByEmail(email);
+// const forgotPassword = async (email: string) => {
+//   const user = await AuthRepository.findUserByEmail(email);
 
-  if (!user) throw new Error("User not found");
+//   if (!user) throw new Error("User not found");
 
-  const otp = generateOTP();
-  const otpHash = await HashUtils.hashOTP(otp);
+//   const otp = generateOTP();
+//   const otpHash = await HashUtils.hashOTP(otp);
 
-  const cacheKey = getOtpKey("reset_password", email);
+//   const cacheKey = getOtpKey("reset_password", email);
 
-  await CacheService.set(
-    cacheKey,
-    { email, otp: otpHash },
-    OTP_TTL
-  );
+//   await CacheService.set(
+//     cacheKey,
+//     { email, otp: otpHash },
+//     OTP_TTL
+//   );
 
-  await AuthRepository.createOTP({
-    email,
-    codeHash: otpHash,
-    type: "reset_password",
-    expiresAt: new Date(Date.now() + OTP_TTL * 1000),
-  });
+//   await AuthRepository.createOTP({
+//     email,
+//     codeHash: otpHash,
+//     type: "reset_password",
+//     expiresAt: new Date(Date.now() + OTP_TTL * 1000),
+//   });
 
-  sendEmail({
-    to: email,
-    subject: "Password reset code",
-    template: resetPasswordTemplate({
-      name: user.name || "",
-      resetLink: otp,
-    }),
-  });
+//   sendEmail({
+//     to: email,
+//     subject: "Password reset code",
+//     template: resetPasswordTemplate({
+//       name: user.name || "",
+//       resetLink: otp,
+//     }),
+//   });
 
-  return { message: "OTP sent successfully" };
-};
+//   return { message: "OTP sent successfully" };
+// };
 
-// RESET PASSWORD
+// // RESET PASSWORD
 
-const resetPassword = async ({ email, otp, password }: ResetPasswordInput) => {
-  const cacheKey = getOtpKey("reset_password", email);
+// const resetPassword = async ({ email, otp, password }: ResetPasswordInput) => {
+//   const cacheKey = getOtpKey("reset_password", email);
 
-  let data = await CacheService.get(cacheKey);
+//   let data = await CacheService.get(cacheKey);
 
-  if (!data) {
-    data = await AuthRepository.findOTP({
-      email,
-      type: "reset_password",
-    });
-  }
+//   if (!data) {
+//     data = await AuthRepository.findOTP({
+//       email,
+//       type: "reset_password",
+//     });
+//   }
 
-  if (!data) throw new Error("OTP expired");
+//   if (!data) throw new Error("OTP expired");
 
-  const isValid = await HashUtils.compareOTP(
-    otp,
-    data.otp || data.codeHash
-  );
+//   const isValid = await HashUtils.compareOTP(
+//     otp,
+//     data.otp || data.codeHash
+//   );
 
-  if (!isValid) throw new Error("Invalid OTP");
+//   if (!isValid) throw new Error("Invalid OTP");
 
-  const passwordHash = await HashUtils.hashPassword(password);
+//   const passwordHash = await HashUtils.hashPassword(password);
 
-  await AuthRepository.updatePassword({
-    email,
-    passwordHash,
-  });
+//   await AuthRepository.updatePassword({
+//     email,
+//     passwordHash,
+//   });
 
-  await CacheService.del(cacheKey);
+//   await CacheService.del(cacheKey);
 
-  await AuthRepository.deleteOTP({
-    email,
-    type: "reset_password",
-  });
+//   await AuthRepository.deleteOTP({
+//     email,
+//     type: "reset_password",
+//   });
 
-  return { message: "Password reset successful" };
-};
+//   return { message: "Password reset successful" };
+// };
 
-// RESEND OTP
+// // RESEND OTP
 
-const resendOTP = async ({ email, type }: ResendOTPInput) => {
-  const otp = generateOTP();
-  const otpHash = await HashUtils.hashOTP(otp);
+// const resendOTP = async ({ email, type }: ResendOTPInput) => {
+//   const otp = generateOTP();
+//   const otpHash = await HashUtils.hashOTP(otp);
 
-  const cacheKey = getOtpKey(type, email);
-  const pending = await CacheService.get(cacheKey);
-  if (!pending) throw new Error("OTP session not found. Please start over.");
+//   const cacheKey = getOtpKey(type, email);
+//   const pending = await CacheService.get(cacheKey);
+//   if (!pending) throw new Error("OTP session not found. Please start over.");
 
-  await CacheService.set(
-    cacheKey,
-    {
-      ...pending,
-      otp: otpHash
-    },
-    OTP_TTL
-  );
+//   await CacheService.set(
+//     cacheKey,
+//     {
+//       ...pending,
+//       otp: otpHash
+//     },
+//     OTP_TTL
+//   );
 
-  await AuthRepository.createOTP({
-    email,
-    codeHash: otpHash,
-    type,
-    expiresAt: new Date(Date.now() + OTP_TTL * 1000),
-  });
+//   await AuthRepository.createOTP({
+//     email,
+//     codeHash: otpHash,
+//     type,
+//     expiresAt: new Date(Date.now() + OTP_TTL * 1000),
+//   });
 
-  if(type === "reset_password"){
-    sendEmail({
-      to: email,
-      subject: "Password reset code",
-      template: resetPasswordTemplate({
-        name: pending.name || "",
-        resetLink: otp,
-      }),
-    });
-  }
-  if(type === "verify_email"){
-    await sendEmail({
-      to: email,
-      subject: "Email verification code",
-      template: verifyEmailTemplate({
-        name: pending.name || "",
-        otp,
-      }),
-    });
-  }
+//   if(type === "reset_password"){
+//     sendEmail({
+//       to: email,
+//       subject: "Password reset code",
+//       template: resetPasswordTemplate({
+//         name: pending.name || "",
+//         resetLink: otp,
+//       }),
+//     });
+//   }
+//   if(type === "verify_email"){
+//     await sendEmail({
+//       to: email,
+//       subject: "Email verification code",
+//       template: verifyEmailTemplate({
+//         name: pending.name || "",
+//         otp,
+//       }),
+//     });
+//   }
 
-  return { message: "OTP resent successfully" };
-};
+//   return { message: "OTP resent successfully" };
+// };
 
 // EXPORT
 
 export const AuthService = {
-  registerUser,
-  verifyEmail,
-  login,
-  refresh,
-  logout,
-  logoutAll,
+  // registerUser,
+  // verifyEmail,
+  // login,
+  // refresh,
+  // logout,
+  // logoutAll,
   getMe,
-  forgotPassword,
-  resetPassword,
-  resendOTP,
+  // forgotPassword,
+  // resetPassword,
+  // resendOTP,
 };

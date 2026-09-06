@@ -11,7 +11,6 @@ import { loggerMiddleware } from './middleware/logger';
 import { errorHandler } from "./middleware/errorHandler";
 import routes from "./routes/index";
 import { authHandler } from "@/modules/auth/auth.routes";
-import { resolveTenant } from "./middleware/resolveTenant"
 import { Env } from "@/config/env";
 
 
@@ -59,7 +58,7 @@ app.use('/api/v1', limiter);
 
 // API Routes
 app.all("/api/auth/{*any}", authHandler);
-app.use("/api/v1", resolveTenant, routes);
+app.use("/api/v1", routes);
 
 // Error handlers
 Sentry.setupExpressErrorHandler(app);
