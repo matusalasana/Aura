@@ -1,6 +1,6 @@
-import { transporter } from "../config/email";
+import { transporter } from "@/config/email.js";
 import nodemailer from "nodemailer";
-import { Env } from "../config/env";
+import { Env } from "@/config/env.js";
 
 export const sendEmail = async ({
   to,
@@ -12,7 +12,7 @@ export const sendEmail = async ({
   template: string
 }) => {
   const info = await transporter.sendMail({
-    from: Env.EMAIL_FROM,
+    from: Env.EMAIL_SENDER,
     to,
     subject,
     html: template,

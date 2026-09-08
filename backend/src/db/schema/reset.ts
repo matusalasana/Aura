@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
-import { db } from "../index";
-import  logger from "../../utils/logger";
+
+import { db } from "../index.js";
+import  logger from "@/utils/logger.js";
 
 
 export const resetSchema = async () => {

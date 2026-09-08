@@ -1,10 +1,12 @@
 import { betterAuth } from "better-auth";
+import { emailOTP } from "better-auth/plugins"
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
-import { db } from "../db";
-import * as schema from "../db/schema";
-import { Env } from "./env";
-
+import { db } from "../db/index.js";
+import * as schema from "../db/schema/index.js";
+import { Env } from "./env.js";
+import { sendEmail } from "@/utils/email.js"
+import { verifyEmailTemplate } from "@/templates/verifyEmail.js";
 
 export const auth = betterAuth({
   

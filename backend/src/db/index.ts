@@ -1,10 +1,9 @@
-import { neon } from "@neondatabase/serverless";
 import { Pool } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
 
-import logger from "@/utils/logger"
-import { Env } from "@/config/env";
-import * as schema from "@/db/schema";
+import logger from "@/utils/logger.js"
+import { Env } from "@/config/env.js";
+import * as schema from "@/db/schema/index.js";
 
 
 const pool = new Pool({

@@ -1,8 +1,8 @@
-import { app } from './app';
-import { Env } from './config/env';
-import { connectDB } from './db';
-import logger from './utils/logger';
-import { testRedis } from "./config/redis";
+import { app } from '@/app.js';
+import { Env } from '@/config/env.js';
+import { connectDB } from '@/db/index.js';
+import logger from '@/utils/logger.js';
+import { testRedis } from "@/config/redis.js";
 
 const startServer = async () => {
   try {

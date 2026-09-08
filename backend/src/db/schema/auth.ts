@@ -1,10 +1,21 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, text, pgEnum, timestamp, boolean, index } from "drizzle-orm/pg-core";
+
+import { stores } from "./stores.js"
+
+
+export const roleEnum = pgEnum("role", [
+  "customer",
+  "admin",
+  "vendor"
+]);
+
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
+  role: roleEnum("role").notNull().default("customer"),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -76,6 +87,7 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  stores: many(stores),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

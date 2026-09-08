@@ -1,61 +1,70 @@
 import { OTPInput, REGEXP_ONLY_DIGITS } from "input-otp";
 
 interface OTPProps {
-  onComplete: (code: string) => void;
+  onComplete?: (code: string) => void;
   email: string;
   type: string;
-  onResend: (email: string, type: string) => void
+  onResend?: (email: string, type: string) => void;
   resending: boolean;
   countdown: number;
 }
 
-
 const OTPCard = ({
-  onComplete, 
-  email, 
-  type, 
-  onResend, 
+  onComplete,
+  email,
+  type,
+  onResend,
   resending,
   countdown,
 }: OTPProps) => {
-  
-  const canResend = resending;
-  
+  const isResendDisabled = resending || countdown > 0;
+
   const handleResend = () => {
+    if (isResendDisabled) return;
+
     onResend(email, type);
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-8 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
+      <div className="card w-full max-w-sm space-y-6 p-8 shadow-2xl animate-scale-in">
+        {/* Header */}
+        <div className="space-y-2 text-center">
+          <h2 className="heading text-2xl">
             Verify your email
           </h2>
-          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-            Enter the 6-digit code sent to your email {email}
+
+          <p className="subheading text-sm">
+            Enter the 6-digit code sent to your email{" "}
+            <span className="font-medium text-content">
+              {email.slice(0,2)}******@gmail.com
+            </span>
           </p>
         </div>
 
-        <div className="flex justify-center mb-6">
-        
+        {/* OTP */}
+        <div className="flex-center">
           <OTPInput
             maxLength={6}
             pattern={REGEXP_ONLY_DIGITS}
-            onComplete={onComplete} 
+            onComplete={onComplete}
             containerClassName="otp-container"
             render={({ slots }) => (
-              <div style={{ display: "flex", gap: "8px" }}>
-                {slots.map((slot, idx) => (
+              <div className="flex gap-2">
+                {slots.map((slot, index) => (
                   <div
-                    key={idx}
+                    key={index}
                     className={`
-                      flex h-11 w-11 items-center justify-center rounded-lg
-                      border text-lg font-semibold transition-all
+                      flex h-11 w-11 items-center justify-center
+                      rounded-lg border
+                      bg-background
+                      text-lg font-semibold
+                      transition-all duration-200
+
                       ${
                         slot.isActive
-                          ? "border-amber-500 bg-amber-50 text-amber-700 ring-2 ring-amber-500/20 dark:border-amber-400 dark:bg-amber-400/10 dark:text-amber-300"
-                          : "border-zinc-300 bg-zinc-50 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+                          ? "border-primary bg-primary/5 text-primary ring-2 ring-primary/20"
+                          : "border-border text-content"
                       }
                     `}
                   >
@@ -65,24 +74,28 @@ const OTPCard = ({
               </div>
             )}
           />
-          
         </div>
 
+        {/* Resend */}
         <div className="flex items-center justify-center gap-2 text-sm">
-          <p className="text-zinc-500 dark:text-zinc-400">
+          <p className="muted">
             Didn't receive a code?
           </p>
+
           <button
-            disabled={canResend}
+            type="button"
+            disabled={isResendDisabled}
             onClick={handleResend}
-            className="font-semibold text-amber-600 hover:text-amber-700 disabled:text-amber-300 dark:text-amber-400 dark:hover:text-amber-300"
+            className="link font-semibold disabled:pointer-events-none disabled:opacity-50"
           >
-            Resend
+            {resending ? "Sending..." : "Resend"}
           </button>
-          <span className="text-zinc-400 dark:text-zinc-600 ml-1">
-            {
-              countdown > 0 ? countdown : ""
-            }</span>
+
+          {countdown > 0 && (
+            <span className="text-secondary tabular-nums">
+              ({countdown}s)
+            </span>
+          )}
         </div>
       </div>
     </div>

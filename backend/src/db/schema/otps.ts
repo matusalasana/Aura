@@ -8,8 +8,9 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const otpTypeEnum = pgEnum("otp_type", [
-  "verify_email",
-  "reset_password",
+  "forgot-password",
+  "email-verification",
+  "sign-in",
 ]);
 
 export const otps = pgTable(

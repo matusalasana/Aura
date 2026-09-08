@@ -1,9 +1,5 @@
-import { db } from "@/db";
-import { users } from "@/db/schema/users";
-import { refreshTokens } from "@/db/schema/refreshTokens";
+import { db } from "@/db/index.js";
 import { user } from "@/db/schema/auth.js";
-import { type OTPType } from "./auth.validation";
-import { type registerUserDBInput } from "./auth.validation"
 
 import { eq, and, gt, lt } from "drizzle-orm";
 

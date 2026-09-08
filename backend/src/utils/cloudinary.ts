@@ -1,4 +1,4 @@
-import cloudinary from "../config/cloudinary";
+import cloudinary from "@/config/cloudinary.js";
 
 export const uploadToCloudinary = (buffer, folder, options = {}) => {
   return new Promise((resolve, reject) => {

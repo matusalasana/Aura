@@ -1,22 +1,53 @@
 import {
   pgTable,
   uuid,
-  varchar,
   text,
-  boolean,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
-export const stores = pgTable("stores", {
-  id: uuid("id").defaultRandom().primaryKey(),
+import { user } from "./auth.js";
 
-  storeName: varchar("store_name", { length: 255 }).notNull(),
-  
-  subdomain: varchar("subdomain", { length: 63 }).notNull().unique(),
-  
-  customDomain: varchar("custom_domain", { length: 255 }),
-  
-  isActive: boolean("is_active").notNull().default(true),
 
-  createdAt: timestamp("created_at").defaultNow(),
-});
+
+export const stores = pgTable(
+  "stores",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    name: text("name").notNull(),
+
+    slug: text("slug").notNull(),
+
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+
+    description: text("description"),
+
+    logo: text("logo"),
+
+    createdAt: timestamp("created_at")
+      .defaultNow()
+      .notNull(),
+
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex("store_slug_uidx").on(table.slug),
+  ],
+);
+
+
+
+
+export const storeRelations = relations(stores, ({ one }) => ({
+  owner: one(user, {
+    fields: [stores.ownerId],
+    references: [user.id],
+  }),
+}));

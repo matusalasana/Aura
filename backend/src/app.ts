@@ -1,4 +1,4 @@
-import "./instrument";
+import "./instrument.js";
 
 import * as Sentry from "@sentry/node";
 import express from 'express';
@@ -7,12 +7,13 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
   
-import { loggerMiddleware } from './middleware/logger';
-import { errorHandler } from "./middleware/errorHandler";
-import routes from "./routes/index";
-import { authHandler } from "@/modules/auth/auth.routes";
-import { Env } from "@/config/env";
-
+import { loggerMiddleware } from './middleware/logger.js';
+import { errorHandler } from "./middleware/errorHandler.js";
+import routes from "./routes/index.js";
+import { authHandler } from "@/modules/auth/auth.routes.js";
+import { Env } from "@/config/env.js";
+import { sendEmail } from "@/utils/email.js";
+import { welcomeTemplate } from "@/templates/welcome.js"
 
 
 export const app = express();
@@ -59,6 +60,16 @@ app.use('/api', limiter);
 // API Routes
 app.all("/api/auth/{*any}", authHandler);
 app.use("/api/v1", routes);
+app.get("/email", async(req, res) => {
+  await sendEmail({
+    to: "matusalasana@gmail.com",
+    subject: "Test",
+    template: welcomeTemplate({
+      name: "Sana",
+      dashboardLink: "gghh"
+    })
+  })
+})
 
 // Error handlers
 Sentry.setupExpressErrorHandler(app);

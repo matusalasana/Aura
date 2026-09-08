@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -5,17 +6,23 @@ import { useNavigate, Navigate } from "react-router-dom";
 
 import { type SignupInput, signupSchema } from "../schemas";
 import { useCurrentUser } from "../hooks/useCurrentUser";
-import { useSignup } from "../hooks/useSignup";
+import { useSendOTP } from "../hooks/useSendOTP";
 import { useSocialSignin } from "@/features/auth/hooks/useSocialSignin"
+import { useSignupStore } from "../stores/signupStore";
+
+import OTPCard from "../components/OTPCard";
 
 const Signup = () => {
   const navigate = useNavigate();
 
   const { data: user, isLoading: userLoading } = useCurrentUser();
-  const { mutate: signupUser, isPending: signingin } = useSignup();
+  const { mutate: sendOTP, isPending: sending } = useSendOTP();
   const { mutate: signinWithSocial, isPending: signingInWithSocial} = useSocialSignin();
 
-  const isPending = signingin || signingInWithSocial;
+  const { setData } = useSignupStore();
+  const [ isOpen, setIsOpen ] = useState(false);
+  
+  const isPending = sending || signingInWithSocial;
 
   const {
     register,
@@ -26,9 +33,13 @@ const Signup = () => {
   });
 
   const onSubmit = (data: SignupInput) => {
-    signupUser(data, {
-      onSuccess: () => navigate("/")
-    });
+    sendOTP({
+      email: data.email,
+      name: data.name,
+      type: "email-verification"
+    }, {
+      onSuccess: () => navigate("/verify-otp")
+    })
   };
 
   if (userLoading) {
@@ -45,6 +56,15 @@ const Signup = () => {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4">
+      {isOpen && (
+      <OTPCard
+        email={data.email}
+        type="sign-in"
+        resending={sending}
+        countdown={5}
+      />
+      )}
+      
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="card w-full max-w-md space-y-5 p-8 shadow-lg animate-scale-in"
@@ -129,13 +149,13 @@ const Signup = () => {
           disabled={isPending}
           className="btn-primary w-full"
         >
-          {signingin ? (
+          {sending ? (
             <>
               <Loader2 className="h-5 w-5 animate-spin" />
-              Creating account...
+              Signing up...
             </>
           ) : (
-            "Create Account"
+            "Sign Up"
           )}
         </button>
 

@@ -1,8 +1,8 @@
 import { Redis } from "@upstash/redis";
-import { Env } from "@/config/env";
-import logger from "@/utils/logger";
+import { Env } from "@/config/env.js";
+import logger from "@/utils/logger.js";
 
-const redis = new Redis({
+export const redis = new Redis({
   url: Env.UPSTASH_REDIS_REST_URL,
   token: Env.UPSTASH_REDIS_REST_TOKEN,
 });
@@ -20,5 +20,3 @@ export const testRedis = async() => {
     logger.error("Redis connection failed:", error);
   }
 }
-
-export default redis;

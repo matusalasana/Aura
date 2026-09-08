@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction} from "express";
-import logger from "../utils/logger";
+import logger from "../utils/logger.js";
+
+
 export const validate = (schema: any) => (
   req: Request, 
   res: Response, 

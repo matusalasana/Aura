@@ -55,7 +55,7 @@ const envSchema = z.object({
 
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
-  EMAIL_FROM: z.string().optional(),
+  EMAIL_SENDER: z.string().optional(),
 
 });
 
@@ -94,6 +94,6 @@ export const Env = {
   SMTP_SECURE: parsedEnv.SMTP_SECURE,
   SMTP_USER: parsedEnv.SMTP_USER,
   SMTP_PASS: parsedEnv.SMTP_PASS,
-  EMAIL_FROM: parsedEnv.EMAIL_FROM,
+  EMAIL_SENDER: parsedEnv.EMAIL_SENDER,
 
 };
