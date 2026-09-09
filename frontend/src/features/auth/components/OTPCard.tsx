@@ -1,105 +1,141 @@
-import { OTPInput, REGEXP_ONLY_DIGITS } from "input-otp";
+import { useState } from "react";
+import { RefreshCwIcon, XIcon } from "lucide-react";
 
-interface OTPProps {
-  onComplete?: (code: string) => void;
-  email: string;
-  type: string;
-  onResend?: (email: string, type: string) => void;
-  resending: boolean;
-  countdown: number;
-}
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
-const OTPCard = ({
-  onComplete,
+
+export default function OTPCard({
+  open,
   email,
-  type,
-  onResend,
-  resending,
-  countdown,
-}: OTPProps) => {
-  const isResendDisabled = resending || countdown > 0;
+  onClickVerify,
+  isPending,
+  onOpenChange,
+}: OTPCardProps) {
+  const [otp, setOtp] = useState("");
 
-  const handleResend = () => {
-    if (isResendDisabled) return;
-
-    onResend(email, type);
+  const handleVerify = () => {
+    onClickVerify(otp);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
-      <div className="card w-full max-w-sm space-y-6 p-8 shadow-2xl animate-scale-in">
-        {/* Header */}
-        <div className="space-y-2 text-center">
-          <h2 className="heading text-2xl">
-            Verify your email
-          </h2>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md relative">
+        <DialogHeader>
+          <DialogTitle>Verify your login</DialogTitle>
 
-          <p className="subheading text-sm">
-            Enter the 6-digit code sent to your email{" "}
-            <span className="font-medium text-content">
-              {email.slice(0,2)}******@gmail.com
+          <DialogDescription>
+            Enter the verification code we sent to your email address:
+            <span className="ml-1 font-medium">
+              {email.slice(0,2)}***@example.com
             </span>
-          </p>
-        </div>
+          </DialogDescription>
+        </DialogHeader>
 
-        {/* OTP */}
-        <div className="flex-center">
-          <OTPInput
+        <DialogClose 
+          className="absolute top-1 right-1"
+          render={ 
+            <Button variant="ghost">
+              <XIcon className="size-4"/>
+            </Button>
+          } 
+        />
+
+        <Field>
+          <div className="flex items-center justify-between">
+            <FieldLabel htmlFor="otp-verification">
+              Verification code
+            </FieldLabel>
+          </div>
+
+          <InputOTP
             maxLength={6}
-            pattern={REGEXP_ONLY_DIGITS}
-            onComplete={onComplete}
-            containerClassName="otp-container"
-            render={({ slots }) => (
-              <div className="flex gap-2">
-                {slots.map((slot, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      flex h-11 w-11 items-center justify-center
-                      rounded-lg border
-                      bg-background
-                      text-lg font-semibold
-                      transition-all duration-200
-
-                      ${
-                        slot.isActive
-                          ? "border-primary bg-primary/5 text-primary ring-2 ring-primary/20"
-                          : "border-border text-content"
-                      }
-                    `}
-                  >
-                    {slot.char}
-                  </div>
-                ))}
-              </div>
-            )}
-          />
-        </div>
-
-        {/* Resend */}
-        <div className="flex items-center justify-center gap-2 text-sm">
-          <p className="muted">
-            Didn't receive a code?
-          </p>
-
-          <button
-            type="button"
-            disabled={isResendDisabled}
-            onClick={handleResend}
-            className="link font-semibold disabled:pointer-events-none disabled:opacity-50"
+            id="otp-verification"
+            value={otp}
+            onChange={setOtp}
           >
-            {resending ? "Sending..." : "Resend"}
-          </button>
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+            </InputOTPGroup>
+            <InputOTPSeparator className="mx-2" />
 
-          {countdown > 0 && (
-            <span className="text-secondary tabular-nums">
-              ({countdown}s)
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
+            <InputOTPGroup>
+              <InputOTPSlot index={2} />
+              <InputOTPSlot index={3} />
+            </InputOTPGroup>
+            <InputOTPSeparator className="mx-2" />
+            
+            <InputOTPGroup>
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+
+          </InputOTP>
+
+          <FieldDescription>
+            <a href="#">I no longer have access to this email address.</a>
+          </FieldDescription>
+        </Field>
+
+        <Field>
+          <Button
+            disabled={isPending || otp.length !== 6}
+            onClick={handleVerify}
+            type="button"
+            className="w-full"
+          >
+            {isPending ? "Verifying..." : "Verify"}
+          </Button>
+
+          <Button
+            disabled={isPending || otp.length !== 6}
+            variant="outline" 
+            size="xs"
+          >
+              <RefreshCwIcon />
+              Resend Code
+            </Button>
+
+          <div className="text-sm text-muted-foreground">
+            Having trouble signing in?{" "}
+            <a
+              href="#"
+              className="underline underline-offset-4 hover:text-primary"
+            >
+              Contact support
+            </a>
+          </div>
+        </Field>
+      </DialogContent>
+    </Dialog>
   );
-};
-
-export default OTPCard;
+}

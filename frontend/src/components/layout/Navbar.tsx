@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, ShoppingBag, User } from "lucide-react";
 import { useState } from "react";
 import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
-import ThemeToggle from "../ui/ThemeToggle";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -66,8 +65,6 @@ const Navbar = () => {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 md:flex">
-
-          <ThemeToggle />
 
           <button
             onClick={() => navigate("/cart")}
@@ -170,7 +167,6 @@ const Navbar = () => {
 
 
             <div className="flex items-center justify-between pt-2">
-              <ThemeToggle />
 
               {user ? (
                 <button

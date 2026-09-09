@@ -15,15 +15,15 @@
 }
 
 @utility btn-outline {
-  @apply btn border border-border bg-transparent text-content hover:bg-muted focus:ring-2 focus:ring-primary/30;
+  @apply btn border border-border bg-transparent text-foreground hover:bg-muted focus:ring-2 focus:ring-primary/30;
 }
 
 @utility btn-ghost {
-  @apply btn bg-transparent text-content hover:bg-muted focus:ring-2 focus:ring-primary/30;
+  @apply btn bg-transparent text-foreground hover:bg-muted focus:ring-2 focus:ring-primary/30;
 }
 
-@utility btn-danger {
-  @apply btn bg-danger text-white hover:opacity-90 focus:ring-2 focus:ring-danger/30;
+@utility btn-destructive {
+  @apply btn bg-destructive text-white hover:opacity-90 focus:ring-2 focus:ring-destructive/30;
 }
 
 
@@ -65,7 +65,7 @@
 ======================================== */
 
 @utility input {
-  @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-content outline-none transition-colors placeholder:text-secondary disabled:cursor-not-allowed disabled:opacity-50 focus:border-primary focus:ring-2 focus:ring-primary/20;
+  @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-secondary disabled:cursor-not-allowed disabled:opacity-50 focus:border-primary focus:ring-2 focus:ring-primary/20;
 }
 
 @utility textarea {
@@ -73,11 +73,11 @@
 }
 
 @utility label {
-  @apply mb-2 block text-sm font-medium text-content;
+  @apply mb-2 block text-sm font-medium text-foreground;
 }
 
 @utility error-text {
-  @apply text-sm text-danger;
+  @apply text-sm text-destructive;
 }
 
 
@@ -86,7 +86,7 @@
 ======================================== */
 
 @utility heading {
-  @apply font-bold tracking-tight text-content;
+  @apply font-bold tracking-tight text-foreground;
 }
 
 @utility subheading {
@@ -111,7 +111,7 @@
 ======================================== */
 
 @utility badge {
-  @apply inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-content;
+  @apply inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-foreground;
 }
 
 @utility badge-success {
@@ -122,7 +122,7 @@
   @apply inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400;
 }
 
-@utility badge-danger {
+@utility badge-destructive {
   @apply inline-flex items-center rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400;
 }
 

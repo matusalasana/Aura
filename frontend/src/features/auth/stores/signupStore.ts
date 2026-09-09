@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 type SignupData = {
   name: string;
@@ -7,29 +6,27 @@ type SignupData = {
   password: string;
 };
 
-type SignupStoreState = {
+type SignupStore = {
   data: SignupData;
   setData: (data: SignupData) => void;
+  clearData: () => void;
 };
 
-export const useSignupStore = create<SignupStoreState>()(
-  
-  persist(
-    
-    (set) => ({
+export const useSignupStore = create<SignupStore>((set) => ({
+  data: {
+    name: "",
+    email: "",
+    password: "",
+  },
+
+  setData: (data) => set({ data }),
+
+  clearData: () =>
+    set({
       data: {
         name: "",
         email: "",
         password: "",
       },
-
-      setData: (data) => set({ data }),
     }),
-    
-    {
-      name: "signup-storage",
-    }
-    
-  )
-  
-);
+}));

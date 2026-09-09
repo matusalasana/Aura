@@ -17,7 +17,6 @@ import VendorDashboard from "@/dashboard/vendor/pages/VendorDashboard";
 
 import Signup from "@/features/auth/pages/Signup"
 import Signin from "@/features/auth/pages/Signin"
-import OtpVerification from "@/features/auth/pages/OtpVerification"
 
 
 export const router = createBrowserRouter([
@@ -39,11 +38,6 @@ export const router = createBrowserRouter([
         path: "/sign-up",
         element: <Signup />
       },
-      {
-        path: "/verify-otp",
-        element: <OtpVerification />
-      },
-      
       // Customer Protected Pages
       {
         element: <ProtectedRoutes />,

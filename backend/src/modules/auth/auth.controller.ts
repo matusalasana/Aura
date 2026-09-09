@@ -13,7 +13,7 @@ const sendOTP = async (
 
   return res.status(200).json({
     success: true,
-    message: "OTP sent to your email successfully.",
+    message: "OTP sent, please check your  email",
   });
 };
 
@@ -24,7 +24,8 @@ const verifyOTP = async (
   res: Response,
 ) => {
   const { otp, type, email } = req.body;
-  
+
+  console.log(req.body)
   await AuthService.verifyOTP({
     email,
     otp,
@@ -33,7 +34,7 @@ const verifyOTP = async (
 
   return res.status(200).json({
     success: true,
-    message: "OTP verified successfully.",
+    message: "Signed up successfully",
   });
 };
 
@@ -52,7 +53,7 @@ const resendOTP = async (
 
   return res.status(200).json({
     success: true,
-    message: "OTP sent to your email successfully.",
+    message: "OTP sent, please check your  email",
   });
 };
 

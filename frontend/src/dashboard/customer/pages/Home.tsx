@@ -4,7 +4,6 @@ import Hero from "../components/Hero";
 import ValueProps from "../components/ValueProps";
 import FeaturedVendors from "../components/FeaturedVendors";
 import TrendingCategories from "../components/TrendingCategories";
-import ProgressIndicator from "@/components/ui/ProgressIndicator";
 import { useSignout } from "@/features/auth/hooks/useSignout"
 import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser"
 

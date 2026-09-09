@@ -8,10 +8,10 @@ const hashOTP = async (otp: string) => {
 };
 
 // Compare otp
-const compareOTP = async ({otp, hashedOTP}: {
-  otp: string;
-  hashedOTP: string;
-}) => {
+const compareOTP = async (
+  otp: string,
+  hashedOTP: string
+) => {
   return await bcrypt.compare(otp, hashedOTP);
 };
 

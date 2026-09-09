@@ -6,17 +6,14 @@ import { redis } from "@/config/redis.js";
 import { generateOTP } from "@/utils/otp.js";
 import { sendEmail } from "@/utils/email.js";
 import { verifyEmailTemplate } from "@/templates/verifyEmail.js";
-// import { resetPasswordTemplate } from "../../templates/resetPassword";
-
-type OTPType = {
-  type: string;
-  email: string;
-}
+import { resetPasswordTemplate } from "../../templates/resetPassword.js";
 
 
-// constants
 const OTP_EXP = 600;
-const getOtpKey = ({ type, email}: OTPType) => `otp:${type}:${email}`;
+
+const getOtpKey = ({ type, email }) => {
+  return `otp:${type}:${email}`;
+};
 
 const getEmailParams = ({name, otp, type, email}) => {
   const emailSubject = type === "email-verification"
@@ -41,65 +38,118 @@ const getEmailParams = ({name, otp, type, email}) => {
 
 
 
-
-
-// send otp
-const sendOTP = async ({email, type, name}) => {
+// SEND OTP
+const sendOTP = async ({ email, type, name }) => {
+  if (!email || !type || !name) {
+    throw new Error("Missing required fields");
+  }
 
   const otp = generateOTP();
-  const hashedOTP = HashUtils.hashOTP(otp);
-  
-  const cacheKey = getOtpKey(type, email);
-  await redis.set(cacheKey, otp, { ex: OTP_EXP});
+  const hashedOTP = await HashUtils.hashOTP(otp);
 
-  const emailParams = getEmailParams({name, otp, type, email});
+  const cacheKey = getOtpKey({
+    type,
+    email,
+  });
+
+  await redis.set(cacheKey, hashedOTP, {
+    ex: OTP_EXP,
+  });
+
+  const emailParams = getEmailParams({
+    name,
+    otp,
+    type,
+    email,
+  });
 
   await sendEmail(emailParams);
-  
+
+  console.log("key:", cacheKey);
+  console.log("hashed:", hashedOTP);
+
+  const hashedRedisOTP = await redis.get(cacheKey);
+
+  console.log("hashedRedisOTP:", hashedRedisOTP);
+
   return {
-    message: "OTP sent successfully"
+    message: "OTP sent successfully",
   };
-  
 };
 
 
-// verify otp
+// VERIFY OTP
 const verifyOTP = async ({
   type,
   email,
-  otp
+  otp,
 }) => {
+  if (!email || !type || !otp) {
+    throw new Error("Missing required fields");
+  }
 
-  const cacheKey = getOtpKey(type, email);
+  const cacheKey = getOtpKey({
+    type,
+    email,
+  });
+
   const hashedOTP = await redis.get(cacheKey);
 
-  const isValid = await HashUtils.compareOTP(otp, hashedOTP)
-  if(!isValid) throw new Error("OTP invalid or expired");
+  if (!hashedOTP) {
+    throw new Error("OTP invalid or expired");
+  }
+
+  const isValid = await HashUtils.compareOTP(
+    otp,
+    hashedOTP
+  );
+
+  if (!isValid) {
+    throw new Error("OTP invalid or expired");
+  }
+
+  // Prevent OTP reuse
+  await redis.del(cacheKey);
 
   return {
-    message: "OTP verified successfully"
+    message: "OTP verified successfully",
   };
-  
 };
 
 
-// resend OTP
+// RESEND OTP
 const resendOTP = async ({ email, type, name }) => {
-  
+  if (!email || !type || !name) {
+    throw new Error("Missing required fields");
+  }
+
   const otp = generateOTP();
   const otpHash = await HashUtils.hashOTP(otp);
 
-  const cacheKey = getOtpKey(type, email);
-  
-  const oldOTP = await redis.get(cacheKey);
-  if(oldOTP){
-    await redis.del(cacheKey)
-  }
+  const cacheKey = getOtpKey({
+    type,
+    email,
+  });
 
-  const emailParams = getEmailParams({name, otp, type, email});
+  // Replace old OTP
+  await redis.del(cacheKey);
+
+  await redis.set(cacheKey, otpHash, {
+    ex: OTP_EXP,
+  });
+
+  const emailParams = getEmailParams({
+    name,
+    otp,
+    type,
+    email,
+  });
+
   await sendEmail(emailParams);
-  
-  return { message: "OTP resent successfully" };
+
+  return {
+    message: "OTP resent successfully",
+  };
 };
 
 
