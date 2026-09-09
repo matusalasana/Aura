@@ -1,14 +1,17 @@
 import { Request, Response } from "express";
 
 import { AuthService } from "./auth.service.js";
-
+import type { 
+  SendOTPInput,
+  ResendOTPInput,
+  VerifyOTPInput } from "@/modules/auth/auth.validation.js"
 
 // send otp
 const sendOTP = async (
   req: Request,
   res: Response,
 ) => {
-  const { email, name, type } = req.body;
+  const { email, name, type }: SendOTPInput = req.body;
   await AuthService.sendOTP({name, type, email});
 
   return res.status(200).json({
@@ -23,7 +26,7 @@ const verifyOTP = async (
   req: Request,
   res: Response,
 ) => {
-  const { otp, type, email } = req.body;
+  const { otp, type, email }: VerifyOTPInput = req.body;
 
   console.log(req.body)
   await AuthService.verifyOTP({
@@ -44,11 +47,12 @@ const resendOTP = async (
   req: Request,
   res: Response,
 ) => {
-  const { type, email } = req.body;
+  const { type, email, name }: ResendOTPInput = req.body;
   
   await AuthService.resendOTP({
     email,
-    type
+    type,
+    name
   });
 
   return res.status(200).json({
@@ -63,7 +67,8 @@ const getMe = async (
   req: Request,
   res: Response
 ) => {
-  const user = await AuthService.getMe(req.user!.id);
+  const id = req.user!.id as string;
+  const user = await AuthService.getMe(id);
 
   res.json({
     success: true,

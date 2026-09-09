@@ -9,6 +9,24 @@ const TypeEnum = z.enum([
   "verify_email", "reset_password"
 ]);
 
+ export type SendOTPInput = {
+   type: string;
+   email: string;
+   name?: string;
+ }
+
+export type ResendOTPInput = {
+  type: string;
+  email: string;
+  name?: string;
+}
+
+export type VerifyOTPInput = {
+  type: string;
+  otp: string;
+  email: string;
+}
+
 
 
 export const registerSchema = z.object({

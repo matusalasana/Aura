@@ -7,15 +7,24 @@ import { generateOTP } from "@/utils/otp.js";
 import { sendEmail } from "@/utils/email.js";
 import { verifyEmailTemplate } from "@/templates/verifyEmail.js";
 import { resetPasswordTemplate } from "../../templates/resetPassword.js";
+import type { 
+  SendOTPInput,
+  ResendOTPInput,
+  VerifyOTPInput } from "@/modules/auth/auth.validation.js";
 
 
 const OTP_EXP = 600;
 
-const getOtpKey = ({ type, email }) => {
+const getOtpKey = ({ type, email }: { type: string; email: string; }) => {
   return `otp:${type}:${email}`;
 };
 
-const getEmailParams = ({name, otp, type, email}) => {
+const getEmailParams = ({name, otp, type, email}: {
+  name: string;
+  otp: string;
+  type: string;
+  email: string;
+}) => {
   const emailSubject = type === "email-verification"
     ? "Email Verification Code" 
     : "Password Reset Code"
@@ -39,7 +48,7 @@ const getEmailParams = ({name, otp, type, email}) => {
 
 
 // SEND OTP
-const sendOTP = async ({ email, type, name }) => {
+const sendOTP = async ({ email, type, name }: SendOTPInput) => {
   if (!email || !type || !name) {
     throw new Error("Missing required fields");
   }
@@ -65,13 +74,6 @@ const sendOTP = async ({ email, type, name }) => {
 
   await sendEmail(emailParams);
 
-  console.log("key:", cacheKey);
-  console.log("hashed:", hashedOTP);
-
-  const hashedRedisOTP = await redis.get(cacheKey);
-
-  console.log("hashedRedisOTP:", hashedRedisOTP);
-
   return {
     message: "OTP sent successfully",
   };
@@ -83,7 +85,7 @@ const verifyOTP = async ({
   type,
   email,
   otp,
-}) => {
+}: VerifyOTPInput) => {
   if (!email || !type || !otp) {
     throw new Error("Missing required fields");
   }
@@ -93,7 +95,7 @@ const verifyOTP = async ({
     email,
   });
 
-  const hashedOTP = await redis.get(cacheKey);
+  const hashedOTP = await redis.get<string>(cacheKey);
 
   if (!hashedOTP) {
     throw new Error("OTP invalid or expired");
@@ -101,7 +103,7 @@ const verifyOTP = async ({
 
   const isValid = await HashUtils.compareOTP(
     otp,
-    hashedOTP
+    hashedOTP as string
   );
 
   if (!isValid) {
@@ -118,7 +120,7 @@ const verifyOTP = async ({
 
 
 // RESEND OTP
-const resendOTP = async ({ email, type, name }) => {
+const resendOTP = async ({ email, type, name }: ResendOTPInput) => {
   if (!email || !type || !name) {
     throw new Error("Missing required fields");
   }
