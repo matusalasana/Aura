@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     errorElement: <ErrorPage />,
     children: [
-      // Customer Public Pages
+      //  App Public Pages
       {
         index: true,
         element: <Home />,

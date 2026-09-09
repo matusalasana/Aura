@@ -1,47 +1,38 @@
-import BecomeVendor from "@/components/common/BecomeVendor";
-import BecomeVendorForm from "@/features/vendors/components/BecomeVendorForm";
-import Hero from "../components/Hero";
-import ValueProps from "../components/ValueProps";
-import FeaturedVendors from "../components/FeaturedVendors";
-import TrendingCategories from "../components/TrendingCategories";
-import { useSignout } from "@/features/auth/hooks/useSignout"
-import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser"
+import React, { useState } from 'react';
+import { 
+  Store, 
+  Globe, 
+  ShieldCheck, 
+  Zap, 
+  ArrowRight, 
+  Layers, 
+  BarChart3, 
+  CheckCircle2, 
+  ShoppingBag,
+  ExternalLink
+} from 'lucide-react';
 
+import Hero from "@/dashboard/customer/components/Hero";
+import FeaturedCategories from "@/dashboard/customer/components/FeaturedCategories";
+import PopularStores from "@/dashboard/customer/components/PopularStores";
+import WhyAura from "@/dashboard/customer/components/WhyAura";
+import FAQ from "@/dashboard/customer/components/FAQ";
+import Pricing from "@/dashboard/customer/components/Pricing";
+import VendorOnboarding from "@/components/common/VendorSignupForm";
 
-const Home = () => {
-  const { data: user, isLoading} = useCurrentUser();
-  const { mutate: signout, isPending} = useSignout();
-  
+export default function AuraHomePage() {
 
-  if(isLoading){
-    return<p>Loading user...</p>
-  }
   return (
-    <div>
-      
-      <button
-        onClick={() => signout()}
-        disabled={isPending}
-        className="btn btn-danger"
-      >
-        {isPending ? "Signing Out..." : "Sign Out " }
-      </button>
+    <div className="min-h-screen bg-foreground text-foreground font-sans antialiased">
 
-      {user && (
-        <div>
-          <p>Name: {user.name}</p>
-          <p>email: {user.email}</p>
-        </div>)
-      }
-      
       <Hero />
-      <ValueProps />
-      <FeaturedVendors />
-      <TrendingCategories />
-      <BecomeVendor />
-      <BecomeVendorForm />
+      <VendorOnboarding />
+      <Pricing />
+      <FeaturedCategories />
+      <PopularStores />
+      <WhyAura />
+      <FAQ />
+      
     </div>
-  )
+  );
 }
-
-export default Home
