@@ -31,7 +31,7 @@ export const storeDomains = pgTable(
 
     domain: text("domain").notNull(),
 
-    customDomain: text("custom_domain").notNull(),
+    customDomain: text("custom_domain"),
 
     status: statusEnum("status")
       .notNull()
@@ -43,11 +43,3 @@ export const storeDomains = pgTable(
     domainIdx: uniqueIndex("store_domain_idx").on(table.domain),
   })
 );
-
-
-export const storeDomainRelations = relations(storeDomains, ({ one }) => ({
-  stores: one(stores, {
-    fields: [storeDomains.storeId],
-    references: [stores.id],
-  }),
-}));

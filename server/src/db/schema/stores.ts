@@ -16,7 +16,7 @@ export const stores = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
 
-    name: text("name").notNull(),
+    storeName: text("store_name").notNull(),
 
     slug: text("slug").notNull(),
 
@@ -27,6 +27,8 @@ export const stores = pgTable(
     description: text("description"),
 
     logo: text("logo"),
+
+    plan: text("plan"),
 
     createdAt: timestamp("created_at")
       .defaultNow()
@@ -41,13 +43,3 @@ export const stores = pgTable(
     uniqueIndex("store_slug_uidx").on(table.slug),
   ],
 );
-
-
-
-
-export const storeRelations = relations(stores, ({ one }) => ({
-  owner: one(user, {
-    fields: [stores.ownerId],
-    references: [user.id],
-  }),
-}));
