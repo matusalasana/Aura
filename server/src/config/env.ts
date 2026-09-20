@@ -57,6 +57,9 @@ const envSchema = z.object({
   SMTP_PASS: z.string().optional(),
   EMAIL_SENDER: z.string().optional(),
 
+  // Routing 
+  TEST_HOSTNAME: z.string().min(4),
+
 });
 
 const parsedEnv = envSchema.parse(process.env);
@@ -96,4 +99,5 @@ export const Env = {
   SMTP_PASS: parsedEnv.SMTP_PASS,
   EMAIL_SENDER: parsedEnv.EMAIL_SENDER,
 
+  TEST_HOSTNAME: parsedEnv.TEST_HOSTNAME,
 };
