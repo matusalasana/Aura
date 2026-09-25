@@ -1,9 +1,9 @@
-import AddProductForm from "@/features/products/components/AddProductForm"
+import React from 'react'
 
-export default function VendorDashboard() {
+const VendorDashboard = () => {
   return (
-    <div>
-      <AddProductForm />
-    </div>
-  );
+    <div>Store Dashboard</div>
+  )
 }
+
+export default VendorDashboard

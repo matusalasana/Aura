@@ -19,6 +19,7 @@ import WhyAura from "@/dashboard/customer/components/WhyAura";
 import FAQ from "@/dashboard/customer/components/FAQ";
 import Pricing from "@/dashboard/customer/components/Pricing";
 import VendorOnboarding from "@/components/common/VendorSignupForm";
+import ProductForm from "@/features/products/components/forms/ProductForm";
 
 export default function AuraHomePage() {
 
@@ -26,6 +27,7 @@ export default function AuraHomePage() {
     <div className="min-h-screen bg-foreground text-foreground font-sans antialiased">
 
       <Hero />
+      <ProductForm />
       <VendorOnboarding />
       <Pricing />
       <FeaturedCategories />

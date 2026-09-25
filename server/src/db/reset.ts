@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 
-import { db } from "../index.js";
+import { db } from "@/db";
 import  logger from "@/utils/logger.js";
 
 

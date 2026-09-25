@@ -7,7 +7,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  logger.error(`${err}`);
+  logger.error(`${err.cause || err.message}`);
 
   const statusCode = err.statusCode || err.status || 500;
   const message = err.message || "Internal Server Error";

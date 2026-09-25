@@ -1,41 +1,24 @@
 import { Request, Response, NextFunction } from "express";
+
 import { auth } from "@/config/auth.js";
-
+import type { Permission } from "@/modules/auth/auth.permissions.js";
+import { rolePermissions } from "@/modules/auth/auth.roles";
 import { AuthRepository } from "@/modules/auth/auth.repository.js";
-import logger from "@/utils/logger.js"
+import logger from "@/utils/logger.js";
 
 
-type Role = "customer" | "vendor" | "admin";
-
-export const authorize = (...allowedRoles: Role[]) => {
+export const hasRolePermission = (
+  membership: string,
+  permission: Permission
+) => {
   
-  return async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  const permissions = rolePermissions[membership];
+  console.log(membership)
+  console.log(permission)
+  console.log(permissions)
+  if (!permissions) {
+    return false;
+  }
 
-    if (!req.user) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-
-    const id = req.user.id as string;
-    const user = await AuthRepository.findUserById(id)
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    const userRole = user.role;
-    
-    if (!userRole || !allowedRoles.includes(userRole)) {
-        logger.warn(`Unauthorized access attempt by user ${req.user.id} to ${req.originalUrl}`);
-        return res.status(403).json({ message: "Forbidden: You do not have the required role" });
-    }
-
-    next();
-  };
+  return permissions.includes(permission);
 };

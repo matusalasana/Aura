@@ -99,7 +99,7 @@ export default function VendorOnboarding() {
           </p>
         </div>
 
-        <div className="container-custom max-w-2xl">
+        <div className="container max-w-2xl">
           {/* Stepper Progress Bar */}
           <div className="relative mb-8 flex-between">
             <div className="absolute left-0 right-0 top-1/2 -z-10 h-0.5 -translate-y-1/2 bg-border" />
