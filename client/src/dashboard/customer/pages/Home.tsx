@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { 
   Store, 
   Globe, 
@@ -12,6 +11,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 
+import { useProducts } from "@/features/products/hooks/useProducts";
 import Hero from "@/dashboard/customer/components/Hero";
 import FeaturedCategories from "@/dashboard/customer/components/FeaturedCategories";
 import PopularStores from "@/dashboard/customer/components/PopularStores";
@@ -20,13 +20,25 @@ import FAQ from "@/dashboard/customer/components/FAQ";
 import Pricing from "@/dashboard/customer/components/Pricing";
 import VendorOnboarding from "@/components/common/VendorSignupForm";
 import ProductForm from "@/features/products/components/forms/ProductForm";
+import ProductCard from "@/components/common/product/ProductCard";
 
 export default function AuraHomePage() {
+  const { data: products, isLoading } = useProducts();
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  
   return (
-    <div className="min-h-screen bg-foreground text-foreground font-sans antialiased">
+    <div className="min-h-screen bg-foreground text-foreground font-sans antialiased px-5">
 
       <Hero />
+    
+      {products?.map((p) => (
+        <ProductCard product={p} />
+      ))
+        
+      }
       <ProductForm />
       <VendorOnboarding />
       <Pricing />

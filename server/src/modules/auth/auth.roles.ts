@@ -1,4 +1,4 @@
-import type { Permission } from "./permissions";
+import type { Permission } from "./auth.permissions.js";
 
 export const rolePermissions: Record<string, Permission[]> = {
   owner: [

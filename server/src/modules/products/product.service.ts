@@ -6,6 +6,7 @@ import type {
 } from "@/modules/products/product.validations.js";
 
 const createProduct = async (
+  storeId: string,
   data: CreateProductInput,
 ) => {
   const allowedTypes = ["simple", "variant"];
@@ -34,7 +35,7 @@ const createProduct = async (
   }
   }
 
-  return ProductRepository.create(data);
+  return ProductRepository.create(storeId, data);
 };
 
 const getProduct = async (
@@ -73,23 +74,6 @@ const updateProduct = async (
 
   if (!product) {
     throw new Error("Product not found");
-  }
-
-  if (data.slug) {
-    const existing =
-      await ProductRepository.findBySlug(
-        storeId,
-        data.slug,
-      );
-
-    if (
-      existing &&
-      existing.id !== productId
-    ) {
-      throw new Error(
-        "A product with this slug already exists",
-      );
-    }
   }
 
   return ProductRepository.update(

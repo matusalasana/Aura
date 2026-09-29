@@ -73,6 +73,7 @@
     "autoprefixer": "^10.4.21",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
+    "husky": "^9.1.7",
     "tailwindcss": "^4.1.14",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.22.4",

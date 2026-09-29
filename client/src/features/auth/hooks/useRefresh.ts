@@ -1,11 +1,10 @@
 import api from "@/lib/axios"
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { setAccessToken } from "@/utils/token";
 
 const refresh = async () => {
   const res = await api.post("/auth/refresh");
-  return res.data.accessToken
+  return res.data
 };
 
 export const useRefresh = () => {
@@ -14,8 +13,7 @@ export const useRefresh = () => {
   return useMutation({
     mutationFn: refresh,
 
-    onSuccess: (accessToken) => {
-      setAccessToken(accessToken);
+    onSuccess: () => {
 
       queryClient.invalidateQueries({
           queryKey: ["auth"],

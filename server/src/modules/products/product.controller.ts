@@ -1,15 +1,18 @@
 import type { Request, Response } from "express";
 
 import { ProductService } from "@/modules/products/product.service.js";
+import type { CreateProductInput, UpdateProductInput} from "@/modules/products/product.validations.js"
 
 export const createProduct = async (
   req: Request,
   res: Response,
 ) => {
-  const product = await ProductService.createProduct({
-    storeId: req.store.id,
-    ...req.body,
-  });
+  const storeId = req.store.id as string;
+  const data: CreateProductInput = req.body;
+  const product = await ProductService.createProduct(
+    storeId,
+    data
+  );
 
   res.status(201).json({
     success: true,

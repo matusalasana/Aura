@@ -1,7 +1,6 @@
 import api from "@/lib/axios"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { clearAccessToken } from "@/utils/token";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const logoutAll = async () => {
@@ -15,7 +14,6 @@ export const useLogoutAll = () => {
     mutationFn: logoutAll,
 
     onSuccess: () => {
-      clearAccessToken();
 
       queryClient.clear();
 

@@ -1,7 +1,6 @@
 import api from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { setAccessToken } from "@/utils/token";
 import { type VerifyEmailInput } from "../types";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
@@ -16,8 +15,7 @@ export const useVerifyEmail = () => {
   return useMutation({
     mutationFn: verifyEmail,
 
-    onSuccess: ({ user, accessToken, message }) => {
-      setAccessToken(accessToken);
+    onSuccess: ({ user, message }) => {
 
       queryClient.setQueryData(["auth"], user);
 

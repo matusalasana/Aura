@@ -13,7 +13,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { products } from "@/db/schema";
+import { products } from "@/db/schema/index.js";
 
 export const productVariants = pgTable(
   "product_variants",

@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db/index.js";
-import { stores } from "@/db/schema/stores";
+import { stores } from "@/db/schema/index.js";
 import { getSubdomain } from "@/utils/getSubdomain.js";
 import { logger } from "@/utils/logger.js";
 import { Env } from "@/config/env.js";
@@ -21,6 +21,9 @@ export const resolveTenant = async (
   }
 
   const subdomain = getSubdomain(hostname);
+  if(!subdomain) {
+    return next()
+  }
 
   logger.warn(`${hostname}`)
   logger.warn(`${subdomain}`)

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { auth } from "@/config/auth.js";
 import type { Permission } from "@/modules/auth/auth.permissions.js";
-import { rolePermissions } from "@/modules/auth/auth.roles";
+import { rolePermissions } from "@/modules/auth/auth.roles.js";
 import { AuthRepository } from "@/modules/auth/auth.repository.js";
 import logger from "@/utils/logger.js";
 

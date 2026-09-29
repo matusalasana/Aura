@@ -1,14 +1,15 @@
 import { eq, and } from "drizzle-orm";
 
 import { db } from "@/db/index.js";
-import { products } from "@/db/schema";
+import { products } from "@/db/schema/index.js";
+import type { CreateProductInput, UpdateProductInput } from "@/modules/products/product.validations.js";
 
 
 
-const create = async (data) => {
+const create = async (storeId: string, data: CreateProductInput) => {
   const [product] = await db
     .insert(products)
-    .values(data)
+    .values({...data, storeId})
     .returning();
 
   return product;
@@ -42,24 +43,6 @@ const findByIdAndStore = async (
   return product ?? null;
 };
 
-const findBySlug = async (
-  storeId: string,
-  slug: string,
-) => {
-  const [product] = await db
-    .select()
-    .from(products)
-    .where(
-      and(
-        eq(products.storeId, storeId),
-        eq(products.slug, slug),
-      ),
-    )
-    .limit(1);
-
-  return product ?? null;
-};
-
 const findByStore = async (storeId: string) => {
   return db
     .select()
@@ -70,7 +53,7 @@ const findByStore = async (storeId: string) => {
 const update = async (
   id: string,
   storeId: string,
-  data: Partial<typeof products.$inferInsert>,
+  data: UpdateProductInput,
 ) => {
   const [product] = await db
     .update(products)
@@ -114,6 +97,5 @@ export const ProductRepository = {
   deleteOne,
   findById,
   findByIdAndStore,
-  findBySlug,
   findByStore,
 }

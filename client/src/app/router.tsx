@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
       },
       // Customer Protected Pages
       {
-        element: <ProtectedRoutes />,
+        element: <ProtectedRoutes role={["customer"]} />,
         children: [
           {
             path: "/order",

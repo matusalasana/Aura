@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
-import { db } from "@/db";
-import { storeMemberships } from "@/db/schema";
+import { db } from "@/db/index.js";
+import { storeMemberships } from "@/db/schema/index.js";
 
 export const findStoreMembership = async (
   userId: string,

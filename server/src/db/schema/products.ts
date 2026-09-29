@@ -13,7 +13,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { stores } from "@/db/schema";
+import { stores } from "@/db/schema/index.js";
 
 export const productTypeEnum = pgEnum("product_type", [
   "simple",
