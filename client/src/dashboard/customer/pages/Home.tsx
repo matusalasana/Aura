@@ -16,6 +16,7 @@ import Hero from "@/dashboard/customer/components/Hero";
 import FeaturedCategories from "@/dashboard/customer/components/FeaturedCategories";
 import PopularStores from "@/dashboard/customer/components/PopularStores";
 import WhyAura from "@/dashboard/customer/components/WhyAura";
+import Testimonials from "@/dashboard/customer/components/Testimonials";
 import FAQ from "@/dashboard/customer/components/FAQ";
 import Pricing from "@/dashboard/customer/components/Pricing";
 import VendorOnboarding from "@/components/common/VendorSignupForm";
@@ -47,6 +48,7 @@ export default function AuraHomePage() {
       <FeaturedCategories />
       <PopularStores />
       <WhyAura />
+      <Testimonials />
       <FAQ />
       
     </div>

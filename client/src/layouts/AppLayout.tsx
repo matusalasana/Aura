@@ -5,7 +5,7 @@ import ScrollToTop from "../utils/ScrollToTop";
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen flex flex-col dark:bg-zinc-900">
+    <div className="min-h-screen flex flex-col bg-foreground">
       <Navbar />
 
       <main className="flex-1">

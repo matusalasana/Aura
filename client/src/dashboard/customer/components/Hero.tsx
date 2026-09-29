@@ -3,7 +3,7 @@ import { ArrowRight, Store, Zap } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="section relative overflow-hidden text-foreground">
+    <section className="relative overflow-hidden text-foreground">
       <div className="container-custom flex flex-col items-center text-center">
         {/* Feature Badge */}
         <div className="badge-primary mb-6 gap-2 px-3 py-1 text-xs">
