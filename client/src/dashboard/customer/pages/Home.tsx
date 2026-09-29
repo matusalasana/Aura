@@ -20,6 +20,7 @@ import FAQ from "@/dashboard/customer/components/FAQ";
 import Pricing from "@/dashboard/customer/components/Pricing";
 import VendorOnboarding from "@/components/common/VendorSignupForm";
 import ProductForm from "@/features/products/components/forms/ProductForm";
+import MerchantMarquee from "@/dashboard/customer/components/MerchantMarquee";
 import ProductCard from "@/components/common/product/ProductCard";
 
 export default function AuraHomePage() {
@@ -30,7 +31,7 @@ export default function AuraHomePage() {
   }
   
   return (
-    <div className="min-h-screen bg-foreground text-foreground font-sans antialiased px-5">
+    <div className="min-h-screen bg-foreground text-foreground font-sans antialiased px-5 space-y-4">
 
       <Hero />
     
@@ -39,6 +40,7 @@ export default function AuraHomePage() {
       ))
         
       }
+      <MerchantMarquee />
       <ProductForm />
       <VendorOnboarding />
       <Pricing />

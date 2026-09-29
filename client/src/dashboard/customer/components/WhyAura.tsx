@@ -1,130 +1,109 @@
-import { ShieldCheck, Globe, Zap, Layers, Lock, Cpu, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import {
+  ShoppingBag,
+  Store,
+  Zap,
+  Package,
+  BarChart3,
+  ShieldCheck,
+  Globe,
+  Rocket,
+} from "lucide-react";
 
-interface Feature {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-  badge?: string;
-}
-
-const FEATURES: Feature[] = [
+const features = [
   {
-    icon: ShieldCheck,
-    title: "Strict Tenant Data Isolation",
+    icon: ShoppingBag,
+    title: "Discover Products",
     description:
-      "Database queries and authentication sessions are strictly scoped per tenant at the ORM layer to eliminate cross-tenant data leakage.",
-    badge: "Security",
+      "Find products from independent stores and growing brands in one place.",
   },
   {
-    icon: Globe,
-    title: "Custom Subdomains & Routing",
+    icon: Store,
+    title: "Your Store, Your Brand",
     description:
-      "Instant wildcard subdomain resolution (`store.aura.shop`) powered by dynamic middleware routing and edge request rewriting.",
-    badge: "Multitenancy",
+      "Give your business its own storefront with your branding, products, and pricing.",
   },
   {
     icon: Zap,
-    title: "Redis-Backed Edge Cache",
+    title: "Fast & Simple",
     description:
-      "Ultra-fast store catalog responses and tenant metadata lookups cached with high-performance Upstash Redis key stores.",
-    badge: "Performance",
+      "A clean shopping experience designed to make browsing and buying effortless.",
   },
   {
-    icon: Lock,
-    title: "Integrated Better Auth",
+    icon: Package,
+    title: "Powerful Product Management",
     description:
-      "Seamless customer and merchant authentication with role-based permissions scoped directly to individual vendor storefronts.",
-    badge: "Authentication",
+      "Manage products, variants, inventory, pricing, and your catalog from one place.",
   },
   {
-    icon: Layers,
-    title: "Modular Schema with Drizzle ORM",
+    icon: BarChart3,
+    title: "Built to Grow",
     description:
-      "Type-safe database migrations and PostgreSQL multi-tenant schema isolation for high-scale merchant inventory management.",
-    badge: "Database",
+      "Get the tools and insights you need as your business grows.",
   },
   {
-    icon: Cpu,
-    title: "Developer-First Architecture",
+    icon: ShieldCheck,
+    title: "Secure by Design",
     description:
-      "Extensible TypeScript backend designed for custom vendor modules, Webhook event subscriptions, and automated payment payouts.",
-    badge: "Extensible",
+      "Modern authentication and security practices help protect your account and data.",
+  },
+  {
+    icon: Globe,
+    title: "Reach More Customers",
+    description:
+      "Put your products online and reach customers beyond your physical location.",
+  },
+  {
+    icon: Rocket,
+    title: "One Platform, Many Possibilities",
+    description:
+      "Everything you need to shop, sell, and grow in one connected platform.",
   },
 ];
 
 export default function WhyAura() {
   return (
-    <section className="section bg-muted/20">
-      <div className="container-custom">
-        {/* Section Header */}
+    <section className="py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        {/* Heading */}
         <div className="mx-auto max-w-2xl text-center">
-          <div className="badge-primary mb-3 gap-1.5">
-            <Zap className="h-3.5 w-3.5" />
-            <span>Platform Infrastructure</span>
-          </div>
-          <h2 className="heading text-3xl sm:text-4xl">
-            Why Build Your Store with{" "}
-            <span className="text-gradient">Aura</span>?
+          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary">
+            Why Aura?
+          </p>
+
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Everything you need to shop and grow
           </h2>
-          <p className="subheading mt-3 text-base">
-            Engineered specifically for developers building multi-merchant marketplaces, custom storefront networks, and tenant-isolated SaaS platforms.
+
+          <p className="mt-4 text-muted-foreground">
+            Aura brings customers and businesses together with the tools
+            needed for a better online marketplace experience.
           </p>
         </div>
 
-        {/* Feature Cards Grid */}
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((feature, idx) => {
+        {/* Features */}
+        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature) => {
             const Icon = feature.icon;
+
             return (
               <div
-                key={idx}
-                className="card-hover flex flex-col justify-between p-6"
+                key={feature.title}
+                className="group rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-md"
               >
-                <div>
-                  <div className="flex-between mb-4">
-                    <div className="grid-center h-10 w-10 rounded-lg border border-border bg-primary/10 text-primary">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    {feature.badge && (
-                      <span className="badge text-[10px] font-semibold uppercase tracking-wider">
-                        {feature.badge}
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="heading text-lg font-bold">{feature.title}</h3>
-                  <p className="subheading mt-2 text-xs leading-relaxed">
-                    {feature.description}
-                  </p>
+                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon className="h-5 w-5" />
                 </div>
 
-                <div className="mt-6 border-t border-border/50 pt-4">
-                  <span className="muted text-[11px] font-mono">
-                    0{idx + 1} / Built for Scale
-                  </span>
-                </div>
+                <h3 className="font-semibold">
+                  {feature.title}
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  {feature.description}
+                </p>
               </div>
             );
           })}
-        </div>
-
-        {/* Bottom Callout Banner */}
-        <div className="card mt-12 flex flex-col items-center justify-between gap-6 bg-card p-8 text-center sm:flex-row sm:text-left">
-          <div>
-            <h3 className="heading text-xl font-bold">
-              Ready to launch your multi-tenant storefront?
-            </h3>
-            <p className="subheading mt-1 text-xs">
-              Deploy your first vendor environment or explore our live demo sandbox.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link to="/register" className="btn-primary gap-2">
-              Start Free Trial <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
         </div>
       </div>
     </section>
