@@ -7,12 +7,14 @@ import { eq, and, gt, lt } from "drizzle-orm";
 
 
 const findUserById = async (userId: string) => {
-  return await db
+  const result = await db
     .select()
     .from(user)
     .where(
       eq(user.id, userId)
     )
+
+  return result[0] || null;
 };
 
 

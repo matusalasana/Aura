@@ -4,7 +4,7 @@ import ErrorPage from "@/pages/ErrorPage"
 
 // Layouts 
 import AppLayout from "@/layouts/AppLayout";
-import VendorLayout from "@/layouts/VendorLayout";
+import StoreLayout from "@/layouts/StoreLayout";
 
 // Public pages
 import Home from "@/dashboard/customer/pages/Home";
@@ -12,8 +12,9 @@ import Home from "@/dashboard/customer/pages/Home";
 // Customer pages
 import ProtectedRoutes from "@/features/auth/components/ProtectedRoutes";
 
-// Vendor pages
-import VendorDashboard from "@/dashboard/vendor/pages/VendorDashboard";
+// Store pages
+import StoreDashboard from "@/dashboard/store/pages/StoreDashboard";
+import StoreProductsPage from "@/features/stores/pages/StoreProductsPage";
 
 import Signup from "@/features/auth/pages/Signup"
 import Signin from "@/features/auth/pages/Signin"
@@ -40,7 +41,7 @@ export const router = createBrowserRouter([
       },
       // Customer Protected Pages
       {
-        element: <ProtectedRoutes role={["customer"]} />,
+        element: <ProtectedRoutes roles={["customer"]} />,
         children: [
           {
             path: "/order",
@@ -51,17 +52,21 @@ export const router = createBrowserRouter([
     ],
   },
   
-  // Vendor protected routes
+  // Store protected routes
   {
-    path: "/vendor",
-    element: <ProtectedRoutes role={["vendor", "customer"]} />, 
+    path: "/stores",
+    element: <ProtectedRoutes roles={["vendor", "customer"]} />, 
     children: [
       {
-        element: <VendorLayout />,
+        element: <StoreLayout />,
         children: [
           {
             index: true,
-            element: <VendorDashboard />,
+            element: <StoreDashboard />,
+          },
+          {
+            path: "products",
+            element: <StoreProductsPage />,
           },
         ]
       },

@@ -2,10 +2,10 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 
 interface ProtectedRoutesProps {
-  role: string[];
+  roles: string[];
 }
 
-const ProtectedRoutes = ({ role }: ProtectedRoutesProps) => {
+const ProtectedRoutes = ({ roles }: ProtectedRoutesProps) => {
   const { data: user, isLoading, isError } = useCurrentUser();
 
   // Handle error first
@@ -29,7 +29,7 @@ const ProtectedRoutes = ({ role }: ProtectedRoutesProps) => {
   }
 
   // Not authenticated or unauthorized
-  if (!user || !role.length || !role.includes(user.role)) {
+  if (!user || !roles.length || !roles.includes(user.role)) {
     return <Navigate to="/" replace />;
   }
 

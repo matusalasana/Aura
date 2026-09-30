@@ -7,7 +7,7 @@ import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { data: user } = useCurrentUser();
+  const { data: user, isLoading } = useCurrentUser();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -20,7 +20,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 flex-between border-b border-border bg-background/80 p-4 backdrop-blur-md">
       {/* Brand Logo */}
       <Link to="/" className="heading text-xl">
-        Aura
+        Aura {isLoading ? "" : user.role}
       </Link>
 
       {/* Desktop Navigation Links */}

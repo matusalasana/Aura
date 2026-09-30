@@ -1,197 +1,104 @@
-import { NavLink } from "react-router-dom";
 import {
+  BarChart3,
+  Boxes,
   LayoutDashboard,
   Package,
-  ShoppingCart,
-  Users,
-  BarChart3,
-  Star,
-  TicketPercent,
-  Wallet,
   Settings,
-  LogOut,
+  ShoppingCart,
   Store,
-  ChevronLeft,
-  ChevronRight,
+  Users,
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import clsx from "clsx";
 
-const links = [
+import { Link } from "react-router-dom";
+
+const sidebarItems = [
   {
-    label: "Dashboard",
+    label: "Overview",
+    href: "/dashboard",
     icon: LayoutDashboard,
-    to: "/vendor/dashboard",
   },
   {
     label: "Products",
+    href: "/dashboard/products",
     icon: Package,
-    to: "/vendor/products",
   },
   {
     label: "Orders",
+    href: "/dashboard/orders",
     icon: ShoppingCart,
-    to: "/vendor/orders",
+  },
+  {
+    label: "Inventory",
+    href: "/dashboard/inventory",
+    icon: Boxes,
   },
   {
     label: "Customers",
+    href: "/dashboard/customers",
     icon: Users,
-    to: "/vendor/customers",
   },
   {
     label: "Analytics",
+    href: "/dashboard/analytics",
     icon: BarChart3,
-    to: "/vendor/analytics",
-  },
-  {
-    label: "Reviews",
-    icon: Star,
-    to: "/vendor/reviews",
-  },
-  {
-    label: "Coupons",
-    icon: TicketPercent,
-    to: "/vendor/coupons",
-  },
-  {
-    label: "Wallet",
-    icon: Wallet,
-    to: "/vendor/wallet",
-  },
-  {
-    label: "Settings",
-    icon: Settings,
-    to: "/vendor/settings",
   },
 ];
 
-export default function VendorSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
-
+const DashboardSidebar = () => {
   return (
-    <aside
-      className={clsx(
-        "sticky top-0 flex h-screen flex-col border-r border-zinc-200 bg-white transition-all duration-300 dark:border-zinc-800 dark:bg-zinc-950",
-        collapsed ? "w-24" : "w-72"
-      )}
-    >
-      {/* Logo */}
-
-      <div className="flex items-center justify-between border-b border-zinc-200 px-5 py-5 dark:border-zinc-800">
-        <div className="flex items-center gap-3 overflow-hidden">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-500 text-white shadow">
-            <Store size={22} />
+    <aside className="flex h-screen w-64 flex-col border-r bg-card">
+      {/* Store Header */}
+      <div className="border-b p-4">
+        <Link to="/dashboard" className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Store className="h-5 w-5" />
           </div>
 
-          {!collapsed && (
-            <div>
-              <h1 className="text-lg font-bold text-zinc-900 dark:text-white">
-                Aura
-              </h1>
-
-              <p className="text-xs text-zinc-500">
-                Vendor Dashboard
-              </p>
-            </div>
-          )}
-        </div>
-
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="rounded-xl p-2 transition hover:bg-zinc-100 dark:hover:bg-zinc-900"
-        >
-          {collapsed ? (
-            <ChevronRight size={18} />
-          ) : (
-            <ChevronLeft size={18} />
-          )}
-        </button>
+          <div className="min-w-0">
+            <p className="truncate font-semibold">Demo Store</p>
+            <p className="text-xs text-muted-foreground">Store Dashboard</p>
+          </div>
+        </Link>
       </div>
 
       {/* Navigation */}
-
-      <nav className="flex-1 space-y-2 overflow-y-auto p-4">
-        {links.map((item) => {
+      <nav className="flex-1 space-y-1 p-3">
+        {sidebarItems.map((item) => {
           const Icon = item.icon;
 
           return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                clsx(
-                  "group flex items-center rounded-2xl px-4 py-3 transition-all",
-                  isActive
-                    ? "bg-amber-500 text-white shadow-lg"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-white"
-                )
-              }
+            <Link
+              key={item.href}
+              to={item.href}
+              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
-              {({ isActive }) => (
-                <motion.div
-                  whileHover={{ x: 3 }}
-                  className="flex items-center gap-4"
-                >
-                  <Icon
-                    size={21}
-                    className={clsx(
-                      isActive
-                        ? "text-white"
-                        : "text-zinc-500 group-hover:text-amber-500"
-                    )}
-                  />
-
-                  {!collapsed && (
-                    <span className="font-medium">
-                      {item.label}
-                    </span>
-                  )}
-                </motion.div>
-              )}
-            </NavLink>
+              <Icon className="h-4 w-4" />
+              {item.label}
+            </Link>
           );
         })}
       </nav>
 
-      {/* Store Card */}
+      {/* Bottom */}
+      <div className="border-t p-3">
+        <Link
+          to="/dashboard/settings"
+          className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <Settings className="h-4 w-4" />
+          Settings
+        </Link>
 
-      <div className="border-t border-zinc-200 p-4 dark:border-zinc-800">
-        {!collapsed ? (
-          <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-            <div className="flex items-center gap-3">
-              <img
-                src="https://i.pravatar.cc/100"
-                alt=""
-                className="h-12 w-12 rounded-full object-cover"
-              />
-
-              <div className="min-w-0 flex-1">
-                <h3 className="truncate font-semibold text-zinc-900 dark:text-white">
-                  Aura Fashion
-                </h3>
-
-                <p className="truncate text-sm text-zinc-500">
-                  Premium Seller
-                </p>
-              </div>
-            </div>
-
-            <button
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-zinc-200 py-3 text-sm font-medium transition hover:bg-red-50 hover:text-red-600 dark:border-zinc-700 dark:hover:bg-red-500/10"
-            >
-              <LogOut size={18} />
-              Logout
-            </button>
-          </div>
-        ) : (
-          <button
-            className="flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-200 hover:bg-red-50 dark:border-zinc-700 dark:hover:bg-red-500/10"
-          >
-            <LogOut size={20} />
-          </button>
-        )}
+        <Link
+          to="/"
+          className="mt-1 flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <Store className="h-4 w-4" />
+          View Store
+        </Link>
       </div>
     </aside>
   );
-}
+};
+
+export default DashboardSidebar;

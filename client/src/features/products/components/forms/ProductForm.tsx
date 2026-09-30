@@ -38,7 +38,7 @@ const ProductForm = () => {
     useState<InventoryInfoData>(initialInventoryData);
 
   const [variantsData, setVariantsData] =
-    useState<VariantsData[] | []>([]);
+    useState<VariantsData[]>([]);
 
   const nextStep = () => {
     setStep((prev) => prev + 1);
@@ -68,7 +68,7 @@ const ProductForm = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <ProgressIndicator
         step={step}
         type={basicData.type}
