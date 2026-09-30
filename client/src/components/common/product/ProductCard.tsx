@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Package, MoreVertical } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,10 +29,12 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card className="overflow-hidden">
-      {/* Product image placeholder */}
-      <div className="container h-44 items-center justify-center bg-muted">
-        <img src="https://images.unsplash.com/photo-1612654442146-84f661a0bc25?q=80&w=1227&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="product image" />
-      </div>
+      <Link to={`/products/${product.id}`}>
+        {/* Product image placeholder */}
+        <div className="container h-44 items-center justify-center bg-muted">
+          <img src="https://images.unsplash.com/photo-1612654442146-84f661a0bc25?q=80&w=1227&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="product image" />
+        </div>
+      </Link>
 
       <CardContent className="p-4">
         {/* Header */}

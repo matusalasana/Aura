@@ -16,6 +16,8 @@ import ProtectedRoutes from "@/features/auth/components/ProtectedRoutes";
 import StoreDashboard from "@/dashboard/store/pages/StoreDashboard";
 import StoreProductsPage from "@/features/stores/pages/StoreProductsPage";
 
+import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
+
 import Signup from "@/features/auth/pages/Signup"
 import Signin from "@/features/auth/pages/Signin"
 
@@ -38,6 +40,10 @@ export const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <Signup />
+      },
+      {
+        path: "products/:productId",
+        element: <ProductDetailsPage />
       },
       // Customer Protected Pages
       {
