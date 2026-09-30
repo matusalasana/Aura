@@ -11,7 +11,12 @@ const CartPage = () => {
   const updateQuantity = useCartStore(
     (state) => state.updateQuantity
   );
-
+  const subtotal = items.reduce(
+    (total, item) =>
+      total + Number(item.price) * item.quantity,
+    0
+  );
+  
   if (items.length === 0) {
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center p-6 text-center">
@@ -66,6 +71,23 @@ const CartPage = () => {
           </div>
         ))}
       </div>
+      <div className="mt-8 flex justify-end">
+  <div className="w-full max-w-sm rounded-xl border p-6">
+    <div className="flex items-center justify-between">
+      <span className="text-muted-foreground">Subtotal</span>
+
+      <span className="text-xl font-bold">
+        ${subtotal.toFixed(2)}
+      </span>
+    </div>
+
+    <Button asChild className="mt-6 w-full" size="lg">
+      <Link to="/checkout" className="w-full">
+        Checkout
+      </Link>
+    </Button>
+  </div>
+</div>
     </div>
   );
 };

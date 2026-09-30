@@ -9,18 +9,19 @@ import StoreLayout from "@/layouts/StoreLayout";
 // Public pages
 import Home from "@/dashboard/customer/pages/Home";
 
-// Customer pages
+// Auth pages
+import Signup from "@/features/auth/pages/Signup"
+import Signin from "@/features/auth/pages/Signin"
 import ProtectedRoutes from "@/features/auth/components/ProtectedRoutes";
+
+// Customer Pages
+import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
+import CartPage from "@/features/cart/pages/CartPage";
+import CheckoutPage from "@/features/checkout/pages/CheckoutPage";
 
 // Store pages
 import StoreDashboard from "@/dashboard/store/pages/StoreDashboard";
 import StoreProductsPage from "@/features/stores/pages/StoreProductsPage";
-
-import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
-import CartPage from "@/features/cart/pages/CartPage";
-
-import Signup from "@/features/auth/pages/Signup"
-import Signin from "@/features/auth/pages/Signin"
 
 
 export const router = createBrowserRouter([
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage />,
+      },
+      {
+        path: "/checkout",
+        element: <CheckoutPage />,
       },
       
       // Customer Protected Pages
