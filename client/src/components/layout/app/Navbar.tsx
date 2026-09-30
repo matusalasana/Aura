@@ -3,11 +3,13 @@ import { Menu, X, ShoppingBag, User } from "lucide-react";
 import { useState } from "react";
 
 import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
+import { useCartStore } from "@/features/cart/store/cartStore";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { data: user, isLoading } = useCurrentUser();
+  const items = useCartStore((state) => state.items);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -33,13 +35,14 @@ const Navbar = () => {
       </div>
 
       {/* Right Action Icons & Auth */}
-      <div className="flex-center gap-2">
+      <div className="flex-center gap-2 relative">
         <button
           className="btn-outline p-2"
           onClick={() => navigate("/cart")}
           aria-label="Cart"
         >
           <ShoppingBag className="h-5 w-5" />
+          <p className="badge text-foreground text-xs bg-destructive rounded-full">{items.length}</p>
         </button>
 
         {user ? (

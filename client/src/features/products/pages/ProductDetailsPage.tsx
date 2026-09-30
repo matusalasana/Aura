@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useProduct } from "@/features/products/hooks/useProduct";
 import QuantitySelector from "@/features/products/components/QuantitySelector";
 import AddToCartButton from "@/features/products/components/AddToCartButton";
+import { useCartStore } from "@/features/cart/store/cartStore";
 
 const ProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -10,6 +11,7 @@ const ProductDetailsPage = () => {
   const { data: product, isLoading, isError } = useProduct(productId!);
 
   const [quantity, setQuantity] = useState(1);
+  const addItem = useCartStore((state) => state.addItem);
 
   if (isLoading) {
     return <div className="mx-auto max-w-7xl p-6">Loading...</div>;
@@ -69,8 +71,10 @@ const ProductDetailsPage = () => {
 
               <AddToCartButton
                 onClick={() => {
-                  console.log("Add to cart:", {
+                  addItem({
                     productId: product.id,
+                    name: product.name,
+                    price: product.price,
                     quantity,
                   });
                 }}

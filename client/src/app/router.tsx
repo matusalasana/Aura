@@ -17,6 +17,7 @@ import StoreDashboard from "@/dashboard/store/pages/StoreDashboard";
 import StoreProductsPage from "@/features/stores/pages/StoreProductsPage";
 
 import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
+import CartPage from "@/features/cart/pages/CartPage";
 
 import Signup from "@/features/auth/pages/Signup"
 import Signin from "@/features/auth/pages/Signin"
@@ -45,6 +46,11 @@ export const router = createBrowserRouter([
         path: "products/:productId",
         element: <ProductDetailsPage />
       },
+      {
+        path: "/cart",
+        element: <CartPage />,
+      },
+      
       // Customer Protected Pages
       {
         element: <ProtectedRoutes roles={["customer"]} />,
