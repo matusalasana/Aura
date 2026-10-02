@@ -1,7 +1,13 @@
-import { eq, and, innerJoin } from "drizzle-orm";
+import { eq, and, sql, innerJoin } from "drizzle-orm";
 
 import { db } from "@/db/index.js";
-import { products, productVariants, user, orders, orderItems, shippingInformation } from "@/db/schema/index.js";
+import { 
+  products, 
+  productVariants, 
+  user, 
+  orders, 
+  orderItems, 
+  shippingInformation } from "@/db/schema/index.js";
 
 
 const createOrderWithItems = async (
@@ -29,6 +35,24 @@ const createOrderWithItems = async (
         orderId: order.id,
       })),
     );
+
+    for (const item of items) {
+      if (item.variantId) {
+        await tx
+          .update(productVariants)
+          .set({
+            stock: sql`${productVariants.stock} - ${item.quantity}`,
+          })
+          .where(eq(productVariants.id, item.variantId));
+      } else {
+        await tx
+          .update(products)
+          .set({
+            stock: sql`${products.stock} - ${item.quantity}`,
+          })
+          .where(eq(products.id, item.productId));
+      }
+    }
 
     return order;
   });
