@@ -7,6 +7,10 @@ export const createProduct = async (
   req: Request,
   res: Response,
 ) => {
+  
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const storeId = req.store.id as string;
   const data: CreateProductInput = req.body;
   const product = await ProductService.createProduct(
@@ -24,6 +28,9 @@ export const getProducts = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const products = await ProductService.getProducts(
     req.store.id,
   );
@@ -38,6 +45,9 @@ export const getProduct = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const product = await ProductService.getProduct(
     req.params.productId,
     req.store.id,
@@ -53,6 +63,9 @@ export const updateProduct = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const product = await ProductService.updateProduct(
     req.params.productId,
     req.store.id,
@@ -69,6 +82,9 @@ export const deleteProduct = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const product = await ProductService.deleteProduct(
     req.params.productId,
     req.store.id,

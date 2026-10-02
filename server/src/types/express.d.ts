@@ -1,5 +1,7 @@
-import type { User } from "better-auth";
-import type { Store } from "@/db/schema/index.js";
+import { type InferSelectModel } from 'drizzle-orm';
+
+import { type Store } from "@/db/schema/stores.js";
+import { type User } from "@/db/schema/auth.js";
 
 
 declare global {

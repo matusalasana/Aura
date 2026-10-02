@@ -1,12 +1,12 @@
 import { and, eq } from "drizzle-orm";
 
 import { db } from "@/db/index.js";
-import { productVariants } from "@/db/schema";
+import { productVariants } from "@/db/schema/index.js";
 
 import type {
   CreateVariantInput,
   UpdateVariantInput,
-} from "@/modules/products/variant.validations.js";
+} from "@/modules/variants/variant.validations.js";
 
 const create = async (
   data: CreateVariantInput,

@@ -43,3 +43,6 @@ export const stores = pgTable(
     uniqueIndex("store_slug_uidx").on(table.slug),
   ],
 );
+
+
+export type Store = typeof stores.$inferSelect;

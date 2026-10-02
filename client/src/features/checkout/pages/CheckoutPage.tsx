@@ -1,10 +1,13 @@
 import { useCartStore } from "@/features/cart/store/cartStore";
 import ShippingInformationForm from "@/features/checkout/components/ShippingInformationForm";
 import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
+import { useCreateOrder } from "@/features/orders/hooks/useCreateOrder";
 import { type CheckoutFormData } from "@/features/checkout/schemas";
 
 
 const CheckoutPage = () => {
+  const { mutate: createOrder, isPending } = useCreateOrder();
+  
   const items = useCartStore((state) => state.items);
 
   const subtotal = items.reduce(
@@ -23,13 +26,12 @@ const CheckoutPage = () => {
 
   const handleSubmit = (data: CheckoutFormData) => {
     const orderPayload = {
-      customer: {
+  
+      shipping: {
         name: data.name,
         email: data.email,
         phone: data.phone,
-      },
-  
-      shipping: {
+        
         address: data.address,
         city: data.city,
         subcity: data.subcity,
@@ -41,8 +43,7 @@ const CheckoutPage = () => {
         quantity: item.quantity,
       })),
     };
-  
-    console.log("Order payload:", orderPayload);
+    createOrder(orderPayload)
   }
 
   return (
@@ -87,6 +88,7 @@ const CheckoutPage = () => {
 
       <ShippingInformationForm
         onSubmit={handleSubmit}
+        isPending={isPending}
       />
       
     </div>

@@ -12,17 +12,18 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 interface Props {
+  isPending: boolean;
   onSubmit: (data: CheckoutFormData) => void;
 }
 
-const ShippingInformationForm = ({onSubmit}: CheckoutFormData) => {
+const ShippingInformationForm = ({onSubmit, isPending}: Props) => {
   const { data: user, isLoading } = useCurrentUser();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<BasicInfoData>({
+  } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
       name: user?.name ?? "",
@@ -55,6 +56,7 @@ const ShippingInformationForm = ({onSubmit}: CheckoutFormData) => {
           {... register("name")}
           className="input"
           placeholder="Abebe Kebede"
+          type="text"
         />
         {errors.name && (
           <p className="text-destructive mt-1">
@@ -70,6 +72,7 @@ const ShippingInformationForm = ({onSubmit}: CheckoutFormData) => {
           {... register("email")}
           className="input"
           placeholder="example@gmail.com"
+          type="email"
         />
         {errors.email && (
           <p className="text-destructive mt-1">
@@ -85,10 +88,27 @@ const ShippingInformationForm = ({onSubmit}: CheckoutFormData) => {
           {... register("phone")}
           className="input"
           placeholder="+2519xxxxxxxx/09xxxxxxxx"
+          type="text"
         />
         {errors.phone && (
           <p className="text-destructive mt-1">
             {errors.phone.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="address" className="label">Address</Label>
+        <Input
+          id="address"
+          {... register("address")}
+          className="input"
+          placeholder="Street or Area"
+          type="text"
+        />
+        {errors.address && (
+          <p className="text-destructive mt-1">
+            {errors.address.message}
           </p>
         )}
       </div>
@@ -138,7 +158,7 @@ const ShippingInformationForm = ({onSubmit}: CheckoutFormData) => {
         )}
       </div>
 
-      <Button className="w-full" type="submit">Place Order</Button>
+      <Button className="w-full" type="submit">{isPending ? "Creating order..." : "Place Order"}</Button>
       
     </form>
   );

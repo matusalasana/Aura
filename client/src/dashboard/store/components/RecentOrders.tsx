@@ -17,37 +17,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useOrders } from "@/features/orders/hooks/useOrders";
 
-const orders = [
-  {
-    id: "#ORD-1024",
-    customer: "Abel Tesfaye",
-    date: "Sep 29, 2026",
-    amount: "$125.00",
-    status: "Paid",
-  },
-  {
-    id: "#ORD-1023",
-    customer: "Sara Ahmed",
-    date: "Sep 29, 2026",
-    amount: "$85.50",
-    status: "Processing",
-  },
-  {
-    id: "#ORD-1022",
-    customer: "Michael John",
-    date: "Sep 28, 2026",
-    amount: "$240.00",
-    status: "Shipped",
-  },
-  {
-    id: "#ORD-1021",
-    customer: "Hana Bekele",
-    date: "Sep 28, 2026",
-    amount: "$64.99",
-    status: "Delivered",
-  },
-];
 
 const getStatusVariant = (
   status: string,
@@ -67,7 +38,14 @@ const getStatusVariant = (
   }
 };
 
+
 const RecentOrders = () => {
+  const { data: orders = [], isLoading } = useOrders();
+
+  if(isLoading){
+  return <p>Loading...</p>
+  }
+  
   return (
     <Card>
       <CardHeader>

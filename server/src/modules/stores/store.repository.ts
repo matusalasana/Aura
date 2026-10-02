@@ -1,5 +1,6 @@
 import { db } from "@/db/index.js";
 import { stores } from "@/db/schema/stores.js";
+import { type StoreInput } from "@/modules/stores/store.validations.js";
 
 import { eq, and, gt, lt } from "drizzle-orm";
 

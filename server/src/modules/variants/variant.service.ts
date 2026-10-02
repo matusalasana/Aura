@@ -4,7 +4,7 @@ import { VariantRepository } from "@/modules/variants/variant.repository.js";
 import type {
   CreateVariantInput,
   UpdateVariantInput,
-} from "@/modules/products/variant.validations.js";
+} from "@/modules/variants/variant.validations.js";
 
 const createVariant = async (
   productId: string,
@@ -27,20 +27,21 @@ const createVariant = async (
     );
   }
 
-  const existing =
-    await VariantRepository.findBySku(
-      productId,
-      data.sku,
-    );
+  const verifiedVariants = [];
 
-  if (existing) {
-    throw new Error(
-      "A variant with this SKU already exists",
-    );
+  for (const variantItem of data) {
+    const exists = await VariantRepository.findBySku(productId, variantItem.sku);
+    
+    if (exists) {
+      throw new Error(`SKU ${variantItem.sku} already exists.`);
+    }
+    
+    verifiedVariants.push(variantItem);
   }
 
-  const dataToInsert = data.map((d) => ({
+  const dataToInsert = verifiedVariants.map((d) => ({
     ...d,
+    price: String(d.price),
     productId,
   }));
   

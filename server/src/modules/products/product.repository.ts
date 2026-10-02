@@ -9,7 +9,11 @@ import type { CreateProductInput, UpdateProductInput } from "@/modules/products/
 const create = async (storeId: string, data: CreateProductInput) => {
   const [product] = await db
     .insert(products)
-    .values({...data, storeId})
+    .values({
+      ...data, 
+      price: data.price !== undefined ? data.price.toString() : undefined,
+      storeId
+    })
     .returning();
 
   return product;
@@ -59,6 +63,7 @@ const update = async (
     .update(products)
     .set({
       ...data,
+      price: data.price !== undefined ? data.price.toString() : undefined,
       updatedAt: new Date(),
     })
     .where(

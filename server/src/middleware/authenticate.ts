@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { auth } from "@/config/auth.js";
+import { type User } from "@/db/schema/auth.js";
 
 export const authenticate = async (
   req: Request,
@@ -18,7 +19,7 @@ export const authenticate = async (
       });
     }
 
-    req.user = session.user;
+    req.user = session.user as User;
 
     next();
   } catch (error) {

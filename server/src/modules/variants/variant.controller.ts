@@ -6,6 +6,9 @@ const createVariant = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const variant = await VariantService.createVariant(
     req.params.productId,
     req.store.id,
@@ -22,6 +25,9 @@ const getVariants = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const variants = await VariantService.getVariants(
     req.params.productId,
     req.store.id,
@@ -37,6 +43,9 @@ const getVariant = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const variant = await VariantService.getVariant(
     req.params.productId,
     req.params.variantId,
@@ -53,6 +62,9 @@ const updateVariant = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const variant = await VariantService.updateVariant(
     req.params.productId,
     req.params.variantId,
@@ -70,6 +82,9 @@ const deleteVariant = async (
   req: Request,
   res: Response,
 ) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
   const variant = await VariantService.deleteVariant(
     req.params.productId,
     req.params.variantId,
