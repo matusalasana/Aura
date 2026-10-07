@@ -1,4 +1,4 @@
-import { ArrowRight, Play, ShoppingBag, Store } from "lucide-react";
+import { ArrowRight, ShoppingBag, Store } from "lucide-react";
 
 export default function Hero() {
   return (

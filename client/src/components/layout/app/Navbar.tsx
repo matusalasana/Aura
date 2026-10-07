@@ -14,6 +14,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
+    { name: "Pricing", path: '/pricing'},
     { name: "Contact", path: "/contact" },
     { name: "About", path: "/about" },
   ];
@@ -22,7 +23,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 flex-between border-b border-border bg-background/80 p-4 backdrop-blur-md">
       {/* Brand Logo */}
       <Link to="/" className="heading text-xl">
-        Aura {isLoading ? "" : user.role}
+        Aura {isLoading ? "•••" : user?.role}
       </Link>
 
       {/* Desktop Navigation Links */}

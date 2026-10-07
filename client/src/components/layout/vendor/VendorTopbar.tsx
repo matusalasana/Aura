@@ -3,19 +3,16 @@ import {
   ChevronDown,
   Menu,
   Moon,
-  Search,
-  Sun,
+  Search
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 type TopbarProps = {
-  collapsed: boolean;
   onToggleSidebar: () => void;
   storeName?: string;
 };
 
 export default function VendorTopbar({
-  collapsed,
   onToggleSidebar,
   storeName = "Aura Fashion",
 }: TopbarProps) {

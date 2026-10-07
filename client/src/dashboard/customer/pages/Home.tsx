@@ -1,16 +1,3 @@
-import { 
-  Store, 
-  Globe, 
-  ShieldCheck, 
-  Zap, 
-  ArrowRight, 
-  Layers, 
-  BarChart3, 
-  CheckCircle2, 
-  ShoppingBag,
-  ExternalLink
-} from 'lucide-react';
-
 import { useProducts } from "@/features/products/hooks/useProducts";
 import Hero from "@/dashboard/customer/components/Hero";
 import FeaturedCategories from "@/dashboard/customer/components/FeaturedCategories";
@@ -35,7 +22,7 @@ export default function AuraHomePage() {
 
       <Hero />
     
-      {products?.map((p) => (
+      {products.map((p) => (
         <ProductCard product={p} />
       ))
         

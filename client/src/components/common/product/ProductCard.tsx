@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Package, MoreVertical } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 

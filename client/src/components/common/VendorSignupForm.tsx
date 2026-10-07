@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   Store,
   Globe,
@@ -331,12 +330,6 @@ export default function VendorOnboarding() {
                               <span className="font-semibold">
                                 {item.name}
                               </span>
-
-                              {item.popular && (
-                                <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
-                                  Popular
-                                </span>
-                              )}
                             </div>
 
                             <span className="font-semibold text-primary">

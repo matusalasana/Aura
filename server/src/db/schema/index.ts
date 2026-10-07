@@ -15,3 +15,5 @@ export * from "@/db/schema/orders.js";
 export * from "@/db/schema/shippingInformation.js";
 
 export * from "@/db/schema/orderItems.js";
+
+export * from "@/db/schema/relations.js"

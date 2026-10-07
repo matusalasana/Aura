@@ -1,18 +1,28 @@
 import { eq, and } from "drizzle-orm";
 
 import { db } from "@/db/index.js";
-import { products } from "@/db/schema/index.js";
-import type { CreateProductInput, UpdateProductInput } from "@/modules/products/product.validations.js";
+import {
+  products,
+} from "@/db/schema/index.js";
 
+import type {
+  CreateProductInput,
+  UpdateProductInput,
+} from "@/modules/products/product.validations.js";
 
-
-const create = async (storeId: string, data: CreateProductInput) => {
+const create = async (
+  storeId: string,
+  data: CreateProductInput,
+) => {
   const [product] = await db
     .insert(products)
     .values({
-      ...data, 
-      price: data.price !== undefined ? data.price.toString() : undefined,
-      storeId
+      ...data,
+      price:
+        data.price !== undefined
+          ? data.price.toString()
+          : undefined,
+      storeId,
     })
     .returning();
 
@@ -20,11 +30,13 @@ const create = async (storeId: string, data: CreateProductInput) => {
 };
 
 const findById = async (id: string) => {
-  const [product] = await db
-    .select()
-    .from(products)
-    .where(eq(products.id, id))
-    .limit(1);
+  const product = await db.query.products.findFirst({
+    where: eq(products.id, id),
+
+    with: {
+      variants: true,
+    },
+  });
 
   return product ?? null;
 };
@@ -33,25 +45,30 @@ const findByIdAndStore = async (
   id: string,
   storeId: string,
 ) => {
-  const [product] = await db
-    .select()
-    .from(products)
-    .where(
-      and(
-        eq(products.id, id),
-        eq(products.storeId, storeId),
-      ),
-    )
-    .limit(1);
+  const product = await db.query.products.findFirst({
+    where: and(
+      eq(products.id, id),
+      eq(products.storeId, storeId),
+    ),
+
+    with: {
+      variants: true,
+    },
+  });
 
   return product ?? null;
 };
 
 const findByStore = async (storeId: string) => {
-  return db
-    .select()
-    .from(products)
-    .where(eq(products.storeId, storeId));
+  const results = await db.query.products.findMany({
+    where: eq(products.storeId, storeId),
+
+    with: {
+      variants: true,
+    },
+  });
+
+  return results ?? [];
 };
 
 const update = async (
@@ -63,7 +80,10 @@ const update = async (
     .update(products)
     .set({
       ...data,
-      price: data.price !== undefined ? data.price.toString() : undefined,
+      price:
+        data.price !== undefined
+          ? data.price.toString()
+          : undefined,
       updatedAt: new Date(),
     })
     .where(
@@ -94,8 +114,6 @@ const deleteOne = async (
   return product ?? null;
 };
 
-
-
 export const ProductRepository = {
   create,
   update,
@@ -103,4 +121,4 @@ export const ProductRepository = {
   findById,
   findByIdAndStore,
   findByStore,
-}
+};
