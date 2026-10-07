@@ -7,7 +7,8 @@ export const createOrder = async (
   req: Request,
   res: Response,
 ) => {
-  
+
+  console.log(req.body)
   if (!req.store) {
     return res.status(404).json({ error: "Store not found" });
   }
@@ -41,11 +42,8 @@ export const getOrders = async (
   }
   const storeId = req.store.id as string;
   const userId = req.user.id as string;
-  const orders = await OrderService.getOrders(
-    storeId,
-    userId
-  );
-
+  const orders = await OrderService.getOrders(storeId, userId);
+console.log(orders)
   res.status(200).json({
     success: true,
     data: orders,

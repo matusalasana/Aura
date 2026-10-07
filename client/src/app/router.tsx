@@ -18,6 +18,7 @@ import ProtectedRoutes from "@/features/auth/components/ProtectedRoutes";
 import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
 import CartPage from "@/features/cart/pages/CartPage";
 import CheckoutPage from "@/features/checkout/pages/CheckoutPage";
+import OrdersPage from "@/features/orders/pages/OrdersPage";
 
 // Store pages
 import StoreDashboard from "@/dashboard/store/pages/StoreDashboard";
@@ -47,6 +48,8 @@ export const router = createBrowserRouter([
         path: "products/:productId",
         element: <ProductDetailsPage />
       },
+      
+      // Customer Protected Pages
       {
         path: "/cart",
         element: <CartPage />,
@@ -55,8 +58,6 @@ export const router = createBrowserRouter([
         path: "/checkout",
         element: <CheckoutPage />,
       },
-      
-      // Customer Protected Pages
       {
         element: <ProtectedRoutes roles={["customer"]} />,
         children: [
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
             element: <h1> Orders page</h1>
           }
         ],
+      },
+      {
+        path: "/orders",
+        element: <OrdersPage />,
       },
     ],
   },

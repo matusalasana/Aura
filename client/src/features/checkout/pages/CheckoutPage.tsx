@@ -10,6 +10,8 @@ const CheckoutPage = () => {
   
   const items = useCartStore((state) => state.items);
 
+  const clearCart = useCartStore((state) => state.clearCart);
+
   const subtotal = items.reduce(
     (total, item) =>
       total + Number(item.price) * item.quantity,
@@ -43,7 +45,9 @@ const CheckoutPage = () => {
         quantity: item.quantity,
       })),
     };
-    createOrder(orderPayload)
+    createOrder(orderPayload, {
+      onSuccess: () => clearCart()
+    })
   }
 
   return (

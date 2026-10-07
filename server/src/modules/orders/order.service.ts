@@ -1,6 +1,18 @@
 import { OrderRepository } from "@/modules/orders/order.repository.js";
 import type { CreateOrderInput } from "@/modules/orders/order.validations.js";
 import { generateOrderNumber } from "@/utils/generateOrderNumber";
+import { redis } from "@/config/redis.js";
+
+
+const ORDER_CACHE_TTL = 60*10 ; // 10 minutes
+
+const orderKey = (storeId: string, orderId: string) =>
+  `store:${storeId}:order:${orderId}:`;
+
+const ordersKey = (storeId: string, customerId: string) =>
+  `store:${storeId}:orders:${customerId}`;
+
+
 
 const createOrder = async (
   storeId: string,
@@ -112,11 +124,6 @@ const createOrder = async (
       productId: product.id,
       variantId: item.variantId ?? null,
 
-      productName: product.name,
-      variantSize,
-      variantColor,
-      sku,
-
       unitPrice,
       quantity: item.quantity,
       total: itemTotal.toFixed(2),
@@ -151,10 +158,21 @@ const createOrder = async (
     shippingInfo
   );
 
+  await redis.del(orderKey(storeId, result.id));
+
   return result;
 };
 
 const getOrders = async(storeId: string, customerId: string) => {
+
+  const key = ordersKey(storeId, customerId);
+
+  const cachedOrders = await redis.get(key);
+
+  if (cachedOrders) {
+    return cachedOrders;
+  }
+  
   return await OrderRepository.getAll(storeId, customerId);
 }
 

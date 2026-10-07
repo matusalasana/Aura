@@ -10,6 +10,7 @@ import {
   shippingInformation } from "@/db/schema/index.js";
 
 
+
 const createOrderWithItems = async (
   orderData: typeof orders.$inferInsert,
   items: (typeof orderItems.$inferInsert)[],
@@ -61,7 +62,7 @@ const createOrderWithItems = async (
 const getAll = async(storeId: string, customerId: string) => {
   const results = await db
     .select({
-      id: orders.orderNumber,
+      orderNumber: orders.orderNumber,
       customer: user.name,
       date: orders.createdAt,
       amount: orders.subtotal,
@@ -69,12 +70,12 @@ const getAll = async(storeId: string, customerId: string) => {
     })
     .from(orders)
     .innerJoin(user, eq(user.id, orders.customerId))
-    .where(
-      and(
-        eq(orders.customerId, customerId),
-        eq(orders.storeId, storeId)
+    .where( 
+      and (
+        eq(orders.storeId, storeId),
+        eq(orders.customerId, customerId)
       )
-    )
+    );
 
   return results;
 };
