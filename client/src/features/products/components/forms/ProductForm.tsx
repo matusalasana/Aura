@@ -28,7 +28,7 @@ const ProductForm = () => {
   };
 
   const initialInventoryData: InventoryInfoData = {
-    price: 0,
+    price: "",
     stock: 0,
     sku: "",
     status: "draft",

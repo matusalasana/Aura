@@ -60,22 +60,17 @@ const createOrderWithItems = async (
 };
 
 const getAll = async(storeId: string, customerId: string) => {
-  const results = await db
-    .select({
-      orderNumber: orders.orderNumber,
-      customer: user.name,
-      date: orders.createdAt,
-      amount: orders.subtotal,
-      status: orders.status,
-    })
-    .from(orders)
-    .innerJoin(user, eq(user.id, orders.customerId))
-    .where( 
-      and (
+  const results = await db.query.orders.findMany({
+    where: and
+      (
         eq(orders.storeId, storeId),
         eq(orders.customerId, customerId)
-      )
-    );
+      ),
+
+    with: {
+      items: true,
+    },
+  });
 
   return results;
 };

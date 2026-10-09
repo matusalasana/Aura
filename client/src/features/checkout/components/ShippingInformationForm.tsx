@@ -17,7 +17,7 @@ interface Props {
 }
 
 const ShippingInformationForm = ({onSubmit, isPending}: Props) => {
-  const { data: user, isLoading } = useCurrentUser();
+  const { data: user } = useCurrentUser();
 
   const {
     register,
@@ -28,7 +28,7 @@ const ShippingInformationForm = ({onSubmit, isPending}: Props) => {
     defaultValues: {
       name: user?.name ?? "",
       email: user?.email ?? "",
-      phone: "+251945807386",
+      phone: "",
       address: "",
       city: "Addis Ababa",
       subcity: "",
@@ -87,7 +87,7 @@ const ShippingInformationForm = ({onSubmit, isPending}: Props) => {
           id="phone"
           {... register("phone")}
           className="input"
-          placeholder="+2519xxxxxxxx/09xxxxxxxx"
+          placeholder="+2519xxx or 09xxx"
           type="text"
         />
         {errors.phone && (

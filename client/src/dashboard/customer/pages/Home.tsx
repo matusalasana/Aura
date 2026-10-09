@@ -1,4 +1,5 @@
 import { useProducts } from "@/features/products/hooks/useProducts";
+import type { Product } from "@/types/product";
 import Hero from "@/dashboard/customer/components/Hero";
 import FeaturedCategories from "@/dashboard/customer/components/FeaturedCategories";
 import PopularStores from "@/dashboard/customer/components/PopularStores";
@@ -22,8 +23,8 @@ export default function AuraHomePage() {
 
       <Hero />
     
-      {products.map((p) => (
-        <ProductCard product={p} />
+      {products.map((p: Product) => (
+        <ProductCard key={p.id} product={p} />
       ))
         
       }

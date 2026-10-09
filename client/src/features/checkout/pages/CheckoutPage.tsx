@@ -1,6 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/features/cart/store/cartStore";
 import ShippingInformationForm from "@/features/checkout/components/ShippingInformationForm";
-import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
 import { useCreateOrder } from "@/features/orders/hooks/useCreateOrder";
 import { type CheckoutFormData } from "@/features/checkout/schemas";
 
@@ -11,6 +11,8 @@ const CheckoutPage = () => {
   const items = useCartStore((state) => state.items);
 
   const clearCart = useCartStore((state) => state.clearCart);
+
+  const navigate = useNavigate();
 
   const subtotal = items.reduce(
     (total, item) =>
@@ -46,7 +48,10 @@ const CheckoutPage = () => {
       })),
     };
     createOrder(orderPayload, {
-      onSuccess: () => clearCart()
+      onSuccess: () => {
+        clearCart();
+        navigate("/orders")
+      }
     })
   }
 

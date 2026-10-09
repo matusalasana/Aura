@@ -1,37 +1,10 @@
 import { Link } from "react-router-dom";
-import { MoreVertical, ShoppingCart } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AddToCartButton from "@/features/products/components/AddToCartButton";
 import { useCartStore } from "@/features/cart/store/cartStore";
-
-type ImageType = {
-  url: string;
-  productId: string;
-};
-
-type VariantType = {
-  id: string,
-  productId: string,
-  price: string;
-  stock: number;
-  sku: string;
-}
-export type Product = {
-  id: string;
-  storeId: string;
-  images: ImageType[];
-  variants: VariantType[];
-  name: string;
-  description: string;
-  status: "active" | "draft" | "archived";
-  type: "simple" | "variant";
-  price: string;
-  stock: number;
-  sku: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import type { Product } from "@/types/product";
 
 interface ProductCardProps {
   product: Product;
@@ -53,19 +26,11 @@ const image = product.images?.[0]?.url;
 const isAvailable = isSimpleAvailable || isVariantAvailable
 const isVariantProduct = product.type === "variant";
 
-const selectedVariant = product.variants?.filter((variant: VariantType) => variant.productId === product.id)[0];
+const selectedVariant = product.variants?.[0];
 
 const price = isVariantProduct
   ? selectedVariant?.price
   : product.price;
-
-const stock = isVariantProduct
-  ? selectedVariant?.stock ?? 0
-  : product.stock ?? 0;
-
-const sku = isVariantProduct
-  ? selectedVariant?.sku
-  : product.sku;
 
 const addItem = useCartStore((state) => state.addItem);
 
@@ -135,7 +100,7 @@ return (
           onClick={() => addItem({
             productId: product.id,
             name: product.name,
-            price: price!,
+            price: String(price!),
             quantity: 1,
           })}
         />

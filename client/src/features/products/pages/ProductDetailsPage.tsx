@@ -4,6 +4,7 @@ import { useProduct } from "@/features/products/hooks/useProduct";
 import QuantitySelector from "@/features/products/components/QuantitySelector";
 import AddToCartButton from "@/features/products/components/AddToCartButton";
 import { useCartStore } from "@/features/cart/store/cartStore";
+import type { ProductVariant } from "@/types/product";
 
 const ProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -22,7 +23,7 @@ const ProductDetailsPage = () => {
       product.variants?.length &&
       !selectedVariantId
     ) {
-      setSelectedVariantId(product.variants[0].id);
+      setSelectedVariantId(product.variants[0].id ?? null);
     }
   }, [product, selectedVariantId]);
 
@@ -126,19 +127,19 @@ const ProductDetailsPage = () => {
           </p>
   
           {/* Variants */}
-          {isVariantProduct && product.variants?.length > 0 && (
+          {isVariantProduct && (product.variants?.length ?? 0) > 0 && (
             <div className="mt-6">
               <p className="mb-3 text-sm font-medium">
                 Select variant
               </p>
   
               <div className="flex flex-wrap gap-2">
-                {product.variants.map((variant) => (
+                {product.variants?.map((variant: ProductVariant) => (
                   <button
                     key={variant.id}
                     type="button"
                     onClick={() => {
-                      setSelectedVariantId(variant.id);
+                      setSelectedVariantId(variant.id ?? null);
                       setQuantity(1);
                     }}
                     disabled={variant.stock <= 0}
@@ -152,7 +153,6 @@ const ProductDetailsPage = () => {
                         : ""
                     }`}
                   >
-                    {variant.name}
                   </button>
                 ))}
               </div>
@@ -193,7 +193,7 @@ const ProductDetailsPage = () => {
                     productId: product.id,
                     variantId: selectedVariant?.id,
                     name: product.name,
-                    price: price!,
+                    price: String(price!),
                     quantity,
                   });
                 }}

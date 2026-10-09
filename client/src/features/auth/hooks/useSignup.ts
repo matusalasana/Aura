@@ -1,16 +1,22 @@
-import { authClient } from "@/lib/authClient"
+import { authClient } from "@/lib/authClient";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import { getErrorMessage } from "@/utils/getErrorMessage";
-import { type  SignupInput } from "../schemas";
+import { type SignupInput } from "../schemas";
 
 const signup = async (data: SignupInput) => {
   const res = await authClient.signUp.email(data);
-  return res.data.data;
+
+  if (res.error) {
+    throw new Error(res.error.message || "Failed to sign up");
+  }
+
+  if (!res.data) {
+    throw new Error("Sign-up returned no data");
+  }
+
+  return res.data;
 };
 
-export const useSignup = () => {
-  return useMutation({
+export const useSignup = () =>
+  useMutation({
     mutationFn: signup,
   });
-};

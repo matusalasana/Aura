@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useOrders } from "@/features/orders/hooks/useOrders";
-
+import type { Order } from "@/types/order";
 
 const getStatusVariant = (
   status: string,
@@ -70,7 +70,7 @@ const RecentOrders = () => {
             </TableHeader>
 
             <TableBody>
-              {orders.map((order) => (
+              {orders.map((order: Order) => (
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">
                     {order.id}

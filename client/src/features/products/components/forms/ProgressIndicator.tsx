@@ -4,14 +4,7 @@ import {
   Boxes,
   Layers,
   ClipboardCheck,
-  type LucideIcon
 } from "lucide-react";
-
-interface Step {
-  num: number;
-  icon: LucideIcon;
-  title: string;
-}
 
 interface Props {
   type: string;

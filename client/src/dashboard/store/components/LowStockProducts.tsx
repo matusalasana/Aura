@@ -1,4 +1,5 @@
-import { AlertTriangle, ArrowRight } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,8 @@ const products = [
 ];
 
 const LowStockProducts = () => {
+  const navigate = useNavigate();
+  
   return (
     <Card>
       <CardHeader className="flex flex-row items-start justify-between">
@@ -69,11 +72,8 @@ const LowStockProducts = () => {
           </div>
         ))}
 
-        <Button variant="outline" className="w-full" asChild>
-          <a href="/dashboard/inventory">
-            View Inventory
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </a>
+        <Button variant="outline" className="w-full" onClick={() => navigate("/stores")}>
+          View all
         </Button>
       </CardContent>
     </Card>

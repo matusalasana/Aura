@@ -118,7 +118,7 @@ const ProductsTable = () => {
 
                   <td className="px-6 py-4 text-right">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger>
                         <Button
                           variant="ghost"
                           size="icon"

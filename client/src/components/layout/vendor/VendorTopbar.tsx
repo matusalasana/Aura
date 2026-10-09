@@ -7,14 +7,12 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-type TopbarProps = {
-  onToggleSidebar: () => void;
+interface TopbarProps {
   storeName?: string;
 };
 
 export default function VendorTopbar({
-  onToggleSidebar,
-  storeName = "Aura Fashion",
+  storeName = "My Store",
 }: TopbarProps) {
   return (
     <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-zinc-200 bg-white/80 px-6 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-950/80">
@@ -22,7 +20,6 @@ export default function VendorTopbar({
 
       <div className="flex items-center gap-4">
         <button
-          onClick={onToggleSidebar}
           className="hidden rounded-xl border border-zinc-200 p-2 transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900 lg:flex"
         >
           <Menu size={20} />

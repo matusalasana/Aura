@@ -16,10 +16,10 @@ export const useSignupStore = () => {
   return useMutation({
     mutationFn: signupStore,
 
-    onSuccess: ({ message, store }) => {
+    onSuccess: ({ message }) => {
       toast.success(message || "Store application sent successfully");
 
-      queryClient.setQueryData(["stores"]);
+      queryClient.invalidateQueries({ queryKey: ["stores"] });
     },
 
     onError: (error) => {

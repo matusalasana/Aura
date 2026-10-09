@@ -1,14 +1,9 @@
-interface Variant {
-  color: string;
-  size: string;
-  price: string;
-  sku: string;
-  stock: number;
-}
+import type { VariantsData } from "@/features/products/schemas";
 
 interface VariantCardProps {
-  variant: Variant;
+  variant: VariantsData;
 }
+
 
 const VariantCard = ({ variant }: VariantCardProps) => {
   return (

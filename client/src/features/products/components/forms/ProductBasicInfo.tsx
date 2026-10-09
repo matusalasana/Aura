@@ -128,7 +128,6 @@ const ProductBasicInfo = ({onClickNext, defaultValues}: Props) => {
 
           <select
             id="type"
-            type="text"
             className="input"
             {...register("type")}
           >

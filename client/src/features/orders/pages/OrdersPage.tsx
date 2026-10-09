@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useOrders } from "@/features/orders/hooks/useOrders";
+import type { Order } from "@/types/order";
+
 
 const OrdersPage = () => {
   const { data: orders = [], isLoading } = useOrders();
@@ -42,7 +44,7 @@ const OrdersPage = () => {
       </div>
 
       <div className="space-y-4">
-        {orders.map((order) => (
+        {orders.map((order: Order) => (
           <Link
             key={order.id}
             to={`/orders/${order.id}`}
@@ -55,7 +57,9 @@ const OrdersPage = () => {
                 </p>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {new Date(order.date).toLocaleDateString()}
+                  {order.date
+                    ? new Date(order.date).toLocaleDateString()
+                    : "—"}
                 </p>
               </div>
 

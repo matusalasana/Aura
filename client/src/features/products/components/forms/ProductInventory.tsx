@@ -55,7 +55,7 @@ const ProductInventory = ({onClickNext, onClickPrev, defaultValues}: Props) => {
             type="number"
             placeholder="2,000"
             className="input"
-            {...register("price", { valueAsNumber: true })}
+            {...register("price")}
           />
 
           {errors.price && (

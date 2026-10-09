@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import VendorSidebar from "@/components/layout/vendor/VendorSidebar";
 import VendorTopbar from "@/components/layout/vendor/VendorTopbar";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/utils/ScrollToTop";

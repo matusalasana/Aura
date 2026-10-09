@@ -1,8 +1,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogClose,
 } from "@/components/ui/dialog";
 
 import ProductForm from "@/features/products/components/forms/ProductForm";

@@ -18,12 +18,18 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 
+
+interface OTPCardProps {
+  open: boolean;
+  email: string;
+  onClickVerify: (otp: string) => void;
+  isPending: boolean;
+  onOpenChange: (open: boolean) => void;
+}
 
 export default function OTPCard({
   open,

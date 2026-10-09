@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ const CartPage = () => {
       total + Number(item.price) * item.quantity,
     0
   );
+
+  const navigate = useNavigate();
   
   if (items.length === 0) {
     return (
@@ -26,8 +28,8 @@ const CartPage = () => {
           Add some products to your cart to get started.
         </p>
 
-        <Button asChild className="mt-6">
-          <Link to="/">Continue Shopping</Link>
+        <Button variant="outline" className="w-full" onClick={() => navigate("/")}>
+          Continue Shopping
         </Button>
       </div>
     );
@@ -81,10 +83,8 @@ const CartPage = () => {
       </span>
     </div>
 
-    <Button asChild className="mt-6 w-full" size="lg">
-      <Link to="/checkout" className="w-full">
-        Checkout
-      </Link>
+    <Button variant="outline" className="w-full" onClick={() => navigate("/checkout")}>
+      Checkout
     </Button>
   </div>
 </div>

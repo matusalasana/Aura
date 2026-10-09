@@ -82,7 +82,7 @@ const ProductReview = ({
             <div className="col-span-2">
               <ReviewItem
                 label="Description"
-                value={basicData.description}
+                value={basicData.description ?? ""}
               />
             </div>
           </div>
@@ -127,7 +127,7 @@ const ProductReview = ({
 
             <ReviewItem
               label="Status"
-              value={inventoryData.status}
+              value={inventoryData.status ?? "draft"}
             />
           </div>
         </section>

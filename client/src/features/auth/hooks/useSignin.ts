@@ -1,20 +1,26 @@
-import { authClient } from "@/lib/authClient"
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
-import { type SigninInput } from "../schemas"
+import { authClient } from "@/lib/authClient";
+import { useMutation } from "@tanstack/react-query";
+import { type SigninInput } from "../schemas";
 
 const signin = async (data: SigninInput) => {
   const res = await authClient.signIn.email({
     email: data.email,
     password: data.password,
-    callbackURL: "/"
-  })
-  return res.data.data
-}
+    callbackURL: "/",
+  });
 
-export const useSignin = () => {
-  const queryClient = useQueryClient()
-  return useMutation ({
-    mutationFn: signin
-  })
-}
+  if (res.error) {
+    throw new Error(res.error.message || "Failed to sign in");
+  }
+
+  if (!res.data) {
+    throw new Error("Sign-in returned no data");
+  }
+
+  return res.data;
+};
+
+export const useSignin = () =>
+  useMutation({
+    mutationFn: signin,
+  });

@@ -118,9 +118,9 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
       references: [user.id],
     }),
 
-    orderItems: many(orderItems),
+    items: many(orderItems),
 
-    shippingInformation: many(shippingInformation),
+    addresses: many(shippingInformation),
   }),
 );
 
@@ -142,4 +142,4 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
       references: [productVariants.id],
     }),
   }),
-);
+)

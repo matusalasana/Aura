@@ -1,8 +1,11 @@
+
 import api from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
+import type { Order } from "@/types/order";
+import type { ApiResponse } from "@/types/api";
 
-const getOrders = async () => {
-  const res = await api.get("/orders");
+const getOrders = async (): Promise<Order[]> => {
+  const res = await api.get<ApiResponse<Order[]>>("/orders");
   return res.data.data;
 };
 

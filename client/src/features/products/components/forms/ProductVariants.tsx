@@ -42,7 +42,7 @@ const ProductVariants = ({
     <main className="card w-full max-w-2xl shadow-lg animate-scale-in">
       {/* Existing + newly added variants */}
       {allVariants.map((variant, index) => (
-        <div className="card" key={variant.id ?? index}>
+        <div className="card" key={index}>
           <VariantCard variant={variant} />
         </div>
       ))}
@@ -114,9 +114,7 @@ const ProductVariants = ({
             type="number"
             placeholder="2,000"
             className="input"
-            {...register("price", {
-              valueAsNumber: true,
-            })}
+            {...register("price")}
           />
 
           {errors.price && (

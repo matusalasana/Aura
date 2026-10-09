@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
 import SignupForm from '@/features/auth/components/SignupForm';
 import OTPCard from '@/features/auth/components/OTPCard';
-import { useSignupFlow } from "@/features/auth/hooks/useSignupFlow";
 import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
+import { useSignupFlow } from "@/features/auth/hooks/useSignupFlow";
 
 const Signup = () => {
   const { data: user, isLoading } = useCurrentUser();
@@ -14,8 +14,7 @@ const Signup = () => {
     startSignup,
     verifySignupOTP,
     sending,
-    verifying,
-    registering,} = useSignupFlow();
+    verifying,} = useSignupFlow();
   
     if (isLoading) {
     return <p>Loading...</p>;
