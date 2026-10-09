@@ -10,6 +10,8 @@ export * from "@/db/schema/products.js";
 
 export * from "@/db/schema/productVariants.js";
 
+export * from "@/db/schema/productImages.js"
+
 export * from "@/db/schema/orders.js";
 
 export * from "@/db/schema/shippingInformation.js";

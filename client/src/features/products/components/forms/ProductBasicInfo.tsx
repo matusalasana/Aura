@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 
+import ProductMedia from "@/features/products/components/forms/ProductMedia";
 import {
   basicInfoSchema,
   type BasicInfoData,
@@ -16,6 +17,7 @@ const ProductBasicInfo = ({onClickNext, defaultValues}: Props) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<BasicInfoData>({
     resolver: zodResolver(basicInfoSchema),
@@ -84,6 +86,19 @@ const ProductBasicInfo = ({onClickNext, defaultValues}: Props) => {
             </p>
           )}
         </div>
+
+        <ProductMedia
+          onChange={(files) => {
+            setValue("images", files, {
+              shouldValidate: true,
+            });
+          }}
+        />
+        {errors.images && (
+            <p className="text-destructive mt-1">
+              {errors.images.message}
+            </p>
+          )}
 
         {/* Description */}
         <div>

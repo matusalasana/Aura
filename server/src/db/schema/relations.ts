@@ -10,6 +10,7 @@ import {
 
   products,
   productVariants,
+  productImages,
 
   orders,
   orderItems,
@@ -49,7 +50,10 @@ export const storesRelations = relations(stores, ({ one, many }) => ({
     fields: [stores.ownerId],
     references: [user.id],
   }),
-  domain: one(storeDomains),
+  domain: one(storeDomains, {
+    fields: [stores.id],
+    references: [storeDomains.storeId]
+  }),
   
   products: many(products),
   orders: many(orders),
@@ -74,6 +78,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     }),
 
     variants: many(productVariants),
+    images: many(productImages),
     orderItems: many(orderItems),
   }),
 );
@@ -87,6 +92,16 @@ export const productVariantsRelations = relations(productVariants, ({ one, many 
     }),
 
     orderItems: many(orderItems),
+  }),
+);
+
+/* ---------------- PRODUCT IMAGES----------------- */
+
+export const productImagesRelations = relations(productImages, ({ one }) => ({
+    product: one(products, {
+      fields: [productImages.productId],
+      references: [products.id],
+    }),
   }),
 );
 
@@ -105,7 +120,7 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
 
     orderItems: many(orderItems),
 
-    shippingInformation: one(shippingInformation),
+    shippingInformation: many(shippingInformation),
   }),
 );
 

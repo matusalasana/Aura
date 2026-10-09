@@ -1,6 +1,6 @@
 import cloudinary from "@/config/cloudinary.js";
 
-export const uploadToCloudinary = ({
+export const uploadImage = ({
   buffer, folder, options = {}
 }: {
   buffer: Buffer;
@@ -11,7 +11,7 @@ export const uploadToCloudinary = ({
     const stream = cloudinary.uploader.upload_stream(
       {
         folder,
-        resource_type: "auto",
+        resource_type: "image",
         ...options,
       },
       (error, result) => {
@@ -24,7 +24,7 @@ export const uploadToCloudinary = ({
   });
 };
 
-export const deleteFromCloudinary = async ({
+export const deleteImage = async ({
   publicId,
   resourceType = "auto"
 }: {

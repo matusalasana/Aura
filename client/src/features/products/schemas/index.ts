@@ -37,6 +37,8 @@ export const basicInfoSchema = z.object({
       "Slug must contain only lowercase letters, numbers, and hyphens",
     ),
 
+  images: z.array(z.instanceof(File)).max(10),
+
   description: z
     .string()
     .trim()

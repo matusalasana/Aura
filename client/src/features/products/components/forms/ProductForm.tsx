@@ -11,20 +11,22 @@ import type {
   VariantsData,
   InventoryInfoData,
 } from "@/features/products/schemas";
+
 import { useCreateProduct } from "@/features/products/hooks/useCreateProduct";
 
 const ProductForm = () => {
-  const { mutate: createProduct, isPending  } = useCreateProduct();
-  
+  const { mutate: createProduct, isPending } = useCreateProduct();
+
   const [step, setStep] = useState(1);
 
   const initialBasicData: BasicInfoData = {
     name: "",
+    images: [],
     description: "",
     slug: "",
     type: "simple",
   };
-  
+
   const initialInventoryData: InventoryInfoData = {
     price: 0,
     stock: 0,
@@ -32,7 +34,8 @@ const ProductForm = () => {
     status: "draft",
   };
 
-  const [basicData, setBasicData] = useState<BasicInfoData>(initialBasicData);
+  const [basicData, setBasicData] =
+    useState<BasicInfoData>(initialBasicData);
 
   const [inventoryData, setInventoryData] =
     useState<InventoryInfoData>(initialInventoryData);
@@ -49,23 +52,44 @@ const ProductForm = () => {
   };
 
   const handleSubmit = () => {
+    const formData = new FormData();
+
     const product = basicData.type === "simple"
-        ? {...basicData, ...inventoryData}
-        : {...basicData}
-    
-    const productData = {
-      productData: product,
-      variantsData,
-    };
-    createProduct(productData, {
+      ? {
+          ...basicData,
+          ...inventoryData,
+        }
+      : basicData;
+
+    // Product data
+    formData.append(
+      "productData",
+      JSON.stringify({
+        ...product,
+        images: undefined,
+      }),
+    );
+
+    // Variants
+    formData.append(
+      "variantsData",
+      JSON.stringify(variantsData),
+    );
+
+    // Images
+    basicData.images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    createProduct(formData, {
       onSuccess: () => {
-        setBasicData(initialBasicData)
-        setInventoryData(initialInventoryData)
-        setVariantsData([])
-        setStep(1)
-      }
-    })
-  }
+        setBasicData(initialBasicData);
+        setInventoryData(initialInventoryData);
+        setVariantsData([]);
+        setStep(1);
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -84,7 +108,7 @@ const ProductForm = () => {
         />
       )}
 
-      {(basicData.type === "variant" && step === 2) && (
+      {basicData.type === "variant" && step === 2 && (
         <ProductVariants
           variants={variantsData}
           onClickNext={(data) => {
@@ -95,7 +119,7 @@ const ProductForm = () => {
         />
       )}
 
-      {(basicData.type === "simple" && step === 2) && (
+      {basicData.type === "simple" && step === 2 && (
         <ProductInventory
           defaultValues={inventoryData}
           onClickNext={(data) => {

@@ -2,11 +2,8 @@ import { Router } from "express";
 
 import { ProductController } from "@/modules/products/product.controller.js";
 import variantsRoutes from "@/modules/variants/variant.routes.js";
-import {
-  createProductSchema,
-  updateProductSchema,
-} from "@/modules/products/product.validations.js";
 import { validate } from "@/middleware/validation.js";
+import { upload } from "@/middleware/upload.js"
 
 
 const router = Router();
@@ -17,7 +14,7 @@ router.use("/:productId/variants", variantsRoutes)
 
 router.post(
   "/", 
-  validate(createProductSchema),
+  upload.array("images", 10),
   ProductController.createProduct
 );
 
@@ -32,8 +29,7 @@ router.get(
 );
 
 router.patch(
-  "/:productId", 
-  validate(updateProductSchema), 
+  "/:productId",
   ProductController.updateProduct
 );
 

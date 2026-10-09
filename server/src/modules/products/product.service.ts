@@ -1,6 +1,7 @@
 import { ProductRepository } from "@/modules/products/product.repository.js";
 import { redis } from "@/config/redis.js";
 import { VariantRepository } from "@/modules/variants/variant.repository.js";
+import { uploadImage } from "@/utils/cloudinary.js";
   
 import type {
   CreateProductInput,
@@ -19,10 +20,15 @@ const productsKey = (storeId: string) =>
 
 
 
-const createProduct = async (
+const createProduct = async ({
+  files,
+  storeId,
+  data
+}: {
+  files: Express.Multer.File[],
   storeId: string,
-  data: CreateProductInput,
-) => {
+  data: CreateProductInput
+}) => {
   if (data.type !== "simple" && data.type !== "variant") {
     throw new Error("Product type is not valid");
   }
@@ -41,7 +47,27 @@ const createProduct = async (
     }
   }
 
-  const product = await ProductRepository.create(storeId, data);
+  const uploadResults = await Promise.all(
+    files.map((file) =>
+      uploadImage({
+        buffer: file.buffer,
+        folder: `images/products/${storeId}`,
+      })
+    )
+  );
+
+  const productImagesData = uploadResults.map((result) => {
+    return {
+      publicId: result.public_id,
+      url: result.secure_url,
+    }
+  });
+  
+  const product = await ProductRepository.create({
+    storeId, 
+    productData: data,
+    productImagesData
+  });
 
   // Product list has changed.
   await redis.del(productsKey(storeId));
@@ -56,11 +82,11 @@ const getProduct = async (
   const key = productKey(storeId, productId);
 
   // 1. Try Redis first
-  const cachedProduct = await redis.get(key);
+  // const cachedProduct = await redis.get(key);
 
-  if (cachedProduct) {
-    return cachedProduct;
-  }
+  // if (cachedProduct) {
+  //   return cachedProduct;
+  // }
 
   // 2. Fall back to database
   const product =

@@ -3,6 +3,7 @@ import { eq, and } from "drizzle-orm";
 import { db } from "@/db/index.js";
 import {
   products,
+  productImages,
 } from "@/db/schema/index.js";
 
 import type {
@@ -10,23 +11,43 @@ import type {
   UpdateProductInput,
 } from "@/modules/products/product.validations.js";
 
-const create = async (
+const create = async ({
+  storeId, 
+  productData,
+  productImagesData
+}:{
   storeId: string,
-  data: CreateProductInput,
-) => {
-  const [product] = await db
-    .insert(products)
-    .values({
-      ...data,
-      price:
-        data.price !== undefined
-          ? data.price.toString()
-          : undefined,
-      storeId,
-    })
-    .returning();
+  productData: CreateProductInput
+}) => {
+  return db.transaction( async(tx) => {
+    
+    const [product] = await tx
+      .insert(products)
+      .values({
+        ...productData,
+        price:
+          productData.price !== undefined
+            ? productData.price.toString()
+            : undefined,
+        storeId,
+      })
+      .returning();
 
-  return product;
+    const imagesDataToInsert = productImagesData.map((prev) => {
+      return {
+        ...prev,
+        productId: product.id
+      }
+    })
+  
+    const images = await tx
+      .insert(productImages)
+      .values(imagesDataToInsert)
+      .returning();
+  
+    return { product, images };
+    
+  })
 };
 
 const findById = async (id: string) => {
@@ -53,6 +74,7 @@ const findByIdAndStore = async (
 
     with: {
       variants: true,
+      images: true,
     },
   });
 
@@ -65,6 +87,7 @@ const findByStore = async (storeId: string) => {
 
     with: {
       variants: true,
+      images: true,
     },
   });
 
