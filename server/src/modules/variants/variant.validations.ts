@@ -29,22 +29,10 @@ const variantSchema = z.object({
     .max(100, "SKU must be 100 characters or less"),
 });
 
-export const createVariantSchema = z.array(
-  variantSchema,
-);
+export const createVariantSchema = z.array(variantSchema);
 
-export const updateVariantSchema = z.array(
-  variantSchema.partial(),
-);
+export const updateVariantSchema = variantSchema.partial();
 
-export type VariantInput = z.infer<
-  typeof variantSchema
->;
-
-export type CreateVariantInput = z.infer<
-  typeof createVariantSchema
->;
-
-export type UpdateVariantInput = z.infer<
-  typeof updateVariantSchema
->;
+export type VariantInput = z.infer<typeof variantSchema>;
+export type CreateVariantInput = z.infer<typeof createVariantSchema>;
+export type UpdateVariantInput = z.infer<typeof updateVariantSchema>;

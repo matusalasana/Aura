@@ -11,16 +11,21 @@ import type {
   UpdateProductInput,
 } from "@/modules/products/product.validations.js";
 
+type ProductImageData = Pick<
+  typeof productImages.$inferInsert,
+  "publicId" | "url"
+>;
+
 const create = async ({
-  storeId, 
+  storeId,
   productData,
-  productImagesData
-}:{
-  storeId: string,
-  productData: CreateProductInput
+  productImagesData,
+}: {
+  storeId: string;
+  productData: CreateProductInput;
+  productImagesData: ProductImageData[];
 }) => {
-  return db.transaction( async(tx) => {
-    
+  return db.transaction(async (tx) => {
     const [product] = await tx
       .insert(products)
       .values({
@@ -33,21 +38,20 @@ const create = async ({
       })
       .returning();
 
-    const imagesDataToInsert = productImagesData.map((prev) => {
-      return {
-        ...prev,
-        productId: product.id
-      }
-    })
-  
-    const images = await tx
-      .insert(productImages)
-      .values(imagesDataToInsert)
-      .returning();
-  
+    const imagesDataToInsert = productImagesData.map((image) => ({
+      ...image,
+      productId: product.id,
+    }));
+
+    const images = imagesDataToInsert.length
+      ? await tx
+          .insert(productImages)
+          .values(imagesDataToInsert)
+          .returning()
+      : [];
+
     return { product, images };
-    
-  })
+  });
 };
 
 const findById = async (id: string) => {

@@ -1,12 +1,15 @@
+import type { UploadApiResponse } from "cloudinary";
 import cloudinary from "@/config/cloudinary.js";
 
 export const uploadImage = ({
-  buffer, folder, options = {}
+  buffer,
+  folder,
+  options = {},
 }: {
   buffer: Buffer;
   folder: string;
-  options: Record<string, unknown>;
-}) => {
+  options?: Record<string, unknown>;
+}): Promise<UploadApiResponse> => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
@@ -15,9 +18,18 @@ export const uploadImage = ({
         ...options,
       },
       (error, result) => {
-        if (error) return reject(error);
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        if (!result) {
+          reject(new Error("Cloudinary returned no upload result"));
+          return;
+        }
+
         resolve(result);
-      }
+      },
     );
 
     stream.end(buffer);

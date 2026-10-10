@@ -9,14 +9,12 @@ import type {
 } from "@/modules/variants/variant.validations.js";
 
 const create = async (
-  data: CreateVariantInput,
+  data: (typeof productVariants.$inferInsert)[],
 ) => {
-  const [variant] = await db
+  return db
     .insert(productVariants)
     .values(data)
     .returning();
-
-  return variant;
 };
 
 const findById = async (id: string) => {
@@ -85,6 +83,7 @@ const update = async (
     .update(productVariants)
     .set({
       ...data,
+      price: data.price !== undefined ? String(data.price) : undefined,
       updatedAt: new Date(),
     })
     .where(

@@ -1,6 +1,6 @@
 import { OrderRepository } from "@/modules/orders/order.repository.js";
 import type { CreateOrderInput } from "@/modules/orders/order.validations.js";
-import { generateOrderNumber } from "@/utils/generateOrderNumber";
+import { generateOrderNumber } from "@/utils/generateOrderNumber.js";
 import { redis } from "@/config/redis.js";
 
 
@@ -97,8 +97,6 @@ const createOrder = async (
     }
 
     let unitPrice: string;
-    let variantSize: string | null = null;
-    let variantColor: string | null = null;
     let sku: string | null = product.sku;
 
     if (product.type === "simple") {
@@ -111,8 +109,6 @@ const createOrder = async (
       }
 
       unitPrice = variant.price;
-      variantSize = variant.size;
-      variantColor = variant.color;
       sku = variant.sku;
     }
 

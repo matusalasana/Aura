@@ -1,5 +1,6 @@
-import { eq, and, sql, innerJoin } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
+import type { OrderData, OrderItem, ShippingAddress } from '@/types/order.js';
 import { db } from "@/db/index.js";
 import { 
   products, 
@@ -12,9 +13,9 @@ import {
 
 
 const createOrderWithItems = async (
-  orderData: typeof orders.$inferInsert,
-  items: (typeof orderItems.$inferInsert)[],
-  shippingInfo: typeof shippingInformation.$inferInsert
+  orderData: OrderData,
+  items: OrderItem[],
+  shippingInfo: ShippingAddress
 ) => {
   return db.transaction(async (tx) => {
     const [shippingAddress] = await tx

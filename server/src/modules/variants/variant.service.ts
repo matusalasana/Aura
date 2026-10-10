@@ -9,7 +9,7 @@ import type {
 const createVariant = async (
   productId: string,
   storeId: string,
-  data: CreateVariantInput[],
+  data: CreateVariantInput,
 ) => {
   const product =
     await ProductRepository.findByIdAndStore(
@@ -30,18 +30,21 @@ const createVariant = async (
   const verifiedVariants = [];
 
   for (const variantItem of data) {
-    const exists = await VariantRepository.findBySku(productId, variantItem.sku);
-    
+    const exists = await VariantRepository.findBySku(
+      productId,
+      variantItem.sku,
+    );
+  
     if (exists) {
       throw new Error(`SKU ${variantItem.sku} already exists.`);
     }
-    
+  
     verifiedVariants.push(variantItem);
   }
-
-  const dataToInsert = verifiedVariants.map((d) => ({
-    ...d,
-    price: String(d.price),
+  
+  const dataToInsert = verifiedVariants.map((variant) => ({
+    ...variant,
+    price: String(variant.price),
     productId,
   }));
   
