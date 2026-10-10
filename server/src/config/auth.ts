@@ -45,5 +45,15 @@ export const auth = betterAuth({
       },
     },
   },
+
+  advanced: {
+    defaultCookieAttributes: {
+        // 2. Force SameSite to "none" so cookies cross domains
+        sameSite: "none", 
+        // 3. Must be true for SameSite="none" to work
+        secure: true,      
+        httpOnly: true,
+    }
+  },
   
 });
