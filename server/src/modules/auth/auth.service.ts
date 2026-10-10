@@ -72,7 +72,7 @@ const sendOTP = async ({ email, type, name }: SendOTPInput) => {
     email,
   });
 
-  await sendEmail(emailParams);
+  sendEmail(emailParams);
 
   return {
     message: "OTP sent successfully",
@@ -147,7 +147,7 @@ const resendOTP = async ({ email, type, name }: ResendOTPInput) => {
     email,
   });
 
-  await sendEmail(emailParams);
+  sendEmail(emailParams);
 
   return {
     message: "OTP resent successfully",

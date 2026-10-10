@@ -43,6 +43,18 @@ const envSchema = z.object({
   CLOUDINARY_API_SECRET: z.string().optional(),
 
   // Email
+  // local 
+  LOCAL_SMTP_HOST: z.string().optional(),
+
+  LOCAL_SMTP_PORT: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(2525),
+  
+  LOCAL_EMAIL_SENDER: z.string().optional(),
+
+  // production 
   SMTP_HOST: z.string().optional(),
 
   SMTP_PORT: z.coerce
@@ -51,12 +63,10 @@ const envSchema = z.object({
     .positive()
     .default(2525),
 
-  SMTP_SECURE: z.coerce.boolean().default(false),
-
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
-  EMAIL_SENDER: z.string().optional(),
-
+  SMTP_FROM: z.string().optional(),
+  
   // Routing 
   TEST_HOSTNAME: z.string().min(4),
 
@@ -92,12 +102,15 @@ export const Env = {
   CLOUDINARY_API_KEY: parsedEnv.CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUD_NAME: parsedEnv.CLOUDINARY_CLOUD_NAME,
 
+  LOCAL_EMAIL_SENDER: parsedEnv.LOCAL_EMAIL_SENDER,
+  LOCAL_SMTP_PORT: parsedEnv.LOCAL_SMTP_PORT,
+  LOCAL_SMTP_HOST: parsedEnv.LOCAL_SMTP_HOST,
+  
   SMTP_HOST: parsedEnv.SMTP_HOST,
   SMTP_PORT: parsedEnv.SMTP_PORT,
-  SMTP_SECURE: parsedEnv.SMTP_SECURE,
   SMTP_USER: parsedEnv.SMTP_USER,
   SMTP_PASS: parsedEnv.SMTP_PASS,
-  EMAIL_SENDER: parsedEnv.EMAIL_SENDER,
+  SMTP_FROM: parsedEnv.SMTP_FROM,
 
   TEST_HOSTNAME: parsedEnv.TEST_HOSTNAME,
 };

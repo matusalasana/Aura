@@ -12,7 +12,7 @@ export const sendEmail = async ({
   template: string
 }) => {
   const info = await transporter.sendMail({
-    from: Env.EMAIL_SENDER,
+    from: Env.NODE_ENV === "production" ? Env.SMTP_FROM : Env.EMAIL_SENDER,
     to,
     subject,
     html: template,
