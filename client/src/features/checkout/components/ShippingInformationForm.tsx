@@ -17,7 +17,7 @@ interface Props {
 }
 
 const ShippingInformationForm = ({onSubmit, isPending}: Props) => {
-  const { data: user } = useCurrentUser();
+  const { user } = useCurrentUser();
 
   const {
     register,

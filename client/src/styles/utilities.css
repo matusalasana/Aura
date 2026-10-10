@@ -123,7 +123,7 @@
 }
 
 @utility badge-destructive {
-  @apply inline-flex items-center rounded-full bg-red-100 px-2.5 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400;
+  @apply inline-flex items-center text-foreground rounded-full bg-destructive px-2.5 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400;
 }
 
 @utility badge-primary {

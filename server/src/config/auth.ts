@@ -35,5 +35,15 @@ export const auth = betterAuth({
     Env.CLIENT_ORIGIN,
     "http://localhost:5173"
   ],
+
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        input: false,
+      },
+    },
+  },
   
 });

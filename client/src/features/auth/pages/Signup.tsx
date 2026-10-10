@@ -5,7 +5,7 @@ import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
 import { useSignupFlow } from "@/features/auth/hooks/useSignupFlow";
 
 const Signup = () => {
-  const { data: user, isLoading } = useCurrentUser();
+  const { user, isLoading } = useCurrentUser();
   
   const { 
     step,

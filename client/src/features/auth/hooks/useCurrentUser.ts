@@ -1,17 +1,12 @@
-import api from "@/lib/axios";
-import { useQuery } from "@tanstack/react-query";
-
-const getCurrentUser = async () => {
-  const res = await api.get("/auth/me");
-  return res.data.data;
-};
+import { authClient } from "@/lib/authClient";
+import type { User } from "@/types/auth";
 
 export const useCurrentUser = () => {
-  return useQuery({
-    queryKey: ["auth"],
-    queryFn: getCurrentUser,
-    refetchOnWindowFocus: false,
-    retry: false,
-    staleTime: 1000 * 60 * 30,
-  });
+  const { data: session, isPending, error } = authClient.useSession();
+
+  return {
+    user: (session?.user as User | undefined) ?? null,
+    isLoading: isPending,
+    error,
+  };
 };

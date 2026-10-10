@@ -8,7 +8,7 @@ import { useCartStore } from "@/features/cart/store/cartStore";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { data: user, isLoading } = useCurrentUser();
+  const { user, isLoading } = useCurrentUser();
   const items = useCartStore((state) => state.items);
 
   const navLinks = [
@@ -23,7 +23,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 flex-between border-b border-border bg-background/80 p-4 backdrop-blur-md">
       {/* Brand Logo */}
       <Link to="/" className="heading text-xl">
-        Aura {isLoading ? "•••" : user?.role}
+        {isLoading ? "Loading..." : `Aura ${user?.role ?? ""}`}
       </Link>
 
       {/* Desktop Navigation Links */}
@@ -38,12 +38,14 @@ const Navbar = () => {
       {/* Right Action Icons & Auth */}
       <div className="flex-center gap-2 relative">
         <button
-          className="btn-outline p-2"
+          className="btn-outline p-2 relative"
           onClick={() => navigate("/cart")}
           aria-label="Cart"
         >
           <ShoppingBag className="h-5 w-5" />
-          <p className="badge text-foreground text-xs bg-destructive rounded-full">{items.length}</p>
+          {items.length > 0 ? (
+            <p className="absolute -top-2 -right-1 badge-destructive">{items.length}</p>
+          ) : ""}
         </button>
 
         {user ? (
@@ -55,7 +57,7 @@ const Navbar = () => {
             <User className="h-5 w-5" />
           </button>
         ) : (
-          <button className="btn-primary" onClick={() => navigate("/login")}>
+          <button className="btn-primary" onClick={() => navigate("/sign-in")}>
             Sign In
           </button>
         )}

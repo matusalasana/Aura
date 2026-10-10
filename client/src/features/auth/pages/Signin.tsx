@@ -11,7 +11,7 @@ import { useSocialSignin } from "@/features/auth/hooks/useSocialSignin"
 const Signin = () => {
   const navigate = useNavigate();
 
-  const { data: user, isLoading } = useCurrentUser();
+  const { user, isLoading } = useCurrentUser();
   const { mutate: signinUser, isPending: signingin } = useSignin();
   const { mutate: signinWithSocial, isPending: signingInWithSocial} = useSocialSignin();
   

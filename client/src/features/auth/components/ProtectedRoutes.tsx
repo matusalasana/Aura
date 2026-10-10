@@ -6,10 +6,10 @@ interface ProtectedRoutesProps {
 }
 
 const ProtectedRoutes = ({ roles }: ProtectedRoutesProps) => {
-  const { data: user, isLoading, isError } = useCurrentUser();
+  const { user, isLoading, error } = useCurrentUser();
 
   // Handle error first
-  if (isError) {
+  if (error) {
     return <Navigate to="/" replace />;
   }
 
