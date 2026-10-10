@@ -33,6 +33,7 @@ export const auth = betterAuth({
 
   trustedOrigins: [
     Env.CLIENT_ORIGIN,
+    "http://localhost:5173"
   ],
   
 });
