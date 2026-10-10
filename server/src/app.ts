@@ -26,6 +26,7 @@ const limiter = rateLimit({
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:3000",
   Env.CLIENT_ORIGIN,
   Env.SERVER_ORIGIN,
 ];
