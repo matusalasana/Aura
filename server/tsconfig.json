@@ -7,9 +7,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
 
     "esModuleInterop": true,
