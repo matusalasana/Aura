@@ -12,8 +12,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import routes from "./routes/index.js";
 import { authHandler } from "@/modules/auth/auth.routes.js";
 import { Env } from "@/config/env.js";
-import { sendEmail } from "@/utils/email.js";
-import { welcomeTemplate } from "@/templates/welcome.js"
+import { appTemplate } from "@/templates/appTemplate.js"
 
 
 export const app = express();
@@ -26,6 +25,7 @@ const limiter = rateLimit({
 });
 
 const allowedOrigins = [
+  "http://localhost:5173",
   Env.CLIENT_ORIGIN,
   Env.SERVER_ORIGIN,
 ];
@@ -60,16 +60,9 @@ app.use('/api', limiter);
 // API Routes
 app.all("/api/auth/{*any}", authHandler);
 app.use("/api/v1", routes);
-app.get("/email", async(req, res) => {
-  await sendEmail({
-    to: "matusalasana@gmail.com",
-    subject: "Test",
-    template: welcomeTemplate({
-      name: "Sana",
-      dashboardLink: "gghh"
-    })
-  })
-})
+app.get("/", (_req, res) => {
+  res.type("html").send(appTemplate());
+});
 
 // Error handlers
 Sentry.setupExpressErrorHandler(app);
