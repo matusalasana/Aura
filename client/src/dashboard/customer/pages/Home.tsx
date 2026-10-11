@@ -13,7 +13,7 @@ import FAQ from "@/dashboard/customer/components/FAQ";
 import Pricing from "@/dashboard/customer/components/Pricing";
 import VendorOnboarding from "@/components/common/VendorSignupForm";
 import MerchantMarquee from "@/dashboard/customer/components/MerchantMarquee";
-import ProductCard from "@/components/common/product/ProductCard";
+import ProductGrid from "@/components/common/product/ProductGrid";
 
 export default function AuraHomePage() {
   const { data: products = [], isLoading } = useProducts();
@@ -60,11 +60,7 @@ export default function AuraHomePage() {
               <span>Loading products...</span>
             </div>
           ) : products.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-              {products.slice(0, 8).map((product: Product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+              <ProductGrid products={products} />
           ) : (
             <div className="rounded-2xl border border-dashed border-border bg-card px-5 py-12 text-center">
               <p className="font-medium">No products available yet</p>
