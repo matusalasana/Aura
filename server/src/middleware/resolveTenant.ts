@@ -3,8 +3,6 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db/index.js";
 import { stores } from "@/db/schema/index.js";
-import { getSubdomain } from "@/utils/getSubdomain.js";
-import { logger } from "@/utils/logger.js";
 import { Env } from "@/config/env.js";
 
 export const resolveTenant = async (
@@ -12,27 +10,12 @@ export const resolveTenant = async (
   res: Response,
   next: NextFunction
 ) => {
-  let hostname;
+  
+  const { storeSlug } = req.params;
 
-  if(Env.NODE_ENV === "development"){
-    hostname = Env.TEST_HOSTNAME
-  }else{
-    hostname = req.hostname;
-  }
-
-  const subdomain = getSubdomain(hostname);
-  if(!subdomain) {
-    return next()
-  }
-
-  logger.warn(`${hostname}`)
-  logger.warn(`${subdomain}`)
-
-  const [store] = await db
-    .select()
-    .from(stores)
-    .where(eq(stores.slug, subdomain))
-    .limit(1);
+  const store = await db.query.stores.findFirst({
+    where: eq(stores.slug, storeSlug),
+  });
 
   if (!store) {
     return res.status(404).json({

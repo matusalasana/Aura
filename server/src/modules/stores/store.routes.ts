@@ -10,9 +10,19 @@ const router = Router();
 router.post(
   "/", 
   authenticate,
-  StoreController.signupStore
+  StoreController.createStore
 );
 
+router.get(
+  "/me",
+  authenticate,
+  StoreController.getMyStore
+);
+
+router.get(
+  "/:slug", 
+  StoreController.getStoreBySlug
+);
 
 
 

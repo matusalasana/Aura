@@ -12,6 +12,7 @@ import ContactPage from "@/pages/ContactPage";
 import AboutPage from "@/pages/AboutPage";
 import PricingPage from "@/pages/PricingPage";
 import ServicesPage from "@/pages/ServicesPage";
+import PublicStorePage from "@/features/stores/pages/PublicStorePage";
 
 // Auth pages
 import Signup from "@/features/auth/pages/Signup"
@@ -69,6 +70,10 @@ export const router = createBrowserRouter([
         path: "services",
         element: <ServicesPage />
       },
+      {
+        path: "shop/:slug",
+        element: <PublicStorePage />
+      },
     ],
   },
 
@@ -110,7 +115,7 @@ export const router = createBrowserRouter([
         element: <StoreLayout />,
         children: [
           {
-            index: true,
+            path: ":slug",
             element: <StoreDashboard />,
           },
           {
