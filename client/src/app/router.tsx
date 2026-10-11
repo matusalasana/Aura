@@ -23,6 +23,7 @@ import ProductDetailsPage from "@/features/products/pages/ProductDetailsPage";
 import CartPage from "@/features/cart/pages/CartPage";
 import CheckoutPage from "@/features/checkout/pages/CheckoutPage";
 import OrdersPage from "@/features/orders/pages/OrdersPage";
+import AccountPage from "@/features/customer/pages/AccountPage";
 
 // Store pages
 import StoreDashboard from "@/dashboard/store/pages/StoreDashboard";
@@ -68,32 +69,38 @@ export const router = createBrowserRouter([
         path: "services",
         element: <ServicesPage />
       },
-      
-      // Customer Protected Pages
-      {
-        path: "/cart",
-        element: <CartPage />,
-      },
-      {
-        path: "/checkout",
-        element: <CheckoutPage />,
-      },
-      {
-        element: <ProtectedRoutes roles={["customer"]} />,
-        children: [
-          {
-            path: "/order",
-            element: <h1> Orders page</h1>
-          }
-        ],
-      },
-      {
-        path: "/orders",
-        element: <OrdersPage />,
-      },
     ],
   },
-  
+
+  // Customer protected routes
+  {
+    path: "/",
+    element: <ProtectedRoutes roles={["customer"]} />, 
+    children: [
+      {
+        element: <AppLayout />,
+        children: [
+          {
+            path: "account",
+            element: <AccountPage />
+          },
+          {
+            path: "/cart",
+            element: <CartPage />,
+          },
+          {
+            path: "/checkout",
+            element: <CheckoutPage />,
+          },
+          {
+            path: "/orders",
+            element: <OrdersPage />,
+          },
+        ]
+      }
+    ]
+  },
+
   // Store protected routes
   {
     path: "/stores",
