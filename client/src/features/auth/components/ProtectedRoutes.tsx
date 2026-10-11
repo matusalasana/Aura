@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { LoaderCircle } from "lucide-react";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 
 interface ProtectedRoutesProps {
@@ -8,28 +9,30 @@ interface ProtectedRoutesProps {
 const ProtectedRoutes = ({ roles }: ProtectedRoutesProps) => {
   const { user, isLoading, error } = useCurrentUser();
 
-  // Handle error first
-  if (error) {
-    return <Navigate to="/" replace />;
-  }
-
-  // Stylish, responsive loading state
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-white dark:bg-gray-900 transition-colors duration-300">
-        <div className="flex flex-col items-center">
-          {/* Spinner */}
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-amber-500 border-gray-200 dark:border-gray-700"></div>
-          <p className="mt-4 text-amber-600 dark:text-amber-400 font-semibold text-lg">
-            Aura
-          </p>
+      <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10">
+            <LoaderCircle className="size-7 animate-spin text-primary" />
+          </div>
+
+          <div className="space-y-1 text-center">
+            <p className="text-lg font-bold tracking-tight">Aura</p>
+            <p className="text-sm text-muted-foreground">
+              Securing your page...
+            </p>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Not authenticated or unauthorized
-  if (!user || !roles.length || !roles.includes(user.role)) {
+  if (error || !user) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (!roles.length || !roles.includes(user.role)) {
     return <Navigate to="/" replace />;
   }
 
