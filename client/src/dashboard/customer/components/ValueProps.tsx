@@ -1,49 +1,51 @@
-import React from 'react';
-import { ShieldCheck, Truck, Sparkles } from 'lucide-react'; // Assuming you use lucide-react
+import { ShieldCheck, Truck, Sparkles } from "lucide-react";
 
-const ValueProps: React.FC = () => {
-  const features = [
-    {
-      icon: <ShieldCheck className="w-8 h-8 text-amber-500" />,
-      title: "Verified Vendors",
-      description: "Every seller is vetted to ensure quality, authenticity, and excellent service."
-    },
-    {
-      icon: <Truck className="w-8 h-8 text-amber-500" />,
-      title: "Secure Shipping",
-      description: "Reliable tracking and protected deliveries directly from our boutique partners."
-    },
-    {
-      icon: <Sparkles className="w-8 h-8 text-amber-500" />,
-      title: "Unique Curations",
-      description: "Discover one-of-a-kind pieces you won't find on mass-market platforms."
-    }
-  ];
+const features = [
+  {
+    icon: ShieldCheck,
+    title: "Trusted Shopping",
+    description:
+      "Discover products from independent businesses in one convenient marketplace.",
+  },
+  {
+    icon: Truck,
+    title: "Convenient Ordering",
+    description:
+      "Explore products from different stores and manage your shopping in one place.",
+  },
+  {
+    icon: Sparkles,
+    title: "Discover Something New",
+    description:
+      "Find distinctive products and explore collections from growing businesses.",
+  },
+];
 
+export default function ValueProps() {
   return (
-    <section className="py-20 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid md:grid-cols-3 gap-12">
-          {features.map((feature, index) => (
-            <div 
-              key={index} 
-              className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-950 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm"
+    <section className="bg-muted/30 py-16 transition-colors duration-300 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {features.map(({ icon: Icon, title, description }) => (
+            <article
+              key={title}
+              className="group flex h-full flex-col items-center rounded-2xl border border-border bg-card p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-8"
             >
-              <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/30 rounded-full">
-                {feature.icon}
+              <div className="mb-5 flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-105">
+                <Icon className="size-8" aria-hidden="true" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                {feature.title}
+
+              <h3 className="mb-3 text-lg font-bold text-card-foreground sm:text-xl">
+                {title}
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                {feature.description}
+
+              <p className="max-w-sm text-sm leading-7 text-muted-foreground sm:text-base">
+                {description}
               </p>
-            </div>
+            </article>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-export default ValueProps;
+}

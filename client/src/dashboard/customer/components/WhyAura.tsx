@@ -62,48 +62,44 @@ const features = [
 
 export default function WhyAura() {
   return (
-    <section className="py-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="bg-background py-16 transition-colors duration-300 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
         {/* Heading */}
         <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-primary sm:text-sm">
             Why Aura?
           </p>
 
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Everything you need to shop and grow
           </h2>
 
-          <p className="mt-4 text-muted-foreground">
+          <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">
             Aura brings customers and businesses together with the tools
             needed for a better online marketplace experience.
           </p>
         </div>
 
         {/* Features */}
-        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature) => {
-            const Icon = feature.icon;
-
-            return (
-              <div
-                key={feature.title}
-                className="group rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <Icon className="h-5 w-5" />
-                </div>
-
-                <h3 className="font-semibold">
-                  {feature.title}
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {feature.description}
-                </p>
+        <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-5">
+          {features.map(({ icon: Icon, title, description }) => (
+            <article
+              key={title}
+              className="group rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg sm:p-6"
+            >
+              <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                <Icon className="size-5" aria-hidden="true" />
               </div>
-            );
-          })}
+
+              <h3 className="font-semibold leading-snug text-card-foreground">
+                {title}
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                {description}
+              </p>
+            </article>
+          ))}
         </div>
       </div>
     </section>

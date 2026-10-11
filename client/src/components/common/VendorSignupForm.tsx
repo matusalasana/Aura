@@ -45,7 +45,6 @@ const plans = [
 
 export default function VendorOnboarding() {
   const { mutate: signupStore, isPending } = useSignupStore();
-  
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const {
@@ -64,12 +63,10 @@ export default function VendorOnboarding() {
     },
   });
 
-  const onSubmit = async (formData: FormData) => {
-    console.log("Vendor signup:", formData);
-
+  const onSubmit = (formData: FormData) => {
     signupStore(formData, {
-      onSuccess: () => reset()
-    })
+      onSuccess: () => reset(),
+    });
   };
 
   const selectedPlan = watch("plan");
@@ -77,14 +74,14 @@ export default function VendorOnboarding() {
   const slug = watch("slug");
 
   return (
-    <main className="card w-full max-w-2xl shadow-lg animate-scale-in">
+    <main className="card mx-auto w-full max-w-2xl animate-scale-in shadow-lg">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full space-y-5"
+        className="w-full space-y-6"
       >
         {/* Header */}
-        <div className="space-y-2 text-center">
-          <h1 className="heading text-3xl">
+        <header className="space-y-2 text-center">
+          <h1 className="heading text-2xl font-bold tracking-tight sm:text-3xl">
             Store Onboarding
           </h1>
 
@@ -92,16 +89,19 @@ export default function VendorOnboarding() {
             Launch Your Storefront
           </p>
 
-          <p className="subheading mt-2 text-sm">
-            Set up your tenant environment and custom domain in 3 simple
+          <p className="subheading mx-auto mt-2 max-w-md text-sm leading-relaxed">
+            Set up your tenant environment and custom domain in three simple
             steps.
           </p>
-        </div>
+        </header>
 
-        <div className="container max-w-2xl">
-          {/* Stepper Progress Bar */}
+        <div className="mx-auto w-full max-w-2xl">
+          {/* Stepper */}
           <div className="relative mb-8 flex-between">
-            <div className="absolute left-0 right-0 top-1/2 -z-10 h-0.5 -translate-y-1/2 bg-border" />
+            <div
+              className="absolute left-[12%] right-[12%] top-5 h-0.5 bg-border"
+              aria-hidden="true"
+            />
 
             {steps.map((s) => {
               const Icon = s.icon;
@@ -111,10 +111,11 @@ export default function VendorOnboarding() {
               return (
                 <div
                   key={s.num}
-                  className="flex-center flex-col gap-1.5 bg-background px-2"
+                  className="relative z-10 flex-center min-w-0 flex-col gap-2 bg-card px-1 sm:px-3"
+                  aria-current={isActive ? "step" : undefined}
                 >
                   <div
-                    className={`grid-center h-10 w-10 rounded-full text-xs font-bold transition-all ${
+                    className={`grid-center h-10 w-10 rounded-full transition-colors ${
                       isCompleted
                         ? "bg-primary text-primary-foreground"
                         : isActive
@@ -130,10 +131,10 @@ export default function VendorOnboarding() {
                   </div>
 
                   <span
-                    className={`text-[11px] font-medium ${
+                    className={`text-center text-[11px] sm:text-xs ${
                       isActive || isCompleted
                         ? "font-semibold text-foreground"
-                        : "text-muted-foreground"
+                        : "font-medium text-muted-foreground"
                     }`}
                   >
                     {s.label}
@@ -143,26 +144,22 @@ export default function VendorOnboarding() {
             })}
           </div>
 
-          {/* STEP 1 */}
+          {/* Step 1: Store Information */}
           {step === 1 && (
-            <div className="space-y-5">
-              <div>
-                <h2 className="heading text-xl font-bold">
+            <div className="space-y-5 animate-fade-in">
+              <div className="space-y-1">
+                <h2 className="heading text-xl font-bold tracking-tight">
                   1. Tell us about your store
                 </h2>
 
-                <p className="subheading mt-1 text-xs">
+                <p className="subheading text-xs leading-relaxed">
                   This information will be displayed on your public store
                   metadata.
                 </p>
               </div>
 
-              {/* Store Name */}
-              <div>
-                <label
-                  htmlFor="storeName"
-                  className="label"
-                >
+              <div className="space-y-2">
+                <label htmlFor="storeName" className="label">
                   Store Name
                 </label>
 
@@ -170,45 +167,49 @@ export default function VendorOnboarding() {
                   id="storeName"
                   type="text"
                   placeholder="Acme Fashion"
-                  className="input"
+                  className="input w-full"
+                  aria-invalid={!!errors.storeName}
+                  aria-describedby={
+                    errors.storeName ? "storeName-error" : undefined
+                  }
                   {...register("storeName")}
                 />
 
                 {errors.storeName && (
-                  <p className="error-text mt-1">
+                  <p id="storeName-error" className="error-text text-sm">
                     {errors.storeName.message}
                   </p>
                 )}
               </div>
 
-              {/* Description */}
-              <div>
-                <label
-                  htmlFor="description"
-                  className="label"
-                >
+              <div className="space-y-2">
+                <label htmlFor="description" className="label">
                   Description
                 </label>
 
                 <textarea
                   id="description"
                   placeholder="Tell customers about your store..."
-                  className="textarea"
+                  className="textarea min-h-28 w-full resize-y"
+                  aria-invalid={!!errors.description}
+                  aria-describedby={
+                    errors.description ? "description-error" : undefined
+                  }
                   {...register("description")}
                 />
 
                 {errors.description && (
-                  <p className="error-text mt-1">
+                  <p id="description-error" className="error-text text-sm">
                     {errors.description.message}
                   </p>
                 )}
               </div>
 
-              <div className="flex justify-end pt-4">
+              <div className="flex justify-end pt-2">
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="btn-primary gap-2 text-xs"
+                  className="btn-primary gap-2 text-xs sm:text-sm"
                 >
                   Next: Claim Subdomain
                   <ArrowRight className="h-4 w-4" />
@@ -217,58 +218,62 @@ export default function VendorOnboarding() {
             </div>
           )}
 
-          {/* STEP 2 */}
+          {/* Step 2: Subdomain */}
           {step === 2 && (
-            <div className="space-y-5">
-              <div>
-                <h2 className="heading text-xl font-bold">
+            <div className="space-y-5 animate-fade-in">
+              <div className="space-y-1">
+                <h2 className="heading text-xl font-bold tracking-tight">
                   2. Choose your store subdomain
                 </h2>
 
-                <p className="subheading mt-1 text-xs">
-                  Your tenant routing and wildcard URL for public storefront
-                  access.
+                <p className="subheading text-xs leading-relaxed">
+                  Choose the address customers will use to visit your
+                  storefront.
                 </p>
               </div>
 
-              {/* Slug */}
-              <div>
-                <label
-                  htmlFor="slug"
-                  className="label"
-                >
-                  Slug
+              <div className="space-y-2">
+                <label htmlFor="slug" className="label">
+                  Store Subdomain
                 </label>
 
                 <input
                   id="slug"
                   type="text"
                   placeholder="acme-fashion"
-                  className="input"
+                  className="input w-full"
+                  aria-invalid={!!errors.slug}
+                  aria-describedby={
+                    errors.slug ? "slug-error" : undefined
+                  }
                   {...register("slug")}
                 />
 
                 {errors.slug && (
-                  <p className="error-text mt-1">
+                  <p id="slug-error" className="error-text text-sm">
                     {errors.slug.message}
                   </p>
                 )}
 
                 {slug && (
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Your store will be available at{" "}
-                    <span className="font-mono text-primary">
-                      {slug}.aura.shop
-                    </span>
-                  </p>
+                  <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/40 p-3">
+                    <Globe className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+
+                    <p className="min-w-0 text-xs leading-relaxed text-muted-foreground">
+                      Your store address will be{" "}
+                      <span className="break-all font-mono font-medium text-primary">
+                        {slug}.aura.shop
+                      </span>
+                    </p>
+                  </div>
                 )}
               </div>
 
-              <div className="flex-between pt-4">
+              <div className="flex-between gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="btn-ghost gap-2 text-xs"
+                  className="btn-ghost gap-2 text-xs sm:text-sm"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Back
@@ -277,7 +282,7 @@ export default function VendorOnboarding() {
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="btn-primary gap-2 text-xs"
+                  className="btn-primary gap-2 text-xs sm:text-sm"
                 >
                   Next: Choose Plan
                   <ArrowRight className="h-4 w-4" />
@@ -286,17 +291,17 @@ export default function VendorOnboarding() {
             </div>
           )}
 
-          {/* STEP 3 */}
+          {/* Step 3: Plan Selection */}
           {step === 3 && (
-            <div className="space-y-5">
-              <div>
-                <h2 className="heading text-xl font-bold">
-                  3. Select subscription tier
+            <div className="space-y-5 animate-fade-in">
+              <div className="space-y-1">
+                <h2 className="heading text-xl font-bold tracking-tight">
+                  3. Select subscription plan
                 </h2>
 
-                <p className="subheading mt-1 text-xs">
-                  Choose a tenant plan. You can upgrade or switch to custom
-                  CNAMEs anytime.
+                <p className="subheading text-xs leading-relaxed">
+                  Choose the plan that fits your store. You can upgrade or
+                  switch to custom CNAMEs anytime.
                 </p>
               </div>
 
@@ -309,10 +314,10 @@ export default function VendorOnboarding() {
                     <label
                       key={item.id}
                       htmlFor={`plan-${item.id}`}
-                      className={`block cursor-pointer rounded-lg border p-4 transition-all ${
+                      className={`relative block cursor-pointer rounded-xl border p-4 transition-colors ${
                         isSelected
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
+                          ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                          : "border-border bg-card hover:border-primary/50"
                       }`}
                     >
                       <div className="flex items-start gap-3">
@@ -321,23 +326,29 @@ export default function VendorOnboarding() {
                           type="radio"
                           value={item.id}
                           {...register("plan")}
-                          className="mt-1"
+                          className="mt-1 h-4 w-4 shrink-0 accent-primary"
                         />
 
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold">
+                        <div className="min-w-0 flex-1 space-y-2">
+                          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-semibold text-card-foreground">
                                 {item.name}
                               </span>
+
+                              {"popular" in item && item.popular && (
+                                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                                  Popular
+                                </span>
+                              )}
                             </div>
 
-                            <span className="font-semibold text-primary">
+                            <span className="font-semibold tabular-nums text-primary">
                               {item.price}
                             </span>
                           </div>
 
-                          <p className="mt-1 text-xs text-muted-foreground">
+                          <p className="text-xs leading-relaxed text-muted-foreground">
                             {item.desc}
                           </p>
                         </div>
@@ -347,51 +358,49 @@ export default function VendorOnboarding() {
                 })}
 
                 {errors.plan && (
-                  <p className="error-text mt-1">
+                  <p className="error-text text-sm">
                     {errors.plan.message}
                   </p>
                 )}
               </div>
 
               {/* Summary */}
-              <div className="space-y-1.5 rounded-lg border border-border bg-muted/20 p-4 text-xs">
-                <div className="flex-between">
-                  <span className="muted">
-                    Store Name:
-                  </span>
+              <div className="space-y-3 rounded-xl border border-border bg-muted/30 p-4">
+                <h3 className="text-sm font-semibold text-foreground">
+                  Your store summary
+                </h3>
 
-                  <span className="font-semibold text-foreground">
+                <div className="flex-between gap-4 text-xs">
+                  <span className="text-muted-foreground">Store Name</span>
+                  <span className="min-w-0 break-words text-right font-medium text-foreground">
                     {storeName || "—"}
                   </span>
                 </div>
 
-                <div className="flex-between">
-                  <span className="muted">
-                    Assigned Domain:
+                <div className="flex-between gap-4 text-xs">
+                  <span className="shrink-0 text-muted-foreground">
+                    Assigned Domain
                   </span>
-
-                  <span className="font-mono font-semibold text-primary">
+                  <span className="min-w-0 break-all text-right font-mono font-medium text-primary">
                     {slug ? `${slug}.aura.shop` : "—"}
                   </span>
                 </div>
 
-                <div className="flex-between">
-                  <span className="muted">
-                    Plan:
-                  </span>
-
-                  <span className="font-semibold capitalize text-foreground">
+                <div className="flex-between gap-4 text-xs">
+                  <span className="text-muted-foreground">Plan</span>
+                  <span className="text-right font-medium capitalize text-foreground">
                     {selectedPlan || "—"}
                   </span>
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="flex-between pt-4">
+              <div className="flex-between gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="btn-ghost gap-2 text-xs"
+                  className="btn-ghost gap-2 text-xs sm:text-sm"
+                  disabled={isPending}
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Back
@@ -400,12 +409,12 @@ export default function VendorOnboarding() {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="btn-primary gap-2 px-6 py-2.5 text-xs"
+                  className="btn-primary gap-2 text-xs sm:text-sm"
                 >
                   {isPending ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Launching Environment...
+                      Launching Store...
                     </>
                   ) : (
                     <>

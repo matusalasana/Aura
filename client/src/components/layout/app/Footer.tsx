@@ -1,32 +1,71 @@
-import React from 'react';
+import { Link } from "react-router-dom";
 
-const Footer: React.FC = () => {
+const footerSections = [
+  {
+    title: "Shop",
+    links: [
+      { label: "New Arrivals", to: "/products" },
+      { label: "Trending", to: "/products" },
+      { label: "Categories", to: "/categories" },
+      { label: "Stores", to: "/stores" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "FAQ", to: "/faq" },
+      { label: "Shipping", to: "/shipping" },
+      { label: "Returns", to: "/returns" },
+      { label: "Contact", to: "/contact" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy", to: "/privacy" },
+      { label: "Terms", to: "/terms" },
+      { label: "Cookies", to: "/cookies" },
+      { label: "Licenses", to: "/licenses" },
+    ],
+  },
+];
+
+const Footer = () => {
   return (
-    <footer className="bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6 py-12 lg:px-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-          {/* Brand Column */}
+    <footer className="border-t border-border bg-background text-foreground transition-colors duration-200">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-12">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-12">
+          {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Aura</h2>
-            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-              The premier marketplace connecting unique local vendors with fashion lovers.
+            <Link
+              to="/"
+              className="inline-block text-2xl font-bold tracking-tight text-foreground transition-colors hover:text-primary"
+            >
+              Aura
+            </Link>
+
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              The marketplace connecting local stores with people who love
+              discovering something different.
             </p>
           </div>
 
-          {/* Links Columns */}
-          {[
-            { title: "Shop", links: ["New Arrivals", "Trending", "Categories", "Vendors"] },
-            { title: "Support", links: ["FAQ", "Shipping", "Returns", "Contact"] },
-            { title: "Legal", links: ["Privacy", "Terms", "Cookies", "Licenses"] },
-          ].map((section, idx) => (
-            <div key={idx}>
-              <h4 className="font-bold text-gray-900 dark:text-white mb-4">{section.title}</h4>
+          {/* Footer Links */}
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h4 className="mb-4 text-sm font-semibold text-foreground">
+                {section.title}
+              </h4>
+
               <ul className="space-y-3">
                 {section.links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-600 dark:text-gray-400 text-sm hover:text-amber-500 transition-colors">
-                      {link}
-                    </a>
+                  <li key={link.label}>
+                    <Link
+                      to={link.to}
+                      className="text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    >
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -35,15 +74,17 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 dark:text-gray-600 text-sm">
-            © 2026 Aura Marketplace. All rights reserved.
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-center sm:mt-12 sm:flex-row sm:pt-8 sm:text-left">
+          <p className="text-xs text-muted-foreground sm:text-sm">
+            © {new Date().getFullYear()} Aura Marketplace. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <span className="text-amber-500 font-bold tracking-widest text-sm uppercase">
-              Designed for Aura
-            </span>
-          </div>
+
+          <Link
+            to="/"
+            className="text-xs font-semibold uppercase tracking-widest text-primary transition-opacity hover:opacity-80 sm:text-sm"
+          >
+            Designed for Aura
+          </Link>
         </div>
       </div>
     </footer>

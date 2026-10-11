@@ -3,103 +3,103 @@ import {
   ChevronDown,
   Menu,
   Moon,
-  Search
+  Search,
+  UserRound,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface TopbarProps {
   storeName?: string;
-};
+}
 
 export default function VendorTopbar({
   storeName = "My Store",
 }: TopbarProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-zinc-200 bg-white/80 px-6 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-950/80">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-xl sm:h-20 sm:px-6">
       {/* Left */}
-
-      <div className="flex items-center gap-4">
+      <div className="flex min-w-0 items-center gap-3 sm:gap-4">
         <button
-          className="hidden rounded-xl border border-zinc-200 p-2 transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900 lg:flex"
+          type="button"
+          className="hidden rounded-xl border border-border p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:flex"
+          aria-label="Toggle sidebar"
         >
-          <Menu size={20} />
+          <Menu className="h-5 w-5" />
         </button>
 
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
+        <div className="min-w-0">
+          <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Dashboard
           </h1>
 
-          <p className="text-sm text-zinc-500">
+          <p className="truncate text-xs text-muted-foreground sm:text-sm">
             Welcome back, {storeName}
           </p>
         </div>
       </div>
 
       {/* Search */}
-
-      <div className="hidden flex-1 justify-center px-10 xl:flex">
+      <div className="hidden flex-1 justify-center px-6 xl:flex">
         <div className="relative w-full max-w-xl">
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
-          />
+          <Search className="absolute left-4 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
 
           <input
-            type="text"
+            type="search"
             placeholder="Search products, orders..."
-            className="h-12 w-full rounded-2xl border border-zinc-200 bg-zinc-50 pl-12 pr-4 outline-none transition focus:border-amber-500 dark:border-zinc-700 dark:bg-zinc-900"
+            aria-label="Search products and orders"
+            className="h-11 w-full rounded-xl border border-input bg-muted/40 pl-11 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/30"
           />
         </div>
       </div>
 
-      {/* Right */}
-
-      <div className="flex items-center gap-3">
+      {/* Right Actions */}
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
         {/* Theme */}
-
         <motion.button
+          type="button"
           whileTap={{ scale: 0.95 }}
-          className="rounded-2xl border border-zinc-200 p-3 transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900"
+          className="rounded-xl border border-border p-2.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-3"
+          aria-label="Toggle theme"
         >
-          <Moon size={18} />
-          {/* Replace with Sun icon when dark mode is active */}
+          <Moon className="h-[18px] w-[18px]" />
         </motion.button>
 
         {/* Notifications */}
-
         <motion.button
+          type="button"
           whileTap={{ scale: 0.95 }}
-          className="relative rounded-2xl border border-zinc-200 p-3 transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900"
+          className="relative rounded-xl border border-border p-2.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-3"
+          aria-label="Notifications"
         >
-          <Bell size={18} />
+          <Bell className="h-[18px] w-[18px]" />
 
-          <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-amber-500" />
+          <span
+            className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary ring-2 ring-background"
+            aria-hidden="true"
+          />
         </motion.button>
 
         {/* Profile */}
+        <button
+          type="button"
+          className="flex items-center gap-2 rounded-xl border border-border p-2 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:gap-3 sm:px-3"
+          aria-label="Open profile menu"
+        >
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/10 text-primary sm:h-11 sm:w-11">
+            <UserRound className="h-5 w-5" />
+          </div>
 
-        <button className="flex items-center gap-3 rounded-2xl border border-zinc-200 px-3 py-2 transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900">
-          <img
-            src="https://i.pravatar.cc/150"
-            alt="Vendor"
-            className="h-11 w-11 rounded-full object-cover"
-          />
-
-          <div className="hidden text-left md:block">
-            <h3 className="font-semibold text-zinc-900 dark:text-white">
-              Sana
+          <div className="hidden min-w-0 text-left md:block">
+            <h3 className="max-w-32 truncate text-sm font-semibold text-foreground">
+              {storeName}
             </h3>
 
-            <p className="text-sm text-zinc-500">
-              Vendor
+            <p className="text-xs text-muted-foreground">
+              Store Admin
             </p>
           </div>
 
-          <ChevronDown
-            size={18}
-            className="hidden text-zinc-500 md:block"
-          />
+          <ChevronDown className="hidden h-[18px] w-[18px] text-muted-foreground md:block" />
         </button>
       </div>
     </header>
