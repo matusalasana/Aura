@@ -1,28 +1,18 @@
 
-import type {
-  VariantsData,
-} from "@/features/products/schemas";
+import type { Product } from "@/types/product";
+import type { Order } from "@/types/order";
 
-export type ProductType = "simple" | "variant";
 
-export type ProductStatus = "draft" | "active" | "archived";
+export type PlanEnum = "starter" | "pro" | "enterprise";
 
-export interface ProductVariant extends VariantsData {
-  id?: string;
-  productId?: string;
-}
-
-export interface ProductImage {
-  id?: string;
-  url: string;
-  publicId?: string;
-  createdAt?: string;
-}
 
 export type Store = {
   id: string;
   storeName: string;
   slug: string;
+  plan: string;
   description: string | null;
   logo: string | null;
+  products?: Product[];
+  orders?: Order[];
 };

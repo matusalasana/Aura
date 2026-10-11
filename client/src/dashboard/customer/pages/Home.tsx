@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 
 import { useProducts } from "@/features/products/hooks/useProducts";
+import { useStores } from "@/features/stores/hooks/useStores";
 
 import Hero from "@/dashboard/customer/components/Hero";
 import FeaturedCategories from "@/dashboard/customer/components/FeaturedCategories";
+import FeaturedStores from "@/dashboard/customer/components/FeaturedStores";
 import PopularStores from "@/dashboard/customer/components/PopularStores";
 import WhyAura from "@/dashboard/customer/components/WhyAura";
 import Testimonials from "@/dashboard/customer/components/Testimonials";
@@ -15,13 +17,16 @@ import MerchantMarquee from "@/dashboard/customer/components/MerchantMarquee";
 import ProductGrid from "@/components/common/product/ProductGrid";
 
 export default function AuraHomePage() {
-  const { data: products = [], isLoading } = useProducts();
+  const { data: products = [], isLoading: productsLoading } = useProducts();
+  const { data: stores = [], isLoading: storesLoading } = useStores();
 
+  const isLoading = productsLoading || storesLoading;
+  
   return (
     <main className="min-h-screen bg-background font-sans text-foreground antialiased">
       <Hero />
 
-      <MerchantMarquee />
+      <MerchantMarquee stores={stores ?? []} />
 
       {/* Featured products */}
       <section className="py-16 sm:py-20">
@@ -72,6 +77,7 @@ export default function AuraHomePage() {
       </section>
 
       <FeaturedCategories />
+      <FeaturedStores stores={stores ?? []} />
       <PopularStores />
       <WhyAura />
       <Testimonials />

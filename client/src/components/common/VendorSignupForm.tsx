@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 import { useSignupStore } from "@/features/stores/hooks/useSignupStore";
-import { type FormData, storeSignupSchema } from "@/features/stores/schemas";
+import { type StoreFormData, storeSignupSchema } from "@/features/stores/schemas";
 
 const steps = [
   { num: 1, label: "Store Info", icon: Store },
@@ -45,6 +45,8 @@ const plans = [
 
 export default function VendorOnboarding() {
   const { mutate: signupStore, isPending } = useSignupStore();
+  
+  const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const {
@@ -53,7 +55,7 @@ export default function VendorOnboarding() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<StoreFormData>({
     resolver: zodResolver(storeSignupSchema),
     defaultValues: {
       storeName: "",
@@ -63,7 +65,14 @@ export default function VendorOnboarding() {
     },
   });
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = (data: StoreFormData) => {
+    const formData = new FormData();
+
+    if(selectedLogo){
+      formData.append("logo", selectedLogo)
+    }
+    formData.append("storeData", JSON.stringify(data))
+    
     signupStore(formData, {
       onSuccess: () => reset(),
     });
@@ -178,6 +187,33 @@ export default function VendorOnboarding() {
                 {errors.storeName && (
                   <p id="storeName-error" className="error-text text-sm">
                     {errors.storeName.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="logo" className="label">
+                  Store Logo
+                </label>
+
+                <input
+                  id="logo"
+                  type="file"
+                  accept="image/*"
+                  multiple={false}
+                  onChange={(e) => {
+                    setSelectedLogo(e.target.files?.[0] ?? null);
+                  }}
+                  className="input w-full"
+                  aria-invalid={!!selectedLogo}
+                  aria-describedby={
+                    selectedLogo ? "storeName-error" : undefined
+                  }
+                />
+
+                {!selectedLogo && (
+                  <p id="logo-error" className="error-text text-sm">
+                    Logo is required
                   </p>
                 )}
               </div>

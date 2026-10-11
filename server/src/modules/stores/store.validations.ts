@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const storeSignupSchema = z.object({
+export const createStoreSchema = z.object({
   storeName: z
     .string()
     .min(2, "Store name must be at least 2 characters"),
@@ -8,6 +8,8 @@ export const storeSignupSchema = z.object({
   description: z
     .string()
     .min(10, "Description must be at least 10 characters"),
+
+  logo: z.string().optional(),
 
   slug: z
     .string()
@@ -21,4 +23,8 @@ export const storeSignupSchema = z.object({
 });
 
 
-export type StoreInput = z.infer<typeof storeSignupSchema>;
+export const updateStoreSchema = createStoreSchema.partial()
+
+export type CreateStoreInput = z.infer<typeof createStoreSchema>;
+
+export type UpdateStoreInput = z.infer<typeof updateStoreSchema>;

@@ -1,21 +1,21 @@
 import { db } from "@/db/index.js";
 import { stores } from "@/db/schema/stores.js";
-import { type StoreInput } from "@/modules/stores/store.validations.js";
+import type { UpdateStoreInput, CreateStoreInput } from "@/modules/stores/store.validations.js"
 
 import { eq, and } from "drizzle-orm";
 
 const createStore = async ({
-  data,
+  storeData,
   ownerId,
 }: {
-  data: StoreInput;
+  storeData: CreateStoreInput;
   ownerId: string;
 }) => {
   
   return await db
     .insert(stores)
     .values({
-    ...data,
+    ...storeData,
     ownerId,
     })
     .returning();
@@ -27,6 +27,10 @@ const findBySlug = async (slug: string) => {
   });
 };
 
+const getAll = async () => {
+
+  return await db.query.stores.findMany();
+};
 
 const findByOwnerId = async (ownerId: string) => {
 
@@ -39,8 +43,49 @@ const findByOwnerId = async (ownerId: string) => {
   });
 };
 
+const findByStoreId = async (storeId: string) => {
+
+  return await db.query.stores.findFirst({
+    where: eq(stores.id, storeId)
+  });
+};
+
+const update = async ({
+  ownerId,
+  data
+}: {
+  ownerId: string;
+  data: UpdateStoreInput;
+}) => {
+
+  return await db
+    .update(stores)
+    .set(data)
+    .where(
+      eq(stores.ownerId, ownerId)
+    )
+    .returning();
+  
+};
+
+const deleteStore = async (storeId: string) => {
+
+  return await db
+    .delete(stores)
+    .where(
+      eq(stores.id, storeId)
+    )
+    .returning();
+  
+};
+
+
 export const StoreRepository = {
   createStore,
   findBySlug,
-  findByOwnerId
+  findByOwnerId,
+  getAll,
+  update,
+  deleteStore,
+  findByStoreId,
 };

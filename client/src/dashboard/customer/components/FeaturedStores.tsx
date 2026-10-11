@@ -1,14 +1,12 @@
-import React from "react";
-import { ArrowRight, Store } from "lucide-react";
+import { ArrowRight, Store as StoreIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import type { Store } from "@/types/store";
 
-const vendors = [
-  { name: "Urban Threads", category: "Streetwear", image: "/vendor1.jpg" },
-  { name: "Luxe Linen", category: "Sustainable", image: "/vendor2.jpg" },
-  { name: "Vintage Aura", category: "Retro", image: "/vendor3.jpg" },
-];
+interface Props {
+  stores: Store[];
+}
 
-const FeaturedVendors: React.FC = () => {
+const FeaturedStores = ({stores}: Props) => {
   return (
     <section className="bg-background py-16 transition-colors duration-300 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
@@ -32,18 +30,18 @@ const FeaturedVendors: React.FC = () => {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {vendors.map((vendor) => (
+          {stores.map((store) => (
             <Link
-              key={vendor.name}
+              key={store.storeName}
               to={`/stores/${encodeURIComponent(
-                vendor.name.toLowerCase().replace(/\s+/g, "-")
+                store.storeName.toLowerCase().replace(/\s+/g, "-")
               )}`}
               className="group block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <div className="relative h-56 overflow-hidden bg-muted sm:h-64">
                 <img
-                  src={vendor.image}
-                  alt={`${vendor.name} store`}
+                  src={store.logo || undefined}
+                  alt={`${store.storeName} store`}
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(event) => {
@@ -55,15 +53,15 @@ const FeaturedVendors: React.FC = () => {
 
                 <div className="absolute inset-x-0 bottom-0 flex items-end gap-3 p-5">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/15 text-white backdrop-blur-sm">
-                    <Store size={21} aria-hidden="true" />
+                    <StoreIcon size={21} aria-hidden="true" />
                   </div>
 
                   <div className="min-w-0">
                     <h3 className="truncate text-lg font-bold text-white sm:text-xl">
-                      {vendor.name}
+                      {store.storeName}
                     </h3>
                     <p className="mt-1 text-sm font-medium text-white/80">
-                      {vendor.category}
+                      {store.plan}
                     </p>
                   </div>
 
@@ -82,4 +80,4 @@ const FeaturedVendors: React.FC = () => {
   );
 };
 
-export default FeaturedVendors;
+export default FeaturedStores;

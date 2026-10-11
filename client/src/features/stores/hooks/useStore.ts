@@ -4,7 +4,7 @@ import type { Store } from "@/types/store";
 import type { ApiResponse } from "@/types/api";
 
 const getStore = async (slug: string): Promise<Store> => {
-  const res = await api.get(`/stores/${slug}`);
+  const res = await api.get<ApiResponse<Store>>(`/stores/${slug}`);
   
   return res.data.data;
 };

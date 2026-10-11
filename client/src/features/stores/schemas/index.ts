@@ -20,4 +20,4 @@ export const storeSignupSchema = z.object({
   plan: z.enum(["starter", "pro", "enterprise"]),
 });
 
-export type FormData = z.infer<typeof storeSignupSchema>;
+export type StoreFormData = z.infer<typeof storeSignupSchema>;
