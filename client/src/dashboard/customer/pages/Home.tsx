@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 
 import { useProducts } from "@/features/products/hooks/useProducts";
-import type { Product } from "@/types/product";
 
 import Hero from "@/dashboard/customer/components/Hero";
 import FeaturedCategories from "@/dashboard/customer/components/FeaturedCategories";

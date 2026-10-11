@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   inventoryInfoSchema,
   type InventoryInfoData,
@@ -13,144 +16,132 @@ interface Props {
   defaultValues: InventoryInfoData;
 }
 
-const ProductInventory = ({onClickNext, onClickPrev, defaultValues}: Props) => {
+const ProductInventory = ({
+  onClickNext,
+  onClickPrev,
+  defaultValues,
+}: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<InventoryInfoData>({
     resolver: zodResolver(inventoryInfoSchema),
-    defaultValues
+    defaultValues,
   });
 
   const onSubmit = (data: InventoryInfoData) => {
-    console.log("Inventory Info:", data);
-    onClickNext(data)
+    onClickNext(data);
   };
 
   return (
-    <main className="card w-full max-w-2xl shadow-lg animate-scale-in">
+    <main className="mx-auto w-full max-w-2xl animate-in fade-in duration-300">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full space-y-5"
+        className="space-y-6 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-8"
       >
-        <div>
-          <h2 className="heading text-xl font-bold">
+        <div className="space-y-1">
+          <h2 className="text-xl font-semibold tracking-tight">
             Inventory Information
           </h2>
-
-          <p className="subheading mt-1 text-xs">
-            Set your product price and stock details.
+          <p className="text-sm text-muted-foreground">
+            Set your product price, available stock, and listing status.
           </p>
         </div>
 
-        {/* Product Price */}
-        <div>
-          <label htmlFor="price" className="label">
-            Product Price
-          </label>
-
-          <input
+        <div className="space-y-2">
+          <Label htmlFor="price">Product Price</Label>
+          <Input
             id="price"
             type="number"
-            placeholder="2,000"
-            className="input"
+            step="any"
+            placeholder="2000"
+            aria-invalid={!!errors.price}
+            aria-describedby={errors.price ? "price-error" : undefined}
             {...register("price")}
           />
-
           {errors.price && (
-            <p className="text-destructive mt-1">
+            <p id="price-error" className="text-sm text-destructive">
               {errors.price.message}
             </p>
           )}
         </div>
 
-        {/* Product in Stock  */}
-        <div>
-          <label htmlFor="stock" className="label">
-            Product in Stock
-          </label>
-
-          <input
+        <div className="space-y-2">
+          <Label htmlFor="stock">Available Stock</Label>
+          <Input
             id="stock"
             type="number"
+            step="1"
             placeholder="100"
-            className="input"
+            aria-invalid={!!errors.stock}
+            aria-describedby={errors.stock ? "stock-error" : undefined}
             {...register("stock", { valueAsNumber: true })}
           />
-
           {errors.stock && (
-            <p className="text-destructive mt-1">
+            <p id="stock-error" className="text-sm text-destructive">
               {errors.stock.message}
             </p>
           )}
         </div>
 
-        {/* SKU */}
-        <div>
-          <label htmlFor="description" className="label">
-            SKU
-          </label>
-
-          <input
-            id="description"
+        <div className="space-y-2">
+          <Label htmlFor="sku">SKU</Label>
+          <Input
+            id="sku"
             type="text"
             placeholder="KAH-WHT-XL"
-            className="input"
+            aria-invalid={!!errors.sku}
+            aria-describedby={errors.sku ? "sku-error" : undefined}
             {...register("sku")}
           />
-
+          <p className="text-xs text-muted-foreground">
+            A unique identifier to help you track this product.
+          </p>
           {errors.sku && (
-            <p className="text-destructive mt-1">
+            <p id="sku-error" className="text-sm text-destructive">
               {errors.sku.message}
             </p>
           )}
         </div>
 
-        {/* Status */}
-        <div>
-          <label htmlFor="status" className="label">
-            Status
-          </label>
-
+        <div className="space-y-2">
+          <Label htmlFor="status">Listing Status</Label>
           <select
             id="status"
-            className="input"
+            aria-invalid={!!errors.status}
+            aria-describedby={errors.status ? "status-error" : undefined}
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             {...register("status")}
           >
-            <option value="">Select Status</option>
+            <option value="">Select a status</option>
             <option value="draft">Draft</option>
-            <option value="archived">Archived</option>
             <option value="active">Active</option>
+            <option value="archived">Archived</option>
           </select>
-
           {errors.status && (
-            <p className="text-destructive mt-1">
+            <p id="status-error" className="text-sm text-destructive">
               {errors.status.message}
             </p>
           )}
         </div>
 
-
-        <div className="flex-between pt-4">
-          <button
+        <div className="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <Button
             type="button"
+            variant="ghost"
             onClick={onClickPrev}
-            className="btn-ghost gap-2 text-xs"
+            className="gap-2"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="size-4" />
             Back
-          </button>
+          </Button>
 
-          <button
-            type="submit"
-            className="btn-primary gap-2 text-xs"
-          >
+          <Button type="submit" className="gap-2">
             Next: Review & Publish
-            <ArrowRight className="h-4 w-4" />
-          </button>
+            <ArrowRight className="size-4" />
+          </Button>
         </div>
-        
       </form>
     </main>
   );

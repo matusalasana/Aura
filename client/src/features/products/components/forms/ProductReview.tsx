@@ -1,5 +1,13 @@
-import { ArrowLeft, Check, Package } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ClipboardCheck,
+  Package,
+  Boxes,
+  LoaderCircle,
+} from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import type {
   BasicInfoData,
   InventoryInfoData,
@@ -26,60 +34,62 @@ const ProductReview = ({
   onClickPrev,
   onSubmit,
 }: Props) => {
+  const isVariantProduct = type === "variant";
+
   return (
-    <main className="card w-full max-w-2xl shadow-lg animate-scale-in">
-      <div className="space-y-6">
+    <main className="mx-auto w-full max-w-2xl animate-in fade-in duration-300">
+      <div className="space-y-7 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:p-8">
         {/* Header */}
-        <div>
-          <h2 className="heading text-xl font-bold">
+        <div className="space-y-1">
+          <div className="mb-3 flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <ClipboardCheck className="size-5" />
+          </div>
+
+          <h2 className="text-xl font-semibold tracking-tight">
             Review Product
           </h2>
 
-          <p className="subheading mt-1 text-xs">
-            Review your product information before publishing.
+          <p className="text-sm text-muted-foreground">
+            Check your product details before creating your listing.
           </p>
         </div>
 
         {/* Product Preview */}
-        <div className="flex items-center gap-4 rounded-lg border p-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-            <Package className="h-6 w-6 text-primary" />
+        <div className="flex min-w-0 items-center gap-4 rounded-xl border border-border bg-background p-4">
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Package className="size-7" />
           </div>
 
-          <div>
-            <h3 className="font-semibold">
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate font-semibold">
               {basicData.name || "Untitled Product"}
             </h3>
 
-            <p className="text-xs text-muted-foreground">
-              /{basicData.slug}
+            <p className="mt-1 truncate text-sm text-muted-foreground">
+              /{basicData.slug || "no-slug"}
             </p>
           </div>
+
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs font-medium capitalize text-muted-foreground">
+            {isVariantProduct ? (
+              <Boxes className="size-3.5" />
+            ) : (
+              <Package className="size-3.5" />
+            )}
+            {isVariantProduct ? "Variants" : "Simple"}
+          </span>
         </div>
 
         {/* Basic Information */}
         <section className="space-y-3">
-          <h3 className="font-semibold">
-            Basic Information
-          </h3>
+          <h3 className="text-sm font-semibold">Basic Information</h3>
 
-          <div className="grid grid-cols-2 gap-4 rounded-lg border p-4">
-            <ReviewItem
-              label="Product Name"
-              value={basicData.name}
-            />
+          <div className="grid grid-cols-1 gap-5 rounded-xl border border-border p-4 sm:grid-cols-2 sm:p-5">
+            <ReviewItem label="Product Name" value={basicData.name} />
+            <ReviewItem label="Slug" value={basicData.slug} />
+            <ReviewItem label="Product Type" value={basicData.type} />
 
-            <ReviewItem
-              label="Slug"
-              value={basicData.slug}
-            />
-
-            <ReviewItem
-              label="Product Type"
-              value={basicData.type}
-            />
-
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <ReviewItem
                 label="Description"
                 value={basicData.description ?? ""}
@@ -89,71 +99,94 @@ const ProductReview = ({
         </section>
 
         {/* Variants */}
-        {type === "variant" && (
-        <section className="space-y-3">
-          <h3 className="font-semibold">
-            Variants
-          </h3>
+        {isVariantProduct && (
+          <section className="space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold">Product Variants</h3>
 
-          {variantsData.map((variant) => (
-            <VariantCard variant={variant} />
-          ))}
-        </section>
+              <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                {variantsData.length}{" "}
+                {variantsData.length === 1 ? "variant" : "variants"}
+              </span>
+            </div>
+
+            {variantsData.length > 0 ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {variantsData.map((variant, index) => (
+                  <VariantCard
+                    key={`${variant.sku}-${index}`}
+                    variant={variant}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="rounded-lg border border-dashed border-border p-5 text-center text-sm text-muted-foreground">
+                No variants have been added.
+              </p>
+            )}
+          </section>
         )}
 
-        
-        {/* Inventory */}
-        {type === "simple" && (
-        <section className="space-y-3">
-          <h3 className="font-semibold">
-            Inventory
-          </h3>
+        {/* Simple Product Inventory */}
+        {!isVariantProduct && (
+          <section className="space-y-3">
+            <h3 className="text-sm font-semibold">Inventory Information</h3>
 
-          <div className="grid grid-cols-2 gap-4 rounded-lg border p-4">
-            <ReviewItem
-              label="Price"
-              value={`ETB ${inventoryData.price.toLocaleString()}`}
-            />
+            <div className="grid grid-cols-2 gap-x-4 gap-y-5 rounded-xl border border-border p-4 sm:p-5">
+              <ReviewItem
+                label="Price"
+                value={`ETB ${Number(inventoryData.price).toLocaleString()}`}
+              />
 
-            <ReviewItem
-              label="Stock"
-              value={inventoryData.stock.toLocaleString()}
-            />
+              <ReviewItem
+                label="Available Stock"
+                value={Number(inventoryData.stock).toLocaleString()}
+              />
 
-            <ReviewItem
-              label="SKU"
-              value={inventoryData.sku || "—"}
-            />
+              <ReviewItem
+                label="SKU"
+                value={inventoryData.sku || "—"}
+              />
 
-            <ReviewItem
-              label="Status"
-              value={inventoryData.status ?? "draft"}
-            />
-          </div>
-        </section>
+              <ReviewItem
+                label="Listing Status"
+                value={inventoryData.status || "draft"}
+              />
+            </div>
+          </section>
         )}
 
         {/* Actions */}
-        <div className="flex-between pt-4">
-          <button
-            disabled={isCreating}
+        <div className="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <Button
             type="button"
+            variant="ghost"
+            disabled={isCreating}
             onClick={onClickPrev}
-            className="btn-ghost gap-2 text-xs"
+            className="gap-2"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="size-4" />
             Back
-          </button>
+          </Button>
 
-          <button
-            disabled={isCreating}
+          <Button
             type="button"
+            disabled={isCreating}
             onClick={onSubmit}
-            className="btn-primary gap-2 text-xs"
+            className="gap-2"
           >
-            <Check className="h-4 w-4" />
-            {isCreating ? "Creating..." : "Create Product"}
-          </button>
+            {isCreating ? (
+              <>
+                <LoaderCircle className="size-4 animate-spin" />
+                Creating Product...
+              </>
+            ) : (
+              <>
+                <Check className="size-4" />
+                Create Product
+              </>
+            )}
+          </Button>
         </div>
       </div>
     </main>
@@ -165,18 +198,14 @@ interface ReviewItemProps {
   value: string | number;
 }
 
-const ReviewItem = ({
-  label,
-  value,
-}: ReviewItemProps) => {
-  return (
-    <div className="space-y-1">
-      <p className="text-xs text-muted-foreground">
-        {label}
-      </p>
+const ReviewItem = ({ label, value }: ReviewItemProps) => {
+  const displayValue = String(value ?? "").trim() || "—";
 
-      <p className="text-sm font-medium capitalize">
-        {value || "—"}
+  return (
+    <div className="min-w-0 space-y-1.5">
+      <p className="text-xs font-medium text-muted-foreground">{label}</p>
+      <p className="break-words text-sm font-medium capitalize">
+        {displayValue}
       </p>
     </div>
   );

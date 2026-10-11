@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -43,6 +43,8 @@ type AccountFormValues = z.infer<typeof accountSchema>;
 
 const AccountPage = () => {
   const { user, isLoading } = useCurrentUser();
+  
+  const navigate = useNavigate();
 
   const {
     register,
@@ -111,8 +113,8 @@ const AccountPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full">
-              <Link to="/sign-in">Go to Signin</Link>
+            <Button onClick={() => navigate("sign-in")} className="w-full">
+              Go to Signin
             </Button>
           </CardContent>
         </Card>
@@ -128,13 +130,12 @@ const AccountPage = () => {
           <Button
             variant="ghost"
             size="sm"
-            asChild
+            onClick={() => navigate("/")}
             className="-ml-2 mb-4 text-muted-foreground"
           >
-            <Link to="/">
-              <ArrowLeft className="size-4" />
-              Back to home
-            </Link>
+            
+            <ArrowLeft className="size-4" />
+            Back to home
           </Button>
 
           <div className="flex items-center gap-3">
@@ -303,10 +304,10 @@ const AccountPage = () => {
               <Button
                 variant="outline"
                 size="sm"
-                asChild
+                onClick={() => navigate("forgot-password")}
                 className="shrink-0"
               >
-                <Link to="/forgot-password">Reset password</Link>
+                Reset password
               </Button>
             </div>
           </CardContent>

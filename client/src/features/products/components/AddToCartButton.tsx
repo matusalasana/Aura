@@ -1,10 +1,11 @@
 import { ShoppingCart } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 
-type AddToCartButtonProps = {
+interface AddToCartButtonProps {
   disabled?: boolean;
   onClick: () => void;
-};
+}
 
 const AddToCartButton = ({
   disabled = false,
@@ -13,13 +14,13 @@ const AddToCartButton = ({
   return (
     <Button
       type="button"
-      className="w-full"
       size="lg"
+      className="w-full gap-2 font-medium transition-transform active:scale-[0.98]"
       disabled={disabled}
       onClick={onClick}
     >
-      <ShoppingCart />
-      Add to Cart
+      <ShoppingCart className="size-4 shrink-0" />
+      {disabled ? "Unavailable" : "Add to Cart"}
     </Button>
   );
 };

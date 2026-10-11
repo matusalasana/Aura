@@ -1,6 +1,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Package } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 import ProductMedia from "@/features/products/components/forms/ProductMedia";
 import {
@@ -13,7 +18,7 @@ interface Props {
   onClickNext: (data: BasicInfoData) => void;
 }
 
-const ProductBasicInfo = ({onClickNext, defaultValues}: Props) => {
+const ProductBasicInfo = ({ onClickNext, defaultValues }: Props) => {
   const {
     register,
     handleSubmit,
@@ -21,139 +26,149 @@ const ProductBasicInfo = ({onClickNext, defaultValues}: Props) => {
     formState: { errors },
   } = useForm<BasicInfoData>({
     resolver: zodResolver(basicInfoSchema),
-    defaultValues
+    defaultValues,
   });
 
   const onSubmit = (data: BasicInfoData) => {
-    console.log("Basic Info:", data);
-    onClickNext(data)
+    onClickNext(data);
   };
 
   return (
-    <main className="card w-full max-w-2xl shadow-lg animate-scale-in">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full space-y-5"
-      >
-        <div>
-          <h2 className="heading text-xl font-bold">
-            Basic Information
-          </h2>
+    <main className="w-full max-w-2xl">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <Package className="size-5" />
+        </div>
 
-          <p className="subheading mt-1 text-xs">
-            Add the basic information about your product.
+        <div>
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+            Add a product
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Step 1 of 3 · Basic information
           </p>
         </div>
+      </div>
 
-        {/* Product Name */}
-        <div>
-          <label htmlFor="name" className="label">
-            Product Name
-          </label>
-
-          <input
-            id="name"
-            type="text"
-            placeholder="Khaki Jeans"
-            className="input"
-            {...register("name")}
-          />
-
-          {errors.name && (
-            <p className="text-destructive mt-1">
-              {errors.name.message}
+      <div className="rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-6 lg:p-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <h2 className="text-lg font-semibold">Product details</h2>
+            <p className="mt-1 text-sm leading-6 text-muted-foreground">
+              Give your product a clear name, description, and images so
+              customers know what you're selling.
             </p>
-          )}
-        </div>
+          </div>
 
-        {/* Product Slug */}
-        <div>
-          <label htmlFor="slug" className="label">
-            Product Slug
-          </label>
+          <div className="space-y-2">
+            <Label htmlFor="name">Product name</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="e.g. Khaki Jeans"
+              autoComplete="off"
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? "name-error" : undefined}
+              {...register("name")}
+            />
+            {errors.name && (
+              <p id="name-error" className="text-sm text-destructive">
+                {errors.name.message}
+              </p>
+            )}
+          </div>
 
-          <input
-            id="slug"
-            type="text"
-            placeholder="Khaki-jeans"
-            className="input"
-            {...register("slug")}
-          />
-
-          {errors.slug && (
-            <p className="text-destructive mt-1">
-              {errors.slug.message}
+          <div className="space-y-2">
+            <Label htmlFor="slug">Product slug</Label>
+            <Input
+              id="slug"
+              type="text"
+              placeholder="e.g. khaki-jeans"
+              autoComplete="off"
+              aria-invalid={!!errors.slug}
+              aria-describedby={errors.slug ? "slug-error" : undefined}
+              {...register("slug")}
+            />
+            <p className="text-xs text-muted-foreground">
+              A URL-friendly identifier for your product.
             </p>
-          )}
-        </div>
+            {errors.slug && (
+              <p id="slug-error" className="text-sm text-destructive">
+                {errors.slug.message}
+              </p>
+            )}
+          </div>
 
-        <ProductMedia
-          onChange={(files) => {
-            setValue("images", files, {
-              shouldValidate: true,
-            });
-          }}
-        />
-        {errors.images && (
-            <p className="text-destructive mt-1">
-              {errors.images.message}
+          <div className="space-y-2">
+            <Label>Product images</Label>
+            <ProductMedia
+              onChange={(files) => {
+                setValue("images", files, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+              }}
+            />
+            {errors.images && (
+              <p className="text-sm text-destructive">
+                {errors.images.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              rows={5}
+              placeholder="Describe the product, its materials, features, or anything customers should know..."
+              aria-invalid={!!errors.description}
+              aria-describedby={
+                errors.description ? "description-error" : undefined
+              }
+              {...register("description")}
+            />
+            {errors.description && (
+              <p id="description-error" className="text-sm text-destructive">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="type">Product type</Label>
+            <select
+              id="type"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              aria-invalid={!!errors.type}
+              aria-describedby={errors.type ? "type-error" : undefined}
+              {...register("type")}
+            >
+              <option value="">Select product type</option>
+              <option value="simple">Simple product</option>
+              <option value="variant">Product with variations</option>
+            </select>
+
+            <p className="text-xs leading-5 text-muted-foreground">
+              Choose variations if customers can select different sizes,
+              colors, or other options.
             </p>
-          )}
 
-        {/* Description */}
-        <div>
-          <label htmlFor="description" className="label">
-            Description
-          </label>
+            {errors.type && (
+              <p id="type-error" className="text-sm text-destructive">
+                {errors.type.message}
+              </p>
+            )}
+          </div>
 
-          <textarea
-            id="description"
-            placeholder="Tell customers about your product..."
-            className="textarea"
-            {...register("description")}
-          />
-
-          {errors.description && (
-            <p className="text-destructive mt-1">
-              {errors.description.message}
-            </p>
-          )}
-        </div>
-
-        {/* Product Type */}
-        <div>
-          <label htmlFor="name" className="label">
-            Does this product have variations like multiple sizes, colors, or packages?
-          </label>
-
-          <select
-            id="type"
-            className="input"
-            {...register("type")}
-          >
-            <option value="">Select Type</option>
-            <option value="simple">Simple Product</option>
-            <option value="variant">Variant Product</option>
-          </select>
-
-          {errors.type && (
-            <p className="text-destructive mt-1">
-              {errors.type.message}
-            </p>
-          )}
-        </div>
-
-        <div className="flex justify-end pt-4">
-          <button
-            type="submit"
-            className="btn-primary gap-2 text-xs"
-          >
-            Next: Inventory 
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-        
-      </form>
+          <div className="flex justify-end border-t border-border pt-5">
+            <Button type="submit" className="w-full rounded-xl sm:w-auto">
+              Next: Inventory
+              <ArrowRight className="size-4" />
+            </Button>
+          </div>
+        </form>
+      </div>
     </main>
   );
 };

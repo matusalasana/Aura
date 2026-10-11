@@ -58,7 +58,7 @@ const Navbar = () => {
           >
             <ShoppingBag className="h-5 w-5" />
 
-            {items.length > 0 && (
+            {(user && items.length > 0) && (
               <span className="badge-destructive absolute -right-2 -top-2">
                 {items.length}
               </span>

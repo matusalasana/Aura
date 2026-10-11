@@ -6,7 +6,6 @@ import {
   Palette,
   BarChart3,
   Users,
-  ShieldCheck,
   Zap,
   Globe,
   CheckCircle2,

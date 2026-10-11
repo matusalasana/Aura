@@ -62,7 +62,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-medium capitalize ${
             isAvailable
               ? "bg-background/90 text-foreground"
-              : "bg-destructive text-destructive-foreground"
+              : "bg-destructive text-background"
           }`}
         >
           {isAvailable ? "In stock" : "Out of stock"}
