@@ -8,6 +8,10 @@ import StoreLayout from "@/layouts/StoreLayout";
 
 // Public pages
 import Home from "@/dashboard/customer/pages/Home";
+import ContactPage from "@/pages/ContactPage";
+import AboutPage from "@/pages/AboutPage";
+import PricingPage from "@/pages/PricingPage";
+import ServicesPage from "@/pages/ServicesPage";
 
 // Auth pages
 import Signup from "@/features/auth/pages/Signup"
@@ -47,6 +51,22 @@ export const router = createBrowserRouter([
       {
         path: "products/:productId",
         element: <ProductDetailsPage />
+      },
+      {
+        path: "contact",
+        element: <ContactPage />
+      },
+      {
+        path: "about",
+        element: <AboutPage />
+      },
+      {
+        path: "pricing",
+        element: <PricingPage />
+      },
+      {
+        path: "services",
+        element: <ServicesPage />
       },
       
       // Customer Protected Pages

@@ -2,11 +2,11 @@ import {
   Bell,
   ChevronDown,
   Menu,
-  Moon,
   Search,
   UserRound,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 interface TopbarProps {
   storeName?: string;
@@ -58,10 +58,10 @@ export default function VendorTopbar({
         <motion.button
           type="button"
           whileTap={{ scale: 0.95 }}
-          className="rounded-xl border border-border p-2.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-3"
+          className="rounded-xl text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-3"
           aria-label="Toggle theme"
         >
-          <Moon className="h-[18px] w-[18px]" />
+          <ThemeToggle />
         </motion.button>
 
         {/* Notifications */}
