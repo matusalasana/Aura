@@ -115,6 +115,27 @@ const deleteStore = async (
 };
 
 
+export const getStoreProduct = async (
+  req: Request,
+  res: Response,
+) => {
+  if (!req.store) {
+    return res.status(404).json({ error: "Store not found" });
+  }
+  const storeId = req.store.id as string;
+  const productId = req.params.productId as string;
+  console.log(productId)
+  const product = await StoreService.getStoreProduct({
+    productId,
+    storeId,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: product,
+  });
+};
+
 
 export const StoreController = {
   createStore,
@@ -123,4 +144,6 @@ export const StoreController = {
   getStores,
   updateStore,
   deleteStore,
+
+  getStoreProduct,
 };

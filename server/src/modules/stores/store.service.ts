@@ -98,6 +98,27 @@ const deleteStore = async (storeId: string) => {
 };
 
 
+const getStoreProduct = async ({
+  productId,
+  storeId
+}: {
+  productId: string;
+  storeId: string;
+}) => {
+  
+  const product = await StoreRepository.findProductByIdAndStore({
+    productId,
+    storeId,
+  });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  return product;
+};
+
+
 
 export const StoreService = {
   createStore,
@@ -106,4 +127,6 @@ export const StoreService = {
   getStores,
   updateStore,
   deleteStore,
+
+  getStoreProduct
 };

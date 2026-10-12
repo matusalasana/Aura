@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MoreVertical, ImageOff } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,11 +8,13 @@ import type { Product } from "@/types/product";
 
 interface ProductCardProps {
   product: Product;
+  
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
-
+  const { slug = "" } = useParams<{ slug: string }>();
+  
   const isVariantProduct = product.type === "variant";
   const selectedVariant = isVariantProduct
     ? product.variants?.find((variant) => variant.stock > 0)
@@ -39,7 +41,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Card className="group overflow-hidden border-border bg-card shadow-sm transition-shadow duration-200 hover:shadow-md">
       {/* Product Image */}
       <Link
-        to={`/products/${product.id}`}
+        to={`/stores/${slug}/products/${product.id}`}
         className="relative block overflow-hidden bg-muted"
       >
         <div className="aspect-square">

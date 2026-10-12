@@ -11,10 +11,10 @@ export const resolveTenant = async (
   next: NextFunction
 ) => {
   
-  const { storeSlug } = req.params;
+  const { slug } = req.params;
 
   const store = await db.query.stores.findFirst({
-    where: eq(stores.slug, storeSlug),
+    where: eq(stores.slug, slug),
   });
 
   if (!store) {

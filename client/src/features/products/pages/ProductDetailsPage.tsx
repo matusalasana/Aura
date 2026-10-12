@@ -23,7 +23,11 @@ const formatPrice = (price: string | number) =>
 
 const ProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>();
-  const { data: product, isLoading, isError } = useProduct(productId!);
+  const { slug } = useParams<{ slug: string }>();
+  const { data: product, isLoading, isError } = useProduct({
+    productId,
+    slug,
+  });
   const addItem = useCartStore((state) => state.addItem);
 
   const [quantity, setQuantity] = useState(1);

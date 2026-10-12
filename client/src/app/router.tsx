@@ -12,7 +12,8 @@ import ContactPage from "@/pages/ContactPage";
 import AboutPage from "@/pages/AboutPage";
 import PricingPage from "@/pages/PricingPage";
 import ServicesPage from "@/pages/ServicesPage";
-import PublicStorePage from "@/features/stores/pages/PublicStorePage";
+import PublicStoresPage from "@/features/stores/pages/PublicStoresPage";
+import StoreHomePage from "@/features/stores/pages/StoreHomePage";
 
 // Auth pages
 import Signup from "@/features/auth/pages/Signup"
@@ -32,12 +33,13 @@ import StoreProductsPage from "@/features/stores/pages/StoreProductsPage";
 
 
 export const router = createBrowserRouter([
+
+  // Public routes 
   {
     path: "/",
     element: <AppLayout />,
     errorElement: <ErrorPage />,
     children: [
-      //  App Public Pages
       {
         index: true,
         element: <Home />,
@@ -49,10 +51,6 @@ export const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <Signup />
-      },
-      {
-        path: "products/:productId",
-        element: <ProductDetailsPage />
       },
       {
         path: "contact",
@@ -71,12 +69,25 @@ export const router = createBrowserRouter([
         element: <ServicesPage />
       },
       {
-        path: "shop/:slug",
-        element: <PublicStorePage />
+        path: "stores",
+        element: <PublicStoresPage />
+      },
+      {
+        path: "stores/:slug",
+        element: <StoreHomePage />
+      },
+      {
+        path: "stores/:slug/products/:productId",
+        element: <ProductDetailsPage />
+      },
+      {
+        path: "stores/:slug/products",
+        element: <StoreProductsPage />
       },
     ],
   },
 
+  
   // Customer protected routes
   {
     path: "/",
@@ -106,6 +117,7 @@ export const router = createBrowserRouter([
     ]
   },
 
+  
   // Store protected routes
   {
     path: "/stores",
@@ -115,7 +127,7 @@ export const router = createBrowserRouter([
         element: <StoreLayout />,
         children: [
           {
-            path: ":slug",
+            path: "me",
             element: <StoreDashboard />,
           },
           {
@@ -126,6 +138,7 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
   
   // Admin section
   {

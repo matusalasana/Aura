@@ -4,6 +4,7 @@ import { ProductController } from "@/modules/products/product.controller.js";
 import variantsRoutes from "@/modules/variants/variant.routes.js";
 import { validate } from "@/middleware/validation.js";
 import { upload } from "@/middleware/upload.js"
+import { resolveTenant } from "@/middleware/resolveTenant.js"
 
 
 const router = Router();
@@ -19,7 +20,7 @@ router.post(
 );
 
 router.get(
-  "/", 
+  "/",
   ProductController.getProducts
 );
 

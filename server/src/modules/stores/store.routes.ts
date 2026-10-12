@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { authenticate } from "@/middleware/authenticate.js";
+import { resolveTenant } from "@/middleware/resolveTenant.js";
 import { upload } from "@/middleware/upload.js";
 import { StoreController } from "@/modules/stores/store.controller.js";
 
@@ -43,6 +44,12 @@ router.get(
   StoreController.getStoreBySlug
 );
 
+
+router.get(
+  "/:slug/products/:productId",
+  resolveTenant,
+  StoreController.getStoreProduct
+);
 
 
 export default router;

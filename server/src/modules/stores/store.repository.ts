@@ -1,5 +1,5 @@
 import { db } from "@/db/index.js";
-import { stores } from "@/db/schema/stores.js";
+import { stores, products } from "@/db/schema/index.js";
 import type { UpdateStoreInput, CreateStoreInput } from "@/modules/stores/store.validations.js"
 
 import { eq, and } from "drizzle-orm";
@@ -24,6 +24,9 @@ const createStore = async ({
 const findBySlug = async (slug: string) => {
   return await db.query.stores.findFirst({
     where: eq(stores.slug, slug),
+    with: {
+      products: true
+    }
   });
 };
 
@@ -80,6 +83,23 @@ const deleteStore = async (storeId: string) => {
 };
 
 
+const findProductByIdAndStore = async ({
+  storeId,
+  productId,
+}: {
+  storeId: string
+  productId: string
+}) => {
+
+  return await db.query.products.findFirst({
+    where: and(
+      eq(products.storeId, storeId),
+      eq(products.id, productId)
+      ),
+  });
+};
+
+
 export const StoreRepository = {
   createStore,
   findBySlug,
@@ -88,4 +108,6 @@ export const StoreRepository = {
   update,
   deleteStore,
   findByStoreId,
+
+  findProductByIdAndStore,
 };
