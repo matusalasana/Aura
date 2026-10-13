@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/v1/:path*",
+      "destination": "https://aura-0flj.onrender.com/api/v1/:path*"
+    },
+    {
+      "source": "/api/auth/:path*",
+      "destination": "https://aura-0flj.onrender.com/api/auth/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

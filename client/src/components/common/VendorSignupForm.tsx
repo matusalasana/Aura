@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 
 import { useSignupStore } from "@/features/stores/hooks/useSignupStore";
+import { usePlans } from "@/features/payments/hooks/usePlans";
+import type { Plan } from "@/types/plan";
 import { type StoreFormData, storeSignupSchema } from "@/features/stores/schemas";
 
 const steps = [
@@ -21,30 +23,10 @@ const steps = [
   { num: 3, label: "Select Plan", icon: CreditCard },
 ] as const;
 
-const plans = [
-  {
-    id: "starter",
-    name: "Starter",
-    price: "$19/mo",
-    desc: "Up to 100 products on 1 subdomain",
-  },
-  {
-    id: "pro",
-    name: "Pro Vendor",
-    price: "$49/mo",
-    desc: "Unlimited products, 3 domains, priority Redis cache",
-    popular: true,
-  },
-  {
-    id: "enterprise",
-    name: "Enterprise",
-    price: "$149/mo",
-    desc: "Dedicated DB instance, 0% fees, super-admin tools",
-  },
-] as const;
 
 export default function VendorOnboarding() {
   const { mutate: signupStore, isPending } = useSignupStore();
+  const { data: plans = [] } = usePlans();
   
   const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -61,7 +43,7 @@ export default function VendorOnboarding() {
       storeName: "",
       description: "",
       slug: "",
-      plan: "starter",
+      planId: "",
     },
   });
 
@@ -78,7 +60,7 @@ export default function VendorOnboarding() {
     });
   };
 
-  const selectedPlan = watch("plan");
+  const selectedPlan = watch("planId");
   const storeName = watch("storeName");
   const slug = watch("slug");
 
@@ -343,7 +325,7 @@ export default function VendorOnboarding() {
 
               {/* Plans */}
               <div className="space-y-3">
-                {plans.map((item) => {
+                {plans.map((item: Plan) => {
                   const isSelected = selectedPlan === item.id;
 
                   return (
@@ -361,7 +343,7 @@ export default function VendorOnboarding() {
                           id={`plan-${item.id}`}
                           type="radio"
                           value={item.id}
-                          {...register("plan")}
+                          {...register("planId")}
                           className="mt-1 h-4 w-4 shrink-0 accent-primary"
                         />
 
@@ -372,7 +354,7 @@ export default function VendorOnboarding() {
                                 {item.name}
                               </span>
 
-                              {"popular" in item && item.popular && (
+                              {item && (item.name === "Growth") && (
                                 <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                                   Popular
                                 </span>
@@ -380,12 +362,23 @@ export default function VendorOnboarding() {
                             </div>
 
                             <span className="font-semibold tabular-nums text-primary">
-                              {item.price}
+                              {item.yearlyPrice}
+                            </span>
+                            <span className="font-semibold tabular-nums text-primary">
+                              {item.monthlyPrice}
                             </span>
                           </div>
 
+                          <div className="flex flex-col">
+                            {item?.features?.map((feature) => (
+                              <span className="font-semibold tabular-nums text-foreground">
+                              {feature}
+                            </span>
+                            ))}
+                          </div>
+
                           <p className="text-xs leading-relaxed text-muted-foreground">
-                            {item.desc}
+                            {item.description}
                           </p>
                         </div>
                       </div>
@@ -393,9 +386,9 @@ export default function VendorOnboarding() {
                   );
                 })}
 
-                {errors.plan && (
+                {errors.planId && (
                   <p className="error-text text-sm">
-                    {errors.plan.message}
+                    {errors.planId.message}
                   </p>
                 )}
               </div>

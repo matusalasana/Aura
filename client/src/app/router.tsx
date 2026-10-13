@@ -5,6 +5,7 @@ import ErrorPage from "@/pages/ErrorPage"
 // Layouts 
 import AppLayout from "@/layouts/AppLayout";
 import StoreLayout from "@/layouts/StoreLayout";
+import AdminLayout from "@/layouts/AdminLayout";
 
 // Public pages
 import Home from "@/dashboard/customer/pages/Home";
@@ -30,6 +31,11 @@ import AccountPage from "@/features/customer/pages/AccountPage";
 // Store pages
 import StoreDashboard from "@/dashboard/store/pages/StoreDashboard";
 import StoreProductsPage from "@/features/stores/pages/StoreProductsPage";
+
+// Admin routes
+import AdminDashboard from "@/features/admin/pages/AdminDashboard";
+import AdminStores from "@/features/admin/pages/AdminStores";
+import AdminPayments from "@/features/admin/pages/AdminPayments";
 
 
 export const router = createBrowserRouter([
@@ -143,14 +149,22 @@ export const router = createBrowserRouter([
   // Admin section
   {
     path: "/admin",
-    element: <h1>protected routes</h1>, 
+    element: <ProtectedRoutes roles={["customer", "admin"]} />, 
     children: [
       {
-        element: <h1>Admin Layout </h1>,
+        element: <AdminLayout />,
         children: [
           {
             index: true,
-            element: <h1>Admin Dashboard </h1>,
+            element: <AdminDashboard />,
+          },
+          {
+            path: "stores",
+            element: <AdminStores />
+          },
+          {
+            path: "payments",
+            element: <AdminPayments />
           },
         ],
       },

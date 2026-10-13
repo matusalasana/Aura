@@ -32,16 +32,14 @@ const FeaturedStores = ({stores}: Props) => {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {stores.map((store) => (
             <Link
-              key={store.storeName}
-              to={`/stores/${encodeURIComponent(
-                store.storeName.toLowerCase().replace(/\s+/g, "-")
-              )}`}
+              key={store.name}
+              to={`/stores/${store.slug}`}
               className="group block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <div className="relative h-56 overflow-hidden bg-muted sm:h-64">
                 <img
                   src={store.logo || undefined}
-                  alt={`${store.storeName} store`}
+                  alt={`${store.name} store`}
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(event) => {
@@ -58,7 +56,7 @@ const FeaturedStores = ({stores}: Props) => {
 
                   <div className="min-w-0">
                     <h3 className="truncate text-lg font-bold text-white sm:text-xl">
-                      {store.storeName}
+                      {store.name}
                     </h3>
                     <p className="mt-1 text-sm font-medium text-white/80">
                       {store.plan}

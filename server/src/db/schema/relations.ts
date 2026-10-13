@@ -1,21 +1,17 @@
 import { relations } from "drizzle-orm";
 
-import {
-  user,
-  session,
-  account,
+import { user, session, account } from "./auth.js";
+import { stores } from "./stores.js";
+import { plans } from "./plans.js";
+import { storeDomains } from "./storeDomains.js";
+import { products } from "./products.js";
+import { productVariants } from "./productVariants.js";
+import { productImages } from "./productImages.js";
+import { orders } from "./orders.js";
+import { orderItems } from "./orderItems.js";
+import { shippingInformation } from "./shippingInformation.js";
 
-  stores,
-  storeDomains,
 
-  products,
-  productVariants,
-  productImages,
-
-  orders,
-  orderItems,
-  shippingInformation,
-} from "@/db/schema/index.js";
 
 /* -------------------- USER -------------------- */
 
@@ -49,6 +45,10 @@ export const storesRelations = relations(stores, ({ one, many }) => ({
   owner: one(user, {
     fields: [stores.ownerId],
     references: [user.id],
+  }),
+  plan: one(plans, {
+    fields: [stores.planId],
+    references: [plans.id]
   }),
   domain: one(storeDomains, {
     fields: [stores.id],
@@ -121,8 +121,7 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
     items: many(orderItems),
 
     addresses: many(shippingInformation),
-  }),
-);
+}));
 
 /* -------------------- ORDER ITEM -------------------- */
 
@@ -141,5 +140,14 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
       fields: [orderItems.variantId],
       references: [productVariants.id],
     }),
+}));
+
+/* -------------------- PLAN -------------------- */
+
+export const plansRelations = relations(plans, ({ one }) => ({
+  store: one(stores, {
+    fields: [plans.id],
+    references: [stores.planId],
   }),
-)
+
+}));

@@ -8,6 +8,8 @@ import { Env } from "./env.js";
 import { sendEmail } from "@/utils/email.js"
 import { verifyEmailTemplate } from "@/templates/verifyEmail.js";
 
+const isProduction = Env.NODE_ENV === "production";
+
 export const auth = betterAuth({
   
   database: drizzleAdapter(db, {
@@ -17,7 +19,9 @@ export const auth = betterAuth({
 
   secret: Env.BETTER_AUTH_SECRET,
 
-  baseURL: Env.BETTER_AUTH_URL,
+  baseURL: isProduction 
+    ? Env.CLIENT_ORIGIN
+    : "http://localhost:5173",
 
   emailAndPassword: {
     enabled: true,
@@ -47,8 +51,9 @@ export const auth = betterAuth({
   },
 
   advanced: {
+    trustedProxyHeaders: true,
 		defaultCookieAttributes: {
-			sameSite: "none",
+			sameSite: "lax",
 			secure: true,
 			httpOnly: true,
 		},

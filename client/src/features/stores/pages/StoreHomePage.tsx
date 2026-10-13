@@ -10,7 +10,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useStore } from "@/features/stores/hooks/useStore";
-import type { Product } from "@/types/product";
 import ProductGrid from "@/components/common/product/ProductGrid"
 
 
@@ -41,6 +40,26 @@ const StoreHomePage = () => {
         </div>
       </main>
     );
+  }
+
+  if (isError) {
+    return (
+      <div className="mt-10 rounded-2xl border border-border px-5 py-12 text-center">
+        <p className="font-medium text-foreground">
+          Could not load products
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Please try again.
+        </p>
+        <Button
+          variant="outline"
+          className="mt-4"
+          onClick={() => refetch()}
+        >
+          Try again
+        </Button>
+      </div>
+    )
   }
 
   if (isError || !store) {
@@ -86,7 +105,7 @@ const StoreHomePage = () => {
                   {store.logo && !logoError ? (
                     <img
                       src={store.logo}
-                      alt={`${store.storeName} logo`}
+                      alt={`${store.name} logo`}
                       onError={() => setLogoError(true)}
                       className="size-full object-cover"
                     />
@@ -104,7 +123,7 @@ const StoreHomePage = () => {
                     Storefront
                   </p>
                   <h1 className="break-words text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
-                    {store.storeName}
+                    {store.name}
                   </h1>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Discover products from this store.
@@ -161,23 +180,8 @@ const StoreHomePage = () => {
               </div>
             ))}
           </div>
-        ) : isError ? (
-          <div className="mt-10 rounded-2xl border border-border px-5 py-12 text-center">
-            <p className="font-medium text-foreground">
-              Could not load products
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Please try again.
-            </p>
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={() => refetch()}
-            >
-              Try again
-            </Button>
-          </div>
-        ) : store.products?.length > 0 ? (
+        ) : (
+            store?.products?.length ?? 0) > 0 ? (
           <ProductGrid
             products={store.products ?? []}
           />

@@ -1,6 +1,8 @@
 import { authClient } from "@/lib/authClient";
 import { useMutation } from "@tanstack/react-query";
 import { type SigninInput } from "../schemas";
+import { toast } from "react-hot-toast";
+
 
 const signin = async (data: SigninInput) => {
   let CALLBACK_URL;
@@ -18,13 +20,14 @@ const signin = async (data: SigninInput) => {
   });
 
   if (res.error) {
-    throw new Error(res.error.message || "Failed to sign in");
+    toast.error(res.error?.message || res.error?.code || "Signin Error");
   }
 
   if (!res.data) {
-    throw new Error("Sign-in returned no data");
+    toast.error("Sign-in returned no data");
   }
 
+  toast.success("signin Successful")
   return res.data;
 };
 

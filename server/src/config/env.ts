@@ -74,6 +74,7 @@ const envSchema = z.object({
 
 const parsedEnv = envSchema.parse(process.env);
 
+
 export const Env = {
   
   NODE_ENV: parsedEnv.NODE_ENV,

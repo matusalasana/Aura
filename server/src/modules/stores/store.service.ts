@@ -20,8 +20,7 @@ const createStore = async ({
     ...data,
     logo: uploadResult.secure_url,
   }
-  console.log(data)
-  console.log(storeData)
+
   return await StoreRepository.createStore({ 
     storeData,
     ownerId 

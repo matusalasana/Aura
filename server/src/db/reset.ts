@@ -9,8 +9,8 @@ export const resetSchema = async () => {
     DROP SCHEMA IF EXISTS public CASCADE;
     CREATE SCHEMA public;
   `);
-  
-  logger.info("Schema dropped successfully")
 };
 
 resetSchema();
+
+logger.info("Schema dropped successfully")

@@ -42,46 +42,46 @@ export const createProduct = async (
   });
 };
 
-export const getProducts = async (
-  req: Request,
-  res: Response,
-) => {
-  if(!req.store){
-    res.status(404).json({
-      message: "store not found"
-    })
-  }
-  const storeId = req.store.id as string;
-  console.log(storeId)
-  const products = await ProductService.getProducts(
-    storeId,
-  );
+// export const getProducts = async (
+//   req: Request,
+//   res: Response,
+// ) => {
+//   if(!req.store){
+//     res.status(404).json({
+//       message: "store not found"
+//     })
+//   }
+//   const storeId = req.store.id as string;
+//   console.log(storeId)
+//   const products = await ProductService.getProducts(
+//     storeId,
+//   );
 
-  console.log(products)
+//   console.log(products)
 
-  res.status(200).json({
-    success: true,
-    data: products,
-  });
-};
+//   res.status(200).json({
+//     success: true,
+//     data: products,
+//   });
+// };
 
-export const getProduct = async (
-  req: Request,
-  res: Response,
-) => {
-  if (!req.store) {
-    return res.status(404).json({ error: "Store not found" });
-  }
-  const product = await ProductService.getProduct(
-    req.params.productId,
-    req.store.id,
-  );
+// export const getProduct = async (
+//   req: Request,
+//   res: Response,
+// ) => {
+//   if (!req.store) {
+//     return res.status(404).json({ error: "Store not found" });
+//   }
+//   const product = await ProductService.getProduct(
+//     req.params.productId,
+//     req.store.id,
+//   );
 
-  res.status(200).json({
-    success: true,
-    data: product,
-  });
-};
+//   res.status(200).json({
+//     success: true,
+//     data: product,
+//   });
+// };
 
 export const updateProduct = async (
   req: Request,
@@ -124,6 +124,6 @@ export const ProductController = {
   createProduct,
   updateProduct,
   deleteProduct,
-  getProduct,
-  getProducts,
+  // getProduct,
+  // getProducts,
 };

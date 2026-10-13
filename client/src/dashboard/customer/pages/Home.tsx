@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, LoaderCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-import { useProducts } from "@/features/products/hooks/useProducts";
 import { useStores } from "@/features/stores/hooks/useStores";
 
 import Hero from "@/dashboard/customer/components/Hero";
@@ -14,13 +13,11 @@ import FAQ from "@/dashboard/customer/components/FAQ";
 import Pricing from "@/dashboard/customer/components/Pricing";
 import VendorOnboarding from "@/components/common/VendorSignupForm";
 import MerchantMarquee from "@/dashboard/customer/components/MerchantMarquee";
-import ProductGrid from "@/components/common/product/ProductGrid";
+
 
 export default function AuraHomePage() {
-  const { data: products = [], isLoading: productsLoading } = useProducts();
-  const { data: stores = [], isLoading: storesLoading } = useStores();
-
-  const isLoading = productsLoading || storesLoading;
+  
+  const { data: stores = [] } = useStores();
   
   return (
     <main className="min-h-screen bg-background font-sans text-foreground antialiased">
@@ -47,32 +44,13 @@ export default function AuraHomePage() {
             </div>
 
             <Link
-              to="/products"
+              to="/stores/products"
               className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-primary transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               View all
               <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
-
-          {isLoading ? (
-            <div
-              className="flex min-h-48 items-center justify-center gap-3 text-muted-foreground"
-              role="status"
-            >
-              <LoaderCircle className="size-5 animate-spin text-primary" />
-              <span>Loading products...</span>
-            </div>
-          ) : products.length > 0 ? (
-              <ProductGrid products={products} />
-          ) : (
-            <div className="rounded-2xl border border-dashed border-border bg-card px-5 py-12 text-center">
-              <p className="font-medium">No products available yet</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Check back soon to discover products from Aura stores.
-              </p>
-            </div>
-          )}
         </div>
       </section>
 

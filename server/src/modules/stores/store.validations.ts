@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+
+const storeStatusEnum = z.enum([
+  "pending",
+  "active",
+  "suspended",
+]);
+
 export const createStoreSchema = z.object({
   storeName: z
     .string()
@@ -9,7 +16,7 @@ export const createStoreSchema = z.object({
     .string()
     .min(10, "Description must be at least 10 characters"),
 
-  logo: z.string().optional(),
+  logo: z.string().min(1),
 
   slug: z
     .string()
@@ -19,7 +26,9 @@ export const createStoreSchema = z.object({
       "Slug can only contain lowercase letters, numbers, and hyphens"
     ),
 
-  plan: z.enum(["starter", "pro", "enterprise"]),
+  status: storeStatusEnum,
+  
+  planId: z.uuid().min(1),
 });
 
 

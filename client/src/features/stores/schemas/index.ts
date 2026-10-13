@@ -17,7 +17,7 @@ export const storeSignupSchema = z.object({
       "Slug can only contain lowercase letters, numbers, and hyphens"
     ),
 
-  plan: z.enum(["starter", "pro", "enterprise"]),
+  planId: z.uuid().min(1),
 });
 
 export type StoreFormData = z.infer<typeof storeSignupSchema>;

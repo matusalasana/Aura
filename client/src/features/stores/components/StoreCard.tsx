@@ -15,7 +15,7 @@ const StoreCard = ({ store }: Props) => {
   return (
     <Link
       to={`/stores/${store.slug}`}
-      aria-label={`Visit ${store.storeName}`}
+      aria-label={`Visit ${store.name}`}
       className="group block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       {/* Store cover */}
@@ -23,7 +23,7 @@ const StoreCard = ({ store }: Props) => {
         {showLogo ? (
           <img
             src={store.logo!}
-            alt={`${store.storeName} logo`}
+            alt={`${store.name} logo`}
             loading="lazy"
             onError={() => setImageError(true)}
             className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -66,7 +66,7 @@ const StoreCard = ({ store }: Props) => {
 
           <div className="min-w-0 flex-1">
             <h3 className="truncate font-semibold text-card-foreground transition-colors group-hover:text-primary">
-              {store.storeName}
+              {store.name}
             </h3>
             <p className="mt-1 truncate text-sm text-muted-foreground">
               Explore this store's collection

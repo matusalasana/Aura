@@ -26,23 +26,23 @@ export default function MerchantMarquee({ stores }: Props) {
           <div className="flex w-max animate-scroll-left gap-4">
             {stores.map((store, index) => (
               <div
-                key={`${store.storeName}-${index}`}
+                key={`${store.name}-${index}`}
                 className="flex h-16 min-w-48 items-center gap-3 rounded-xl border bg-card px-5"
               >
                 {store.logo ? (
                   <img
                     src={store.logo}
-                    alt={`${store.storeName} logo`}
+                    alt={`${store.name} logo`}
                     className="h-9 w-9 shrink-0 rounded-lg object-cover"
                   />
                 ) : (
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 px-1 text-xs font-bold text-primary">
-                    {store.storeName.split(" ")[0] ?? store.storeName}
+                    {store.name.split(" ")[0] ?? store.name}
                   </div>
                 )}
 
                 <span className="whitespace-nowrap font-medium">
-                  {store.storeName}
+                  {store.name}
                 </span>
               </div>
             ))}

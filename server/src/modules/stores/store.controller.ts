@@ -15,6 +15,7 @@ const createStore = async (
   const file = req.file as Express.Multer.File;
   const ownerId = req.user.id as string;
   const data: CreateStoreInput = JSON.parse(req.body.storeData);
+  
   const store = await StoreService.createStore({ownerId, file, data});
   
   return res.status(200).json({

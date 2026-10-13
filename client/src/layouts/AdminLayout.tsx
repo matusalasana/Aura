@@ -1,8 +1,19 @@
+import { Outlet } from "react-router-dom";
+import Navbar from "@/components/layout/admin/Navbar";
+import Footer from "@/components/layout/Footer";
+import ScrollToTop from "@/utils/ScrollToTop";
 
-const AdminLayout = () => {
+export default function AdminLayout() {
   return (
-    <div></div>
-  )
-}
+    <div className="min-h-screen flex flex-col bg-background">
+      <Navbar />
 
-export default AdminLayout
+      <main className="flex-1">
+      <ScrollToTop />
+        <Outlet />
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

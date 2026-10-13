@@ -6,11 +6,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
+import { toNodeHandler } from "better-auth/node";
   
 import { loggerMiddleware } from './middleware/logger.js';
 import { errorHandler } from "./middleware/errorHandler.js";
 import routes from "./routes/index.js";
-import { authHandler } from "@/modules/auth/auth.routes.js";
+import { auth } from "@/config/auth.js";
 import { Env } from "@/config/env.js";
 import { appTemplate } from "@/templates/appTemplate.js"
 
@@ -53,6 +54,11 @@ app.use(helmet({
   contentSecurityPolicy: false,
 }));
 app.use(express.json());
+
+app.all("/api/auth/{*any}", (req, res, next) => {
+  toNodeHandler(auth)(req, res).catch(next);
+});
+
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(cookieParser());
 app.use(loggerMiddleware);
@@ -61,7 +67,6 @@ app.use(loggerMiddleware);
 app.use('/api', limiter);
 
 // API Routes
-app.all("/api/auth/{*any}", authHandler);
 app.use("/api/v1", routes);
 app.get("/", (_req, res) => {
   res.type("html").send(appTemplate());

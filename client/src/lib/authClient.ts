@@ -1,7 +1,9 @@
 import { createAuthClient } from "better-auth/react";
 
-export const authClient = createAuthClient({
-  baseURL: import.meta.env.DEV
+const BASE_URL = import.meta.env.DEV
     ? "http://localhost:3000"
-    : "https://aura-0flj.onrender.com",
+    : "/";
+
+export const authClient = createAuthClient({
+  baseURL: BASE_URL,
 });

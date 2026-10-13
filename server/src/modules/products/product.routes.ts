@@ -19,15 +19,15 @@ router.post(
   ProductController.createProduct
 );
 
-router.get(
-  "/",
-  ProductController.getProducts
-);
+// router.get(
+//   "/",
+//   ProductController.getProducts
+// );
 
-router.get(
-  "/:productId", 
-  ProductController.getProduct
-);
+// router.get(
+//   "/:productId", 
+//   ProductController.getProduct
+// );
 
 router.patch(
   "/:productId",

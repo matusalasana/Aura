@@ -8,7 +8,7 @@ export type PlanEnum = "starter" | "pro" | "enterprise";
 
 export type Store = {
   id: string;
-  storeName: string;
+  name: string;
   slug: string;
   plan: string;
   description: string | null;
