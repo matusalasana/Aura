@@ -9,7 +9,7 @@
       "destination": "https://aura-marketplace-api.onrender.com/api/auth/:path*"
     },
     {
-      "source": "/((?!api/v1|api/auth|src|@vite|@id|@fs|@react-refresh|node_modules|assets|favicon).*)",
+      "source": "/((?!api).*)",
       "destination": "/index.html"
     }
   ]
