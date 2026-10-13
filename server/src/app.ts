@@ -29,6 +29,7 @@ const limiter = rateLimit({
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:3001",
   "http://localhost:3000",
   Env.CLIENT_ORIGIN,
   Env.SERVER_ORIGIN,
@@ -55,9 +56,7 @@ app.use(helmet({
 }));
 app.use(express.json());
 
-app.all("/api/auth/{*any}", (req, res, next) => {
-  toNodeHandler(auth)(req, res).catch(next);
-});
+app.all('/api/auth/{*any}', toNodeHandler(auth));
 
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(cookieParser());

@@ -2,14 +2,14 @@
   "rewrites": [
     {
       "source": "/api/v1/:path*",
-      "destination": "https://aura-0flj.onrender.com/api/v1/:path*"
+      "destination": "https://aura-marketplace-api.onrender.com/api/v1/:path*"
     },
     {
       "source": "/api/auth/:path*",
-      "destination": "https://aura-0flj.onrender.com/api/auth/:path*"
+      "destination": "https://aura-marketplace-api.onrender.com/api/auth/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!src|@vite|@id|@fs|@react-refresh|node_modules|assets|favicon).*)",
       "destination": "/index.html"
     }
   ]

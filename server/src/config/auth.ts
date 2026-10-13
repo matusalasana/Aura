@@ -20,8 +20,8 @@ export const auth = betterAuth({
   secret: Env.BETTER_AUTH_SECRET,
 
   baseURL: isProduction 
-    ? Env.CLIENT_ORIGIN
-    : "http://localhost:5173",
+    ? `${Env.CLIENT_ORIGIN}/api/auth`
+    : "http://localhost:3000/api/auth",
 
   emailAndPassword: {
     enabled: true,
@@ -29,8 +29,8 @@ export const auth = betterAuth({
 
   socialProviders: { 
     google: { 
-      clientId: process.env.GOOGLE_CLIENT_ID as string, 
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: Env.GOOGLE_CLIENT_ID as string, 
+      clientSecret: Env.GOOGLE_CLIENT_SECRET as string,
       prompt: "select_account",
     },
   },
