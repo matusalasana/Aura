@@ -1,35 +1,24 @@
 
-export const permissions = {
-  
+export const PERMISSIONS = {
   // Products
-  "products.read": "products.read",
-  "products.create": "products.create",
-  "products.update": "products.update",
-  "products.delete": "products.delete",
+  PRODUCT_READ: "products:read",
+  PRODUCT_CREATE: "products:create",
+  PRODUCT_UPDATE: "products:update",
+  PRODUCT_DELETE: "products:delete",
 
   // Orders
-  "orders.read": "orders.read",
-  "orders.update": "orders.update",
-  "orders.cancel": "orders.cancel",
-  "orders.refund": "orders.refund",
+  ORDER_READ: "orders:read",
+  ORDER_UPDATE: "orders:update",
+  ORDER_CANCEL: "orders:cancel",
+  ORDER_REFUND: "orders:refund",
 
   // Store
-  "store.read": "store.read",
-  "store.update": "store.update",
-  "store.settings": "store.settings",
-
-  // Members
-  "members.read": "members.read",
-  "members.invite": "members.invite",
-  "members.update": "members.update",
-  "members.remove": "members.remove",
-
-  // Domains
-  "domains.read": "domains.read",
-  "domains.create": "domains.create",
-  "domains.update": "domains.update",
-  "domains.delete": "domains.delete",
+  STORE_CREATE: "store:create",
+  STORE_READ: "store:read",
+  STORE_UPDATE: "store:update",
+  STORE_SUSPEND: "store:suspend",
+  STORE_SETTINGS: "store:settings",
   
 } as const;
 
-export type Permission = (typeof permissions)[keyof typeof permissions];
+export type Permission = keyof typeof PERMISSIONS;

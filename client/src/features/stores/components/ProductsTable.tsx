@@ -1,5 +1,5 @@
 import { MoreHorizontal, Package, RefreshCw } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams  } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,8 @@ const getStatusVariant = (status: string) => {
 };
 
 const ProductsTable = () => {
+  const { slug = "" } = useParams<{ slug: string }>();
+  
   const navigate = useNavigate();
   
   const {
@@ -47,7 +49,7 @@ const ProductsTable = () => {
     isLoading,
     isError,
     refetch,
-  } = useProducts();
+  } = useProducts(slug);
 
   if (isLoading) {
     return (

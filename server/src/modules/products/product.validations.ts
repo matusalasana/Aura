@@ -39,8 +39,7 @@ export const basicInfoSchema = z.object({
 
 export const inventoryInfoSchema = z.object({
   price: z
-    .number()
-    .positive("Price must be greater than 0")
+    .string()
     .optional(),
 
   stock: z

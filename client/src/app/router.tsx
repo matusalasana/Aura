@@ -15,6 +15,7 @@ import PricingPage from "@/pages/PricingPage";
 import ServicesPage from "@/pages/ServicesPage";
 import PublicStoresPage from "@/features/stores/pages/PublicStoresPage";
 import StoreHomePage from "@/features/stores/pages/StoreHomePage";
+import CreateStorePage from "@/pages/CreateStorePage";
 
 // Auth pages
 import Signup from "@/features/auth/pages/Signup"
@@ -97,7 +98,7 @@ export const router = createBrowserRouter([
   // Customer protected routes
   {
     path: "/",
-    element: <ProtectedRoutes roles={["customer"]} />, 
+    element: <ProtectedRoutes roles={["customer", "vendor"]} />, 
     children: [
       {
         element: <AppLayout />,
@@ -118,6 +119,10 @@ export const router = createBrowserRouter([
             path: "/orders",
             element: <OrdersPage />,
           },
+          {
+            path: "/stores/new",
+            element: <CreateStorePage />,
+          },
         ]
       }
     ]
@@ -127,17 +132,17 @@ export const router = createBrowserRouter([
   // Store protected routes
   {
     path: "/stores",
-    element: <ProtectedRoutes roles={["vendor", "customer"]} />, 
+    element: <ProtectedRoutes roles={["vendor"]} />, 
     children: [
       {
         element: <StoreLayout />,
         children: [
           {
-            path: "me",
+            path: ":storeId/dashboard",
             element: <StoreDashboard />,
           },
           {
-            path: "products",
+            path: ":slug/products",
             element: <StoreProductsPage />,
           },
         ]

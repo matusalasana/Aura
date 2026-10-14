@@ -11,7 +11,6 @@ import WhyAura from "@/dashboard/customer/components/WhyAura";
 import Testimonials from "@/dashboard/customer/components/Testimonials";
 import FAQ from "@/dashboard/customer/components/FAQ";
 import Pricing from "@/dashboard/customer/components/Pricing";
-import VendorOnboarding from "@/components/common/VendorSignupForm";
 import MerchantMarquee from "@/dashboard/customer/components/MerchantMarquee";
 
 
@@ -44,7 +43,7 @@ export default function AuraHomePage() {
             </div>
 
             <Link
-              to="/stores/products"
+              to="/stores"
               className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-primary transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               View all
@@ -59,7 +58,6 @@ export default function AuraHomePage() {
       <PopularStores />
       <WhyAura />
       <Testimonials />
-      <VendorOnboarding />
       <Pricing />
       <FAQ />
     </main>

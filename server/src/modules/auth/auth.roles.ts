@@ -1,58 +1,59 @@
+import { PERMISSIONS } from "./auth.permissions.js";
 import type { Permission } from "./auth.permissions.js";
 
-export const rolePermissions: Record<string, Permission[]> = {
-  owner: [
-    "products.read",
-    "products.create",
-    "products.update",
-    "products.delete",
+export const rolePermissions = {
+  vendor: [
+    PERMISSIONS.PRODUCT_READ,
+    PERMISSIONS.PRODUCT_CREATE,
+    PERMISSIONS.PRODUCT_UPDATE,
+    PERMISSIONS.PRODUCT_DELETE,
 
-    "orders.read",
-    "orders.update",
-    "orders.cancel",
-    "orders.refund",
+    PERMISSIONS.ORDER_READ,
+    PERMISSIONS.ORDER_UPDATE,
+    PERMISSIONS.ORDER_CANCEL,
+    PERMISSIONS.ORDER_REFUND,
 
-    "store.read",
-    "store.update",
-    "store.settings",
+    PERMISSIONS.STORE_CREATE,
+    PERMISSIONS.STORE_READ,
+    PERMISSIONS.STORE_UPDATE,
+    PERMISSIONS.STORE_SETTINGS,
 
-    "members.read",
-    "members.invite",
-    "members.update",
-    "members.remove",
+    PERMISSIONS.MEMBER_READ,
+    PERMISSIONS.MEMBER_INVITE,
+    PERMISSIONS.MEMBER_UPDATE,
+    PERMISSIONS.MEMBER_REMOVE,
 
-    "domains.read",
-    "domains.create",
-    "domains.update",
-    "domains.delete",
+    PERMISSIONS.DOMAIN_READ,
+    PERMISSIONS.DOMAIN_CREATE,
+    PERMISSIONS.DOMAIN_UPDATE,
+    PERMISSIONS.DOMAIN_DELETE,
   ],
 
-  manager: [
-    "products.read",
-    "products.create",
-    "products.update",
-    "products.delete",
+  admin: [
+    PERMISSIONS.PRODUCT_READ,
+    PERMISSIONS.PRODUCT_CREATE,
+    PERMISSIONS.PRODUCT_UPDATE,
+    PERMISSIONS.PRODUCT_DELETE,
 
-    "orders.read",
-    "orders.update",
-    "orders.cancel",
+    PERMISSIONS.ORDER_READ,
+    PERMISSIONS.ORDER_UPDATE,
+    PERMISSIONS.ORDER_CANCEL,
 
-    "store.read",
+    PERMISSIONS.STORE_READ,
 
-    "members.read",
-    "members.invite",
-    "members.update",
+    PERMISSIONS.MEMBER_READ,
+    PERMISSIONS.MEMBER_INVITE,
+    PERMISSIONS.MEMBER_UPDATE,
 
-    "domains.read",
+    PERMISSIONS.DOMAIN_READ,
   ],
 
-  staff: [
-    "products.read",
-    "products.update",
-
-    "orders.read",
-    "orders.update",
-
-    "store.read",
+  customer: [
+    PERMISSIONS.PRODUCT_READ,
+    PERMISSIONS.ORDER_READ,
+    PERMISSIONS.STORE_READ,
   ],
-};
+} satisfies Record<string, readonly Permission[]>;
+
+
+export type Role = keyof typeof rolePermissions;

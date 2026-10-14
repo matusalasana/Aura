@@ -75,81 +75,81 @@ const createProduct = async ({
   return product;
 };
 
-// const getProduct = async (
-//   productId: string,
-//   storeId: string,
-// ) => {
-//   const key = productKey(storeId, productId);
+const getProduct = async (
+  productId: string,
+  storeId: string,
+) => {
+  const key = productKey(storeId, productId);
 
-//   // 1. Try Redis first
-//   // const cachedProduct = await redis.get(key);
+  // 1. Try Redis first
+  // const cachedProduct = await redis.get(key);
 
-//   // if (cachedProduct) {
-//   //   return cachedProduct;
-//   // }
+  // if (cachedProduct) {
+  //   return cachedProduct;
+  // }
 
-//   // 2. Fall back to database
-//   const product =
-//     await ProductRepository.findByIdAndStore(
-//       productId,
-//       storeId,
-//     );
+  // 2. Fall back to database
+  const product =
+    await ProductRepository.findByIdAndStore(
+      productId,
+      storeId,
+    );
 
-//   if (!product) {
-//     throw new Error("Product not found");
-//   }
+  if (!product) {
+    throw new Error("Product not found");
+  }
 
-//   // 3. Cache database result
-//   await redis.set(key, product, {
-//     ex: PRODUCT_CACHE_TTL,
-//   });
+  // 3. Cache database result
+  await redis.set(key, product, {
+    ex: PRODUCT_CACHE_TTL,
+  });
 
-//   return product;
-// };
+  return product;
+};
 
-// const getProducts = async (storeId: string) => {
-//   const key = productsKey(storeId);
+const getProducts = async (storeId: string) => {
+  const key = productsKey(storeId);
 
-//   // 1. Try Redis first
-//   const cachedProducts = await redis.get(key);
+  // 1. Try Redis first
+  const cachedProducts = await redis.get(key);
 
-//   if (cachedProducts) {
-//     return cachedProducts;
-//   }
+  if (cachedProducts) {
+    return cachedProducts;
+  }
 
-//   // 2. Get from database
-//   const products = await ProductRepository.findByStore(storeId);
+  // 2. Get from database
+  const products = await ProductRepository.findByStore(storeId);
 
-//   // 3. Calculate average price for variant products
-//   const refinedProducts = products.map((product) => {
-//     if (product.type !== "variant" || product.price !== null) {
-//       return product;
-//     }
+  // 3. Calculate average price for variant products
+  const refinedProducts = products.map((product) => {
+    if (product.type !== "variant" || product.price !== null) {
+      return product;
+    }
 
-//     const prices = product.variants
-//       .map((variant) => Number(variant.price))
-//       .filter((price) => !Number.isNaN(price));
+    const prices = product.variants
+      .map((variant) => Number(variant.price))
+      .filter((price) => !Number.isNaN(price));
 
-//     if (!prices.length) {
-//       return product;
-//     }
+    if (!prices.length) {
+      return product;
+    }
 
-//     const averagePrice =
-//       prices.reduce((sum, price) => sum + price, 0) / prices.length;
+    const averagePrice =
+      prices.reduce((sum, price) => sum + price, 0) / prices.length;
 
-//     return {
-//       ...product,
-//       price: averagePrice.toFixed(2),
-//     };
-//   });
+    return {
+      ...product,
+      price: averagePrice.toFixed(2),
+    };
+  });
 
-//   // 4. Cache refined products
-//   await redis.set(key, refinedProducts, {
-//     ex: PRODUCT_CACHE_TTL,
-//   });
+  // 4. Cache refined products
+  await redis.set(key, refinedProducts, {
+    ex: PRODUCT_CACHE_TTL,
+  });
 
-//   return refinedProducts;
-// };
+  return refinedProducts;
+};
 
 const updateProduct = async (
   productId: string,
@@ -207,8 +207,8 @@ const deleteProduct = async (
 
 export const ProductService = {
   createProduct,
-  // getProduct,
-  // getProducts,
+  getProduct,
+  getProducts,
   updateProduct,
   deleteProduct,
 };

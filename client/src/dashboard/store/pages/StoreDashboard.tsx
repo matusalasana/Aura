@@ -4,6 +4,7 @@ import DashboardStats from "@/dashboard/store/components/DashboardStats";
 import SalesOverview from "@/dashboard/store/components/SalesOverview";
 import RecentOrders from "@/dashboard/store/components/RecentOrders";
 import LowStockProducts from "@/dashboard/store/components/LowStockProducts";
+import ProductForm from "@/features/products/components/forms/ProductForm";
 
 const StoreDashboard = () => {
   const {

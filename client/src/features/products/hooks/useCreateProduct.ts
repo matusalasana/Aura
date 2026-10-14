@@ -3,8 +3,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 
-const createProduct = async (formData: FormData) => {
-  const response = await api.post("/products", formData);
+type CreateProductVariables = {
+  slug: string;
+  formData: FormData;
+};
+
+const createProduct = async ({
+  slug,
+  formData,
+}: CreateProductVariables) => {
+  const response = await api.post(
+    `/stores/${slug}/products`,
+    formData
+  );
 
   return response.data;
 };
@@ -15,9 +26,9 @@ export const useCreateProduct = () => {
   return useMutation({
     mutationFn: createProduct,
 
-    onSuccess: ({ message }) => {
+    onSuccess: ({ message }, { slug }) => {
       queryClient.invalidateQueries({
-        queryKey: ["products"],
+        queryKey: ["products", slug],
       });
 
       toast.success(message || "Product created");

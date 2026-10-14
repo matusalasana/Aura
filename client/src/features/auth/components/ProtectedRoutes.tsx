@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { LoaderCircle } from "lucide-react";
 import { useCurrentUser } from "../hooks/useCurrentUser";
+import { toast } from "react-hot-toast";
 
 interface ProtectedRoutesProps {
   roles: string[];
@@ -29,10 +30,12 @@ const ProtectedRoutes = ({ roles }: ProtectedRoutesProps) => {
   }
 
   if (error || !user) {
+    toast.error("Insufficient Permission");
     return <Navigate to="/" replace />;
   }
 
   if (!roles.length || !roles.includes(user.role)) {
+    toast.error("couldn't find your role")
     return <Navigate to="/" replace />;
   }
 

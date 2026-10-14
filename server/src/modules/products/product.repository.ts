@@ -85,18 +85,18 @@ const findByIdAndStore = async (
   return product ?? null;
 };
 
-// const findByStore = async (storeId: string) => {
-//   const results = await db.query.products.findMany({
-//     where: eq(products.storeId, storeId),
+const findByStore = async (storeId: string) => {
+  const results = await db.query.products.findMany({
+    where: eq(products.storeId, storeId),
 
-//     with: {
-//       variants: true,
-//       images: true,
-//     },
-//   });
+    with: {
+      variants: true,
+      images: true,
+    },
+  });
 
-//   return results ?? [];
-// };
+  return results ?? [];
+};
 
 const update = async (
   id: string,
@@ -147,5 +147,5 @@ export const ProductRepository = {
   deleteOne,
   findById,
   findByIdAndStore,
-  // findByStore,
+  findByStore,
 };

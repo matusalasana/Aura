@@ -12,10 +12,13 @@ export const resolveTenant = async (
 ) => {
   
   const { slug } = req.params;
+  console.log("Slug:", slug)
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.slug, slug),
   });
+
+  console.log("Store:", store)
 
   if (!store) {
     return res.status(404).json({

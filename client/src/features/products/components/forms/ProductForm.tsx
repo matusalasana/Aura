@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 import ProductBasicInfo from "@/features/products/components/forms/ProductBasicInfo";
 import ProductInventory from "@/features/products/components/forms/ProductInventory";
@@ -15,6 +16,8 @@ import type {
 import { useCreateProduct } from "@/features/products/hooks/useCreateProduct";
 
 const ProductForm = () => {
+  const { slug = "" } = useParams<{ slug: string }>();
+  
   const { mutate: createProduct, isPending } = useCreateProduct();
 
   const [step, setStep] = useState(1);
@@ -81,7 +84,7 @@ const ProductForm = () => {
       formData.append("images", image);
     });
 
-    createProduct(formData, {
+    createProduct({slug, formData}, {
       onSuccess: () => {
         setBasicData(initialBasicData);
         setInventoryData(initialInventoryData);

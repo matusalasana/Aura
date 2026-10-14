@@ -14,8 +14,8 @@ const variantSchema = z.object({
     .max(100, "Product color must be less than 100 characters"),
 
   price: z
-    .number()
-    .positive("Price must be greater than 0"),
+    .string()
+    .min(1),
 
   stock: z
     .number()
